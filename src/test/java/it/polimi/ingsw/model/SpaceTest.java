@@ -17,4 +17,6 @@ public class SpaceTest {
         assertEquals(space.getLevel(), 0);
     }
 
+
+
 }
