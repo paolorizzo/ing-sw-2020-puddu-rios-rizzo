@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Space {
+
     private int posX, posY;
     private Worker worker;
     private List<Piece> pieces;
@@ -13,7 +14,10 @@ public class Space {
         this.posX = posX;
         this.posY = posY;
         adjacentSpaces = new ArrayList<>();
+        pieces = new ArrayList<>();
+        addPiece(Piece.LEVEL0);
     }
+
     void addAdjacentSpace(Space s){
         adjacentSpaces.add(s);
     }
@@ -34,11 +38,13 @@ public class Space {
         this.worker = null;
     }
     void addPiece(Piece p){
-
-        pieces.add(p);
+        if(pieces.contains(p))
+            throw new IllegalArgumentException("This space already contains" + p.toString());
+        else
+            pieces.add(p);
     }
 
-    //for undo action
+    //to undo action
     void removeLastPiece(){
         if(pieces.size() == 1)
             throw new IllegalArgumentException();
@@ -48,6 +54,14 @@ public class Space {
     public int getLevel(){
         Piece last = pieces.get(pieces.size()-1);
         return last.getLevel();
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
     }
 
     public boolean isFreeSpace(){
