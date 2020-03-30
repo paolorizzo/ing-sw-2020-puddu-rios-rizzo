@@ -32,4 +32,9 @@ public class Player
     {
         return workers[sex.ordinal()];
     }
+
+    public int getPlayerNum()
+    {
+        return playerNum;
+    }
 }

@@ -28,6 +28,6 @@ public class Worker {
 
     @Override
     public String toString(){
-        return player.getNickname()+"-"+sex.name();
+        return "P"+player.getPlayerNum()+"-"+sex.name().charAt(0);
     }
 }
