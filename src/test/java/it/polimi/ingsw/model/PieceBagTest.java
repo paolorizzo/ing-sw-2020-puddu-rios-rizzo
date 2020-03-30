@@ -4,7 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PieceBagTest {
+public class PieceBagTest
+{
+
     @Test
     public void EndOfPiece(){
         PieceBag bag = new PieceBag();
