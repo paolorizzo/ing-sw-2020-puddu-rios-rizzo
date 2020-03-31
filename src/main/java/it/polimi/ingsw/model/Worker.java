@@ -8,6 +8,7 @@ public class Worker {
     public Worker(Sex sex, Player player) {
         this.sex = sex;
         this.player = player;
+        this.space = null;
     }
 
     public Sex getSex() {

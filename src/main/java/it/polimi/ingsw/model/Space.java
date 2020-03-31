@@ -16,11 +16,13 @@ public class Space {
         adjacentSpaces = new ArrayList<>();
         pieces = new ArrayList<>();
         addPiece(Piece.LEVEL0);
+        worker = null;
     }
 
     void addAdjacentSpace(Space s){
         adjacentSpaces.add(s);
     }
+
     List<Space> getAdjacentSpaces(){
         return adjacentSpaces;
     }
@@ -28,20 +30,37 @@ public class Space {
     public boolean hasWorkerOnIt(){
         return worker != null;
     }
+
     public Worker getWorkerOnIt(){
         return worker;
     }
+
     void setWorkerOnIt(Worker w){
         this.worker = w;
     }
+
     void removeWorkerOnIt(){
         this.worker = null;
     }
+
     void addPiece(Piece p){
         if(pieces.contains(p))
             throw new IllegalArgumentException("This space already contains" + p.toString());
+        else if(UpperLevelInSpace(p))
+            throw new IllegalArgumentException("Can't build over an upper level");
         else
             pieces.add(p);
+    }
+
+    private boolean UpperLevelInSpace(Piece p) {
+        if (p != Piece.DOME && pieces.size() > 0)
+        {
+            for (Piece piece : Piece.values()) {
+                if (piece.getLevel() > p.getLevel() && pieces.contains(piece))
+                    return true;
+            }
+        }
+        return false;
     }
 
     //to undo action

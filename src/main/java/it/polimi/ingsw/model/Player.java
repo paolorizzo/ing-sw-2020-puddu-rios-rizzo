@@ -13,8 +13,8 @@ public class Player
         this.nickname = nickname;
         this.color = color;
         this.workers = new Worker[2];
-        this.workers[0] = new Worker(Sex.MALE, this);
-        this.workers[1] = new Worker(Sex.FEMALE, this);
+        this.workers[1] = new Worker(Sex.MALE, this);
+        this.workers[0] = new Worker(Sex.FEMALE, this);
         this.playerNum = playerNum;
     }
 
