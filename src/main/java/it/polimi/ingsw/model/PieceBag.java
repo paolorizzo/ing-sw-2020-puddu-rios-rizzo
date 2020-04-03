@@ -5,16 +5,16 @@ public class PieceBag {
 
     public PieceBag()
     {
-        countLevel[Piece.LEVEL0.ordinal()] = 0;
-        countLevel[Piece.LEVEL1.ordinal()] = 22;
-        countLevel[Piece.LEVEL2.ordinal()] = 18;
-        countLevel[Piece.LEVEL3.ordinal()] = 14;
-        countLevel[Piece.DOME.ordinal()] = 18;
+        countLevel[Piece.LEVEL0.getLevel()] = 0;
+        countLevel[Piece.LEVEL1.getLevel()] = 22;
+        countLevel[Piece.LEVEL2.getLevel()] = 18;
+        countLevel[Piece.LEVEL3.getLevel()] = 14;
+        countLevel[Piece.DOME.getLevel()] = 18;
     }
 
     int getCount(Piece p)
     {
-        return countLevel[p.ordinal()];
+        return countLevel[p.getLevel()];
     }
 
     boolean hasPiece(Piece p)
@@ -27,6 +27,11 @@ public class PieceBag {
         if(getCount(p) == 0)
             throw new IllegalArgumentException();
         else
-            countLevel[p.ordinal()]--;
+            countLevel[p.getLevel()]--;
+    }
+
+    void undoGetPiece(Piece p)
+    {
+        countLevel[p.getLevel()]++;
     }
 }

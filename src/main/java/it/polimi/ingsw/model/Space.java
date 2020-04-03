@@ -66,8 +66,11 @@ public class Space {
     //to undo action
     void removeLastPiece(){
         if(pieces.size() == 1)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Can't undo removing piece level 0");
         pieces.remove(pieces.size()-1);
+    }
+    Piece getLastPiece(){
+        return pieces.get(pieces.size()-1);
     }
 
     public int getLevel(){
