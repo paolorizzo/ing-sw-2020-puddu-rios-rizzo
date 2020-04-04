@@ -20,6 +20,19 @@ public class Controller implements Observer
         views.add(view);
     }
 
+    public void start()
+    {
+        for(View v : views)
+        {
+            v.startNameView();
+        }
+    }
+
+    public void setup()
+    {
+        views.get(0).startNumberOfPlayersView();
+    }
+
     @Override
     public void update(Object o)
     {

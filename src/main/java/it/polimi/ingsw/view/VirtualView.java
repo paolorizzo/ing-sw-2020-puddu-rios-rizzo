@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.view.middleware.Connection;
+import it.polimi.ingsw.view.middleware.Message;
 
 public class VirtualView extends View
 {
@@ -14,18 +15,25 @@ public class VirtualView extends View
     @Override
     public void startNameView()
     {
+        Message m = new Message("startNameView");
 
+        connection.send(m);
     }
 
     @Override
     public void startNumberOfPlayersView()
     {
+        Message m = new Message("startNumberOfPlayersView");
 
+        connection.send(m);
     }
 
     @Override
     public void update(Object o)
     {
+        Message m = new Message("update");
+        m.addArg("update from VirtualView");
 
+        connection.send(m);
     }
 }

@@ -59,7 +59,7 @@ public class Server
             controller = new Controller();
             controller.addView(view);
             views.get(0).addObserver(controller);
-            //controller.setup();
+            controller.setup();
         }
 
         // if the number of players is set before the desired number of players have connected, this awakes the waiting thread started in run()
@@ -82,7 +82,7 @@ public class Server
                 views.get(i).addObserver(controller);
             }
 
-            //controller.start();
+            controller.start();
             numberOfPlayerIsSet = false;
         }
     }
