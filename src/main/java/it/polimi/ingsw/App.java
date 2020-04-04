@@ -1,15 +1,22 @@
 package it.polimi.ingsw;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
+import it.polimi.ingsw.view.middleware.Server;
 
+import java.io.IOException;
+
+public class App
+{
     public static void main( String[] args )
     {
-
-        System.out.println( "Hello World!" );
+        Server server;
+        try
+        {
+            server = new Server();
+            server.run();
+        }
+        catch (IOException e)
+        {
+            System.err.println("Impossible to start the server!\n" + e.getMessage());
+        }
     }
 }
