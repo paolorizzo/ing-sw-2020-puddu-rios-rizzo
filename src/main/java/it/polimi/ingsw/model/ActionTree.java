@@ -49,6 +49,10 @@ public class ActionTree {
         this.lose = lose;
     }
 
+    public void setEndOfTurn(boolean endOfTurn) {
+        this.endOfTurn = endOfTurn;
+    }
+
     public Action getAction() {
         return action;
     }
@@ -120,4 +124,6 @@ public class ActionTree {
                 children.equals(that.children) &&
                 Objects.equals(action, that.action);
     }
+
+
 }

@@ -7,37 +7,39 @@ public class PowerStrategy {
 
     protected ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
-        this.addMoveLayer(root, player, board, null);
-        this.addBuildLayer(root, player, board, null);
+        this.addMoveLayer(root, player, board);
+        this.addBuildLayer(root, player, board);
         return root;
     }
 
 
-    protected void addMoveLayer(ActionTree curr, Player player, Board board, String workerID){
+    protected void addMoveLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot()){
             //simulate
             board.executeAction(curr.getAction());
-            workerID = curr.getAction().getWorkerID();
         }
         //parto dai nodi più in basso
         for(ActionTree child: curr.getChildren())
-            addMoveLayer(child, player, board, workerID);
+            addMoveLayer(child, player, board);
 
         if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
 
             List<Worker> workers = new ArrayList<Worker>();
-            if(workerID == null) {
+
+            if(curr.isRoot()) {
                 //scelta libera del worker
                 workers.add(player.getWorker(Sex.MALE));
                 workers.add(player.getWorker(Sex.FEMALE));
             }else{
+                String workerID = curr.getAction().getWorkerID();
                 if(workerID.charAt(workerID.length()-1) == 'M')
                     workers.add(player.getWorker(Sex.MALE));
                 else if(workerID.charAt((workerID.length()-1)) == 'F')
                     workers.add(player.getWorker(Sex.FEMALE));
             }
+            boolean moved = false;
             for(Worker worker: workers){
                 Space currSpace = worker.getSpace();
                 for(Space adj: currSpace.getAdjacentSpaces()){
@@ -50,9 +52,14 @@ public class PowerStrategy {
                         }
                         Direction dir = Direction.compareTwoLevels(currSpace.getLevel(), adj.getLevel());
                         Action action = new MoveAction(worker.toString(), adj.getPosX(), adj.getPosY(), dir, currSpace.getPosX(), currSpace.getPosY());
+                        moved = true;
                         curr.addChild(new ActionTree(action, win, false, endOfTurn, true));
                     }
                 }
+            }
+            if(curr.isRoot() && !moved){
+                curr.setLose(true);
+                curr.setEndOfTurn(true);
             }
         }
 
@@ -62,26 +69,26 @@ public class PowerStrategy {
         }
     }
 
-    protected void addBuildLayer(ActionTree curr, Player player, Board board, String workerID){
+    protected void addBuildLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot()){
             //simulate
             board.executeAction(curr.getAction());
-            workerID = curr.getAction().getWorkerID();
         }
         //parto dai nodi più in basso
         for(ActionTree child: curr.getChildren())
-            addBuildLayer(child, player, board, workerID);
+            addBuildLayer(child, player, board);
 
         if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
 
             List<Worker> workers = new ArrayList<Worker>();
-            if(workerID == null) {
+            if(curr.isRoot()) {
                 //scelta libera del worker
                 workers.add(player.getWorker(Sex.MALE));
                 workers.add(player.getWorker(Sex.FEMALE));
             }else{
+                String workerID = curr.getAction().getWorkerID();
                 if(workerID.charAt(workerID.length()-1) == 'M')
                     workers.add(player.getWorker(Sex.MALE));
                 else if(workerID.charAt((workerID.length()-1)) == 'F')
@@ -102,6 +109,7 @@ public class PowerStrategy {
                 //can't built with the worker selected
                 // lose
                 curr.setLose(true);
+                curr.setEndOfTurn(true);
             }
         }
 
