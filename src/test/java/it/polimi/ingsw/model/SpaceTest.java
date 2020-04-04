@@ -34,4 +34,18 @@ public class SpaceTest {
         assert(space.isFreeSpace());
     }
 
+    @Test
+    public void checkPeripheral()
+    {
+        Space space1 = new Space(0, 3);
+        Space space2 = new Space(4, 3);
+        Space space3 = new Space(2, 0);
+        Space space4 = new Space(2, 4);
+
+        assert(space1.isPeripheralSpace());
+        assert(space2.isPeripheralSpace());
+        assert(space3.isPeripheralSpace());
+        assert(space4.isPeripheralSpace());
+    }
+
 }
