@@ -35,8 +35,8 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTestTwoPlayer(){
-        int numeberOfTest = 10;
-        for(int seed=0;seed<numeberOfTest;seed++)
+        int numberOfTest = 10;
+        for(int seed=0;seed<numberOfTest;seed++)
             gameRandomTestTwoPlayer(seed);
     }
     public void gameRandomTestTwoPlayer(int seed) {

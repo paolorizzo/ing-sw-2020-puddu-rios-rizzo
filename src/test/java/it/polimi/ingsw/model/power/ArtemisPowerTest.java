@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 
-public class ApolloPowerTest {
+public class ArtemisPowerTest {
 
     @Test
     public void gameRandomTestTwoPlayer(){
@@ -30,7 +30,7 @@ public class ApolloPowerTest {
         board.executeAction(a3);
         board.executeAction(a4);
 
-        PowerStrategy powerStrategy = new ApolloPower();
+        PowerStrategy powerStrategy = new ArtemisPower();
 
         Random rand = new Random(seed);
 
@@ -87,7 +87,7 @@ public class ApolloPowerTest {
         board.executeAction(a5);
         board.executeAction(a6);
 
-        PowerStrategy powerStrategy = new ApolloPower();
+        PowerStrategy powerStrategy = new ArtemisPower();
 
         Random rand = new Random(seed);
 
