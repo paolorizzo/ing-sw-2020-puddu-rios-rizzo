@@ -152,4 +152,5 @@ public class BoardTest {
         Action a = new Action("P1-M", 1, 1);
         board.undoExecuteAction(a);
     }
+
 }
