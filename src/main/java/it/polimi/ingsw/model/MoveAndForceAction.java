@@ -43,6 +43,12 @@ public class MoveAndForceAction extends MoveAction {
                 ", forcedStartY=" + forcedStartY +
                 ", forcedTargetX=" + forcedTargetX +
                 ", forcedTargetY=" + forcedTargetY +
+                ", direction=" + direction +
+                ", startX=" + startX +
+                ", startY=" + startY +
+                ", workerID='" + workerID + '\'' +
+                ", targetX=" + targetX +
+                ", targetY=" + targetY +
                 '}';
     }
 

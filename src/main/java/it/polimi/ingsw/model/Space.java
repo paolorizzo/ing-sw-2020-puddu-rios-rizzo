@@ -23,7 +23,7 @@ public class Space {
         adjacentSpaces.add(s);
     }
 
-    List<Space> getAdjacentSpaces(){
+    public List<Space> getAdjacentSpaces(){
         return adjacentSpaces;
     }
 
@@ -69,7 +69,7 @@ public class Space {
             throw new IllegalArgumentException("Can't undo removing piece level 0");
         pieces.remove(pieces.size()-1);
     }
-    Piece getLastPiece(){
+    public Piece getLastPiece(){
         return pieces.get(pieces.size()-1);
     }
 

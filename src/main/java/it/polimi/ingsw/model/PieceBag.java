@@ -17,7 +17,7 @@ public class PieceBag {
         return countLevel[p.getLevel()];
     }
 
-    boolean hasPiece(Piece p)
+    public boolean hasPiece(Piece p)
     {
         return getCount(p) > 0;
     }

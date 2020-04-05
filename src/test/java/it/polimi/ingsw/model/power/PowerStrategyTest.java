@@ -1,33 +1,15 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.power.PowerStrategy;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 
-import static org.junit.Assert.*;
-
 public class PowerStrategyTest {
 
-    @Test
-    public void generateActionTreeTest(){
-        Player p1 = new Player("Paolo", Color.BLUE, 1);
-        Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
-        Action a1 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);
-        Action a2 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 3, 3);
-        Action a3 = new SetupAction(p2.getWorker(Sex.MALE).toString(), 0, 4);
-        Action a4 = new SetupAction(p2.getWorker(Sex.FEMALE).toString(), 2, 2);
-        board.executeAction(a1);
-        board.executeAction(a2);
-        board.executeAction(a3);
-        board.executeAction(a4);
-
-        PowerStrategy powerStrategy = new PowerStrategy();
-        ActionTree result = powerStrategy.generateActionTree(board, p1);
-        assert(result.getChildren().size() == 13);
-    }
     @Test
     public void testPruning(){
         Player p1 = new Player("Paolo", Color.BLUE, 1);
@@ -136,7 +118,7 @@ public class PowerStrategyTest {
         System.out.println("gameRandomTestThreePlayer: Game #"+seed);
         while(true){
             Player currPlayer = p.get(playerTurn%p.size());
-            //System.out.println("gameRandomTestThreePlayer: Num Turn "+numTurn+" player: "+currPlayer.getNickname());
+            System.out.println("gameRandomTestThreePlayer: Num Turn "+numTurn+" player: "+currPlayer.getNickname());
             result = powerStrategy.generateActionTree(board, currPlayer);
             ActionTree curr = result;
             while(!curr.isEndOfTurn()){
@@ -145,6 +127,7 @@ public class PowerStrategyTest {
                     assert(false);
                 int numChild = rand.nextInt(size);
                 curr = curr.getChildren().get(numChild);
+                System.out.println("\t"+curr.getAction());
                 board.executeAction(curr.getAction());
             }
             if(curr.isWin()){

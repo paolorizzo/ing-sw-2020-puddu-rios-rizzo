@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.power;
+
+import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,7 @@ public class PowerStrategy {
                 }
             }
             if(curr.isRoot() && !moved){
+                //can't move with the workers
                 curr.setLose(true);
                 curr.setEndOfTurn(true);
             }
