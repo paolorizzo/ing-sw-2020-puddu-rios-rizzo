@@ -22,7 +22,7 @@ public class PieceBag {
         return getCount(p) > 0;
     }
 
-    void getPiece(Piece p)
+    void pickPiece(Piece p)
     {
         if(getCount(p) == 0)
             throw new IllegalArgumentException();
@@ -30,7 +30,7 @@ public class PieceBag {
             countLevel[p.getLevel()]--;
     }
 
-    void undoGetPiece(Piece p)
+    void undoPickPiece(Piece p)
     {
         countLevel[p.getLevel()]++;
     }

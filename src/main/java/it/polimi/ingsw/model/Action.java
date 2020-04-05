@@ -47,8 +47,4 @@ public class Action {
                 workerID.equals(action.workerID);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(workerID, targetX, targetY);
-    }
 }

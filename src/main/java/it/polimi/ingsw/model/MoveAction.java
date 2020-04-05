@@ -49,8 +49,4 @@ public class MoveAction extends Action{
                 direction == that.direction;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), direction, startX, startY);
-    }
 }

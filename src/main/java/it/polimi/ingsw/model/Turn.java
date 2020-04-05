@@ -36,6 +36,11 @@ public class Turn{
         return actions.contains(action);
     }
 
+    public ArrayList<Action> getActions(){
+        return actions;
+    }
+
+
     public boolean isEmpty(){
         return actions.isEmpty();
     }

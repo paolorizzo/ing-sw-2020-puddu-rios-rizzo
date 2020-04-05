@@ -7,6 +7,7 @@ import java.util.Vector;
 public class Board {
     private Space[][] spaces;
     private PieceBag pieceBag;
+    private Deck deck;
     private HashMap<String, Worker> workers;
     public Board(List<Player> players){
         spaces = generateSpaces();
@@ -16,7 +17,7 @@ public class Board {
             workers.put(p.getWorker(Sex.MALE).toString(), p.getWorker(Sex.MALE));
             workers.put(p.getWorker(Sex.FEMALE).toString(), p.getWorker(Sex.FEMALE));
         }
-
+        deck = new Deck();
         pieceBag = new PieceBag();
     }
     private Space[][] generateSpaces(){
@@ -53,6 +54,8 @@ public class Board {
     public Space[][] getSpaces(){
         return spaces;
     }
+
+    public Deck getDeck() { return deck;}
     public PieceBag getPieceBag() { return pieceBag;}
 
     public void executeAction(Action action){
@@ -100,7 +103,7 @@ public class Board {
         forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()]);
     }
     public void executeAction(BuildAction action){
-        pieceBag.getPiece(((BuildAction) action).getPiece());
+        pieceBag.pickPiece(((BuildAction) action).getPiece());
         spaces[action.getTargetX()][action.getTargetY()].addPiece(((BuildAction) action).getPiece());
     }
     public void undoExecuteAction(Action action){
@@ -147,7 +150,7 @@ public class Board {
         forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()]);
     }
     public void undoExecuteAction(BuildAction action){
-        pieceBag.undoGetPiece(((BuildAction) action).getPiece());
+        pieceBag.undoPickPiece(((BuildAction) action).getPiece());
         spaces[action.getTargetX()][action.getTargetY()].removeLastPiece();
     }
 

@@ -65,8 +65,4 @@ public class MoveAndForceAction extends MoveAction {
                 forcedWorkerId.equals(that.forcedWorkerId);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), forcedWorkerId, forcedStartX, forcedStartY, forcedTargetX, forcedTargetY);
-    }
 }

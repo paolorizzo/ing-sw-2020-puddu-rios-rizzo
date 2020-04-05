@@ -1,16 +1,20 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.power.PowerStrategy;
+
 public class Card
 {
     private String name;
     private int num;
     private String description;
+    private PowerStrategy powerStrategy;
 
-    public Card(String name, int num, String desc)
+    public Card(int num, String name, String desc, PowerStrategy ps)
     {
-        this.name = name;
         this.num = num;
+        this.name = name;
         this.description = desc;
+        this.powerStrategy = ps;
     }
 
     public String getName()
@@ -27,4 +31,9 @@ public class Card
     {
         return description;
     }
+
+    public PowerStrategy getPowerStrategy() {
+        return powerStrategy;
+    }
+
 }

@@ -32,8 +32,4 @@ public class BuildAction extends Action{
         return piece == that.piece;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), piece);
-    }
 }
