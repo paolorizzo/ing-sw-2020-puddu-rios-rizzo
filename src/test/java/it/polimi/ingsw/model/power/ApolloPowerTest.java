@@ -40,7 +40,7 @@ public class ApolloPowerTest extends PowerTest {
 
                 if(lastLayer.getAction() == action && lastLayer.isWin()){
                     assert(((MoveAction) action).getDirection() == Direction.UP);
-                    assert(board.getSpaces()[startX][startY].getLevel() == 2 && board.getSpaces()[startX][startY].getLevel() == 3);
+                    assert(board.getSpaces()[startX][startY].getLevel() == 2 && board.getSpaces()[targetX][targetY].getLevel() == 3);
                 }else if(lastLayer.getAction() == action){
                     assert(lastLayer.isLose());
                 }

@@ -9,7 +9,7 @@ public class AtlasPower extends PowerStrategy {
 
     protected ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
-        this.addMoveLayer(root, player, board);
+        super.addMoveLayer(root, player, board);
         this.addBuildLayer(root, player, board);
         return root;
     }
@@ -37,18 +37,22 @@ public class AtlasPower extends PowerStrategy {
             for(Worker worker: workers){
                 Space currSpace = worker.getSpace();
                 for(Space adj: currSpace.getAdjacentSpaces()){
-                    if(adj.isFreeSpace() && (board.getPieceBag().hasPiece(adj.getLastPiece().nextPiece()) || board.getPieceBag().hasPiece(Piece.DOME))){
-                        built = true;
-                        Action action = new BuildAction(worker.toString(), adj.getPosX(), adj.getPosY(), adj.getLastPiece().nextPiece());
-                        curr.addChild(new ActionTree(action, false, false, true, true));
-                        if(adj.getLastPiece().nextPiece() != Piece.DOME) {
-                            action = new BuildAction(worker.toString(), adj.getPosX(), adj.getPosY(), Piece.DOME);
+                    if(adj.isFreeSpace()){
+
+                        if(board.getPieceBag().hasPiece(adj.getLastPiece().nextPiece())){
+                            built = true;
+                            Action action = new BuildAction(worker.toString(), adj.getPosX(), adj.getPosY(), adj.getLastPiece().nextPiece());
+                            curr.addChild(new ActionTree(action, false, false, true, true));
+                        }
+                        if(board.getPieceBag().hasPiece(Piece.DOME) && adj.getLastPiece().nextPiece() != Piece.DOME) {
+                            built = true;
+                            Action action = new BuildAction(worker.toString(), adj.getPosX(), adj.getPosY(), Piece.DOME);
                             curr.addChild(new ActionTree(action, false, false, true, true));
                         }
                     }
                 }
             }
-            if(!built){
+            if(!built && !curr.isWin()){
                 //can't built with the worker selected
                 // lose
                 curr.setLose(true);

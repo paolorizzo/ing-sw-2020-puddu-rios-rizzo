@@ -112,7 +112,7 @@ public class PowerStrategy {
                     }
                 }
             }
-            if(!built && !curr.isRoot()){
+            if(!built && !curr.isRoot() && !curr.isWin()){
                 //can't built with the worker selected
                 // lose
                 curr.setLose(true);
