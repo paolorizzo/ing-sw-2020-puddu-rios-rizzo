@@ -10,6 +10,7 @@ public class PowerStrategyTest {
     @Test
     public void gameRandomTest(){
         int numberOfTest = 1000;
+
         Random rand = new Random(42);
         for(int seed=0;seed<numberOfTest;seed++){
             gameRandomTest(seed, rand.nextInt(2)+2);
@@ -49,7 +50,7 @@ public class PowerStrategyTest {
         powersTest.put(5, new DemeterPowerTest());
         powersTest.put(6, new HephaestusPowerTest());
         powersTest.put(8, new MinotaurPowerTest());
-
+        powersTest.put(9, new PanPowerTest());
         for(Player player: players) {
 
             List<Card> cards = board.getDeck().getCards();
