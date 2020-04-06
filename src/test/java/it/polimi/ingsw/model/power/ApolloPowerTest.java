@@ -11,7 +11,7 @@ import java.util.Vector;
 
 public class ApolloPowerTest extends PowerTest {
 
-    public void assertPower(Board board, Turn turn){
+    public void assertPower(Board board, Turn turn, ActionTree lastLayer){
         int countMoveAndForce = 0, countMove = 0 , countBuild = 0;
         for(Action action: turn.getActions()){
             String workerID = action.getWorkerID();
@@ -37,6 +37,14 @@ public class ApolloPowerTest extends PowerTest {
                 assert(targetY == forcedStartY);
                 assert(forcedTargetX == startX);
                 assert(forcedTargetY == startY);
+
+                if(lastLayer.getAction() == action && lastLayer.isWin()){
+                    assert(((MoveAction) action).getDirection() == Direction.UP);
+                    assert(board.getSpaces()[startX][startY].getLevel() == 2 && board.getSpaces()[startX][startY].getLevel() == 3);
+                }else if(lastLayer.getAction() == action){
+                    assert(lastLayer.isLose());
+                }
+
             }else if(action instanceof MoveAction){
                 assert(countMoveAndForce == 0);
                 assert(countBuild == 0);
@@ -46,6 +54,13 @@ public class ApolloPowerTest extends PowerTest {
                 assert(workerID.equals(board.getSpaces()[startX][startY].getWorkerOnIt().toString()));
                 assert(board.getSpaces()[startX][startY].getLevel()>=board.getSpaces()[targetX][targetY].getLevel()-1);
                 assert(Math.abs(startX-targetX)<=1 && Math.abs(startY-targetY)<=1 && (startX-targetX != 0 || startY-targetY != 0));
+
+                if(lastLayer.getAction() == action && lastLayer.isWin()){
+                    assert(((MoveAction) action).getDirection() == Direction.UP);
+                    assert(board.getSpaces()[startX][startY].getLevel() == 2 && board.getSpaces()[targetX][targetY].getLevel() == 3);
+                }else if(lastLayer.getAction() == action){
+                    assert(lastLayer.isLose());
+                }
 
             }else if(action instanceof BuildAction){
                 assert(countMove != 0 || countMoveAndForce != 0);
@@ -57,8 +72,15 @@ public class ApolloPowerTest extends PowerTest {
             }
             board.executeAction(action);
         }
-        assert(countBuild <= 1);
-        assert(countMoveAndForce+countMove <= 1);
+        if(lastLayer.isWin()){
+            assert(countMove+countMoveAndForce == 1);
+        }else if(lastLayer.isLose()){
+            assert(countMove+countMoveAndForce == 0 || (countMove+countMoveAndForce == 1 && countBuild == 0));
+        }else{
+            assert(countBuild == 1);
+            assert(countMove+countMoveAndForce == 1);
+        }
+
     }
 
 }

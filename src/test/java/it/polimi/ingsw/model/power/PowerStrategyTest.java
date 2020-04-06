@@ -9,7 +9,7 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 100;
+        int numberOfTest = 500;
         Random rand = new Random(42);
         for(int seed=0;seed<numberOfTest;seed++){
             gameRandomTest(seed, rand.nextInt(2)+2);
@@ -46,6 +46,7 @@ public class PowerStrategyTest {
         powersTest.put(2, new ArtemisPowerTest());
         powersTest.put(3, new AthenaPowerTest());
         powersTest.put(4, new AtlasPowerTest());
+        powersTest.put(5, new DemeterPowerTest());
 
         for(Player player: players) {
 
@@ -87,7 +88,7 @@ public class PowerStrategyTest {
             //generate random turn
             ActionTree curr = result;
             Turn turn = new Turn(currPlayer);
-            while(!curr.isEndOfTurn()){
+            while(!curr.isEndOfTurn() || (curr.isEndOfTurn() && curr.getChildren().size()!=0 && rand.nextInt(2) == 1)){
                 int size = curr.getChildren().size();
                 if(size == 0)
                     assert(false);
@@ -102,7 +103,8 @@ public class PowerStrategyTest {
                 }
             }
             //assert and execute turn
-            powersTest.get(currPlayer.getCard().getNum()).assertPower(board, turn);
+            powersTest.get(currPlayer.getCard().getNum()).assertPower(board, turn, curr);
+
             if(curr.isWin()){
                 System.out.println(currPlayer.getNickname()+" won");
                 assert(true);

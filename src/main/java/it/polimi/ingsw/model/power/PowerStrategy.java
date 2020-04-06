@@ -13,9 +13,13 @@ public class PowerStrategy {
         this.addBuildLayer(root, player, board);
         return root;
     }
-
-
     protected void addMoveLayer(ActionTree curr, Player player, Board board){
+        recursiveAddMoveLayer(curr, player, board);
+    }
+    protected void addBuildLayer(ActionTree curr, Player player, Board board){
+        recursiveAddBuildLayer(curr, player, board);
+    }
+    private void recursiveAddMoveLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot()){
             //simulate
@@ -23,7 +27,7 @@ public class PowerStrategy {
         }
         //parto dai nodi più in basso
         for(ActionTree child: curr.getChildren())
-            addMoveLayer(child, player, board);
+            this.recursiveAddMoveLayer(child, player, board);
 
         if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
@@ -72,7 +76,7 @@ public class PowerStrategy {
         }
     }
 
-    protected void addBuildLayer(ActionTree curr, Player player, Board board){
+    private void recursiveAddBuildLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot()){
             //simulate
@@ -80,7 +84,7 @@ public class PowerStrategy {
         }
         //parto dai nodi più in basso
         for(ActionTree child: curr.getChildren())
-            addBuildLayer(child, player, board);
+            this.recursiveAddBuildLayer(child, player, board);
 
         if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
