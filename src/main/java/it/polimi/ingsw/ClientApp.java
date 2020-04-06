@@ -12,9 +12,9 @@ public class ClientApp {
         {
             client.run();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            System.err.println(e.getMessage());
+            System.err.println(e.toString());
         }
     }
 }

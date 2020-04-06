@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.*;
 import java.lang.reflect.Method;
 
-public class Client implements Observer
+public class Client implements Observer, Runnable
 {
     private Socket socket;
     private String ip;
@@ -88,38 +88,46 @@ public class Client implements Observer
     }
 
     // handles the messages coming from the stream, de-serializing and calling methodHandler
-    public void run() throws IOException
+    public void run()
     {
-        socket = new Socket(ip, port);
-        System.out.println("Connected to the server");
-
-        // moved the declaration of byteIn from here. Problems?
-
-        while(true)
+        try
         {
+            socket = new Socket(ip, port);
+            System.out.println("Connected to the server");
 
-            try
+            // moved the declaration of byteIn from here. Problems?
+
+            while(true)
             {
-                ByteIn  = new ObjectInputStream(socket.getInputStream());
-                List<Object> args = new ArrayList<Object>();;
 
-                Message message = (Message) ByteIn.readObject();
-                String s = message.getMethodName();
-
-                if(message.hasArgs())
+                try
                 {
-                    for(int i = 0; i<message.numberOfArgs(); i++)
-                    {
-                        args.add(message.getArg(i));
-                    }
-                }
+                    ByteIn  = new ObjectInputStream(socket.getInputStream());
+                    List<Object> args = new ArrayList<Object>();;
 
-                methodHandler(s, args);
-            }
-            catch (ClassNotFoundException e)
-            {
-                System.err.println("Error in reading the object");
+                    Message message = (Message) ByteIn.readObject();
+                    String s = message.getMethodName();
+
+                    if(message.hasArgs())
+                    {
+                        for(int i = 0; i<message.numberOfArgs(); i++)
+                        {
+                            args.add(message.getArg(i));
+                        }
+                    }
+
+                    methodHandler(s, args);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    System.err.println("Error in reading the object");
+                }
             }
         }
+        catch(IOException e)
+        {
+            System.err.println("Error in creating the client socket");
+        }
+
     }
 }

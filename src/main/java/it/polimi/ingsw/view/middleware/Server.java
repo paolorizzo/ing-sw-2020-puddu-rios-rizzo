@@ -10,9 +10,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server
+public class Server implements Runnable
 {
-    private static final int PORT= 42069;
+    private static int PORT;
     private ServerSocket serverSocket;
     private Controller controller;
 
@@ -23,8 +23,11 @@ public class Server
     private boolean numberOfPlayerIsSet = false;
     private Object numberOfPlayersLock = new Object();
 
-    public Server() throws IOException
+    private boolean gameIsOn = false;
+
+    public Server(int port) throws IOException
     {
+        PORT = port;
         this.serverSocket = new ServerSocket(PORT);
     }
 
@@ -46,6 +49,11 @@ public class Server
     public int getNumberOfPlayers()
     {
         return numberOfPlayers;
+    }
+
+    public boolean isGameOn()
+    {
+        return gameIsOn;
     }
 
     // adds the connection to the list, associating it with the relative virtual view
@@ -91,7 +99,8 @@ public class Server
             }
 
             controller.start();
-            numberOfPlayerIsSet = false;
+            numberOfPlayerIsSet = false; // why?
+            gameIsOn = true;
         }
     }
 

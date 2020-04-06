@@ -11,7 +11,7 @@ public class App
         Server server;
         try
         {
-            server = new Server();
+            server = new Server(42069);
             server.run();
         }
         catch (IOException e)
