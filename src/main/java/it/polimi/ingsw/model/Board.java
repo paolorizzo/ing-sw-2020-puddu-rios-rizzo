@@ -137,17 +137,17 @@ public class Board {
     }
     public void undoExecuteAction(MoveAndForceAction action){
         //salvo workers
-        Worker worker = spaces[((MoveAction)action).getStartX()][((MoveAction)action).getStartY()].getWorkerOnIt();
-        Worker forcedWorker = spaces[((MoveAndForceAction) action).getForcedStartX()][((MoveAndForceAction) action).getForcedStartY()].getWorkerOnIt();
+        Worker worker = spaces[((MoveAction)action).getTargetX()][((MoveAction)action).getTargetY()].getWorkerOnIt();
+        Worker forcedWorker = spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()].getWorkerOnIt();
         //tolgo workers
-        spaces[((MoveAction)action).getStartX()][((MoveAction)action).getStartY()].removeWorkerOnIt();
-        spaces[((MoveAndForceAction) action).getForcedStartX()][((MoveAndForceAction) action).getForcedStartY()].removeWorkerOnIt();
+        spaces[((MoveAction)action).getTargetX()][((MoveAction)action).getTargetY()].removeWorkerOnIt();
+        spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()].removeWorkerOnIt();
         //aggiungo workers
-        spaces[action.getTargetX()][action.getTargetY()].setWorkerOnIt(worker);
-        spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()].setWorkerOnIt(forcedWorker);
+        spaces[action.getStartX()][action.getStartY()].setWorkerOnIt(worker);
+        spaces[((MoveAndForceAction) action).getForcedStartX()][((MoveAndForceAction) action).getForcedStartY()].setWorkerOnIt(forcedWorker);
         //setto spaces
-        worker.setSpace(spaces[action.getTargetX()][action.getTargetY()]);
-        forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()]);
+        worker.setSpace(spaces[action.getStartX()][action.getStartY()]);
+        forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedStartX()][((MoveAndForceAction) action).getForcedStartY()]);
     }
     public void undoExecuteAction(BuildAction action){
         pieceBag.undoPickPiece(((BuildAction) action).getPiece());

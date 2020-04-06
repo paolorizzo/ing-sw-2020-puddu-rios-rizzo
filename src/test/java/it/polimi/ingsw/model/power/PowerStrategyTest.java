@@ -48,6 +48,7 @@ public class PowerStrategyTest {
         powersTest.put(4, new AtlasPowerTest());
         powersTest.put(5, new DemeterPowerTest());
         powersTest.put(6, new HephaestusPowerTest());
+        powersTest.put(8, new MinotaurPowerTest());
 
         for(Player player: players) {
 

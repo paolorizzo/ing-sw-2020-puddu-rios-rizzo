@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.InvalidActionTreeGenerateException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApolloPower extends PowerStrategy {
+public class MinotaurPower extends PowerStrategy {
 
     protected ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
@@ -19,7 +19,7 @@ public class ApolloPower extends PowerStrategy {
     protected void addMoveLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot())
-            throw new InvalidActionTreeGenerateException("Apollo: before move there is always root");
+            throw new InvalidActionTreeGenerateException("Minotaur: before move there is always root");
 
         curr.setAppendedLayer(false);
 
@@ -30,7 +30,7 @@ public class ApolloPower extends PowerStrategy {
             workers.add(player.getWorker(Sex.MALE));
             workers.add(player.getWorker(Sex.FEMALE));
         }else{
-            throw new InvalidActionTreeGenerateException("Apollo: before move there is always root");
+            throw new InvalidActionTreeGenerateException("Minotaur: before move there is always root");
         }
         boolean moved = false;
         for(Worker worker: workers){
@@ -46,7 +46,7 @@ public class ApolloPower extends PowerStrategy {
                     Direction dir = Direction.compareTwoLevels(currSpace.getLevel(), adj.getLevel());
                     Action action;
                     if(adj.hasWorkerOnIt())
-                        action = new MoveAndForceAction(worker.toString(), adj.getPosX(), adj.getPosY(), dir, currSpace.getPosX(), currSpace.getPosY(), adj.getWorkerOnIt().toString(), adj.getPosX(), adj.getPosY(), currSpace.getPosX(), currSpace.getPosY());
+                        action = new MoveAndForceAction(worker.toString(), adj.getPosX(), adj.getPosY(), dir, currSpace.getPosX(), currSpace.getPosY(), adj.getWorkerOnIt().toString(), adj.getPosX(), adj.getPosY(), 2*adj.getPosX()-currSpace.getPosX(), 2*adj.getPosY()-currSpace.getPosY());
                     else
                         action = new MoveAction(worker.toString(), adj.getPosX(), adj.getPosY(), dir, currSpace.getPosX(), currSpace.getPosY());
                     moved = true;
@@ -62,6 +62,7 @@ public class ApolloPower extends PowerStrategy {
     }
 
     private boolean canMoveAndForce(Board board, Space curr, Space adj, Player player){
-        return (!adj.hasWorkerOnIt() || (adj.hasWorkerOnIt() && adj.getWorkerOnIt() != player.getWorker(Sex.MALE) && adj.getWorkerOnIt() != player.getWorker(Sex.FEMALE)));
+        return (!adj.hasWorkerOnIt() || (adj.hasWorkerOnIt() && 2*adj.getPosX()-curr.getPosX()<5 && 0<=2*adj.getPosX()-curr.getPosX() && 2*adj.getPosY()-curr.getPosY()<5 && 0<=2*adj.getPosY()-curr.getPosY() && board.getSpaces()[2*adj.getPosX()-curr.getPosX()][2*adj.getPosY()-curr.getPosY()].isFreeSpace() && adj.getWorkerOnIt() != player.getWorker(Sex.MALE) && adj.getWorkerOnIt() != player.getWorker(Sex.FEMALE)));
     }
+
 }
