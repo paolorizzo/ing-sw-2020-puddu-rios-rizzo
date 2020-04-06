@@ -51,13 +51,16 @@ public class PowerStrategyTest {
         powersTest.put(6, new HephaestusPowerTest());
         powersTest.put(8, new MinotaurPowerTest());
         powersTest.put(9, new PanPowerTest());
+        powersTest.put(10, new PrometheusPowerTest());
+
+
         for(Player player: players) {
 
             List<Card> cards = board.getDeck().getCards();
 
             player.setCard(board.getDeck().pickCard(cards.get(rand.nextInt(cards.size())).getNum()));
 
-            System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
+            //System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
 
             for(Sex sex: Sex.values()){
                 int x = rand.nextInt(5), y = rand.nextInt(5);
@@ -66,7 +69,7 @@ public class PowerStrategyTest {
                     y = rand.nextInt(5);
                 }
                 board.executeAction(new SetupAction(player.getWorker(sex).toString(), x, y));
-                System.out.println(player.getNickname()+" setup worker "+sex+" on "+x+" "+y);
+                //System.out.println(player.getNickname()+" setup worker "+sex+" on "+x+" "+y);
             }
 
         }
@@ -77,7 +80,7 @@ public class PowerStrategyTest {
         ActionTree result;
         while(true){
             Player currPlayer = players.get(playerTurn%players.size());
-            System.out.println("Num Turn "+numTurn+" player: "+currPlayer.getNickname());
+            //System.out.println("Num Turn "+numTurn+" player: "+currPlayer.getNickname());
 
             //generate ActionTree
             result = currPlayer.getCard().getPowerStrategy().generateActionTree(board, currPlayer);
@@ -97,7 +100,7 @@ public class PowerStrategyTest {
                     assert(false);
                 int numChild = rand.nextInt(size);
                 curr = curr.getChildren().get(numChild);
-                System.out.println("\t"+curr.getAction());
+                //System.out.println("\t"+curr.getAction());
                 turn.add(curr.getAction());
             }
             for(Player opponent: players){
@@ -114,7 +117,7 @@ public class PowerStrategyTest {
                 return;
             }
             if(curr.isLose()){
-                System.out.println("\t"+currPlayer.getNickname()+" lose");
+                //System.out.println("\t"+currPlayer.getNickname()+" lose");
                 players.remove(currPlayer);
                 playerTurn--;
                 if(players.size()==1){

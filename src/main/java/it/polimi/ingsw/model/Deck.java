@@ -18,6 +18,7 @@ public class Deck {
         cardsInDeck.put(6, new Card(6, "Hephaestus", "Your Build: Your Worker may build one additional block (not dome) on top of your first block.", new HephaestusPower()));
         cardsInDeck.put(8, new Card(8, "Minotaur", "Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.", new MinotaurPower()));
         cardsInDeck.put(9, new Card(9, "Pan", "Win Condition: You also win if your Worker moves down two or more levels.", new PanPower()));
+        cardsInDeck.put(10, new Card(10, "Prometheus", "Your Turn: If your Worker does not move up, it may build both before and after moving.", new PrometheusPower()));
     }
     public Card pickCard(int num){
         if(!cardsInDeck.containsKey(num))
