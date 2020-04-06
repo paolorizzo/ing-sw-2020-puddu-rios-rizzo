@@ -28,7 +28,10 @@ public class Server
         this.serverSocket = new ServerSocket(PORT);
     }
 
-    // invoked by the connection of the first player when the user inputs the desired number of players
+    /**
+     * Invoked by the connection of the first player when the user inputs the desired number of players
+     * @param n The desired number of players for the upcoming match
+     */
     public void setNumberOfPlayers(int n)
     {
         // notifies the waiting thread started in run()
