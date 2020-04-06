@@ -10,7 +10,7 @@ public class ClientView extends View
         Scanner stdin = new Scanner(System.in);
         System.out.println("Insert username: ");
         String name = stdin.nextLine();
-        notify(name);
+        notify("selected username "+name);
     }
 
     @Override
@@ -26,5 +26,11 @@ public class ClientView extends View
     public void update(Object o)
     {
 
+    }
+
+    @Override
+    public void startOutOfGameView()
+    {
+        System.out.println("Sorry! You're out of the game.");
     }
 }

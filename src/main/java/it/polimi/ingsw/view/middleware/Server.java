@@ -82,6 +82,11 @@ public class Server
                 views.get(i).addObserver(controller);
             }
 
+            if(numberOfPlayers < views.size())
+            {
+                views.get(2).startOutOfGameView();
+            }
+
             controller.start();
             numberOfPlayerIsSet = false;
         }
@@ -129,22 +134,32 @@ public class Server
             }
         }).start();
 
-        // accepts all sockets requests and registers all the connections, and runs a separate thread for all of them
+        // accepts and registers the first 3 connections, runs a separate thread for all of them
         while(true)
         {
             try
             {
-                Socket socket = serverSocket.accept();
+                synchronized (cons)
+                {
+                    if(cons.size() < 3)
+                    {
+                        Socket socket = serverSocket.accept();
 
-                final Connection connection = new Connection(socket, this);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        connection.run();
+                        final Connection connection = new Connection(socket, this);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                connection.run();
+                            }
+                        }).start();
+
+                        register(connection);
                     }
-                }).start();
-
-                register(connection);
+                    else
+                    {
+                        serverSocket.close();
+                    }
+                }
             }
             catch (IOException e)
             {

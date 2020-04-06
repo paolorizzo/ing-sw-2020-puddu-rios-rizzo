@@ -36,4 +36,12 @@ public class VirtualView extends View
 
         connection.send(m);
     }
+
+    @Override
+    public void startOutOfGameView()
+    {
+        Message m = new Message("startOutOfGameView");
+
+        connection.send(m);
+    }
 }

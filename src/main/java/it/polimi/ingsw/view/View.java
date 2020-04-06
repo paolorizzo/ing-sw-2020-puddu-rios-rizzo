@@ -7,4 +7,5 @@ public abstract class View extends Observable implements Observer
 {
     public abstract void startNameView();
     public abstract void startNumberOfPlayersView();
+    public abstract void startOutOfGameView();
 }
