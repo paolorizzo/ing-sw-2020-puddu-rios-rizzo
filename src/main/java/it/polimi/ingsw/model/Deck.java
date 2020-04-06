@@ -15,6 +15,7 @@ public class Deck {
         cardsInDeck.put(3, new Card(3, "Athena", "Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.", new AthenaPower()));
         cardsInDeck.put(4, new Card(4,"Atlas", "Your Build: Your Worker may build a dome at any level.", new AtlasPower()));
         cardsInDeck.put(5, new Card(5, "Demeter","Your Build: Your Worker may build one additional time, but not on the same space.", new DemeterPower()));
+        cardsInDeck.put(6, new Card(6, "Hephaestus", "Your Build: Your Worker may build one additional block (not dome) on top of your first block.", new HephaestusPower()));
     }
     public Card pickCard(int num){
         if(!cardsInDeck.containsKey(num))
