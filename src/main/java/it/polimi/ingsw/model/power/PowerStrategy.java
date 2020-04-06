@@ -123,7 +123,7 @@ public class PowerStrategy {
     }
 
     //nothing to prune in base case
-    protected boolean requirePruning(){
+    protected boolean requirePruning(Turn lastTurn){
         return false;
     }
     //nothing change in base case

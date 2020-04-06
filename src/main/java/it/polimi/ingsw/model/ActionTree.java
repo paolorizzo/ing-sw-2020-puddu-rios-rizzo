@@ -73,6 +73,9 @@ public class ActionTree {
         children.add(child);
     }
 
+    public void removeChild(ActionTree child) {
+        children.remove(child);
+    }
     public boolean isRoot() {
         return root;
     }

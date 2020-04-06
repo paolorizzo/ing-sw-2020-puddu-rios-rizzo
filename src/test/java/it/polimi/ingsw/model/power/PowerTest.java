@@ -33,4 +33,8 @@ public class PowerTest {
         assert(countMove <= 1);
     }
 
+    public void assertPruning(Turn turn){
+        assert(true);
+    }
+
 }

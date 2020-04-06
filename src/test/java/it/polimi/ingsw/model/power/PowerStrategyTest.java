@@ -21,7 +21,9 @@ public class PowerStrategyTest {
 
         Random rand = new Random(seed);
 
-        List<Player> p = new ArrayList<>();
+        rand.nextInt();
+
+        List<Player> players = new ArrayList<>();
 
         Board board;
         Player p1 = new Player("Francesco", Color.BLUE, 1);
@@ -29,23 +31,26 @@ public class PowerStrategyTest {
         Player p2 = new Player("Paolo", Color.WHITE, 2);
 
 
-        p.add(p1);
-        p.add(p2);
+        players.add(p1);
+        players.add(p2);
         if(numOfPlayer == 3) {
             Player p3 = new Player("Federico", Color.GREY, 3);
-            p.add(p3);
+            players.add(p3);
         }
 
-        board = new Board(p);
+        TurnArchive turnArchive = new TurnArchive();
+        board = new Board(players);
 
         HashMap<Integer, PowerTest> powersTest = new HashMap<>();
         powersTest.put(1, new ApolloPowerTest());
         powersTest.put(2, new ArtemisPowerTest());
+        powersTest.put(3, new AthenaPowerTest());
         powersTest.put(4, new AtlasPowerTest());
 
-        for(Player player: p) {
+        for(Player player: players) {
 
             List<Card> cards = board.getDeck().getCards();
+
             player.setCard(board.getDeck().pickCard(cards.get(rand.nextInt(cards.size())).getNum()));
 
             System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
@@ -67,12 +72,21 @@ public class PowerStrategyTest {
         int numTurn = 0, playerTurn = 0;
         ActionTree result;
         while(true){
-            Player currPlayer = p.get(playerTurn%p.size());
+            Player currPlayer = players.get(playerTurn%players.size());
             System.out.println("Num Turn "+numTurn+" player: "+currPlayer.getNickname());
+
+            //generate ActionTree
             result = currPlayer.getCard().getPowerStrategy().generateActionTree(board, currPlayer);
-            ActionTree curr = result;
-            Turn turn = new Turn();
+            //pruning ActionTree
+            for(Player opponent: players){
+                if(!opponent.equals(currPlayer) && opponent.getCard().getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(opponent))){
+                        opponent.getCard().getPowerStrategy().pruneActionTree(result);
+                }
+            }
+
             //generate random turn
+            ActionTree curr = result;
+            Turn turn = new Turn(currPlayer);
             while(!curr.isEndOfTurn()){
                 int size = curr.getChildren().size();
                 if(size == 0)
@@ -81,6 +95,11 @@ public class PowerStrategyTest {
                 curr = curr.getChildren().get(numChild);
                 System.out.println("\t"+curr.getAction());
                 turn.add(curr.getAction());
+            }
+            for(Player opponent: players){
+                if(!opponent.equals(currPlayer) && opponent.getCard().getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(opponent))){
+                    powersTest.get(opponent.getCard().getNum()).assertPruning(turn);
+                }
             }
             //assert and execute turn
             powersTest.get(currPlayer.getCard().getNum()).assertPower(board, turn);
@@ -91,16 +110,17 @@ public class PowerStrategyTest {
             }
             if(curr.isLose()){
                 System.out.println("\t"+currPlayer.getNickname()+" lose");
-                p.remove(currPlayer);
+                players.remove(currPlayer);
                 playerTurn--;
-                if(p.size()==1){
-                    System.out.println(p.get(0).getNickname()+" won");
+                if(players.size()==1){
+                    System.out.println(players.get(0).getNickname()+" won");
                     assert(true);
                     return;
                 }
             }
+            turnArchive.addTurn(turn);
             numTurn++;
-            playerTurn = (playerTurn+1) % p.size();
+            playerTurn = (playerTurn+1) % players.size();
         }
     }
     @Test

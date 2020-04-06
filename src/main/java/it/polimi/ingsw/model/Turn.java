@@ -6,13 +6,15 @@ import java.util.ArrayList;
 //This check is supposed to happen in the VALIDATE_SELECT and VALIDATE_ACTION states of its FSM
 public class Turn{
     ArrayList<Action> actions;
+    Player player;
 
-    public Turn(){
+    public Turn(Player player){
+        this.player = player;
         actions=new ArrayList();
     }
 
-    public Turn(Action firstAction){
-        this();
+    public Turn(Player player, Action firstAction){
+        this(player);
         actions.add(firstAction);
     }
 
@@ -26,6 +28,9 @@ public class Turn{
         else{
             actions.add(action);
         }
+    }
+    public Player getPlayer() {
+        return player;
     }
 
     public int size(){
