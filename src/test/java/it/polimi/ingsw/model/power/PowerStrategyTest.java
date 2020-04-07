@@ -94,7 +94,7 @@ public class PowerStrategyTest {
             //generate random turn
             ActionTree curr = result;
             Turn turn = new Turn(currPlayer);
-            while(!curr.isEndOfTurn() || (curr.isEndOfTurn() && curr.getChildren().size()!=0 && rand.nextInt(2) == 1)){
+            while(!curr.isWin() && !curr.isLose() && (!curr.isEndOfTurn() || (curr.isEndOfTurn() && curr.getChildren().size()!=0 && rand.nextInt(2) == 1))){
                 int size = curr.getChildren().size();
                 if(size == 0)
                     assert(false);
