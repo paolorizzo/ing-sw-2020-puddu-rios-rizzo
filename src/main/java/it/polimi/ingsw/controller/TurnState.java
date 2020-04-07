@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-public enum State {
+public enum TurnState{
     PLAYER_SETUP,
     GET_ACTION_TREE,
     DISPLAY_SELECT_VIEW,
@@ -15,11 +15,7 @@ public enum State {
     ELABORATE_ACTION,
     UPDATE_TURN_ARCHIVE;
 
-
-    //standard implementation of the next state function
-    //returns the state immediately after the caller
-    //the last state returns the first state
-    State next(){
-        return State.values()[ (this.ordinal()+1) % (State.values().length) ];
+    TurnState next(){
+        return TurnState.values()[ (this.ordinal()+1) % (TurnState.values().length) ];
     }
 }
