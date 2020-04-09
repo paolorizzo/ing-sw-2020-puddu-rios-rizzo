@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class ClientView extends View
 {
+
+
+
     @Override
     public void startNameView()
     {
