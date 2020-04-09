@@ -1,7 +1,9 @@
 package it.polimi.ingsw.controller;
 
 public enum ConnectionState {
-    MEMORIZE_VIEW,
+    MEMORIZE_VIEW{
+
+    },
     DISPLAY_NUM_PLAYERS_VIEW,
     VALIDATE_NUM_PLAYERS,
     ELABORATE_NUM_PLAYERS,

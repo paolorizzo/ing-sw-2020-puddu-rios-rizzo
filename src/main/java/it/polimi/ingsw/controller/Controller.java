@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Controller implements Observer
 {
+    private Controller instance;
     private List<View> views;
 
     public Controller()
