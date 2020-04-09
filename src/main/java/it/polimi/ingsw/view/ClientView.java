@@ -4,8 +4,11 @@ import java.util.Scanner;
 
 public class ClientView extends View
 {
+    private ConnectionState currentConnectionState;
 
-
+    public ClientView(){
+        currentConnectionState = ConnectionState.REQUEST_ID;
+    }
 
     @Override
     public void startNameView()
