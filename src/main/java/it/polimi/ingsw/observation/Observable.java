@@ -10,8 +10,12 @@ public abstract class Observable<T> {
         observers = new ArrayList<T>();
     }
 
-    public void addObserver(T observer){
+    public synchronized void addObserver(T observer){
         if(!observers.contains(observer))
             observers.add(observer);
+    }
+
+    public boolean hasObservers(){
+        return !observers.isEmpty();
     }
 }

@@ -3,19 +3,19 @@ package it.polimi.ingsw.observation;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RequestsObservable extends Observable<RequestsObserver>{
+public class RequestsObservable extends Observable<RequestsObserver>{
 
     public RequestsObservable(){
         super();
     }
 
-    public void notifyRequestID(){
+    public synchronized void notifyRequestID(){
         for(RequestsObserver obs:observers){
             obs.updateRequestID();
         }
     }
 
-    public void notifyRequestNumPlayers(){
+    public synchronized void notifyRequestNumPlayers(){
         for(RequestsObserver obs:observers){
             obs.updateRequestID();
         }

@@ -3,19 +3,14 @@ package it.polimi.ingsw.observation;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameObservable {
+public class GameObservable extends Observable<GameObserver>{
     private List<GameObserver> observers;
 
     public GameObservable(){
-        observers=new ArrayList<GameObserver>();
+        super();
     }
 
-    public void addObserver(GameObserver observer){
-        if(!observers.contains(observer))
-            observers.add(observer);
-    }
-
-    public void notifyAllNumPlayers(int numPlayers){
+    public synchronized void notifyNumPlayers(int numPlayers){
         for(GameObserver obs:observers){
             obs.updateNumPlayers(numPlayers);
         }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.view.View;
+
 import java.util.Objects;
 
 public class Player
@@ -9,15 +11,40 @@ public class Player
     private Color color;
     private Card card;
     private Worker[] workers;
+    private View view;
 
-    public Player(String nickname, Color color, int playerNum)
+    public Player(Color color, int playerNum)
     {
-        this.nickname = nickname;
+        this.nickname = null;
         this.color = color;
         this.workers = new Worker[2];
         this.workers[1] = new Worker(Sex.MALE, this);
         this.workers[0] = new Worker(Sex.FEMALE, this);
         this.playerNum = playerNum;
+    }
+
+    public Player(Color color, int playerNum, View view){
+        this(color, playerNum);
+        setView(view);
+    }
+
+    public Player(String nickname, Color color, int playerNum){
+        this(color, playerNum);
+        setNickname(nickname);
+    }
+
+    public View getView(){
+        return view;
+    }
+
+    public void setView(View view){
+        this.view = view;
+    }
+
+    //TODO test setNickname
+    public void setNickname(String nickname)
+    {
+        this.nickname=nickname;
     }
 
     public String getNickname()

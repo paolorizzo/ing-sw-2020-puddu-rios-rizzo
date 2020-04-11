@@ -67,10 +67,10 @@ public class Server implements Runnable
         // in the case of the first player, runs the setup on the controller's side (to ask the number of players)
         if(cons.size()==1)
         {
-            controller = new Controller();
+            controller = Controller.instance();
             controller.addView(view);
             views.get(0).addObserver(controller);
-            controller.setup();
+            //controller.setup();
         }
 
         // if the number of players is set before the desired number of players have connected, this awakes the waiting thread started in run()
@@ -95,10 +95,13 @@ public class Server implements Runnable
 
             if(numberOfPlayers < views.size())
             {
-                views.get(2).startOutOfGameView();
+                //TODO handle this communication inside new paradigm
+                //this will require some thought given that all the views receive the same
+                //notifies, and given that a new view might not have an ID
+                //views.get(2).startOutOfGameView();
             }
 
-            controller.start();
+            //controller.start();
             numberOfPlayerIsSet = false; // why?
             gameIsOn = true;
         }

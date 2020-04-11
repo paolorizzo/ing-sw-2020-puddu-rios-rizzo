@@ -15,6 +15,11 @@ public class Message implements Serializable
         this.args = new ArrayList<Object>();
     }
 
+    public Message(String methodName, List<Object> args){
+        this.methodName = methodName;
+        this.args = args;
+    }
+
     public void addArg(Object o)
     {
         args.add(o);
@@ -38,6 +43,18 @@ public class Message implements Serializable
     public Object getArg(int i)
     {
         return args.get(i);
+    }
+
+    public List<Object> getArgsList(){
+        List<Object> args = new ArrayList<Object>();
+        if(hasArgs())
+        {
+            for(int i = 0; i<numberOfArgs(); i++)
+            {
+                args.add(getArg(i));
+            }
+        }
+        return args;
     }
 }
 

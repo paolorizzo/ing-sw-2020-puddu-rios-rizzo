@@ -1,17 +1,35 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Message;
 
+//TODO test
 public class VirtualView extends View
 {
+    //inherits attributes from View, notably the feeds
     private Connection connection;
 
     public VirtualView(Connection c)
     {
+        super();
         this.connection = c;
     }
 
+    public void updateID(int id){
+        connection.sendMessage("updateID", id);
+    }
+
+
+    public void updateNumPlayers(int numPlayers){
+        //TODO
+    }
+
+    public void updateName(int id, String name){
+        //TODO
+    }
+
+/*
     @Override
     public void startNameView()
     {
@@ -44,4 +62,5 @@ public class VirtualView extends View
 
         connection.send(m);
     }
+ */
 }
