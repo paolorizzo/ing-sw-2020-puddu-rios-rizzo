@@ -4,6 +4,7 @@ import org.junit.Test;
 
 public class ObservableTest
 {
+    /*
     public class ObserverUtil implements Observer
     {
         private boolean flag = false;
@@ -40,4 +41,5 @@ public class ObservableTest
         observable.notify("test");
         assert(observer.getFlag());
     }
+    */
 }

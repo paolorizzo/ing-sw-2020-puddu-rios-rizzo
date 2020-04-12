@@ -9,12 +9,14 @@ import java.util.concurrent.*;
 
 public class ServerTest
 {
+    /*
     private ExecutorService executor = Executors.newFixedThreadPool(128);
 
     // checks the registration of connections on the server's side
     // while 4 clients try to connect, only 3 must be accepted
     // waits 1 second after running the clients' threads to check for the number of registered connections
-    /*
+
+
     @Test
     public void checkRegisteredConnections()
     {
@@ -112,6 +114,8 @@ public class ServerTest
             System.err.println("Impossible to start the server!\n" + e.getMessage());
         }
     }
-    */
+
+
+     */
 
 }

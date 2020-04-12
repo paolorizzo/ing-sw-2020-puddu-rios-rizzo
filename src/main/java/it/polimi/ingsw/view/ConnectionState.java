@@ -20,8 +20,8 @@ public enum ConnectionState {
     READ_ID {
         //sets the id
         public void execute(Object input) {
-            System.out.println("Ecco il mio Id " + input);
             int id = (int) input;
+            System.out.println("My id is: " + id);
             view.setID(id);
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
@@ -76,6 +76,5 @@ public enum ConnectionState {
     public void execute(Object input){
 
     }
-
 
     }

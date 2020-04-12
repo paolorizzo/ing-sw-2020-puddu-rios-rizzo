@@ -27,7 +27,6 @@ public class Connection extends Messenger implements Runnable
     {
         this.socket = socket;
         this.server = server;
-
         this.view = null;
         methodMap = null;
     }

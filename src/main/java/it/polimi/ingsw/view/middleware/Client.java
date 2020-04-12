@@ -33,12 +33,19 @@ public class Client extends Messenger implements ViewObserver, Runnable {
         this.cw = ClientView.instance();
         this.cw.addObserver(this);
         virtualGameFeed = new GameObservable();
-        virtualGameFeed.addObserver(cw);
         virtualPlayersFeed = new PlayersObservable();
-        virtualPlayersFeed.addObserver(cw);
+        addObserver(cw);
         methodMap = constructMethodMap();
     }
 
+    public ClientView getClientView(){
+        return cw;
+    }
+
+    public void addObserver(ModelObserver view){
+        virtualGameFeed.addObserver(view);
+        virtualPlayersFeed.addObserver(view);
+    }
 
 
     /* called by run()
