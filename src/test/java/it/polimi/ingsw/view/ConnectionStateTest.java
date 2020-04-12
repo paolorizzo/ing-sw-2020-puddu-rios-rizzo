@@ -14,7 +14,7 @@ public class ConnectionStateTest {
         ConnectionState[] expectedStates = new ConnectionState[7];
         expectedStates[0]= ConnectionState.REQUEST_ID;
         expectedStates[1]= ConnectionState.READ_ID;
-        expectedStates[2]= ConnectionState.REQUEST_NUM_PLAYERS;
+        expectedStates[2]= ConnectionState.ASK_NUM_PLAYERS;
         expectedStates[3]= ConnectionState.READ_NUM_PLAYERS;
         expectedStates[4]= ConnectionState.PUBLISH_NUM_PLAYERS;
         expectedStates[5]= ConnectionState.PUBLISH_NAME;
@@ -34,7 +34,7 @@ public class ConnectionStateTest {
             if(state.equals(ConnectionState.READ_ID)) {
                 assertNotNull(state.next());
                 assert (
-                        state.next().equals(ConnectionState.REQUEST_NUM_PLAYERS)
+                        state.next().equals(ConnectionState.ASK_NUM_PLAYERS)
                                 ||
                                 state.next().equals(ConnectionState.PUBLISH_NUM_PLAYERS)
                 );

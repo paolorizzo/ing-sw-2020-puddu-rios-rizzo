@@ -12,6 +12,7 @@ public class PlayersObservable extends Observable<PlayersObserver>{
     }
 
     public synchronized void notifyID(int id){
+        System.out.println("notifyID with id: "+id);
         for(PlayersObserver obs:observers){
             obs.updateID(id);
         }

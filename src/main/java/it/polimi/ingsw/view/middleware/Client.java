@@ -26,14 +26,16 @@ public class Client extends Messenger implements ViewObserver, Runnable {
     private GameObservable virtualGameFeed;
     private PlayersObservable virtualPlayersFeed;
 
-    private Map<String, Observable> methodMap;
-
     public Client(String ip, int port)
     {
         this.ip = ip;
         this.port = port;
         this.cw = ClientView.instance();
         this.cw.addObserver(this);
+        virtualGameFeed = new GameObservable();
+        virtualGameFeed.addObserver(cw);
+        virtualPlayersFeed = new PlayersObservable();
+        virtualPlayersFeed.addObserver(cw);
         methodMap = constructMethodMap();
     }
 
@@ -153,6 +155,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
                 try {
                     ByteIn = new ObjectInputStream(socket.getInputStream());
                     Message message = (Message) ByteIn.readObject();
+                    System.out.println("Messaggio in arrivo sul client! Message method: "+message);
                     callMethod(message);
                 }
                 catch (ClassNotFoundException e)
@@ -189,7 +192,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
 
     @Override
     public void updateNumPlayers(int numPlayers){
-        sendMessage("updateNumPlayers");
+        sendMessage("updateNumPlayers", numPlayers);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.exception.IncorrectStateException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
@@ -54,13 +55,24 @@ public class ClientView extends View
     }
 
     public void updateID(int id){
+        System.out.println("ClientView.updateID with id "+id);
         if(currentConnectionState.equals(ConnectionState.READ_ID))
             currentConnectionState.execute(id);
     }
-
+    public void numPlayersView(){
+        if(currentConnectionState.equals(ConnectionState.ASK_NUM_PLAYERS)){
+            System.out.println("Sei il primo player! Inserisci il numero di giocatori");
+            Scanner in = new Scanner(System.in);
+            int numPlayers = in.nextInt();
+            currentConnectionState = currentConnectionState.next();
+            currentConnectionState.execute(numPlayers);
+        }else{
+            throw new IncorrectStateException("Can't ask numOfPlayer in state "+currentConnectionState);
+        }
+    }
     public synchronized void updateNumPlayers(int numPlayers){
-        //if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
-        //    currentConnectionState.execute(numPlayers);
+        if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
+            currentConnectionState.execute(numPlayers);
     }
 
     public synchronized void updateName(int id, String name){

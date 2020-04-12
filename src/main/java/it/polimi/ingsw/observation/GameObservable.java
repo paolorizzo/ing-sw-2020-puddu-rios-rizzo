@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameObservable extends Observable<GameObserver>{
-    private List<GameObserver> observers;
 
     public GameObservable(){
         super();

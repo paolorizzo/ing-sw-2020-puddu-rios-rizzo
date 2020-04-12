@@ -56,5 +56,13 @@ public class Message implements Serializable
         }
         return args;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "methodName='" + methodName + '\'' +
+                ", args=" + args +
+                '}';
+    }
 }
 

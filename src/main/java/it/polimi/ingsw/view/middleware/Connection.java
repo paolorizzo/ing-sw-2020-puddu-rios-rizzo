@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.middleware;
 import it.polimi.ingsw.observation.Observable;
 import it.polimi.ingsw.observation.RequestsObserver;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,12 +22,12 @@ public class Connection extends Messenger implements Runnable
     private ObjectOutputStream outByte;
     private ObjectInputStream ByteIn;
 
-    private Map<String, Observable> methodMap;
 
     public Connection(Socket socket, Server server)
     {
         this.socket = socket;
         this.server = server;
+
         this.view = null;
         methodMap = null;
     }
@@ -94,6 +95,8 @@ public class Connection extends Messenger implements Runnable
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ByteIn.readObject();
+
+                System.out.println("Messaggio in arrivo! Message method: "+message);
                 callMethod(message);
                 //TODO intercept message to discover numPlayers
                 /*

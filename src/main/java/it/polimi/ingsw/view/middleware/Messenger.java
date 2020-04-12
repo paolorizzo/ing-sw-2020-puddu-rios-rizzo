@@ -18,7 +18,13 @@ public abstract class Messenger {
     protected Map<String, Observable> methodMap;
 
     protected Object getObservable(String methodName){
-        return methodMap.get(methodName);
+        System.out.println("cerco "+methodName);
+        try{
+            return methodMap.get(methodName);
+        }catch(Exception e){
+            System.out.println("non trovo "+methodName);
+        }
+        return null;
     }
 
     //low level sendMessage, simply serializes and sends a Message object through an output stream
@@ -59,13 +65,11 @@ public abstract class Messenger {
     //retrieves the object on which to call the method using the methodMap
     //through the service method getObservable
     public void callMethod(String methodName, List<Object> args){
+        if(methodName.contains("update"))
+            methodName = toNotify(methodName);
 
         Object target = getObservable(methodName);
-
-        if(methodName.contains("update"))
-            callNotify(target, toNotify(methodName), args);
-        else
-            callNotify(target, methodName, args);
+        callNotify(target, methodName, args);
     }
 
     //wrapper on callMethod, makes it easier to use it by encapsulating the logic needed to unpack the Message
@@ -85,6 +89,7 @@ public abstract class Messenger {
                 Object[] methodArgs = args.toArray();
                 try
                 {
+                    System.out.println("Invoke "+methodName+" on "+target);
                     method.invoke(target, methodArgs);
                 }
                 catch(IllegalAccessException e)
