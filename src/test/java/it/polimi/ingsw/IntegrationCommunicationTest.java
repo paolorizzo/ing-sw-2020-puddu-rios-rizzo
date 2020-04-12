@@ -24,8 +24,9 @@ public class IntegrationCommunicationTest {
     @Test
     public void loopTest(){
 
-        Server server = buildAndRunServer();
-        Client client = buildAndRunClient();
+        int port = 40000;
+        Server server = buildAndRunServer(port);
+        Client client = buildAndRunClient(port);
         ClientView cw = client.getClientView();
         try{
             TimeUnit.SECONDS.sleep(1);
@@ -40,12 +41,12 @@ public class IntegrationCommunicationTest {
 
     //constructs the server and runs it in a thread
     //also returns the server
-    public Server buildAndRunServer(){
+    public Server buildAndRunServer(int port){
 
         Server server;
         try
         {
-            server = new Server(42069);
+            server = new Server(port);
             executor.submit(server);
             return server;
         }
@@ -58,8 +59,8 @@ public class IntegrationCommunicationTest {
 
     //constructs the client and runs it in a thread
     //also returns the client
-    public Client buildAndRunClient(){
-        Client client = new Client("127.0.0.1", 42069);
+    public Client buildAndRunClient(int port){
+        Client client = new Client("127.0.0.1", port);
         try
         {
             executor.submit(client);

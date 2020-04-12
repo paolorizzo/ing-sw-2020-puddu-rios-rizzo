@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 
 public class ConnectionStateTest {
-    /*
 
 
     //tests that no states were added, removed or modified
@@ -15,9 +14,9 @@ public class ConnectionStateTest {
         ConnectionState[] expectedStates = new ConnectionState[7];
         expectedStates[0]= ConnectionState.REQUEST_ID;
         expectedStates[1]= ConnectionState.READ_ID;
-        expectedStates[2]= ConnectionState.ASK_NUM_PLAYERS;
-        expectedStates[3]= ConnectionState.READ_NUM_PLAYERS;
-        expectedStates[4]= ConnectionState.PUBLISH_NUM_PLAYERS;
+        expectedStates[2]= ConnectionState.PUBLISH_NUM_PLAYERS;
+        expectedStates[3]= ConnectionState.REQUEST_NUM_PLAYERS;
+        expectedStates[4]= ConnectionState.READ_NUM_PLAYERS;
         expectedStates[5]= ConnectionState.PUBLISH_NAME;
         expectedStates[6]= ConnectionState.END;
         ConnectionState[] actualStates = ConnectionState.values();
@@ -28,6 +27,7 @@ public class ConnectionStateTest {
 
     //tests that the next state function returns an acceptable state
     //does NOT test whether it is logically correct, just that it is acceptable
+    /*
     @Test
     public void nextStateAcceptable(){
         ConnectionState[] states = ConnectionState.values();
@@ -35,7 +35,7 @@ public class ConnectionStateTest {
             if(state.equals(ConnectionState.READ_ID)) {
                 assertNotNull(state.next());
                 assert (
-                        state.next().equals(ConnectionState.ASK_NUM_PLAYERS)
+                        state.next().equals(ConnectionState.REQUEST_NUM_PLAYERS)
                                 ||
                                 state.next().equals(ConnectionState.PUBLISH_NUM_PLAYERS)
                 );
@@ -65,5 +65,6 @@ public class ConnectionStateTest {
             }
         }
     }
+
      */
 }

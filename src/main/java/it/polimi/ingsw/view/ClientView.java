@@ -24,12 +24,19 @@ public class ClientView extends View
     private List<Player> players;
     private int id;
 
+    private UserInterface ui;
+
     //private because ClientView is singleton. instance() should be called to get an object of this type
     private ClientView(){
         super();
         game=null;
         players = new ArrayList<Player>();
         id = -1;
+        ui = Cli.instance();
+    }
+
+    public UserInterface getUi(){
+        return ui;
     }
 
     public int getID(){
@@ -59,8 +66,10 @@ public class ClientView extends View
         if(currentConnectionState.equals(ConnectionState.READ_ID))
             currentConnectionState.execute(id);
     }
+
+    /*
     public void numPlayersView(){
-        if(currentConnectionState.equals(ConnectionState.ASK_NUM_PLAYERS)){
+        if(currentConnectionState.equals(ConnectionState.PUBLISH_NUM_PLAYERS)){
             System.out.println("Sei il primo player! Inserisci il numero di giocatori");
             Scanner in = new Scanner(System.in);
             int numPlayers = in.nextInt();
@@ -70,7 +79,10 @@ public class ClientView extends View
             throw new IncorrectStateException("Can't ask numOfPlayer in state "+currentConnectionState);
         }
     }
+
+     */
     public synchronized void updateNumPlayers(int numPlayers){
+        System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
             currentConnectionState.execute(numPlayers);
     }

@@ -9,9 +9,11 @@ import java.util.List;
 
 //TODO create singleton superclass
 //TODO test whole class
+//TODO refactor into 3 models, one for every feed
 public class Model {
     public static Model instance;
 
+    Game game;
     List<Player> players;
 
     //feeds
@@ -19,6 +21,7 @@ public class Model {
     public PlayersObservable playersFeed;
 
     private Model(){
+        game = new Game();
         players = new ArrayList<Player>();
         gameFeed = new GameObservable();
         playersFeed = new PlayersObservable();
@@ -31,6 +34,10 @@ public class Model {
         return instance;
     }
 
+    GameObservable getGameFeed(){
+        return gameFeed;
+    }
+
 
     //constructs a new player with the view, and adds it to the player list
     //also adds it as an observer and returns it
@@ -40,6 +47,10 @@ public class Model {
         players.add(newPlayer);
         addObserver(newPlayer);
         return newPlayer;
+    }
+
+    public void setNumPlayers(int numPlayers){
+        game.setNumPlayers(numPlayers);
     }
 
     public void addObserver(Player p){

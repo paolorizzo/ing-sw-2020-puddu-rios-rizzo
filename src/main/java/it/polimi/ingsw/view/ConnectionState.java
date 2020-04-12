@@ -26,23 +26,23 @@ public enum ConnectionState {
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
                 view.currentConnectionState.execute(null);
-            }else
-                view.currentConnectionState = ConnectionState.READ_NUM_PLAYERS;
-
-
-        }
-    },
-    ASK_NUM_PLAYERS{
-        public void execute(Object input)  {
-            view.numPlayersView();
+            }else{
+                view.currentConnectionState = ConnectionState.REQUEST_NUM_PLAYERS;
+                view.currentConnectionState.execute(null);
+            }
         }
     },
     PUBLISH_NUM_PLAYERS{
         public void execute(Object input) {
-            int numOfPlayer = (int)input;
-            System.out.println("publish number of player "+numOfPlayer);
-            view.viewGameFeed.notifyNumPlayers(numOfPlayer);
+            int numPlayers = ui.getNumPlayers();
+            System.out.println("publishing number of players: "+numPlayers);
+            view.viewGameFeed.notifyNumPlayers(numPlayers);
             view.currentConnectionState = view.currentConnectionState.next();
+        }
+    },
+    REQUEST_NUM_PLAYERS{
+        public void execute(Object input)  {
+            //view.numPlayersView();
         }
     },
     //TODO add custom IncorrectStateException
@@ -62,6 +62,7 @@ public enum ConnectionState {
 
 
     private static ClientView view = ClientView.instance();
+    private static UserInterface ui = view.getUi();
 
     //default implementation of next, returns the next enum instance in order, or null if the FSM has terminated
     public ConnectionState next(){

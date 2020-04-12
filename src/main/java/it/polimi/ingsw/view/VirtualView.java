@@ -17,12 +17,12 @@ public class VirtualView extends View
     }
 
     public void updateID(int id){
-        connection.sendMessage("updateID", id);
+        connection.sendMessage("notifyID", id);
     }
 
 
     public void updateNumPlayers(int numPlayers){
-        //TODO
+        connection.sendMessage("notifyNumPlayers", numPlayers);
     }
 
     public void updateName(int id, String name){

@@ -57,8 +57,7 @@ public class Controller implements ViewObserver
 
     //GameObserver updates
     public synchronized void updateNumPlayers(int numPlayers){
-        //if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
-        //    currentConnectionState.execute(numPlayers);
+        model.setNumPlayers(numPlayers);
     }
 
     //PlayersObservable updates
