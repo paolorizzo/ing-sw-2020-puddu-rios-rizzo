@@ -4,4 +4,5 @@ public interface RequestsObserver {
 
     public void updateRequestID();
     public void updateRequestNumPlayers();
+    public void updateAckID();
 }

@@ -47,47 +47,36 @@ public class Controller implements ViewObserver
     //TODO this method should instead publish the id of the first player whose id hasn't been published yet
     //if the third player connects before the second can solve his id, there may be conflicts
     //perhaps enforcing sequential connections already solves the problem
-    public synchronized void updateRequestID(){
+    public synchronized void updateRequestID()
+    {
+        System.out.println("Il prossimo ID che manderò è:"+(players.size()-1));
         model.playersFeed.notifyID(players.size()-1);
     }
 
-    public synchronized void updateRequestNumPlayers(){
+    public synchronized void updateAckID()
+    {
+        System.out.println("ricevuto ACK ID");
+    }
+
+    public synchronized void updateRequestNumPlayers()
+    {
         //TODO
     }
 
     //GameObserver updates
-    public synchronized void updateNumPlayers(int numPlayers){
+    public synchronized void updateNumPlayers(int numPlayers)
+    {
         model.setNumPlayers(numPlayers);
     }
 
     //PlayersObservable updates
-    public synchronized void updateID(int id){
+    public synchronized void updateID(int id)
+    {
         //TODO
     }
 
-    public synchronized void updateName(int id, String name){
+    public synchronized void updateName(int id, String name)
+    {
         //TODO
     }
-
-    /*
-    public void start()
-    {
-        for(View v : views)
-        {
-            v.startNameView();
-        }
-    }
-
-    public void setup()
-    {
-        views.get(0).startNumberOfPlayersView();
-    }
-
-    @Override
-    public void update(Object o)
-    {
-        System.out.println("Update received: " + o);
-    }
-
-     */
 }

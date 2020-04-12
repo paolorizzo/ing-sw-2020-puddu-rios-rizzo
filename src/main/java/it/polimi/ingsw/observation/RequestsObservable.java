@@ -15,6 +15,13 @@ public class RequestsObservable extends Observable<RequestsObserver>{
         }
     }
 
+    public synchronized void notifyAckID()
+    {
+        for(RequestsObserver obs:observers){
+            obs.updateAckID();
+        }
+    }
+
     public synchronized void notifyRequestNumPlayers(){
         for(RequestsObserver obs:observers){
             obs.updateRequestID();

@@ -95,23 +95,16 @@ public class Connection extends Messenger implements Runnable
                 ByteIn = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ByteIn.readObject();
 
+                //TODO intercept message to discover numPlayers
+
+                if(message.getMethodName().equals("updateAckID"))
+                {
+                    System.out.println("Sblocco il thread");
+                    server.registerIdAck();
+                }
+
                 System.out.println("Messaggio in arrivo! Message method: "+message);
                 callMethod(message);
-                //TODO intercept message to discover numPlayers
-                /*
-                if(message.getMethodName().equals("update"))
-                {
-                    view.notify(message.getArg(0));
-                    if (message.getArg(0).equals("2Players"))
-                    {
-                        server.setNumberOfPlayers(2);
-                    }
-                    else if (message.getArg(0).equals("3Players"))
-                    {
-                        server.setNumberOfPlayers(3);
-                    }
-                }
-                */
 
             }
             catch (ClassNotFoundException e)

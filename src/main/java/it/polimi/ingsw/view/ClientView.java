@@ -49,8 +49,11 @@ public class ClientView extends View
         for(int i=0; i < id+1; i++){
             players.add(new Player(Color.values()[id], id));
         }
+        /*
         if(id == 2)
             game = new Game(3);
+
+         */
     }
 
 
@@ -67,20 +70,6 @@ public class ClientView extends View
             currentConnectionState.execute(id);
     }
 
-    /*
-    public void numPlayersView(){
-        if(currentConnectionState.equals(ConnectionState.PUBLISH_NUM_PLAYERS)){
-            System.out.println("Sei il primo player! Inserisci il numero di giocatori");
-            Scanner in = new Scanner(System.in);
-            int numPlayers = in.nextInt();
-            currentConnectionState = currentConnectionState.next();
-            currentConnectionState.execute(numPlayers);
-        }else{
-            throw new IncorrectStateException("Can't ask numOfPlayer in state "+currentConnectionState);
-        }
-    }
-
-     */
     public synchronized void updateNumPlayers(int numPlayers){
         System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
@@ -101,37 +90,4 @@ public class ClientView extends View
     public void start(){
         startConnectionFSM();
     }
-
-
-    /*
-    @Override
-    public void startNameView()
-    {
-        Scanner stdin = new Scanner(System.in);
-        System.out.println("Insert username: ");
-        String name = stdin.nextLine();
-        notify("selected username "+name);
-    }
-
-    @Override
-    public void startNumberOfPlayersView()
-    {
-        Scanner stdin = new Scanner(System.in);
-        System.out.println("Insert the desired number of players: ");
-        String num = stdin.nextLine();
-        notify(num+"Players");
-    }
-
-    @Override
-    public void update(Object o)
-    {
-
-    }
-
-    @Override
-    public void startOutOfGameView()
-    {
-        System.out.println("Sorry! You're out of the game.");
-    }
-    */
 }

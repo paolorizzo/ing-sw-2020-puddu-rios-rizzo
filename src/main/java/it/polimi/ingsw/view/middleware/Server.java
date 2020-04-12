@@ -23,6 +23,14 @@ public class Server implements Runnable
     private boolean numberOfPlayerIsSet = false;
     private Object numberOfPlayersLock = new Object();
 
+    private boolean idSet = false;
+    private final Object idSetLock = new Object();
+
+    private boolean nextClientIsReady = false;
+    private final Object clientReadyLock = new Object();
+
+    private int nextClientIn = 0;
+
     private boolean gameIsOn = false;
 
     public Server(int port) throws IOException
@@ -43,6 +51,15 @@ public class Server implements Runnable
             this.numberOfPlayers = n;
             this.numberOfPlayerIsSet = true;
             numberOfPlayersLock.notify();
+        }
+    }
+
+    public void registerIdAck()
+    {
+        synchronized (idSetLock)
+        {
+            idSet = true;
+            idSetLock.notify();
         }
     }
 
@@ -68,9 +85,21 @@ public class Server implements Runnable
         if(cons.size()==1)
         {
             controller = Controller.instance();
+            /*
+            //queste due righe di codice sono alternative a letClientIn()
             controller.addView(view);
             views.get(0).addObserver(controller);
+             */
+            letClientIn();
             //controller.setup();
+        }
+        else
+        {
+            synchronized (clientReadyLock)
+            {
+                nextClientIsReady = true;
+                clientReadyLock.notify();
+            }
         }
 
         // if the number of players is set before the desired number of players have connected, this awakes the waiting thread started in run()
@@ -79,6 +108,8 @@ public class Server implements Runnable
             if(numberOfPlayerIsSet && cons.size() == numberOfPlayers)
                 numberOfPlayersLock.notify();
         }
+
+        System.out.println("Registered connection n. "+(views.size()));
     }
 
     // adds to the game only the first n connections in the list, with n being the desired number of players
@@ -107,6 +138,14 @@ public class Server implements Runnable
         }
     }
 
+    public void letClientIn()
+    {
+        System.out.println("Lascio entrare il prossimo client");
+        controller.addView(views.get(nextClientIn));
+        views.get(nextClientIn).addObserver(controller);
+        nextClientIn++;
+    }
+
     public int getNumberOfConnections()
     {
         return cons.size();
@@ -117,6 +156,7 @@ public class Server implements Runnable
     {
         System.out.println("Server listening on port: " + PORT);
 
+        /*
         // handles the connections waiting for the game to start
         new Thread(new Runnable()
         {
@@ -149,6 +189,48 @@ public class Server implements Runnable
             }
         }).start();
 
+         */
+
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run() {
+                synchronized (idSetLock)
+                {
+                    try
+                    {
+                        while(true)
+                        {
+                            while(!idSet)
+                            {
+                                idSetLock.wait();
+                            }
+
+                            synchronized (clientReadyLock)
+                            {
+                                while(!nextClientIsReady)
+                                {
+                                    clientReadyLock.wait();
+                                }
+                            }
+
+                            letClientIn();
+                            idSet = false;
+
+                            if(views.size() == nextClientIn )
+                                nextClientIsReady = false;
+                        }
+                    }
+                    catch( InterruptedException e)
+                    {
+                        System.err.println("InterruptedException del thread di Server");
+                    }
+
+                }
+            }
+        }).start();
+
+
         // accepts and registers the first 3 connections, runs a separate thread for all of them
         while(true)
         {
@@ -156,24 +238,30 @@ public class Server implements Runnable
             {
                 synchronized (cons)
                 {
+                    Socket socket = serverSocket.accept();
+
+                    final Connection connection = new Connection(socket, this);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            connection.run();
+                        }
+                    }).start();
+
+                    register(connection);
+
+                    //how to block connections
+                    /*
                     if(cons.size() < 3)
                     {
-                        Socket socket = serverSocket.accept();
 
-                        final Connection connection = new Connection(socket, this);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                connection.run();
-                            }
-                        }).start();
-
-                        register(connection);
                     }
                     else
                     {
                         serverSocket.close();
                     }
+
+                     */
                 }
             }
             catch (IOException e)

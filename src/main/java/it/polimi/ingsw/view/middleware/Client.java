@@ -193,6 +193,12 @@ public class Client extends Messenger implements ViewObserver, Runnable {
     }
 
     @Override
+    public void updateAckID()
+    {
+        sendMessage("updateAckID");
+    }
+
+    @Override
     public void updateRequestNumPlayers(){
         sendMessage("updateRequestNumPlayers");
     }

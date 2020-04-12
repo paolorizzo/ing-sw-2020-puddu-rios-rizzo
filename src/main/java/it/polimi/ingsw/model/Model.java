@@ -43,7 +43,7 @@ public class Model {
     //also adds it as an observer and returns it
     public Player addPlayer(View view){
         int id = players.size()+1;
-        Player newPlayer = new Player(Color.values()[id-1], id, view);
+        Player newPlayer = new Player(Color.values()[((id-1))], id, view);
         players.add(newPlayer);
         addObserver(newPlayer);
         return newPlayer;

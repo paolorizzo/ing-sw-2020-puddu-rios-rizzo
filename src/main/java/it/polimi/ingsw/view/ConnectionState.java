@@ -23,6 +23,7 @@ public enum ConnectionState {
             int id = (int) input;
             System.out.println("My id is: " + id);
             view.setID(id);
+            view.viewRequestsFeed.notifyAckID();
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
                 view.currentConnectionState.execute(null);

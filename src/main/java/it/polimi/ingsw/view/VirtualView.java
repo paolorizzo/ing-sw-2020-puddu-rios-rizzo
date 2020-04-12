@@ -20,7 +20,6 @@ public class VirtualView extends View
         connection.sendMessage("notifyID", id);
     }
 
-
     public void updateNumPlayers(int numPlayers){
         connection.sendMessage("notifyNumPlayers", numPlayers);
     }
