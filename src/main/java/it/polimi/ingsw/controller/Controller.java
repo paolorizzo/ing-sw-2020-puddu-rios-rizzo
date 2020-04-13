@@ -49,13 +49,12 @@ public class Controller implements ViewObserver
     //perhaps enforcing sequential connections already solves the problem
     public synchronized void updateRequestID()
     {
-        System.out.println("Il prossimo ID che manderò è:"+(players.size()-1));
         model.playersFeed.notifyID(players.size()-1);
     }
 
     public synchronized void updateAckID()
     {
-        System.out.println("ricevuto ACK ID");
+        //TODO: we need this method to justify the ACK travelling, but what do we do here?
     }
 
     public synchronized void updateRequestNumPlayers()

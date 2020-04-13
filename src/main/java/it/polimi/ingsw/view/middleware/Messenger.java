@@ -6,29 +6,34 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 //TODO test
 //TODO many aspects common to subclasses should be moved here socket
-//
-public abstract class Messenger {
+
+public abstract class Messenger
+{
     protected Map<String, Observable> methodMap;
 
-    protected Object getObservable(String methodName){
-        System.out.println("cerco "+methodName);
+    protected Object getObservable(String methodName)
+    {
         try{
             return methodMap.get(methodName);
         }catch(Exception e){
-            System.out.println("non trovo "+methodName);
+            System.err.println("Can't find the method called "+methodName);
         }
         return null;
     }
 
-    //low level sendMessage, simply serializes and sends a Message object through an output stream
-    public void sendMessage(ObjectOutputStream outByte, Message msg){
+    /**
+     * Low level sendMessage, simply serializes and sends a Message object through an output stream
+     * @param outByte the socket output stream associated with the communication.
+     * @param msg the message to be sent.
+     */
+    public void sendMessage(ObjectOutputStream outByte, Message msg)
+    {
         try
         {
             outByte.writeObject(msg);
@@ -41,12 +46,14 @@ public abstract class Messenger {
     }
 
     //masks complexity, generic for a list of many arguments
-    public void sendMessage(ObjectOutputStream outByte, String methodName, List<Object> args){
+    public void sendMessage(ObjectOutputStream outByte, String methodName, List<Object> args)
+    {
         sendMessage(outByte, new Message(methodName, args));
     }
 
     //useful to send messages with a variable amount of arguments
-    public void sendMessage(ObjectOutputStream outByte, String methodName, Object ...arg){
+    public void sendMessage(ObjectOutputStream outByte, String methodName, Object ...arg)
+    {
         List<Object> args = Arrays.asList(arg);
         sendMessage(outByte, new Message(methodName, args));
     }
@@ -56,15 +63,16 @@ public abstract class Messenger {
     //we have to convert from the name of an update
     //to the name of a notify
     //this system relies on the consistence of naming patterns between observers and observables
-    public String toNotify(String update){
+    public String toNotify(String update)
+    {
         return update.replace("update", "notify");
     }
-
 
     //sanitizes the methodName to make sure that it is a notify, before calling callNotify
     //retrieves the object on which to call the method using the methodMap
     //through the service method getObservable
-    public void callMethod(String methodName, List<Object> args){
+    public void callMethod(String methodName, List<Object> args)
+    {
         if(methodName.contains("update"))
             methodName = toNotify(methodName);
 
@@ -73,7 +81,8 @@ public abstract class Messenger {
     }
 
     //wrapper on callMethod, makes it easier to use it by encapsulating the logic needed to unpack the Message
-    public void callMethod(Message msg){
+    public void callMethod(Message msg)
+    {
         callMethod(msg.getMethodName(), msg.getArgsList());
     }
 
@@ -82,14 +91,15 @@ public abstract class Messenger {
     //also relies on wrapper functions to get the target object
     //TODO: check the correspondence of arguments
     //TODO perhaps there is a more efficient way to get the method from the name? some Class.getMethod(String name)?
-    private void callNotify(Object target, String methodName, List<Object> args){
+    private void callNotify(Object target, String methodName, List<Object> args)
+    {
         Method[] possibleMethods = target.getClass().getMethods();
         for(Method method:possibleMethods){
             if(method.getName().equals(methodName)){
                 Object[] methodArgs = args.toArray();
                 try
                 {
-                    System.out.println("Invoke "+methodName+" on "+target);
+                    //System.out.println("Invoke "+methodName+" on "+target);
                     method.invoke(target, methodArgs);
                 }
                 catch(IllegalAccessException e)
@@ -110,6 +120,4 @@ public abstract class Messenger {
     }
 
     protected abstract Map<String, Observable> constructMethodMap();
-
-
 }

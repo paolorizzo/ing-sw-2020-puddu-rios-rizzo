@@ -12,10 +12,11 @@ public class Message implements Serializable
     public Message(String methodName)
     {
         this.methodName = methodName;
-        this.args = new ArrayList<Object>();
+        this.args = new ArrayList<>();
     }
 
-    public Message(String methodName, List<Object> args){
+    public Message(String methodName, List<Object> args)
+    {
         this.methodName = methodName;
         this.args = args;
     }
@@ -45,7 +46,8 @@ public class Message implements Serializable
         return args.get(i);
     }
 
-    public List<Object> getArgsList(){
+    public List<Object> getArgsList()
+    {
         List<Object> args = new ArrayList<Object>();
         if(hasArgs())
         {
@@ -58,7 +60,8 @@ public class Message implements Serializable
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Message{" +
                 "methodName='" + methodName + '\'' +
                 ", args=" + args +
