@@ -13,7 +13,7 @@ import java.util.List;
 public class Server implements Runnable
 {
     private static int PORT;
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private Controller controller;
 
     private final List<View> views = new ArrayList<View>();
@@ -21,7 +21,7 @@ public class Server implements Runnable
 
     private int numberOfPlayers = 1;
     private boolean numberOfPlayerIsSet = false;
-    private Object numberOfPlayersLock = new Object();
+    private final Object numberOfPlayersLock = new Object();
 
     private boolean idSet = false;
     private final Object idSetLock = new Object();
@@ -31,8 +31,6 @@ public class Server implements Runnable
 
     private int nextClientIn = 0;
 
-    private boolean gameIsOn = false;
-
     public Server(int port) throws IOException
     {
         PORT = port;
@@ -41,11 +39,10 @@ public class Server implements Runnable
 
     /**
      * Invoked by the connection of the first player when the user inputs the desired number of players
-     * @param n The desired number of players for the upcoming match
+     * @param n the desired number of players for the upcoming match.
      */
     public void setNumberOfPlayers(int n)
     {
-        // notifies the waiting thread started in run()
         synchronized (numberOfPlayersLock)
         {
             this.numberOfPlayers = n;
@@ -54,6 +51,10 @@ public class Server implements Runnable
         }
     }
 
+    /**
+     * Invoked by the connection of a player sending an ACK of his newly-received ID.
+     * The main purpose of this method is awakening the waiting thread in run() that handles the sequential access to the game.
+     */
     public void registerIdAck()
     {
         synchronized (idSetLock)
@@ -63,17 +64,10 @@ public class Server implements Runnable
         }
     }
 
-    public int getNumberOfPlayers()
-    {
-        return numberOfPlayers;
-    }
-
-    public boolean isGameOn()
-    {
-        return gameIsOn;
-    }
-
-    // adds the connection to the list, associating it with the relative virtual view
+    /**
+     * Adds the connection to the list, associating it with the relative virtual view.
+     * @param c the connection just created between a new client and the server.
+     */
     public synchronized void register(Connection c)
     {
         cons.add(c);
@@ -85,13 +79,7 @@ public class Server implements Runnable
         if(cons.size()==1)
         {
             controller = Controller.instance();
-            /*
-            //queste due righe di codice sono alternative a letClientIn()
-            controller.addView(view);
-            views.get(0).addObserver(controller);
-             */
             letClientIn();
-            //controller.setup();
         }
         else
         {
@@ -101,95 +89,25 @@ public class Server implements Runnable
                 clientReadyLock.notify();
             }
         }
-
-        // if the number of players is set before the desired number of players have connected, this awakes the waiting thread started in run()
-        synchronized (numberOfPlayersLock)
-        {
-            if(numberOfPlayerIsSet && cons.size() == numberOfPlayers)
-                numberOfPlayersLock.notify();
-        }
-
-        System.out.println("Registered connection n. "+(views.size()));
     }
 
-    // adds to the game only the first n connections in the list, with n being the desired number of players
-    // starts the game on the controller's side
-    public void startGame()
-    {
-        if(numberOfPlayerIsSet && cons.size() >= numberOfPlayers)
-        {
-            for (int i = 1; i < numberOfPlayers; i++)
-            {
-                controller.addView(views.get(i));
-                views.get(i).addObserver(controller);
-            }
-
-            if(numberOfPlayers < views.size())
-            {
-                //TODO handle this communication inside new paradigm
-                //this will require some thought given that all the views receive the same
-                //notifies, and given that a new view might not have an ID
-                //views.get(2).startOutOfGameView();
-            }
-
-            //controller.start();
-            numberOfPlayerIsSet = false; // why?
-            gameIsOn = true;
-        }
-    }
-
+    /**
+     * Method used to force the sequential access to the game, in order to assign the IDs properly.
+     * While the connections and views are collected by the server as the socket is accepted, the controller receives the views only when this method is invoked.
+     */
     public void letClientIn()
     {
-        System.out.println("Lascio entrare il prossimo client");
         controller.addView(views.get(nextClientIn));
         views.get(nextClientIn).addObserver(controller);
         nextClientIn++;
     }
 
-    public int getNumberOfConnections()
-    {
-        return cons.size();
-    }
-
-    // handles the incoming connection requests
+    /**
+     * Handles the incoming connection requests and runs the thread that manage the access of clients to the game.
+     */
     public void run()
     {
         System.out.println("Server listening on port: " + PORT);
-
-        /*
-        // handles the connections waiting for the game to start
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run() {
-                synchronized (numberOfPlayersLock)
-                {
-                    try
-                    {
-                        // waits until the first player sets the desired number of players
-                        while(!numberOfPlayerIsSet)
-                        {
-                            numberOfPlayersLock.wait();
-                        }
-
-                        // waits until all the players connect to the server
-                        while(cons.size()<numberOfPlayers)
-                        {
-                            numberOfPlayersLock.wait();
-                        }
-
-                        startGame();
-                    }
-                    catch( InterruptedException e)
-                    {
-                        System.err.println("InterruptedException del thread di Server");
-                    }
-
-                }
-            }
-        }).start();
-
-         */
 
         new Thread(new Runnable()
         {
@@ -230,8 +148,7 @@ public class Server implements Runnable
             }
         }).start();
 
-
-        // accepts and registers the first 3 connections, runs a separate thread for all of them
+        // accepts all connections runs a separate thread for all of them
         while(true)
         {
             try
