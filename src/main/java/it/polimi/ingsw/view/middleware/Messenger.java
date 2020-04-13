@@ -108,7 +108,7 @@ public abstract class Messenger
                 }
                 catch(InvocationTargetException e)
                 {
-                    System.err.println("Error in invoking the method, IllegalTargetException");
+                    System.err.println("Error in invoking the method, IllegalTargetException "+ methodName);
                 }
                 catch(NullPointerException e)
                 {

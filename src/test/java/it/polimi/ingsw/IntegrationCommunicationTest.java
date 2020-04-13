@@ -21,6 +21,7 @@ public class IntegrationCommunicationTest {
     //runs the server and connects one view
     //this test is very significative because it is dependent on the entire chain of observer/observable patterns
     //to work, and on the network connection between Client and Server
+    /*
     @Test
     public void loopTest(){
 
@@ -36,6 +37,30 @@ public class IntegrationCommunicationTest {
             System.err.println(e.getMessage());
         }
         assertEquals(0, cw.getID());
+    }
+
+     */
+
+    @Test
+    public void loopTest2(){
+
+        int port = 40000;
+        Server server = buildAndRunServer(port);
+        Client client1 = buildAndRunClient(port);
+        Client client2 = buildAndRunClient(port);
+        /*
+        ClientView cw = client.getClientView();
+        try{
+            TimeUnit.SECONDS.sleep(1);
+        }
+        catch(InterruptedException e)
+        {
+            System.err.println(e.getMessage());
+        }
+
+         */
+        assertEquals(0, 0);
+
     }
 
 

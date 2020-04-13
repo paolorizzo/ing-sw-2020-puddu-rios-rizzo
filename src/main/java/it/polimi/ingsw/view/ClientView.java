@@ -46,14 +46,6 @@ public class ClientView extends View
     //TODO should not be accepted if ID is already set, meaning it is still -1
     public void setID(int id){
         this.id = id;
-        for(int i=0; i < id+1; i++){
-            players.add(new Player(Color.values()[id], id));
-        }
-        /*
-        if(id == 2)
-            game = new Game(3);
-
-         */
     }
 
 

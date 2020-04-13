@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observation.GameObservable;
+import it.polimi.ingsw.observation.ModelObserver;
 import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.view.View;
 
@@ -41,6 +42,7 @@ public class Model {
 
     //constructs a new player with the view, and adds it to the player list
     //also adds it as an observer and returns it
+    /*
     public Player addPlayer(View view){
         int id = players.size()+1;
         Player newPlayer = new Player(Color.values()[((id-1))], id, view);
@@ -49,12 +51,14 @@ public class Model {
         return newPlayer;
     }
 
+     */
+
     public void setNumPlayers(int numPlayers){
         game.setNumPlayers(numPlayers);
     }
 
-    public void addObserver(Player p){
-        addObserver(p.getView());
+    public void addObserver(ModelObserver obs){
+        addObserver(obs);
     }
 
     public void addObserver(View view){

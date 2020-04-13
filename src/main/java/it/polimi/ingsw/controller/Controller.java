@@ -37,8 +37,9 @@ public class Controller implements ViewObserver
     //TODO handle player limit
     public void addView(View view)
     {
-        players.add(model.addPlayer(view));
-        view.addObserver(this);
+        views.add(view);
+        model.addObserver(view);
+
     }
 
     //RequestsObserver updates
@@ -49,12 +50,13 @@ public class Controller implements ViewObserver
     //perhaps enforcing sequential connections already solves the problem
     public synchronized void updateRequestID()
     {
-        model.playersFeed.notifyID(players.size()-1);
+        model.playersFeed.notifyID(views.size()-1);
     }
 
     public synchronized void updateAckID()
     {
         //TODO: we need this method to justify the ACK travelling, but what do we do here?
+        System.out.println("received ack");
     }
 
     public synchronized void updateRequestNumPlayers()
