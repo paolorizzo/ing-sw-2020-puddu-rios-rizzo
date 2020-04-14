@@ -15,10 +15,10 @@ public class RequestsObservable extends Observable<RequestsObserver>{
         }
     }
 
-    public synchronized void notifyAckID()
+    public synchronized void notifyAckID(int id)
     {
         for(RequestsObserver obs:observers){
-            obs.updateAckID();
+            obs.updateAckID(id);
         }
     }
 

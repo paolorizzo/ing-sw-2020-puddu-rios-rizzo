@@ -35,6 +35,7 @@ public class Controller implements ViewObserver
     //adds player inside the model
     //also adds the controller itself as an observer of the view
     //TODO handle player limit
+    //TODO maybe synchronized?
     public void addView(View view)
     {
         views.add(view);
@@ -53,10 +54,10 @@ public class Controller implements ViewObserver
         model.playersFeed.notifyID(views.size()-1);
     }
 
-    public synchronized void updateAckID()
+    public synchronized void updateAckID(int id)
     {
         //TODO: we need this method to justify the ACK travelling, but what do we do here?
-        System.out.println("received ack");
+        System.out.println("received ack for id " + id);
     }
 
     public synchronized void updateRequestNumPlayers()

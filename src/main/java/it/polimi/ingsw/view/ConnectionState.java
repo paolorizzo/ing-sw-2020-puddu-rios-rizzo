@@ -23,11 +23,21 @@ public enum ConnectionState {
             int id = (int) input;
             System.out.println("My id is: " + id);
             view.setID(id);
-            view.viewRequestsFeed.notifyAckID();
+            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState.execute(id);
+        }
+    },
+    ACK_ID {
+        //sends ack of the reception of the id to the controller
+        //this is used to synchronize the connection of the different clients
+        public void execute(Object input) {
+            int id = (int) input;
+            view.viewRequestsFeed.notifyAckID(id);
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
                 view.currentConnectionState.execute(null);
-            }else{
+            }
+            else{
                 view.currentConnectionState = ConnectionState.REQUEST_NUM_PLAYERS;
                 view.currentConnectionState.execute(null);
             }

@@ -16,9 +16,10 @@ public class ClientView extends View
 {
     private static ClientView instance;
 
+    //finite state machine states
     ConnectionState currentConnectionState;
 
-    //TODO this should perhaps be its own class, or multiple specific classes?
+
     //updates will modify these objects
     Game game;
     private List<Player> players;
@@ -56,8 +57,11 @@ public class ClientView extends View
         return instance;
     }
 
-    public void updateID(int id){
-        System.out.println("ClientView.updateID with id "+id);
+    public synchronized void updateID(int id){
+        if(this.id != -1)
+            System.out.println("ClientView.updateID with id "+id+", but was already "+this.id);
+        else
+            System.out.println("ClientView.updateID with new id "+id);
         if(currentConnectionState.equals(ConnectionState.READ_ID))
             currentConnectionState.execute(id);
     }
