@@ -19,10 +19,6 @@ public class Server implements Runnable
     private final List<View> views = new ArrayList<View>();
     private final List<Connection> cons = new ArrayList<Connection>();
 
-    private int numberOfPlayers = 1;
-    private boolean numberOfPlayerIsSet = false;
-    private final Object numberOfPlayersLock = new Object();
-
     private boolean idSet = false;
     private final Object idSetLock = new Object();
 
@@ -35,20 +31,6 @@ public class Server implements Runnable
     {
         PORT = port;
         this.serverSocket = new ServerSocket(PORT);
-    }
-
-    /**
-     * Invoked by the connection of the first player when the user inputs the desired number of players
-     * @param n the desired number of players for the upcoming match.
-     */
-    public void setNumberOfPlayers(int n)
-    {
-        synchronized (numberOfPlayersLock)
-        {
-            this.numberOfPlayers = n;
-            this.numberOfPlayerIsSet = true;
-            numberOfPlayersLock.notify();
-        }
     }
 
     /**
