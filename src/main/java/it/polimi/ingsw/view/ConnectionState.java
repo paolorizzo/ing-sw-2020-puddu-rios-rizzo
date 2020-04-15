@@ -11,7 +11,7 @@ import java.util.Scanner;
 public enum ConnectionState {
     REQUEST_ID {
         //publishes the request for an id
-        public void execute(Object input) {
+        public void execute(ClientView view, Object input) {
             System.out.println("Richiedo ID");
             view.viewRequestsFeed.notifyRequestID();
             view.currentConnectionState = view.currentConnectionState.next();
@@ -19,61 +19,58 @@ public enum ConnectionState {
     },
     READ_ID {
         //sets the id
-        public void execute(Object input) {
+        public void execute(ClientView view, Object input) {
             int id = (int) input;
             System.out.println("My id is: " + id);
             view.setID(id);
             view.currentConnectionState = view.currentConnectionState.next();
-            view.currentConnectionState.execute(id);
+            view.currentConnectionState.execute(view, id);
         }
     },
     ACK_ID {
         //sends ack of the reception of the id to the controller
         //this is used to synchronize the connection of the different clients
-        public void execute(Object input) {
+        public void execute(ClientView view, Object input) {
             int id = (int) input;
             view.viewRequestsFeed.notifyAckID(id);
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
-                view.currentConnectionState.execute(null);
+                view.currentConnectionState.execute(view, null);
             }
             else{
                 view.currentConnectionState = ConnectionState.REQUEST_NUM_PLAYERS;
-                view.currentConnectionState.execute(null);
+                view.currentConnectionState.execute(view, null);
             }
         }
     },
     PUBLISH_NUM_PLAYERS{
-        public void execute(Object input) {
-            int numPlayers = ui.getNumPlayers();
+        public void execute(ClientView view, Object input) {
+            int numPlayers = view.getUi().getNumPlayers();
             System.out.println("publishing number of players: "+numPlayers);
             view.viewGameFeed.notifyNumPlayers(numPlayers);
             view.currentConnectionState = view.currentConnectionState.next();
         }
     },
     REQUEST_NUM_PLAYERS{
-        public void execute(Object input)  {
+        public void execute(ClientView view, Object input)  {
             //view.numPlayersView();
         }
     },
     //TODO add custom IncorrectStateException
     READ_NUM_PLAYERS{
-        public void execute(Object input){
+        public void execute(ClientView view, Object input){
             if(view.game != null)
                 throw new IncorrectStateException("game should not exist in state" + this.name());
             System.out.println("Creo il game da "+input+" giocatori");
             int numPlayers = (int) input;
             view.game = new Game(numPlayers);
             view.currentConnectionState = view.currentConnectionState.next();
-            view.currentConnectionState.execute(input);
+            view.currentConnectionState.execute(view, input);
         }
     },
     PUBLISH_NAME,
     END;
 
-
-    private static ClientView view = ClientView.instance();
-    private static UserInterface ui = view.getUi();
 
     //default implementation of next, returns the next enum instance in order, or null if the FSM has terminated
     public ConnectionState next(){
@@ -85,7 +82,7 @@ public enum ConnectionState {
 
     //default implementation of the body of the state, does nothing
     //TODO change to abstract when all the states are implemented
-    public void execute(Object input){
+    public void execute(ClientView view, Object input){
 
     }
 

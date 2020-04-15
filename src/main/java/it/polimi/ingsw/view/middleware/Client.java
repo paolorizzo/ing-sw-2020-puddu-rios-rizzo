@@ -27,7 +27,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
     {
         this.ip = ip;
         this.port = port;
-        this.cw = ClientView.instance();
+        this.cw = new ClientView();
         this.cw.addObserver(this);
         virtualGameFeed = new GameObservable();
         virtualPlayersFeed = new PlayersObservable();

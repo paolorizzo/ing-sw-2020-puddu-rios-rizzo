@@ -3,16 +3,9 @@ package it.polimi.ingsw.view;
 import java.util.Scanner;
 
 public class Cli implements UserInterface {
-    private static Cli instance;
 
-    private Cli(){
+    public Cli(){
 
-    }
-
-    static Cli instance(){
-        if(instance==null)
-            instance = new Cli();
-        return instance;
     }
 
     public int getNumPlayers(){

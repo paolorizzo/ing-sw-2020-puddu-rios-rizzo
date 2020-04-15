@@ -14,7 +14,6 @@ import java.util.Scanner;
 //TODO test basically everything in this class
 public class ClientView extends View
 {
-    private static ClientView instance;
 
     //finite state machine states
     ConnectionState currentConnectionState;
@@ -28,12 +27,12 @@ public class ClientView extends View
     private UserInterface ui;
 
     //private because ClientView is singleton. instance() should be called to get an object of this type
-    private ClientView(){
+    public ClientView(){
         super();
         game=null;
         players = new ArrayList<Player>();
         id = -1;
-        ui = Cli.instance();
+        ui = new Cli();
     }
 
     public UserInterface getUi(){
@@ -49,27 +48,19 @@ public class ClientView extends View
         this.id = id;
     }
 
-
-    //this method should be called to get an object of this type
-    public static ClientView instance(){
-        if(instance==null)
-            instance=new ClientView();
-        return instance;
-    }
-
     public synchronized void updateID(int id){
         if(this.id != -1)
             System.out.println("ClientView.updateID with id "+id+", but was already "+this.id);
         else
             System.out.println("ClientView.updateID with new id "+id);
         if(currentConnectionState.equals(ConnectionState.READ_ID))
-            currentConnectionState.execute(id);
+            currentConnectionState.execute(this, id);
     }
 
     public synchronized void updateNumPlayers(int numPlayers){
         System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
-            currentConnectionState.execute(numPlayers);
+            currentConnectionState.execute(this, numPlayers);
     }
 
     public synchronized void updateName(int id, String name){
@@ -79,7 +70,7 @@ public class ClientView extends View
     //sets up the first state for the connection FSM and executes it
     private void startConnectionFSM(){
         currentConnectionState = ConnectionState.REQUEST_ID;
-        currentConnectionState.execute(null);
+        currentConnectionState.execute(this, null);
     }
 
     //start the first FSM

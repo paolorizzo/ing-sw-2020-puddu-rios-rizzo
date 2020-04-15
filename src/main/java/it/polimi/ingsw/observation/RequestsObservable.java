@@ -10,6 +10,7 @@ public class RequestsObservable extends Observable<RequestsObserver>{
     }
 
     public synchronized void notifyRequestID(){
+        System.out.println("notifyingRequestID");
         for(RequestsObserver obs:observers){
             obs.updateRequestID();
         }
