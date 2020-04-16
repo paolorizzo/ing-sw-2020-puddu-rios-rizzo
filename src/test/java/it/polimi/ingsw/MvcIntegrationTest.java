@@ -1,11 +1,13 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.view.middleware.Client;
+import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Server;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MvcIntegrationTest {
     protected ExecutorService executor = Executors.newFixedThreadPool(128);
@@ -41,6 +43,17 @@ public class MvcIntegrationTest {
             System.err.println(e.toString());
         }
         return client;
+    }
+
+    public void safeWaitFor(int seconds)
+    {
+        try{
+            TimeUnit.SECONDS.sleep(seconds);
+        }
+        catch(InterruptedException e)
+        {
+            System.err.println(e.getMessage());
+        }
     }
 
 }
