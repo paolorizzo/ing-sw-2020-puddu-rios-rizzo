@@ -7,10 +7,10 @@ import it.polimi.ingsw.view.ClientView;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.*;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 //TODO this client does not correctly implement observer/observable pattern
 public class Client extends Messenger implements ViewObserver, Runnable {
@@ -37,6 +37,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
 
     public ClientView getClientView()
     {
+
         return cw;
     }
 
@@ -71,33 +72,51 @@ public class Client extends Messenger implements ViewObserver, Runnable {
      */
     public void run()
     {
-        try
+        boolean waitingForServer = true;
+        while(waitingForServer)
         {
-            socket = new Socket(ip, port);
-            System.out.println("Connected to the server");
-
-            //starts the clientView therefore initiating the message exchange
-            cw.start();
-
-            ObjectInputStream ByteIn;
-
-            while(true)
+            try
             {
-                try {
-                    ByteIn = new ObjectInputStream(socket.getInputStream());
-                    Message message = (Message) ByteIn.readObject();
-                    //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
-                    callMethod(message);
-                }
-                catch (ClassNotFoundException e)
+                socket = new Socket(ip, port);
+                System.out.println("Connected to the server");
+                waitingForServer = false;
+
+                //starts the clientView therefore initiating the message exchange
+                cw.start();
+
+                ObjectInputStream ByteIn;
+
+                while(true)
                 {
-                    System.err.println("Error in reading the object");
+                    try {
+                        ByteIn = new ObjectInputStream(socket.getInputStream());
+                        Message message = (Message) ByteIn.readObject();
+                        //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
+                        callMethod(message);
+                    }
+                    catch (ClassNotFoundException e)
+                    {
+                        System.err.println("Error in reading the object");
+                    }
                 }
             }
-        }
-        catch(IOException e)
-        {
-            System.err.println("Error in creating the client socket");
+            catch(IOException e)
+            {
+                try
+                {
+                    System.out.print("Waiting for the server to start");
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    System.out.print(" .");
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    System.out.print(".");
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    System.out.print(".\n");
+                }
+                catch(InterruptedException t)
+                {
+                    System.err.println(t.getMessage());
+                }
+            }
         }
     }
 
