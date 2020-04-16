@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
 
     //tests that multiple clients can correctly receive an id
+    @Test
     public void multipleIdTest()
     {
         int port = 40001;
@@ -39,6 +40,7 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
     }
 
     //TODO why do these tests work only if executed one by one?
+    @Test
     public void checkClientBeforeServer()
     {
         int port = 12345;
@@ -53,6 +55,9 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
 
         ClientView cw = client.getClientView();
 
-        assertEquals(0, cw.getID());
+        assert(cw.getID() == 0);
     }
+
+
+
 }

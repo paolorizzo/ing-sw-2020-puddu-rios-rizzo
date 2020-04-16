@@ -19,18 +19,13 @@ public class Controller implements ViewObserver
     private List<View> views;
     private Model model;
 
-    private Controller()
+    public Controller()
     {
         players = new ArrayList<Player>();
         views = new ArrayList<View>();
-        model = Model.instance();
+        model = new Model();
     }
 
-    public static Controller instance(){
-        if(instance==null)
-            instance = new Controller();
-        return instance;
-    }
 
     //adds player inside the model
     //also adds the controller itself as an observer of the view

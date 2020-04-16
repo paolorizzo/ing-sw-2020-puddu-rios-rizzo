@@ -60,7 +60,7 @@ public class Server implements Runnable
         // in the case of the first player, runs the setup on the controller's side (to ask the number of players)
         if(cons.size()==1)
         {
-            controller = Controller.instance();
+            controller = new Controller();
             letClientIn();
         }
         else

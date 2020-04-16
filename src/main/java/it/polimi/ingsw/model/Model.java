@@ -21,18 +21,11 @@ public class Model {
     public GameObservable gameFeed;
     public PlayersObservable playersFeed;
 
-    private Model(){
+    public Model(){
         game = new Game();
         players = new ArrayList<Player>();
         gameFeed = new GameObservable();
         playersFeed = new PlayersObservable();
-    }
-
-    //singleton
-    public static Model instance(){
-        if(instance==null)
-            instance = new Model();
-        return instance;
     }
 
     GameObservable getGameFeed(){

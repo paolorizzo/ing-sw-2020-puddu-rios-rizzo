@@ -19,7 +19,7 @@ public class Game {
     public void setNumPlayers(int numPlayers) {
         System.out.println("The number of players has been set on the model: " + numPlayers);
         this.numPlayers = numPlayers;
-        Model.instance().getGameFeed().notifyNumPlayers(numPlayers);
+        model.getGameFeed().notifyNumPlayers(numPlayers);
     }
 
     public int getNumPlayers() {
