@@ -9,7 +9,9 @@ import static org.junit.Assert.assertEquals;
 
 public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
 
-    //tests that multiple clients can correctly receive an id
+    /**
+     * Tests that multiple clients can correctly receive an id
+     */
     @Test
     public void multipleIdTest()
     {
@@ -39,7 +41,9 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         }
     }
 
-    //TODO why do these tests work only if executed one by one?
+    /**
+     * Tests that a client can access the game even if started before the server.
+     */
     @Test
     public void checkClientBeforeServer()
     {
@@ -47,7 +51,7 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
 
         Client client = buildAndRunClient(port);
 
-        safeWaitFor(5);
+        safeWaitFor(2);
 
         Server server = buildAndRunServer(port);
 
@@ -58,6 +62,15 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         assert(cw.getID() == 0);
     }
 
+    //TODO once the number of players is handled, we have to test the excluding process
+    public void checkExcludedPlayers()
+    {
 
+    }
 
+    //TODO once the ready state is handled, we have to test the concurrent join of the game
+    public void checkConcurrentJoin()
+    {
+
+    }
 }

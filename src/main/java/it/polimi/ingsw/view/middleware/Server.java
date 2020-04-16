@@ -148,19 +148,6 @@ public class Server implements Runnable
                     }).start();
 
                     register(connection);
-
-                    //how to block connections
-                    /*
-                    if(cons.size() < 3)
-                    {
-
-                    }
-                    else
-                    {
-                        serverSocket.close();
-                    }
-
-                     */
                 }
             }
             catch (IOException e)
