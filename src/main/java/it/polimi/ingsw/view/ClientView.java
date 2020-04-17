@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observation.GameObservable;
 import it.polimi.ingsw.observation.PlayersObservable;
+import it.polimi.ingsw.view.cli.Cli;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class ClientView extends View
     //finite state machine states
     ConnectionState currentConnectionState;
 
-
     //updates will modify these objects
     Game game;
     private List<Player> players;
@@ -26,7 +26,6 @@ public class ClientView extends View
 
     private UserInterface ui;
 
-    //private because ClientView is singleton. instance() should be called to get an object of this type
     public ClientView(){
         super();
         game=null;
@@ -74,7 +73,9 @@ public class ClientView extends View
     }
 
     //start the first FSM
-    public void start(){
+    public void start()
+    {
+        ui.showLogo();
         startConnectionFSM();
     }
 }

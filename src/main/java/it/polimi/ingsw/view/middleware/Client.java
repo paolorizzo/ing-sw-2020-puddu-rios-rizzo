@@ -78,7 +78,6 @@ public class Client extends Messenger implements ViewObserver, Runnable {
             try
             {
                 socket = new Socket(ip, port);
-                System.out.println("Connected to the server");
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
