@@ -80,7 +80,7 @@ public class Server implements Runnable
     public void letClientIn()
     {
         controller.addView(views.get(nextClientIn));
-        views.get(nextClientIn).addObserver(controller);
+        views.get(nextClientIn).setController(controller);
         nextClientIn++;
     }
 

@@ -1,7 +1,9 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.ConnectionState;
 import it.polimi.ingsw.view.middleware.Client;
+import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Server;
 
 import org.junit.Test;
@@ -17,7 +19,7 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
 
     private ExecutorService executor = Executors.newFixedThreadPool(128);
 
-    //tests that one view can correctly request and receive its id
+    //tests that one view can correctly receive a start signal, request and receive its id
     //runs the server and connects one view
     //this test is very significative because it is dependent on the entire chain of observer/observable patterns
     //to work, and on the network connection between Client and Server
@@ -35,7 +37,7 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
         {
             System.err.println(e.getMessage());
         }
-        assertEquals(0, cw.getID());
+        assertEquals(0, cw.getId());
     }
 
     /*

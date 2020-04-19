@@ -18,4 +18,8 @@ public abstract class Observable<T> {
     public boolean hasObservers(){
         return !observers.isEmpty();
     }
+
+    public synchronized void removeObserver(T observer){
+        observers.remove(observer);
+    }
 }

@@ -9,6 +9,7 @@ public class Game {
     private int numPlayers;
 
     public Game(){
+        numPlayers = -1;
     }
 
     public Game(int numPlayers){
@@ -16,10 +17,13 @@ public class Game {
         setNumPlayers(numPlayers);
     }
 
+    public boolean numPlayersIsSet(){
+        return numPlayers != -1;
+    }
+
     public void setNumPlayers(int numPlayers) {
-        System.out.println("The number of players has been set on the model: " + numPlayers);
+        //System.out.println("Setting a game for " + numPlayers + " players");
         this.numPlayers = numPlayers;
-        model.getGameFeed().notifyNumPlayers(numPlayers);
     }
 
     public int getNumPlayers() {

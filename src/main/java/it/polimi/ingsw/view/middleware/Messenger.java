@@ -15,17 +15,8 @@ import java.util.Map;
 
 public abstract class Messenger
 {
-    protected Map<String, Observable> methodMap;
 
-    protected Object getObservable(String methodName)
-    {
-        try{
-            return methodMap.get(methodName);
-        }catch(Exception e){
-            System.err.println("Can't find the method called "+methodName);
-        }
-        return null;
-    }
+    protected abstract Object getObservable(String methodName);
 
     /**
      * Low level sendMessage, simply serializes and sends a Message object through an output stream
@@ -73,11 +64,8 @@ public abstract class Messenger
     //through the service method getObservable
     public void callMethod(String methodName, List<Object> args)
     {
-        if(methodName.contains("update"))
-            methodName = toNotify(methodName);
-
         Object target = getObservable(methodName);
-        callNotify(target, methodName, args);
+        callMethod(target, methodName, args);
     }
 
     //wrapper on callMethod, makes it easier to use it by encapsulating the logic needed to unpack the Message
@@ -86,20 +74,23 @@ public abstract class Messenger
         callMethod(msg.getMethodName(), msg.getArgsList());
     }
 
-    //actually calls the notify
-    //strongly relies on someone else to sanitize the methodName to make sure it is a notify
-    //also relies on wrapper functions to get the target object
+    //actually calls the method
     //TODO: check the correspondence of arguments
     //TODO perhaps there is a more efficient way to get the method from the name? some Class.getMethod(String name)?
-    private void callNotify(Object target, String methodName, List<Object> args)
+    private void callMethod(Object target, String methodName, List<Object> args)
     {
+
+
         Method[] possibleMethods = target.getClass().getMethods();
         for(Method method:possibleMethods){
             if(method.getName().equals(methodName)){
                 Object[] methodArgs = args.toArray();
                 try
                 {
-                    //System.out.println("Invoke "+methodName+" on "+target);
+                    //System.out.print("Invoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
+                    //for(Object o:args)
+                    //    System.out.print("" + o + " ");
+                    //System.out.println();
                     method.invoke(target, methodArgs);
                 }
                 catch(IllegalAccessException e)
@@ -108,7 +99,9 @@ public abstract class Messenger
                 }
                 catch(InvocationTargetException e)
                 {
-                    System.err.println("Error in invoking the method, IllegalTargetException "+ methodName);
+                    System.err.println("Error in invoking the method, InvocationTargetException ");
+                    //System.err.println("the cause was " + e.getCause() + " in the called method");
+                    e.printStackTrace();
                 }
                 catch(NullPointerException e)
                 {
@@ -119,5 +112,4 @@ public abstract class Messenger
         }
     }
 
-    protected abstract Map<String, Observable> constructMethodMap();
 }

@@ -1,37 +1,26 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.observation.*;
 
 public abstract class View implements ModelObserver
 {
-    RequestsObservable viewRequestsFeed;
-    GameObservable viewGameFeed;
-    PlayersObservable viewPlayersFeed;
+    ControllerInterface controller;
 
     public View(){
-        viewRequestsFeed = new RequestsObservable();
-        viewGameFeed = new GameObservable();
-        viewPlayersFeed = new PlayersObservable();
     }
 
-    public void addObserver(ViewObserver obs){
-        viewRequestsFeed.addObserver(obs);
-        viewGameFeed.addObserver(obs);
-        viewPlayersFeed.addObserver(obs);
+    public View(ControllerInterface controller){
+        this();
+        setController(controller);
     }
 
-
-
-    public RequestsObservable getViewRequestsFeed(){
-        return viewRequestsFeed;
+    public void setController(ControllerInterface controller) {
+        this.controller = controller;
     }
 
-    public GameObservable getViewGameFeed(){
-        return viewGameFeed;
-    }
-
-    public PlayersObservable getViewPlayersFeed(){
-        return viewPlayersFeed;
+    public ControllerInterface getController(){
+        return controller;
     }
 
     /*

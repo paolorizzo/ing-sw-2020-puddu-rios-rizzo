@@ -11,6 +11,13 @@ public class PlayersObservable extends Observable<PlayersObserver>{
         super();
     }
 
+    public synchronized void notifyStart(){
+        System.out.println("starting client");
+        for(PlayersObserver obs:observers){
+            obs.updateStart();
+        }
+    }
+
     public synchronized void notifyID(int id){
         System.out.println("notifyID with id: "+id);
         for(PlayersObserver obs:observers){
@@ -23,5 +30,18 @@ public class PlayersObservable extends Observable<PlayersObserver>{
             obs.updateName(id, name);
         }
     }
+
+    public synchronized void notifyOk(int id){
+        for(PlayersObserver obs:observers){
+            obs.updateOk(id);
+        }
+    }
+
+    public synchronized void notifyKo(int id){
+        for(PlayersObserver obs:observers){
+            obs.updateKo(id);
+        }
+    }
+
 
 }

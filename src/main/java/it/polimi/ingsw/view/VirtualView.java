@@ -16,50 +16,32 @@ public class VirtualView extends View
         this.connection = c;
     }
 
-    public void updateID(int id){
-        connection.sendMessage("notifyID", id);
-    }
+    //updates relative to GameObserver
 
-    public void updateNumPlayers(int numPlayers){
+    public synchronized void updateNumPlayers(int numPlayers){
         connection.sendMessage("notifyNumPlayers", numPlayers);
     }
 
-    public void updateName(int id, String name){
-        //TODO
+    //updates relative to PlayersObserver
+
+    public synchronized void updateStart(){
+        connection.sendMessage("notifyStart");
     }
 
-/*
-    @Override
-    public void startNameView()
-    {
-        Message m = new Message("startNameView");
-
-        connection.send(m);
+    public synchronized void updateID(int id){
+        connection.sendMessage("notifyID", id);
     }
 
-    @Override
-    public void startNumberOfPlayersView()
-    {
-        Message m = new Message("startNumberOfPlayersView");
-
-        connection.send(m);
+    public synchronized void updateName(int id, String name){
+        connection.sendMessage("notifyName", id, name);
     }
 
-    @Override
-    public void update(Object o)
-    {
-        Message m = new Message("update");
-        m.addArg("update from VirtualView");
-
-        connection.send(m);
+    public synchronized void updateOk(int id){
+        connection.sendMessage("notifyOk", id);
     }
 
-    @Override
-    public void startOutOfGameView()
-    {
-        Message m = new Message("startOutOfGameView");
-
-        connection.send(m);
+    public synchronized void updateKo(int id){
+        connection.sendMessage("notifyKo", id);
     }
- */
+
 }

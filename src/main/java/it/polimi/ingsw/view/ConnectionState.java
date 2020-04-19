@@ -2,18 +2,28 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.exception.IncorrectStateException;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.view.cli.Cli;
+import it.polimi.ingsw.view.middleware.Connection;
 
 import javax.swing.plaf.IconUIResource;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 //TODO implement remaining states
 //TODO add ID_ACK state
 public enum ConnectionState {
+    READY{
+        public void execute(ClientView view, Object input) {
+            System.out.println("starting the fsm");
+            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState.execute(view, null);
+        }
+    },
     REQUEST_ID {
         //publishes the request for an id
         public void execute(ClientView view, Object input) {
             System.out.println("Richiedo ID");
-            view.viewRequestsFeed.notifyRequestID();
+            view.getController().generateId();
             view.currentConnectionState = view.currentConnectionState.next();
         }
     },
@@ -27,53 +37,176 @@ public enum ConnectionState {
             view.currentConnectionState.execute(view, id);
         }
     },
+    //decides the branch of the fsm to take based on the id
     ACK_ID {
         //sends ack of the reception of the id to the controller
         //this is used to synchronize the connection of the different clients
         public void execute(ClientView view, Object input) {
             int id = (int) input;
-            view.viewRequestsFeed.notifyAckID(id);
+            view.getController().ackId(id);
             if(id == 0) {
                 view.currentConnectionState = view.currentConnectionState.next();
                 view.currentConnectionState.execute(view, null);
             }
-            else{
+            else if(id <= 2){
                 view.currentConnectionState = ConnectionState.REQUEST_NUM_PLAYERS;
                 view.currentConnectionState.execute(view, null);
+            }
+            else{
+                view.currentConnectionState = ConnectionState.PUBLISH_HARAKIRI;
+                view.currentConnectionState.execute(view, null);
+            }
+        }
+    },
+    //TODO should actually read the input to know whether to display a "try again"
+    ASK_NUM_PLAYERS{
+        public void execute(ClientView view, Object input) {
+            view.getUi().askNumPlayers();
+            view.currentConnectionState = view.currentConnectionState.next();
+
+            if(view.getUi() instanceof Cli)
+                view.currentConnectionState.execute(view, null);
+        }
+    },
+    READ_NUM_PLAYERS{
+        public void execute(ClientView view, Object input) {
+            int numPlayers = view.getUi().readNumPlayers();
+            if(numPlayers < 2 || 3 < numPlayers){
+                view.currentConnectionState = ConnectionState.ASK_NUM_PLAYERS;
+                view.currentConnectionState.execute(view, null);
+            }
+            else{
+                view.setNumPlayers(numPlayers);
+                view.currentConnectionState = view.currentConnectionState.next();
+                view.currentConnectionState.execute(view, numPlayers);
             }
         }
     },
     PUBLISH_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
-            int numPlayers = view.getUi().getNumPlayers();
+            int numPlayers = (int) input;
             System.out.println("publishing number of players: "+numPlayers);
-            view.viewGameFeed.notifyNumPlayers(numPlayers);
+            view.getController().setNumPlayers(view.getId(), numPlayers);
+
+            koState = ConnectionState.ASK_NUM_PLAYERS;
+            okState = ConnectionState.ASK_NAME;
+            koInput = null;
+            okInput = null;
             view.currentConnectionState = view.currentConnectionState.next();
+        }
+    },
+    RECEIVE_CHECK{
+        public void execute(ClientView view, Object input) {
+            boolean success = (boolean) input;
+
+            ConnectionState nextState;
+            Object nextInput;
+
+            if(success){
+                System.out.println("operation successful");
+                nextState = okState;
+                nextInput = okInput;
+            }
+            else{
+                System.out.println("operation failed");
+                nextState = koState;
+                nextInput = koInput;
+            }
+
+            koState = null;
+            okState = null;
+            koInput = null;
+            okInput = null;
+
+            view.currentConnectionState = nextState;
+            view.currentConnectionState.execute(view,nextInput);
+        }
+    },
+    ASK_NAME{
+        public void execute(ClientView view, Object input) {
+            view.getUi().askUsername();
+            view.currentConnectionState = view.currentConnectionState.next();
+
+            if(view.getUi() instanceof Cli)
+                view.currentConnectionState.execute(view, null);
+        }
+    },
+    READ_NAME{
+        public void execute(ClientView view, Object input) {
+            String name = view.getUi().readUsername();
+            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState.execute(view, name);
+        }
+    },
+    PUBLISH_NAME{
+        public void execute(ClientView view, Object input) {
+            String name = (String) input;
+            System.out.println("publishing name: " + name);
+            view.getController().setName(view.getId(), name);
+
+            koState = ConnectionState.ASK_NAME;
+            okState = ConnectionState.END;
+            koInput = null;
+            okInput = null;
+            view.currentConnectionState = ConnectionState.RECEIVE_CHECK;
         }
     },
     REQUEST_NUM_PLAYERS{
         public void execute(ClientView view, Object input)  {
-            //view.numPlayersView();
+            //todo launch waiting view
+            view.getController().getNumPlayers();
+            view.currentConnectionState = view.currentConnectionState.next();
         }
     },
-    //TODO add custom IncorrectStateException
-    READ_NUM_PLAYERS{
+    //unless the number of players is 2 and the id is 2, proceeds to ask name
+    RECEIVE_NUM_PLAYERS{
         public void execute(ClientView view, Object input){
+            int numPlayers = (int) input;
             if(view.game != null)
                 throw new IncorrectStateException("game should not exist in state" + this.name());
-            System.out.println("Creo il game da "+input+" giocatori");
-            int numPlayers = (int) input;
-            view.game = new Game(numPlayers);
-            view.currentConnectionState = view.currentConnectionState.next();
+            if(view.getId() < numPlayers){
+                System.out.println("Creo il game da "+input+" giocatori");
+                view.setNumPlayers(numPlayers);
+                view.currentConnectionState = ConnectionState.ASK_NAME;
+                view.currentConnectionState.execute(view, input);
+            }
+            else{
+                view.currentConnectionState = ConnectionState.PUBLISH_HARAKIRI;
+                view.currentConnectionState.execute(view, input);
+            }
+        }
+    },
+    PUBLISH_HARAKIRI{
+        public void execute(ClientView view, Object input) {
+            System.out.println("Communicating shutdown");
+            view.getController().deleteId(view.getId());
+            view.currentConnectionState = ConnectionState.HARAKIRI;
             view.currentConnectionState.execute(view, input);
         }
     },
-    PUBLISH_NAME,
-    END;
+    HARAKIRI{
+        public void execute(ClientView view, Object input) {
+            System.out.println("Ho preso il covid-19");
+            view.getController().kill();
+        }
+    },
+    //this state must leave the client dead in order to allow late messages to be received
+    //the next phase will begin with a specific notify from the controller
+    END{
+        public void execute(ClientView view, Object input){
+            System.out.println("Connection phase has ended for client " + view.getId());
+            System.out.println("Client " + view.getId() + " may now only receive info until the next phase");
+        }
+    };
+
+    private static ConnectionState koState = null;
+    private static ConnectionState okState = null;
+    private static Object koInput = null;
+    private static Object okInput = null;
 
 
-    //default implementation of next, returns the next enum instance in order, or null if the FSM has terminated
-    public ConnectionState next(){
+    //utility general next state function, returns the next enum instance in order, or null if the FSM has terminated
+    private ConnectionState next(){
         if(ordinal()==ConnectionState.values().length-1)
             return null;
         else

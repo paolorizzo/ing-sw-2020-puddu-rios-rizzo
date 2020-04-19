@@ -22,6 +22,20 @@ public class Player
         this.playerNum = playerNum;
     }
 
+    public Player(int playerNum, String nickname){
+        if(playerNum < 0 || 2 < playerNum){
+            throw new RuntimeException("cannot construct this player because id " + playerNum + "is unacceptable");
+        }
+        else{
+            this.nickname = nickname;
+            this.color = Color.values()[playerNum];
+            this.workers = new Worker[2];
+            this.workers[1] = new Worker(Sex.MALE, this);
+            this.workers[0] = new Worker(Sex.FEMALE, this);
+            this.playerNum = playerNum;
+        }
+    }
+
     public String getNickname()
     {
         return nickname;
@@ -40,6 +54,11 @@ public class Player
     public int getPlayerNum()
     {
         return playerNum;
+    }
+
+    //allows outside code to refer to playerNum as id in a coherent way
+    public int getId(){
+        return getPlayerNum();
     }
 
     public Card getCard(){ return card; }

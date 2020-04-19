@@ -22,25 +22,43 @@ public class Cli implements UserInterface
         System.out.println(AnsiColors.ANSI_RESET);
     }
 
-    //TODO handle wrong input
     @Override
-    public int getNumPlayers()
-    {
+    public void askNumPlayers(){
         CliUtils.printBlueOnWhiteSameLine("Choose the number of players:");
+    }
+
+    //wrong input is handled by ConnectionState
+    @Override
+    public int readNumPlayers(){
+        int numPlayers = readInt();
+        return numPlayers;
+    }
+
+    private int readInt(){
         Scanner stdin = new Scanner(System.in);
         int num = stdin.nextInt();
         System.out.println();
         return num;
     }
 
-    //TODO handle wrong input
     @Override
-    public String getUsername() {
-        CliUtils.printBlueOnWhiteSameLine("Choose an username:");
-        Scanner stdin = new Scanner(System.in);
-        String name = stdin.nextLine();
-        System.out.println();
+    public void askUsername() {
+        CliUtils.printBlueOnWhiteSameLine("Choose a username:");
+    }
+
+    @Override
+    public String readUsername(){
+        String name = readString();
         return name;
+    }
+
+    //utility function used to get a string from user input
+    public String readString(){
+        Scanner stdin = new Scanner(System.in);
+        String word = stdin.nextLine();
+        System.out.println();
+        return word;
+
     }
 
     public void showCustomError(String s)

@@ -37,7 +37,7 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         //asserts that ids are correct
         for(int i=0;i<n;i++)
         {
-            assertEquals(i, cws[i].getID());
+            assertEquals(i, cws[i].getId());
         }
     }
 
@@ -55,11 +55,11 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
 
         Server server = buildAndRunServer(port);
 
-        safeWaitFor(1);
+        safeWaitFor(2);
 
         ClientView cw = client.getClientView();
 
-        assert(cw.getID() == 0);
+        assert(cw.getId() == 0);
     }
 
     //TODO once the number of players is handled, we have to test the excluding process

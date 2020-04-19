@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.middleware;
 
+import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.observation.Observable;
 import it.polimi.ingsw.view.ClientView;
@@ -13,26 +14,29 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 //TODO this client does not correctly implement observer/observable pattern
-public class Client extends Messenger implements ViewObserver, Runnable {
+public class Client extends Messenger implements ControllerInterface, Runnable {
     private Socket socket;
     private final String ip;
     private final int port;
+    protected Map<String, Observable> methodMap;
 
     private final ClientView cw;
 
     private final GameObservable virtualGameFeed;
     private final PlayersObservable virtualPlayersFeed;
 
+    private boolean alive;
+
     public Client(String ip, int port)
     {
         this.ip = ip;
         this.port = port;
-        this.cw = new ClientView();
-        this.cw.addObserver(this);
+        this.cw = new ClientView(this);
         virtualGameFeed = new GameObservable();
         virtualPlayersFeed = new PlayersObservable();
         addObserver(cw);
         methodMap = constructMethodMap();
+        alive = true;
     }
 
     public ClientView getClientView()
@@ -57,14 +61,22 @@ public class Client extends Messenger implements ViewObserver, Runnable {
 
         for(Method method:gameMethods) {
             methodMap.put(method.getName(), virtualGameFeed);
-            methodMap.put(toNotify(method.getName()), virtualGameFeed);
         }
         for(Method method:playersMethods) {
             methodMap.put(method.getName(), virtualPlayersFeed);
-            methodMap.put(toNotify(method.getName()), virtualPlayersFeed);
         }
 
         return methodMap;
+    }
+
+    //returns the observable object from the methodMap
+    protected Object getObservable(String methodName) {
+        try{
+            return methodMap.get(methodName);
+        }catch(Exception e){
+            System.err.println("Can't find the method called "+methodName);
+        }
+        return null;
     }
 
     /**
@@ -78,6 +90,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
             try
             {
                 socket = new Socket(ip, port);
+                System.out.println("Connected to the server");
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
@@ -85,7 +98,7 @@ public class Client extends Messenger implements ViewObserver, Runnable {
 
                 ObjectInputStream ByteIn;
 
-                while(true)
+                while(alive)
                 {
                     try {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
@@ -130,40 +143,48 @@ public class Client extends Messenger implements ViewObserver, Runnable {
     }
 
     //TODO test updates inside Client
+
+    //Connection phase methods used for communication to the controller
+
     @Override
-    public void updateRequestID()
+    public void generateId()
     {
-        sendMessage("updateRequestID");
+        sendMessage("generateId");
     }
 
     @Override
-    public void updateAckID(int id)
+    public void ackId(int id)
     {
 
-        sendMessage("updateAckID", id);
+        sendMessage("ackId", id);
     }
 
     @Override
-    public void updateRequestNumPlayers()
+    public void setNumPlayers(int id, int numPlayers)
     {
-        sendMessage("updateRequestNumPlayers");
+        sendMessage("setNumPlayers", cw.getId(), numPlayers);
     }
 
     @Override
-    public void updateNumPlayers(int numPlayers)
+    public void getNumPlayers()
     {
-        sendMessage("updateNumPlayers", numPlayers);
+        sendMessage("getNumPlayers");
     }
 
     @Override
-    public void updateID(int id)
+    public void setName(int id, String name)
     {
-        sendMessage("updateID");
+        sendMessage("setName", id, name);
+    }
+
+    //shuts down the client
+    @Override
+    public void kill(){
+        alive = false;
     }
 
     @Override
-    public void updateName(int id, String name)
-    {
-        sendMessage("updateName");
+    public void deleteId(int id){
+        sendMessage("deleteId", id);
     }
 }

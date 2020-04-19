@@ -21,7 +21,6 @@ public class Connection extends Messenger implements Runnable
         this.socket = socket;
         this.server = server;
         this.view = null;
-        methodMap = null;
     }
 
     /**
@@ -32,38 +31,14 @@ public class Connection extends Messenger implements Runnable
     public void setView(View view)
     {
         this.view = view;
-        methodMap = constructMethodMap();
     }
 
-    //TODO construction of the map could be handled in a better way?
-    /**
-     * Constructs the map between method names and observable objects in the view.
-     * It is called when the view is set, because it needs a reference to the observable objects
-     * @return
-     */
-    public Map<String, Observable> constructMethodMap()
-    {
-
-        Map<String, Observable> methodMap = new HashMap<String, Observable>();
-
-        Method[] requestMethods = view.getViewRequestsFeed().getClass().getMethods();
-        Method[] gameMethods = view.getViewGameFeed().getClass().getMethods();
-        Method[] playersMethods = view.getViewPlayersFeed().getClass().getMethods();
-
-        for(Method method:requestMethods) {
-            methodMap.put(method.getName(), view.getViewRequestsFeed());
-            methodMap.put(toNotify(method.getName()), view.getViewRequestsFeed());
-        }
-        for(Method method:gameMethods) {
-            methodMap.put(method.getName(), view.getViewGameFeed());
-            methodMap.put(toNotify(method.getName()), view.getViewGameFeed());
-        }
-        for(Method method:playersMethods) {
-            methodMap.put(method.getName(), view.getViewPlayersFeed());
-            methodMap.put(toNotify(method.getName()), view.getViewPlayersFeed());
-        }
-
-        return methodMap;
+    //always returns the controller, regardless of the methodName
+    //this happens because the communication from on object that implements
+    //the View interface to an object that implements the ControllerInterface
+    //happens directly, and not through an observable class
+    protected Object getObservable(String methodName) {
+        return view.getController();
     }
 
     /**
@@ -81,6 +56,7 @@ public class Connection extends Messenger implements Runnable
         catch (IOException e)
         {
             System.err.println("Error in creating output socket");
+            e.printStackTrace();
         }
     }
 
@@ -99,7 +75,7 @@ public class Connection extends Messenger implements Runnable
                 ByteIn = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ByteIn.readObject();
 
-                if(message.getMethodName().equals("updateAckID"))
+                if(message.getMethodName().equals("ackId"))
                 {
                     server.registerIdAck();
                 }
