@@ -83,6 +83,12 @@ public class GraphicsLoader {
                 loaderMesh("WORKER_M", "./resources/worker_M.obj");
             }
         }));
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loaderMesh("ISLAND", "./resources/island.obj");
+            }
+        }));
         for(Thread thread: threads){
             thread.start();
         }
@@ -111,6 +117,8 @@ public class GraphicsLoader {
         textures.put("DOME_enabled", loadTexture("DOME_enabled.png"));
         textures.put("DOME_disabled", loadTexture("DOME_disabled.png"));
         textures.put("DOME_preview", loadTexture("DOME_preview.png"));
+
+        textures.put("ISLAND", loadTexture("island.png"));
 
         for(Thread thread: threads){
             thread.join();

@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.*;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.MeshView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,8 @@ public class Board extends Group {
         group3d = new Group3D();
 
         this.getChildren().addAll(group2d, group3d);
+
+        prepareIsland(group3d);
 
         actionFSM = new ActionFSM();
         for(int i=0;i<5;i++){
@@ -220,4 +224,10 @@ public class Board extends Group {
         actionFSM.setPossibleActions(this, actions);
     }
 
+    private void prepareIsland(Group group3D) {
+        MeshView island = new MeshView(GraphicsLoader.instance().getMesh("ISLAND"));
+        PhongMaterial islandTexture = GraphicsLoader.instance().getTexture("ISLAND");
+        island.setMaterial(islandTexture);
+        group3d.getChildren().add(island);
+    }
 }

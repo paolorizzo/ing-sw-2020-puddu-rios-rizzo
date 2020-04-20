@@ -10,10 +10,11 @@ public class ActionFSM{
         WAIT_INITIALIZE {
             public ActionState execute(Object input){
                 System.out.println("STATE: WAIT_INIZIALIZE");
-
-                board.setAllToDefaultView();
-                board.hideSelectTypeActionMenu();
-                board.hideSelectPieceMenu();
+                if(board != null){
+                    board.setAllToDefaultView();
+                    board.hideSelectTypeActionMenu();
+                    board.hideSelectPieceMenu();
+                }
                 resetPreview();
                 worker_id = null;
                 piece = null;
