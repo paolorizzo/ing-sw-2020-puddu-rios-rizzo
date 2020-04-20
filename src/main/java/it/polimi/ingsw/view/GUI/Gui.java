@@ -23,8 +23,8 @@ public class Gui extends Application {
 
         //loadScenario1(board); //move
         //loadScenario2(board); //build
-        //loadScenario3(board); //move and build
-        loadScenario4(board); //forced move
+        loadScenario3(board); //move and build
+        //loadScenario4(board); //forced move
 
         Camera camera = new PerspectiveCamera(true);
 

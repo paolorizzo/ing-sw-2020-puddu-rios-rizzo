@@ -12,8 +12,8 @@ import java.util.*;
 public class Connection extends Messenger implements Runnable
 {
     private final Socket socket;
-
     private final Server server;
+
     private View view;
 
     public Connection(Socket socket, Server server)
@@ -74,13 +74,11 @@ public class Connection extends Messenger implements Runnable
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ByteIn.readObject();
-
+                callMethod(message);
                 if(message.getMethodName().equals("ackId"))
                 {
                     server.registerIdAck();
                 }
-
-                callMethod(message);
             }
             catch (ClassNotFoundException e)
             {
