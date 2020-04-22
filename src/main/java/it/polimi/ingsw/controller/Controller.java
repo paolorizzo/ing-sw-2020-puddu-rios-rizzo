@@ -3,8 +3,6 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.exception.IncorrectStateException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.observation.ViewObserver;
-import it.polimi.ingsw.view.ConnectionState;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
@@ -12,12 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 //TODO test everything
 public class Controller implements ControllerInterface
 {
-    private static Controller instance;
-
     private List<View> views;
     private Model model;
 
@@ -45,11 +40,9 @@ public class Controller implements ControllerInterface
         ackReceived = -1;           //only accepts acks sequentially
     }
 
-
     //adds player inside the model
     //also adds the controller itself as an observer of the view
     //TODO handle player limit
-    //TODO maybe synchronized?
     public synchronized void addView(View view)
     {
         if(accept){
@@ -164,9 +157,8 @@ public class Controller implements ControllerInterface
         //TODO should not be called from outside the server
     }
 
-
     @Override
-    public void deleteId(int id){
+    public synchronized void deleteId(int id){
         System.out.println("client " + id + " died");
         View toBeRemoved = viewMap.get(id);
         model.removeObserver(toBeRemoved);

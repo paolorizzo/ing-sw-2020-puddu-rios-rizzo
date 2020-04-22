@@ -13,7 +13,6 @@ import java.util.*;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-//TODO this client does not correctly implement observer/observable pattern
 public class Client extends Messenger implements ControllerInterface, Runnable {
     private Socket socket;
     private final String ip;
@@ -90,7 +89,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
             try
             {
                 socket = new Socket(ip, port);
-                System.out.println("Connected to the server");
+                //System.out.println("Connected to the server");
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
@@ -104,6 +103,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
                         Message message = (Message) ByteIn.readObject();
                         //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
+                        //System.out.println(message.getMethodName());
                         callMethod(message);
                     }
                     catch (ClassNotFoundException e)
@@ -177,7 +177,6 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
         sendMessage("setName", id, name);
     }
 
-    //shuts down the client
     @Override
     public void kill(){
         alive = false;

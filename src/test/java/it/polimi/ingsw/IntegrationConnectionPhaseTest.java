@@ -62,14 +62,35 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         assert(cw.getId() == 0);
     }
 
-    //TODO once the number of players is handled, we have to test the excluding process
-    public void checkExcludedPlayers()
+    /**
+     * Tests that multiple clients can concurrently connect and then receive an id.
+     */
+    @Test
+    public void checkConcurrentJoin()
     {
+        int port = 40777;
+        int n = 2;
 
+        Server server = buildAndRunServer(port);
+
+        Client[] clients = new Client[n];
+        ClientView[] cws = new ClientView[n];
+
+        //connects n clients concurrently
+        for (int i=0;i<n;i++)
+        {
+            clients[i] = buildAndRunClient(port);
+            cws[i] = clients[i].getClientView();
+        }
+
+        safeWaitFor(1);
+
+        //we don't know which thread will run first, so both cases are possible
+        assert((cws[0].getId()==0 && cws[1].getId()==1) || (cws[0].getId()==1 && cws[1].getId()==0));
     }
 
-    //TODO once the ready state is handled, we have to test the concurrent join of the game
-    public void checkConcurrentJoin()
+    //TODO once the number of players is handled, we have to test the excluding process
+    public void checkExcludedPlayers()
     {
 
     }
