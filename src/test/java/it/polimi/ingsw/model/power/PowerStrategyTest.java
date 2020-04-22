@@ -35,7 +35,7 @@ public class PowerStrategyTest {
         players.add(p1);
         players.add(p2);
         if(numOfPlayer == 3) {
-            Player p3 = new Player("Federico", Color.GREY, 3);
+            Player p3 = new Player("Federico", Color.ORANGE, 3);
             players.add(p3);
         }
 

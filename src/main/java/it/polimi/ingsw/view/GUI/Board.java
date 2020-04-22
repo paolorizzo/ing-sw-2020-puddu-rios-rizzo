@@ -4,13 +4,14 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.model.*;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 
 import java.util.HashMap;
 import java.util.List;
 
+import it.polimi.ingsw.model.Color;
 public class Board extends Group {
     private Tower [][] towers = new Tower[5][5];
     private HashMap<Integer, Player> players;
@@ -27,7 +28,7 @@ public class Board extends Group {
 
         this.getChildren().addAll(group2d, group3d);
 
-        prepareIsland(group3d);
+        prepareBoard();
 
         actionFSM = new ActionFSM();
         for(int i=0;i<5;i++){
@@ -45,6 +46,7 @@ public class Board extends Group {
 
         selectPieceMenu = new SelectPieceMenu(actionFSM);
         group2d.getChildren().add(selectPieceMenu);
+
 
         pieceBag = new PieceBag();
     }
@@ -68,7 +70,7 @@ public class Board extends Group {
 
     public void executeAction(SetupAction action){
         Color color = players.get(action.getWorkerID().charAt(1)-'0').getColor();
-        Worker worker = new Worker(action.getWorkerID(), color);
+        Worker worker = new Worker(action.getWorkerID(), color.toString());
         //aggiungo worker
         towers[action.getTargetX()][action.getTargetY()].setWorker(worker);
     }
@@ -224,10 +226,26 @@ public class Board extends Group {
         actionFSM.setPossibleActions(this, actions);
     }
 
-    private void prepareIsland(Group group3D) {
+    private void prepareBoard() {
         MeshView island = new MeshView(GraphicsLoader.instance().getMesh("ISLAND"));
+        MeshView islands = new MeshView(GraphicsLoader.instance().getMesh("ISLANDS"));
+
         PhongMaterial islandTexture = GraphicsLoader.instance().getTexture("ISLAND");
+
         island.setMaterial(islandTexture);
-        group3d.getChildren().add(island);
+        islands.setMaterial(islandTexture);
+
+        MeshView seaUp = new MeshView(GraphicsLoader.instance().getMesh("SEA"));
+        MeshView seaDown = new MeshView(GraphicsLoader.instance().getMesh("SEADOWN"));
+
+        PhongMaterial seaUpTexture = GraphicsLoader.instance().getTexture("SEA");
+        seaUp.setMaterial(seaUpTexture);
+        PhongMaterial seaDownTexture = new PhongMaterial();
+        seaDownTexture.setDiffuseColor(new javafx.scene.paint.Color((float)59/255, (float)191/255, (float)241/255, 1));
+        seaDown.setMaterial(seaDownTexture);
+
+        MeshView innerWall = new MeshView((GraphicsLoader.instance().getMesh("INNERWALL")));
+        MeshView outerWall = new MeshView((GraphicsLoader.instance().getMesh("OUTERWALL")));
+        group3d.getChildren().addAll(island, islands, innerWall, seaUp, seaDown, outerWall);
     }
 }

@@ -86,12 +86,65 @@ public class GraphicsLoader {
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
+                loaderMesh("INNERWALL", "./resources/innerwall.obj");
+            }
+        }));
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loaderMesh("OUTERWALL", "./resources/outerwall.obj");
+            }
+        }));
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
                 loaderMesh("ISLAND", "./resources/island.obj");
             }
         }));
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loaderMesh("ISLANDS", "./resources/islands.obj");
+            }
+        }));
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loaderMesh("SEA", "./resources/sea.obj");
+            }
+        }));
+
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loaderMesh("SEADOWN", "./resources/seadown.obj");
+            }
+        }));
+
         for(Thread thread: threads){
             thread.start();
         }
+        textures.put("WORKER_MALE_BLUE", loadTexture("worker_male_blue.png"));
+        textures.put("WORKER_MALE_WHITE", loadTexture("worker_male_white.png"));
+        textures.put("WORKER_MALE_ORANGE", loadTexture("worker_male_orange.png"));
+        textures.put("WORKER_MALE_PINK", loadTexture("worker_male_pink.png"));
+        textures.put("WORKER_MALE_PURPLE", loadTexture("worker_male_purple.png"));
+        textures.put("WORKER_MALE_TAN", loadTexture("worker_male_tan.png"));
+
+        textures.put("WORKER_MALE_ENABLED", loadTexture("worker_male_enabled.png"));
+        textures.put("WORKER_MALE_PREVIEW", loadTexture("worker_male_preview.png"));
+        textures.put("WORKER_MALE_DISABLED", loadTexture("worker_male_disabled.png"));
+
+        textures.put("WORKER_FEMALE_BLUE", loadTexture("worker_female_blue.png"));
+        textures.put("WORKER_FEMALE_WHITE", loadTexture("worker_female_white.png"));
+        textures.put("WORKER_FEMALE_ORANGE", loadTexture("worker_female_orange.png"));
+        textures.put("WORKER_FEMALE_PINK", loadTexture("worker_female_pink.png"));
+        textures.put("WORKER_FEMALE_PURPLE", loadTexture("worker_female_purple.png"));
+        textures.put("WORKER_FEMALE_TAN", loadTexture("worker_female_tan.png"));
+
+        textures.put("WORKER_FEMALE_ENABLED", loadTexture("worker_female_enabled.png"));
+        textures.put("WORKER_FEMALE_PREVIEW", loadTexture("worker_female_preview.png"));
+        textures.put("WORKER_FEMALE_DISABLED", loadTexture("worker_female_disabled.png"));
 
         textures.put("LEVEL0_default", loadTexture("LV0_default.png"));
         textures.put("LEVEL0_enabled", loadTexture("LV0_enabled.png"));
@@ -119,6 +172,8 @@ public class GraphicsLoader {
         textures.put("DOME_preview", loadTexture("DOME_preview.png"));
 
         textures.put("ISLAND", loadTexture("island.png"));
+
+        textures.put("SEA", loadTexture("sea.png"));
 
         for(Thread thread: threads){
             thread.join();

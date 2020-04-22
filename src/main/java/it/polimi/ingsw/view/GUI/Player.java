@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
-import javafx.scene.paint.Color;
+import it.polimi.ingsw.model.Color;
 
 public class Player {
     private int id;

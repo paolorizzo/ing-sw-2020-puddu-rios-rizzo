@@ -56,7 +56,8 @@ public class Tower extends Group{
     public void addBuilding(Building b){
         buildings.add(b);
         b.setPosition(top);
-        top = new Point3D(top.getX(), top.getY()-b.getLayoutBounds().getHeight(), top.getZ());
+        //y up is negative, so pick the minY
+        top = new Point3D(top.getX(), top.getY()+b.getLayoutBounds().getMinY(), top.getZ());
         if(this.hasWorker()){
             worker.setPosition(top);
         }
@@ -69,7 +70,7 @@ public class Tower extends Group{
 
     public void removeLastBuilding(){
         Building b = buildings.get(buildings.size()-1);
-        top = new Point3D(top.getX(), top.getY()+b.getLayoutBounds().getHeight(), top.getZ());
+        top = new Point3D(top.getX(), top.getY()-b.getLayoutBounds().getMinY(), top.getZ());
         if(this.hasWorker()){
             worker.setPosition(top);
         }

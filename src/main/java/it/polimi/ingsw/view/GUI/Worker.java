@@ -3,19 +3,20 @@ package it.polimi.ingsw.view.GUI;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 
 
 public class Worker extends MeshView {
     private String workerId;
-    private Color defaultColor;
-    public Worker(String id, Color color){
+    private String defaultColor;
+    public Worker(String id, String color){
         this.workerId = id;
         this.defaultColor = color;
         this.setVisible(false);
         this.setMesh(GraphicsLoader.instance().getMesh("WORKER_"+workerId.charAt(workerId.length()-1)));
-        setToDefaultView();
 
+        setToDefaultView();
     }
     public void setPosition(Point3D position){
         this.setTranslateX(position.getX());
@@ -24,24 +25,37 @@ public class Worker extends MeshView {
         this.setVisible(true);
     }
     public void setToDefaultView() {
-        PhongMaterial defaultMat = new PhongMaterial();
-        defaultMat.setDiffuseColor(defaultColor);
-        this.setMaterial(defaultMat);
+
+        if(workerId.charAt(workerId.length()-1) == 'M'){
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_MALE_"+defaultColor));
+        }else{
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_FEMALE_"+defaultColor));
+        }
+
     }
     public void setToEnableView(){
-        PhongMaterial enabled = new PhongMaterial();
-        enabled.setDiffuseColor(Color.GREEN);
-        this.setMaterial(enabled);
+
+        if(workerId.charAt(workerId.length()-1) == 'M'){
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_MALE_ENABLED"));
+        }else{
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_FEMALE_ENABLED"));
+        }
     }
     public void setToPreview(){
-        PhongMaterial preview = new PhongMaterial();
-        preview.setDiffuseColor(new Color(0.4862, 0.9882, 0f, 0.5));
-        this.setMaterial(preview);
+
+        if(workerId.charAt(workerId.length()-1) == 'M'){
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_MALE_PREVIEW"));
+        }else{
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_FEMALE_PREVIEW"));
+        }
+
     }
     public void setToDisableView(){
-        PhongMaterial disabled = new PhongMaterial();
-        disabled.setDiffuseColor(Color.RED);
-        this.setMaterial(disabled);
+        if(workerId.charAt(workerId.length()-1) == 'M'){
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_MALE_DISABLED"));
+        }else{
+            this.setMaterial(GraphicsLoader.instance().getTexture("WORKER_FEMALE_DISABLED"));
+        }
     }
 
     public String getWorkerId(){

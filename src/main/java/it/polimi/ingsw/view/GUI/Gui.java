@@ -6,9 +6,10 @@ import javafx.scene.Camera;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.paint.Color;
+//import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import it.polimi.ingsw.model.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,19 +27,22 @@ public class Gui extends Application {
         //loadScenario3(board); //move and build
         loadScenario4(board); //forced move
 
+
+
         Camera camera = new PerspectiveCamera(true);
 
         Scene scene = new Scene(board, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
 
         scene.setCamera(camera);
-        scene.setFill(Color.CYAN);
+        //scene.setFill(Color.CYAN);
 
         camera.translateXProperty().set(0);
         camera.translateYProperty().setValue(0);
         camera.translateZProperty().set(-1300);
 
+
         camera.setNearClip(0.1);
-        camera.setFarClip(5000);
+        camera.setFarClip(8000);
 
         stage.setTitle("Santorini");
         stage.setScene(scene);
@@ -180,11 +184,11 @@ public class Gui extends Application {
         board.executeAction(new BuildAction("xxx", 4,3, Piece.LEVEL3));
         board.executeAction(new BuildAction("xxx", 4,3, Piece.DOME));
 
-        board.addPlayer(new Player(1, "Paolo", Color.ROYALBLUE));
+        board.addPlayer(new Player(1, "Paolo", Color.BLUE));
         board.executeAction(new SetupAction("P1-M", 2, 2));
         board.executeAction(new SetupAction("P1-F", 3, 1));
 
-        board.addPlayer(new Player(2, "Federico", Color.GRAY));
+        board.addPlayer(new Player(2, "Federico", Color.ORANGE));
         board.executeAction(new SetupAction("P2-M", 2, 1));
         board.executeAction(new SetupAction("P2-F", 0, 0));
     }
