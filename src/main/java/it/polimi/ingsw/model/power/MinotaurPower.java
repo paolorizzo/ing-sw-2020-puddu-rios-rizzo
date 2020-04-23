@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerateException;
 import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;

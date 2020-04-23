@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.power;
+package it.polimi.ingsw.exception;
 
 public class InvalidActionTreeGenerateException extends RuntimeException{
     public InvalidActionTreeGenerateException(String message){

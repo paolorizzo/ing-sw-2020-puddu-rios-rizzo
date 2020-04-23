@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerateException;
 import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class HephaestusPower extends PowerStrategy {
 
             List<Worker> workers = new ArrayList<Worker>();
             if(curr.isRoot()) {
-                throw new it.polimi.ingsw.model.power.InvalidActionTreeGenerateException("Demeter: can't build first");
+                throw new InvalidActionTreeGenerateException("Demeter: can't build first");
             }else{
                 String workerID = curr.getAction().getWorkerID();
                 if(workerID.charAt(workerID.length()-1) == 'M')

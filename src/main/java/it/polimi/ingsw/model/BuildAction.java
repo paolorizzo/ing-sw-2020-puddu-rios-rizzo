@@ -31,5 +31,22 @@ public class BuildAction extends Action{
         BuildAction that = (BuildAction) o;
         return piece == that.piece;
     }
-
+    public boolean matches(String workerID, Piece piece){
+        if(!this.workerID.equals(workerID))
+            return false;
+        if(this.piece != piece)
+            return false;
+        return true;
+    }
+    public boolean matches(String workerID, int targetX, int targetY, Piece piece){
+        if(!this.workerID.equals(workerID))
+            return false;
+        if(this.targetX != targetX)
+            return false;
+        if(this.targetY != targetY)
+            return false;
+        if(this.piece != piece)
+            return false;
+        return true;
+    }
 }

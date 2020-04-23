@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exception.AlreadyFullException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

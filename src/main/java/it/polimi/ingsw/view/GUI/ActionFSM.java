@@ -41,7 +41,7 @@ public class ActionFSM{
                             worker_id = board.getTower(x, y).getWorker().getWorkerId();
                             boolean foundPossibleAction = false;
                             for(Action action: possibleActions){
-                                if(action.getWorkerID().equals(worker_id)){
+                                if(action.matches(worker_id)){
                                     foundPossibleAction = true;
                                     break;
                                 }
@@ -76,7 +76,7 @@ public class ActionFSM{
                         case "move":
                             System.out.println("move: rendo verdi le possibili mosse");
                             for(Action action: possibleActions){
-                                if(action.getWorkerID().equals(worker_id) && action instanceof MoveAction){
+                                if(action.matches(worker_id) && action instanceof MoveAction){
                                     board.getTower(action.getTargetX(), action.getTargetY()).setToEnableView();
                                 }
                             }
@@ -125,7 +125,7 @@ public class ActionFSM{
                                     //boolean moveAndForce = board.getTower(targetX, targetY).hasWorker();
                                     for (Action action : possibleActions) {
                                         //TODO: in action multiple functions to match the action
-                                        if (action.getWorkerID().equals(worker_id) && action.getTargetX() == targetX && action.getTargetY() == targetY && action instanceof MoveAction) {
+                                        if (action.matches(worker_id, targetX, targetY) && action instanceof MoveAction) {
                                             System.out.println("Ecco la mia azione " + action);
                                             return WAIT_INITIALIZE.execute("");
                                         }
@@ -139,7 +139,7 @@ public class ActionFSM{
 
                                     for (Action action : possibleActions) {
                                         //TODO: in action multiple functions to match the action
-                                        if (action.getWorkerID().equals(worker_id) && action.getTargetX() == previewTargetX && action.getTargetY() == previewTargetY && action instanceof MoveAction) {
+                                        if (action.matches(worker_id, previewTargetX, previewTargetY) && action instanceof MoveAction) {
                                             setPreview(action);
                                             System.out.println("PREVIEW "+action);
                                             break;
@@ -171,7 +171,7 @@ public class ActionFSM{
                     piece = (Piece)input;
                     System.out.println("pezzo selezionato: "+piece);
                     for(Action action: possibleActions){
-                        if(action.getWorkerID().equals(worker_id) && action instanceof BuildAction && ((BuildAction) action).getPiece() == piece){
+                        if(action.matches(worker_id, piece)){
                             board.getTower(action.getTargetX(), action.getTargetY()).setToEnableView();
                         }
                     }
@@ -209,7 +209,7 @@ public class ActionFSM{
                                     //boolean moveAndForce = board.getTower(targetX, targetY).hasWorker();
                                     for (Action action : possibleActions) {
                                         //TODO: in action multiple functions to match the action
-                                        if (action.getWorkerID().equals(worker_id) && action.getTargetX() == targetX && action.getTargetY() == targetY && action instanceof BuildAction && ((BuildAction) action).getPiece() == piece) {
+                                        if (action.matches(worker_id, targetX, targetY, piece)) {
                                             System.out.println("Ecco la mia azione " + action);
                                             worker_id = null;
                                             board.setAllToDefaultView();
@@ -225,7 +225,7 @@ public class ActionFSM{
                                     int previewTargetY = ((String) input).charAt(2) - '0';
                                     for (Action action : possibleActions) {
                                         //TODO: in action multiple functions to match the action
-                                        if (action.getWorkerID().equals(worker_id) && action.getTargetX() == previewTargetX && action.getTargetY() == previewTargetY && action instanceof BuildAction && ((BuildAction) action).getPiece() == piece) {
+                                        if (action.matches(worker_id, previewTargetX, previewTargetY, piece)) {
                                             setPreview(action);
                                             break;
                                         }

@@ -47,4 +47,23 @@ public class Action {
                 workerID.equals(action.workerID);
     }
 
+    public boolean matches(String workerID){
+        return this.workerID.equals(workerID);
+    }
+    public boolean matches(String workerID, int targetX, int targetY){
+        if(!this.workerID.equals(workerID))
+            return false;
+        if(this.targetX != targetX)
+            return false;
+        if(this.targetY != targetY)
+            return false;
+        return true;
+    }
+    public boolean matches(String workerID, Piece piece){
+        return false;
+    }
+    public boolean matches(String workerID, int targetX, int targetY, Piece piece){
+        return false;
+    }
+
 }
