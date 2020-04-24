@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.cli.Cli;
 import it.polimi.ingsw.view.middleware.Client;
 import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Server;
@@ -42,6 +44,12 @@ public class MvcIntegrationTest
     public Client buildAndRunClient(int port)
     {
         Client client = new Client("127.0.0.1", port);
+        ClientView cw = new ClientView(client);
+        client.setClientView(cw);
+
+        Cli cli = new Cli();
+        cw.setUi(cli);
+        cli.addObserver(cw);
         try
         {
             executor.submit(client);

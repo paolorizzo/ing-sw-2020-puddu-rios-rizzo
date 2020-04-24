@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.middleware.Client;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.PhongMaterial;
@@ -12,15 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.polimi.ingsw.model.Color;
-public class Board extends Group {
+public class Board extends Group implements UserInterface {
     private Tower [][] towers = new Tower[5][5];
     private HashMap<Integer, Player> players;
     ActionFSM actionFSM;
     SelectTypeActionMenu selectTypeActionMenu;
     SelectPieceMenu selectPieceMenu;
+    AskNumPlayersMenu askNumPlayersMenu;
+    AskNameMenu askNameMenu;
     Group group2d, group3d;
     PieceBag pieceBag;
-    public Board() {
+
+    ClientView cw;
+    public Board(ClientView cw) {
         players = new HashMap<>();
 
         group2d = new Group();
@@ -47,9 +54,15 @@ public class Board extends Group {
         selectPieceMenu = new SelectPieceMenu(actionFSM);
         group2d.getChildren().add(selectPieceMenu);
 
+        askNumPlayersMenu = new AskNumPlayersMenu(cw);
+        group2d.getChildren().add(askNumPlayersMenu);
+
+        askNameMenu = new AskNameMenu(cw);
+        group2d.getChildren().add(askNameMenu);
 
         pieceBag = new PieceBag();
     }
+
 
     public void addPlayer(Player p){
         players.put(p.getId(), p);
@@ -210,7 +223,18 @@ public class Board extends Group {
     public void hideSelectPieceMenu() {
         selectPieceMenu.hide();
     }
-
+    public void showAskNumPlayersMenu() {
+        askNumPlayersMenu.show();
+    }
+    public void hideAskNumPlayersMenu() {
+        askNumPlayersMenu.hide();
+    }
+    public void showAskNameMenu() {
+        askNameMenu.show();
+    }
+    public void hideAskNameMenu() {
+        askNameMenu.hide();
+    }
     public Tower getTower(int targetX, int targetY) {
         return towers[targetX][targetY];
     }
@@ -247,5 +271,32 @@ public class Board extends Group {
         MeshView innerWall = new MeshView((GraphicsLoader.instance().getMesh("INNERWALL")));
         MeshView outerWall = new MeshView((GraphicsLoader.instance().getMesh("OUTERWALL")));
         group3d.getChildren().addAll(island, islands, innerWall, seaUp, seaDown, outerWall);
+    }
+
+    @Override
+    public void askNumPlayers() {
+        showAskNumPlayersMenu();
+        System.out.println("Ask num player");
+    }
+
+    @Override
+    public void askUsername() {
+        showAskNameMenu();
+
+        System.out.println("Ask name");
+    }
+
+    @Override
+    public void showLogo() {
+
+    }
+
+    @Override
+    public void registerPlayer(int id, String name) {
+        players.put(id, new Player(id, name));
+    }
+    @Override
+    public int getNumPlayersRegister() {
+        return players.size();
     }
 }

@@ -5,7 +5,6 @@ package it.polimi.ingsw.model;
 //that actually modify what is later notified
 //this class should always call notifies upon any modification
 public class Game {
-    private Model model;
     private int numPlayers;
 
     public Game(){

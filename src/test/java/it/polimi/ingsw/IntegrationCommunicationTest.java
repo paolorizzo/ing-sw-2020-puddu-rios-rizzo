@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.ConnectionState;
+import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.cli.Cli;
 import it.polimi.ingsw.view.middleware.Client;
 import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Server;
@@ -29,7 +31,8 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
         int port = 40000;
         Server server = buildAndRunServer(port);
         Client client = buildAndRunClient(port);
-        ClientView cw = client.getClientView();
+
+
         try{
             TimeUnit.SECONDS.sleep(1);
         }
@@ -37,7 +40,7 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
         {
             System.err.println(e.getMessage());
         }
-        assertEquals(0, cw.getId());
+        assert(client.getClientView().getId() == 0);
     }
 
     /*

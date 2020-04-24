@@ -43,5 +43,9 @@ public class PlayersObservable extends Observable<PlayersObserver>{
         }
     }
 
-
+    public synchronized void notifyAllPlayersConnected(){
+        for(PlayersObserver obs:observers){
+            obs.updateAllPlayersConnected();
+        }
+    };
 }

@@ -1,10 +1,11 @@
 package it.polimi.ingsw.view;
 
+
 public interface UserInterface
 {
     void askNumPlayers();
-    int readNumPlayers();
     void askUsername();
-    String readUsername();
-    void showLogo(); 
+    void showLogo();
+    void registerPlayer(int id, String name);
+    int getNumPlayersRegister();
 }

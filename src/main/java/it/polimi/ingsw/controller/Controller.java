@@ -150,7 +150,11 @@ public class Controller implements ControllerInterface
             }
         }
     }
-
+    @Override
+    public synchronized void requestAllPlayersConnected(){
+        if(ackReceived+1 >= model.getNumPlayers())
+            model.playersFeed.notifyAllPlayersConnected();
+    }
     @Override
     public void kill(){
         //TODO save the game state and shut down the server

@@ -27,7 +27,7 @@ public enum ConnectionState {
             view.currentConnectionState = view.currentConnectionState.next();
         }
     },
-    READ_ID {
+    RECEIVE_ID {
         //sets the id
         public void execute(ClientView view, Object input) {
             int id = (int) input;
@@ -61,23 +61,20 @@ public enum ConnectionState {
     //TODO should actually read the input to know whether to display a "try again"
     ASK_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
-            view.getUi().askNumPlayers();
             view.currentConnectionState = view.currentConnectionState.next();
-
-            if(view.getUi() instanceof Cli)
-                view.currentConnectionState.execute(view, null);
+            view.getUi().askNumPlayers();
         }
     },
     READ_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
-            int numPlayers = view.getUi().readNumPlayers();
+            int numPlayers = (int)input;
+            System.out.println("READ_NUM_PLAYERS "+numPlayers);
             if(numPlayers < 2 || 3 < numPlayers){
                 view.currentConnectionState = ConnectionState.ASK_NUM_PLAYERS;
                 view.currentConnectionState.execute(view, null);
             }
             else{
-                view.setNumPlayers(numPlayers);
-                view.currentConnectionState = view.currentConnectionState.next();
+                view.currentConnectionState = PUBLISH_NUM_PLAYERS;
                 view.currentConnectionState.execute(view, numPlayers);
             }
         }
@@ -89,10 +86,10 @@ public enum ConnectionState {
             view.getController().setNumPlayers(view.getId(), numPlayers);
 
             koState = ConnectionState.ASK_NUM_PLAYERS;
-            okState = ConnectionState.ASK_NAME;
+            okState = ConnectionState.REQUEST_NUM_PLAYERS;
             koInput = null;
             okInput = null;
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = ConnectionState.RECEIVE_CHECK;
         }
     },
     RECEIVE_CHECK{
@@ -122,19 +119,56 @@ public enum ConnectionState {
             view.currentConnectionState.execute(view,nextInput);
         }
     },
+    REQUEST_NUM_PLAYERS{
+        public void execute(ClientView view, Object input)  {
+            //todo launch waiting view
+            view.getController().getNumPlayers();
+            view.currentConnectionState = RECEIVE_NUM_PLAYERS;
+        }
+    },
+    RECEIVE_NUM_PLAYERS{
+        public void execute(ClientView view, Object input){
+            System.out.println("RECEIVE_NUM_PLAYERS state execute "+(int)input);
+            int numPlayers = (int) input;
+            if(view.game != null)
+                throw new IncorrectStateException("game should not exist in state" + this.name());
+            if(view.getId() < numPlayers){
+                System.out.println("Creo il game da "+input+" giocatori.");
+                view.setNumPlayers(numPlayers);
+                view.currentConnectionState = ConnectionState.REQUEST_ALL_PLAYERS_CONNECTED;
+                view.currentConnectionState.execute(view, null);
+            }
+            else{
+                view.currentConnectionState = ConnectionState.PUBLISH_HARAKIRI;
+                view.currentConnectionState.execute(view, input);
+            }
+        }
+    },
+    REQUEST_ALL_PLAYERS_CONNECTED{
+        public void execute(ClientView view, Object input){
+            System.out.println("Attendo tutti i giocatori ...");
+            view.getController().requestAllPlayersConnected();
+            view.currentConnectionState = RECEIVE_ALL_PLAYERS_CONNECTED;
+        }
+    },
+    RECEIVE_ALL_PLAYERS_CONNECTED{
+        public void execute(ClientView view, Object input){
+            System.out.println("Tutti i giocatori ora connessi.");
+            view.currentConnectionState = ConnectionState.ASK_NAME;
+            view.currentConnectionState.execute(view, input);
+        }
+    },
     ASK_NAME{
         public void execute(ClientView view, Object input) {
-            view.getUi().askUsername();
             view.currentConnectionState = view.currentConnectionState.next();
-
-            if(view.getUi() instanceof Cli)
-                view.currentConnectionState.execute(view, null);
+            view.getUi().askUsername();
         }
     },
     READ_NAME{
         public void execute(ClientView view, Object input) {
-            String name = view.getUi().readUsername();
-            view.currentConnectionState = view.currentConnectionState.next();
+            String name = (String)input;
+            System.out.println("READ_NAME "+name);
+            view.currentConnectionState = PUBLISH_NAME;
             view.currentConnectionState.execute(view, name);
         }
     },
@@ -145,35 +179,15 @@ public enum ConnectionState {
             view.getController().setName(view.getId(), name);
 
             koState = ConnectionState.ASK_NAME;
-            okState = ConnectionState.END;
+            okState = ConnectionState.WAIT_ALL_PLAYERS_NAME;
             koInput = null;
             okInput = null;
             view.currentConnectionState = ConnectionState.RECEIVE_CHECK;
         }
     },
-    REQUEST_NUM_PLAYERS{
-        public void execute(ClientView view, Object input)  {
-            //todo launch waiting view
-            view.getController().getNumPlayers();
-            view.currentConnectionState = view.currentConnectionState.next();
-        }
-    },
-    //unless the number of players is 2 and the id is 2, proceeds to ask name
-    RECEIVE_NUM_PLAYERS{
-        public void execute(ClientView view, Object input){
-            int numPlayers = (int) input;
-            if(view.game != null)
-                throw new IncorrectStateException("game should not exist in state" + this.name());
-            if(view.getId() < numPlayers){
-                System.out.println("Creo il game da "+input+" giocatori");
-                view.setNumPlayers(numPlayers);
-                view.currentConnectionState = ConnectionState.ASK_NAME;
-                view.currentConnectionState.execute(view, input);
-            }
-            else{
-                view.currentConnectionState = ConnectionState.PUBLISH_HARAKIRI;
-                view.currentConnectionState.execute(view, input);
-            }
+    WAIT_ALL_PLAYERS_NAME{
+        public void execute(ClientView view, Object input) {
+            System.out.println("Wait all players name");
         }
     },
     PUBLISH_HARAKIRI{
@@ -219,4 +233,4 @@ public enum ConnectionState {
 
     }
 
-    }
+}

@@ -19,7 +19,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     private final int port;
     protected Map<String, Observable> methodMap;
 
-    private final ClientView cw;
+    private ClientView cw;
 
     private final GameObservable virtualGameFeed;
     private final PlayersObservable virtualPlayersFeed;
@@ -30,14 +30,15 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     {
         this.ip = ip;
         this.port = port;
-        this.cw = new ClientView(this);
         virtualGameFeed = new GameObservable();
         virtualPlayersFeed = new PlayersObservable();
-        addObserver(cw);
         methodMap = constructMethodMap();
         alive = true;
     }
-
+    public void setClientView(ClientView cw){
+        this.cw = cw;
+        addObserver(cw);
+    }
     public ClientView getClientView()
     {
 
@@ -102,7 +103,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
                     try {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
                         Message message = (Message) ByteIn.readObject();
-                        //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
+                        System.out.println("Messaggio in arrivo sul client! Message method: "+message);
                         //System.out.println(message.getMethodName());
                         callMethod(message);
                     }
@@ -170,7 +171,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     {
         sendMessage("getNumPlayers");
     }
-
+    public  void requestAllPlayersConnected() {sendMessage("requestAllPlayersConnected");};
     @Override
     public void setName(int id, String name)
     {

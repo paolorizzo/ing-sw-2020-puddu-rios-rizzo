@@ -1,11 +1,24 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.observation.GameObservable;
+import it.polimi.ingsw.observation.PlayersObservable;
+import it.polimi.ingsw.observation.UserInterfaceObservable;
+import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.middleware.Client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
-public class Cli implements UserInterface
+public class Cli extends UserInterfaceObservable implements UserInterface
 {
+    private HashMap<Integer, Player> players;
+    public Cli(){
+        players = new HashMap<>();
+    }
     @Override
     public void showLogo()
     {
@@ -25,14 +38,11 @@ public class Cli implements UserInterface
     @Override
     public void askNumPlayers(){
         CliUtils.printBlueOnWhiteSameLine("Choose the number of players:");
+        int numPlayers = readInt();
+        notifyReadNumPlayers(numPlayers);
     }
 
     //wrong input is handled by ConnectionState
-    @Override
-    public int readNumPlayers(){
-        int numPlayers = readInt();
-        return numPlayers;
-    }
 
     private int readInt(){
         Scanner stdin = new Scanner(System.in);
@@ -44,13 +54,10 @@ public class Cli implements UserInterface
     @Override
     public void askUsername() {
         CliUtils.printBlueOnWhiteSameLine("Choose a username:");
+        String name = readString();
+        notifyReadName(name);
     }
 
-    @Override
-    public String readUsername(){
-        String name = readString();
-        return name;
-    }
 
     //utility function used to get a string from user input
     public String readString(){
@@ -70,5 +77,15 @@ public class Cli implements UserInterface
     public void showUsernameError()
     {
         showCustomError("Error! Username not available.");
+    }
+
+    @Override
+    public void registerPlayer(int id, String name){
+        players.put(id, new Player(id, name));
+    }
+
+    @Override
+    public int getNumPlayersRegister() {
+        return players.size();
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observation.GameObservable;
 import it.polimi.ingsw.observation.PlayersObservable;
+import it.polimi.ingsw.observation.UserInterfaceObserver;
 import it.polimi.ingsw.view.middleware.Client;
 import it.polimi.ingsw.view.cli.Cli;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 //TODO test basically everything in this class
-public class ClientView extends View
+public class ClientView extends View implements UserInterfaceObserver
 {
     //finite state machine states
     ConnectionState currentConnectionState;
@@ -24,20 +25,19 @@ public class ClientView extends View
 
     //updates will modify these objects
     Game game;
-    private ArrayList<Player> players;
     private int id;
-
     private UserInterface ui;
 
     //private because ClientView is singleton. instance() should be called to get an object of this type
     public ClientView(ControllerInterface controller){
         super(controller);
-        game=null;
-        players = new ArrayList<Player>();
+        game = null;
         id = -1;
-        ui = new Cli();
     }
 
+    public void setUi(UserInterface ui){
+        this.ui = ui;
+    }
     public UserInterface getUi(){
         return ui;
     }
@@ -48,8 +48,6 @@ public class ClientView extends View
 
     public void setNumPlayers(int numPlayers){
         game = new Game(numPlayers);
-        for(int i=0;i<numPlayers;i++)
-            players.add(null);
     }
 
     public ConnectionState getConnectionState(){
@@ -60,13 +58,21 @@ public class ClientView extends View
     public void setID(int id){
         this.id = id;
     }
-
+    //updates relative to UserInterface
+    public synchronized void updateReadNumPlayers(int numPlayers){
+        if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
+            currentConnectionState.execute(this, numPlayers);
+    }
+    public synchronized void updateReadName(String name){
+        if(currentConnectionState.equals(ConnectionState.READ_NAME))
+            currentConnectionState.execute(this, name);
+    }
     //updates relative to GameObserver
 
     public synchronized void updateNumPlayers(int numPlayers){
         System.out.println("received number of players: " + numPlayers);
         if(game != null)
-            System.out.println("it was already known");
+            System.out.println("it was already known, state: "+currentConnectionState.toString());
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
@@ -78,8 +84,13 @@ public class ClientView extends View
             System.out.println("ClientView.updateID with id "+id+", but was already "+this.id);
         else
             System.out.println("ClientView.updateID with new id "+id);
-        if(currentConnectionState.equals(ConnectionState.READ_ID))
+        if(currentConnectionState.equals(ConnectionState.RECEIVE_ID))
             currentConnectionState.execute(this, id);
+    }
+
+    public synchronized void updateAllPlayersConnected(){
+        if(currentConnectionState.equals(ConnectionState.RECEIVE_ALL_PLAYERS_CONNECTED))
+            currentConnectionState.execute(this, null);
     }
 
     public synchronized void updateStart(){
@@ -89,16 +100,18 @@ public class ClientView extends View
 
     //this method supposes that only valid names are received
     public synchronized void updateName(int id, String name){
-        players.add(id, new Player(id, name));
-        if(id == this.id)
+        getUi().registerPlayer(id, name);
+        if(id == this.id){
             System.out.println("my name is " + name);
-        else
+        }else
             System.out.println("player " + id + " chose " + name + " as their username");
+        System.out.println("Player register "+getUi().getNumPlayersRegister());
+        if(getUi().getNumPlayersRegister() == game.getNumPlayers() && currentConnectionState == ConnectionState.WAIT_ALL_PLAYERS_NAME){
+            currentConnectionState = ConnectionState.END;
+            currentConnectionState.execute(this, null);
+        }
     }
 
-    public String getName(){
-        return players.get(id).getNickname();
-    }
 
     public synchronized void updateOk(int id){
         if(id == this.id){

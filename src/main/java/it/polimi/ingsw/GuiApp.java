@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.cli.Cli;
+import it.polimi.ingsw.view.middleware.Client;
 import javafx.application.Application;
 import javafx.scene.Camera;
 import javafx.scene.PerspectiveCamera;
@@ -13,18 +16,35 @@ import it.polimi.ingsw.model.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gui extends Application {
+public class GuiApp extends Application {
     private static final int WIDTH = 1400;
     private static final int HEIGHT = 800;
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        Board board = new Board();
+
+        Client client = new Client("127.0.0.1", 42069);
+        ClientView cw = new ClientView(client);
+
+        client.setClientView(cw);
+
+        Board board = new Board(cw);
+        cw.setUi(board);
+
+        try
+        {
+            Thread t = new Thread(client);
+            t.start();
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.toString());
+        }
 
         //loadScenario1(board); //move
         //loadScenario2(board); //build
-        loadScenario3(board); //move and build
+        //loadScenario3(board); //move and build
         //loadScenario4(board); //forced move
 
 
@@ -50,6 +70,7 @@ public class Gui extends Application {
     }
 
     public static void main(String[] args) {
+
         launch(args);
     }
 
@@ -184,11 +205,11 @@ public class Gui extends Application {
         board.executeAction(new BuildAction("xxx", 4,3, Piece.LEVEL3));
         board.executeAction(new BuildAction("xxx", 4,3, Piece.DOME));
 
-        board.addPlayer(new Player(1, "Paolo", Color.BLUE));
+        board.registerPlayer(1, "Paolo");
         board.executeAction(new SetupAction("P1-M", 2, 2));
         board.executeAction(new SetupAction("P1-F", 3, 1));
 
-        board.addPlayer(new Player(2, "Federico", Color.ORANGE));
+        board.registerPlayer(2, "Federico");
         board.executeAction(new SetupAction("P2-M", 2, 1));
         board.executeAction(new SetupAction("P2-F", 0, 0));
     }

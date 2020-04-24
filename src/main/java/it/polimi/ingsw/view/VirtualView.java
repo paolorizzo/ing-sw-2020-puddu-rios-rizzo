@@ -44,4 +44,5 @@ public class VirtualView extends View
         connection.sendMessage("notifyKo", id);
     }
 
+    public synchronized void updateAllPlayersConnected(){ connection.sendMessage("notifyAllPlayersConnected"); }
 }
