@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class PrometheusPowerTest extends PowerTest {
 
@@ -59,4 +63,33 @@ public class PrometheusPowerTest extends PowerTest {
         }
     }
 
+    @Test(expected = InvalidActionTreeGenerationException.class)
+    public void tryFirstBuildAfterAction() {
+        PowerStrategy pw = new PrometheusPower();
+        ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
+        Player p0 = new Player(0, "name1");
+        Player p1 = new Player(1, "name2");
+        pw.addBuildLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+    }
+
+    @Test(expected = InvalidActionTreeGenerationException.class)
+    public void tryMoveAfterNotBuildAction()
+    {
+        Player p0 = new Player("Matteo", Color.BLUE, 0);
+        Player p1 = new Player("Paolo", Color.WHITE, 1);
+        Board board = new Board(Arrays.asList(p0, p1));
+        Action a1 = new SetupAction(p0.getWorker(Sex.MALE).toString(), 1, 1);
+        Action a2 = new SetupAction(p0.getWorker(Sex.FEMALE).toString(), 2, 2);
+        Action a3 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);
+        Action a4 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 3, 1);
+        board.executeAction(a1);
+        board.executeAction(a2);
+        board.executeAction(a3);
+        board.executeAction(a4);
+
+        PowerStrategy pw = new PrometheusPower();
+        ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 2, Direction.SAME, 1, 1), false, false, false, true);
+
+        pw.addMoveLayer(t, p0, board);
+    }
 }

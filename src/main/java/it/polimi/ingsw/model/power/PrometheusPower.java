@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.power;
 
-import it.polimi.ingsw.exception.InvalidActionTreeGenerateException;
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class PrometheusPower extends PowerStrategy {
                 }
             } else {
                 if (!(curr.getAction() instanceof BuildAction))
-                    throw new InvalidActionTreeGenerateException("Prometheus: not build action before move action!");
+                    throw new InvalidActionTreeGenerationException("Prometheus: not build action before move action!");
                 String workerID = curr.getAction().getWorkerID();
                 if (workerID.charAt(workerID.length() - 1) == 'M')
                     workers.add(player.getWorker(Sex.MALE));
@@ -99,7 +99,7 @@ public class PrometheusPower extends PowerStrategy {
 
     protected void addBuildLayer(ActionTree curr, Player player, Board board){
         if(!curr.isRoot()){
-            throw new InvalidActionTreeGenerateException("Prometheus: no root in the first build!");
+            throw new InvalidActionTreeGenerationException("Prometheus: no root in the first build!");
         }
 
         if(curr.isAppendedLayer()){

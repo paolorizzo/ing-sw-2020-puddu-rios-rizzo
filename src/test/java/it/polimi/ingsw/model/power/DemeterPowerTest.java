@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class DemeterPowerTest extends PowerTest {
 
@@ -54,4 +58,13 @@ public class DemeterPowerTest extends PowerTest {
         }
     }
 
+    @Test(expected = InvalidActionTreeGenerationException.class)
+    public void tryBuildFirst()
+    {
+        PowerStrategy pw = new DemeterPower();
+        ActionTree t = new ActionTree();
+        Player p0 = new Player(0, "name1");
+        Player p1 = new Player(1, "name2");
+        pw.addBuildLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+    }
 }

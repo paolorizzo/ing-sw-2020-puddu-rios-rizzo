@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 1000;
+        int numberOfTest = 10000;
 
         Random rand = new Random(42);
         for(int seed=0;seed<numberOfTest;seed++){
@@ -371,6 +372,16 @@ public class PowerStrategyTest {
         powerStrategy.pruneActionTree(result2);
 
         assert(result.equals(result2));
+    }
+
+    @Test(expected = InvalidActionTreeGenerationException.class)
+    public void tryMoveAfterAction()
+    {
+        PowerStrategy pw = new PowerStrategy();
+        ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
+        Player p0 = new Player(0, "name1");
+        Player p1 = new Player(1, "name2");
+        pw.addMoveLayer(t, p0, new Board(Arrays.asList(p0, p1)));
     }
 }
 

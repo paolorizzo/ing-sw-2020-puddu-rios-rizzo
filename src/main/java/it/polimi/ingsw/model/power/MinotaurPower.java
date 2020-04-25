@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.power;
 
-import it.polimi.ingsw.exception.InvalidActionTreeGenerateException;
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
@@ -19,19 +19,16 @@ public class MinotaurPower extends PowerStrategy {
     protected void addMoveLayer(ActionTree curr, Player player, Board board){
         //inizialmente simulo le mosse
         if(!curr.isRoot())
-            throw new InvalidActionTreeGenerateException("Minotaur: before move there is always root");
+            throw new InvalidActionTreeGenerationException("Minotaur: before move there is always root");
 
         curr.setAppendedLayer(false);
 
         List<Worker> workers = new ArrayList<Worker>();
 
-        if(curr.isRoot()) {
-            //scelta libera del worker
-            workers.add(player.getWorker(Sex.MALE));
-            workers.add(player.getWorker(Sex.FEMALE));
-        }else{
-            throw new InvalidActionTreeGenerateException("Minotaur: before move there is always root");
-        }
+        //scelta libera del worker
+        workers.add(player.getWorker(Sex.MALE));
+        workers.add(player.getWorker(Sex.FEMALE));
+
         boolean moved = false;
         for(Worker worker: workers){
             Space currSpace = worker.getSpace();

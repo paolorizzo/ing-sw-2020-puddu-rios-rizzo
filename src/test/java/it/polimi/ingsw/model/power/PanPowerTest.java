@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.power.PowerTest;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class PanPowerTest extends PowerTest {
     public void assertPower(Board board, Turn turn, ActionTree lastLayer){
@@ -46,5 +49,15 @@ public class PanPowerTest extends PowerTest {
             assert(countBuild == 1);
             assert(countMove == 1);
         }
+    }
+
+    @Test(expected = InvalidActionTreeGenerationException.class)
+    public void tryMoveAfterAction()
+    {
+        PowerStrategy pw = new PanPower();
+        ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
+        Player p0 = new Player(0, "name1");
+        Player p1 = new Player(1, "name2");
+        pw.addMoveLayer(t, p0, new Board(Arrays.asList(p0, p1)));
     }
 }

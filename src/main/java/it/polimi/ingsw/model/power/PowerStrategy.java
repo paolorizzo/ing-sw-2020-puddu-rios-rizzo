@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.power;
 
+import it.polimi.ingsw.exception.InvalidActionTreeGenerationException;
 import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
@@ -20,31 +21,18 @@ public class PowerStrategy {
         recursiveAddBuildLayer(curr, player, board);
     }
     private void recursiveAddMoveLayer(ActionTree curr, Player player, Board board){
-        //inizialmente simulo le mosse
-        if(!curr.isRoot()){
-            //simulate
-            board.executeAction(curr.getAction());
-        }
-        //parto dai nodi più in basso
-        for(ActionTree child: curr.getChildren())
-            this.recursiveAddMoveLayer(child, player, board);
+        if(!curr.isRoot())
+            throw new InvalidActionTreeGenerationException("Default move: before move there is always root");
 
         if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
 
             List<Worker> workers = new ArrayList<Worker>();
 
-            if(curr.isRoot()) {
-                //scelta libera del worker
-                workers.add(player.getWorker(Sex.MALE));
-                workers.add(player.getWorker(Sex.FEMALE));
-            }else{
-                String workerID = curr.getAction().getWorkerID();
-                if(workerID.charAt(workerID.length()-1) == 'M')
-                    workers.add(player.getWorker(Sex.MALE));
-                else if(workerID.charAt((workerID.length()-1)) == 'F')
-                    workers.add(player.getWorker(Sex.FEMALE));
-            }
+            //scelta libera del worker
+            workers.add(player.getWorker(Sex.MALE));
+            workers.add(player.getWorker(Sex.FEMALE));
+
             boolean moved = false;
             for(Worker worker: workers){
                 Space currSpace = worker.getSpace();
@@ -69,11 +57,6 @@ public class PowerStrategy {
                 curr.setEndOfTurn(true);
             }
         }
-
-        //undo simulazione azione
-        if(!curr.isRoot()){
-            board.undoExecuteAction(curr.getAction());
-        }
     }
 
     private void recursiveAddBuildLayer(ActionTree curr, Player player, Board board){
@@ -90,17 +73,13 @@ public class PowerStrategy {
             curr.setAppendedLayer(false);
 
             List<Worker> workers = new ArrayList<Worker>();
-            if(curr.isRoot()) {
-                //scelta libera del worker
+
+            String workerID = curr.getAction().getWorkerID();
+            if(workerID.charAt(workerID.length()-1) == 'M')
                 workers.add(player.getWorker(Sex.MALE));
+            else if(workerID.charAt((workerID.length()-1)) == 'F')
                 workers.add(player.getWorker(Sex.FEMALE));
-            }else{
-                String workerID = curr.getAction().getWorkerID();
-                if(workerID.charAt(workerID.length()-1) == 'M')
-                    workers.add(player.getWorker(Sex.MALE));
-                else if(workerID.charAt((workerID.length()-1)) == 'F')
-                    workers.add(player.getWorker(Sex.FEMALE));
-            }
+
             boolean built = false;
             for(Worker worker: workers){
                 Space currSpace = worker.getSpace();
