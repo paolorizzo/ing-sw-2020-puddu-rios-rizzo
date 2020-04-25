@@ -22,6 +22,13 @@ public class SpaceTest {
         s.addPiece(Piece.LEVEL2);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void tryToRemoveLevel0()
+    {
+        Space s = new Space(1,1);
+        s.removeLastPiece();
+    }
+
     @Test
     public void checkConstructor(){
         int x = 2;
