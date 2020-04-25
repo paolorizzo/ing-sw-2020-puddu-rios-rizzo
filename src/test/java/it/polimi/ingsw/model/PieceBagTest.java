@@ -16,5 +16,12 @@ public class PieceBagTest
         assertEquals(bag.getCount(Piece.LEVEL2), 0);
         assert(!bag.hasPiece(Piece.LEVEL2));
     }
-
+    @Test(expected = IllegalArgumentException.class)
+    public void tryToPickTooPiece()
+    {
+        PieceBag bag = new PieceBag();
+        while(true){
+            bag.pickPiece(Piece.LEVEL2);
+        }
+    }
 }
