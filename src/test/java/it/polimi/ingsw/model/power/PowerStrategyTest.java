@@ -27,15 +27,15 @@ public class PowerStrategyTest {
         List<Player> players = new ArrayList<>();
 
         Board board;
-        Player p1 = new Player("Francesco", Color.BLUE, 1);
+        Player p1 = new Player("Francesco", Color.BLUE, 0);
 
-        Player p2 = new Player("Paolo", Color.WHITE, 2);
+        Player p2 = new Player("Paolo", Color.WHITE, 1);
 
 
         players.add(p1);
         players.add(p2);
         if(numOfPlayer == 3) {
-            Player p3 = new Player("Federico", Color.ORANGE, 3);
+            Player p3 = new Player("Federico", Color.ORANGE, 2);
             players.add(p3);
         }
 

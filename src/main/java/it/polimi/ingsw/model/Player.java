@@ -14,17 +14,22 @@ public class Player
 
     public Player(String nickname, Color color, int playerNum)
     {
-        this.nickname = nickname;
-        this.color = color;
-        this.workers = new Worker[2];
-        this.workers[1] = new Worker(Sex.MALE, this);
-        this.workers[0] = new Worker(Sex.FEMALE, this);
-        this.playerNum = playerNum;
+        if(playerNum < 0 || 2 < playerNum){
+            throw new IllegalArgumentException("cannot construct this player because id " + playerNum + "is unacceptable");
+        }
+            else{
+            this.nickname = nickname;
+            this.color = color;
+            this.workers = new Worker[2];
+            this.workers[1] = new Worker(Sex.MALE, this);
+            this.workers[0] = new Worker(Sex.FEMALE, this);
+            this.playerNum = playerNum;
+        }
     }
 
     public Player(int playerNum, String nickname){
         if(playerNum < 0 || 2 < playerNum){
-            throw new RuntimeException("cannot construct this player because id " + playerNum + "is unacceptable");
+            throw new IllegalArgumentException("cannot construct this player because id " + playerNum + "is unacceptable");
         }
         else{
             this.nickname = nickname;

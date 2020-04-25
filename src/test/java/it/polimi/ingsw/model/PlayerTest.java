@@ -6,6 +6,16 @@ import static org.junit.Assert.assertNotNull;
 
 public class PlayerTest
 {
+    @Test(expected = IllegalArgumentException.class)
+    public void tryToCreatePlayerWithWrongIdFirstConstructor()
+    {
+       Player p = new Player("name", Color.BLUE, 3);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void tryToCreatePlayerWithWrongIdSecondConstructor()
+    {
+        Player p = new Player(-1, "name");
+    }
     @Test
     public void checkWorkers()
     {
@@ -41,5 +51,16 @@ public class PlayerTest
     {
         Player p = new Player("name", Color.BLUE, 1);
         assertEquals(p.getColor(), Color.BLUE);
+    }
+    @Test
+    public void checkEquals()
+    {
+        Player p = new Player("name", Color.BLUE, 1);
+
+        assert(p.equals(new Player("name", Color.BLUE, 1)));
+        assert(!p.equals(new Player("notEquals", Color.BLUE, 1)));
+        assert(!p.equals(new Player("name", Color.ORANGE, 1)));
+        assert(!p.equals(new Player("name", Color.BLUE, 2)));
+        assert(!p.equals(new Object()));
     }
 }
