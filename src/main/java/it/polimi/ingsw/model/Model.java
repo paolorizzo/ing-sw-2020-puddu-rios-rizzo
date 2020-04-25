@@ -6,6 +6,7 @@ import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 //TODO create singleton superclass
@@ -15,7 +16,7 @@ public class Model {
     public static Model instance;
 
     Game game;
-    ArrayList<Player> players;
+    HashMap<Integer ,Player> players;
 
     //feeds
     public GameObservable gameFeed;
@@ -24,7 +25,7 @@ public class Model {
 
     public Model(){
         game = new Game();
-        players = new ArrayList<Player>();
+        players = new HashMap<>();
         gameFeed = new GameObservable();
         playersFeed = new PlayersObservable();
     }
@@ -33,14 +34,12 @@ public class Model {
         return gameFeed;
     }
 
-    public ArrayList<Player> getPlayers(){
+    public HashMap<Integer, Player> getPlayers(){
         return players;
     }
 
     public void setNumPlayers(int numPlayers){
         game.setNumPlayers(numPlayers);
-        for (int i=0;i<numPlayers;i++)
-            players.add(null);
         gameFeed.notifyNumPlayers(numPlayers);
     }
 
@@ -50,25 +49,21 @@ public class Model {
     //that has already posted their name, possibly even before the last one joined
     public void addPlayer(Player player){
         int id = player.getId();
-        players.add(id, player);
+        players.put(id, player);
 
         //important to notify every name to allow late clients to know all other players before
         //the end of the late client's connection phase
-        for(Player p:players){
-            if(p != null){
-                playersFeed.notifyName(p.getId(), p.getNickname());
-            }
+        for(Player p: players.values()){
+            playersFeed.notifyName(p.getId(), p.getNickname());
         }
     }
 
     //returns true if someone already claimed the nickname
     public boolean nicknamePresent(String name){
         boolean alreadyPresent = false;
-        for(Player p:players) {
-            if(p != null){
-                if (p.getNickname().equals(name))
-                    alreadyPresent = true;
-            }
+        for(Player p: players.values()) {
+            if (p.getNickname().equals(name))
+                alreadyPresent = true;
         }
         return alreadyPresent;
     }
@@ -78,12 +73,7 @@ public class Model {
     //it catches the relative exception and returns false because
     //the fact that it is impossible to get it means that it is not present
     public boolean playerPresent(int id){
-        try{
-            return players.get(id) != null;
-        }
-        catch(IndexOutOfBoundsException e){
-            return false;
-        }
+        return players.get(id) != null;
     }
 
     public int getNumPlayers(){
@@ -95,18 +85,13 @@ public class Model {
     }
 
     public void addObserver(ModelObserver obs){
-        addObserver(obs);
-    }
-
-    public void addObserver(View view){
-        gameFeed.addObserver(view);
-        playersFeed.addObserver(view);
+        gameFeed.addObserver(obs);
+        playersFeed.addObserver(obs);
     }
 
     public void removeObserver(ModelObserver obs){
         gameFeed.removeObserver(obs);
         playersFeed.removeObserver(obs);
     }
-
 
 }
