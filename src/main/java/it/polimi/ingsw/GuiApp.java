@@ -1,8 +1,9 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.cli.Cli;
+import it.polimi.ingsw.view.gui.Board;
 import it.polimi.ingsw.view.middleware.Client;
 import javafx.application.Application;
 import javafx.scene.Camera;
@@ -12,7 +13,6 @@ import javafx.scene.SceneAntialiasing;
 //import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import it.polimi.ingsw.model.Color;
 import java.util.ArrayList;
 import java.util.List;
 

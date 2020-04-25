@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Piece;
 import javafx.event.EventHandler;
@@ -15,6 +15,7 @@ public class Tower extends Group{
     Point3D base;
     Point3D top;
     int row, col;
+
     public Tower(int row, int col, Point3D base){
         this.row = row;
         this.col = col;
@@ -25,6 +26,23 @@ public class Tower extends Group{
         buildings = new ArrayList<>();
         addBuilding(new Building(Piece.LEVEL0));
     }
+
+    public Point3D getBase() {
+        return base;
+    }
+
+    public Point3D getTop() {
+        return top;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
     public void setToDefaultView(){
         for(Building building: buildings){
            building.setToDefaultView();
@@ -44,7 +62,7 @@ public class Tower extends Group{
             building.setToPreview();
         }
         if(worker != null)
-            worker.setToEnableView();
+            worker.setToPreview();
     }
     public void setToDisableView(){
         for(Building building: buildings){
@@ -118,18 +136,6 @@ public class Tower extends Group{
                 actionFSM.execute("E"+row+""+col);
             }
         });
-    }
-
-    @Override
-    public String toString() {
-        return "Tower{" +
-                "buildings=" + buildings +
-                ", worker=" + worker +
-                ", base=" + base +
-                ", top=" + top +
-                ", row=" + row +
-                ", col=" + col +
-                '}';
     }
 
 }

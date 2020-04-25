@@ -1,14 +1,12 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
-import it.polimi.ingsw.view.middleware.Client;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 
 import java.util.HashMap;
@@ -61,11 +59,6 @@ public class Board extends Group implements UserInterface {
         group2d.getChildren().add(askNameMenu);
 
         pieceBag = new PieceBag();
-    }
-
-
-    public void addPlayer(Player p){
-        players.put(p.getId(), p);
     }
 
     public void executeAction(Action action){

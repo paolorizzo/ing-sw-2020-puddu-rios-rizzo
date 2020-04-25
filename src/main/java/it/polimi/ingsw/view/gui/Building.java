@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Piece;
 import javafx.geometry.Point3D;
@@ -30,5 +30,7 @@ public class Building extends MeshView {
     public void setToDisableView(){
         this.setMaterial(GraphicsLoader.instance().getTexture(piece.toString()+"_disabled"));
     }
-
+    public Piece getPiece(){
+        return piece;
+    }
 }

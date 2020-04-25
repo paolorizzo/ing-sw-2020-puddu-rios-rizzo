@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.gui;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
@@ -6,8 +6,11 @@ import javafx.scene.shape.Mesh;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.*;
 
 public class GraphicsLoader {
@@ -44,107 +47,107 @@ public class GraphicsLoader {
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("LEVEL0", "./resources/LV0.obj");
+                loaderMesh("LEVEL0", "LV0.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("LEVEL1", "./resources/LV1.obj");
+                loaderMesh("LEVEL1", "LV1.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("LEVEL2", "./resources/LV2.obj");
+                loaderMesh("LEVEL2", "LV2.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("LEVEL3", "./resources/LV3.obj");
+                loaderMesh("LEVEL3", "LV3.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("DOME", "./resources/DOME.obj");
+                loaderMesh("DOME", "DOME.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("WORKER_F", "./resources/worker_F.obj");
+                loaderMesh("WORKER_F", "worker_F.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("WORKER_M", "./resources/worker_M.obj");
+                loaderMesh("WORKER_M", "worker_M.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("INNERWALL", "./resources/innerwall.obj");
+                loaderMesh("INNERWALL", "innerwall.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("OUTERWALL", "./resources/outerwall.obj");
+                loaderMesh("OUTERWALL", "outerwall.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("ISLAND", "./resources/island.obj");
+                loaderMesh("ISLAND", "island.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("ISLANDS", "./resources/islands.obj");
+                loaderMesh("ISLANDS", "islands.obj");
             }
         }));
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("SEA", "./resources/sea.obj");
+                loaderMesh("SEA", "sea.obj");
             }
         }));
 
         threads.add(new Thread(new Runnable() {
             @Override
             public void run() {
-                loaderMesh("SEADOWN", "./resources/seadown.obj");
+                loaderMesh("SEADOWN", "seadown.obj");
             }
         }));
 
         for(Thread thread: threads){
             thread.start();
         }
-        textures.put("WORKER_MALE_BLUE", loadTexture("worker_male_blue.png"));
-        textures.put("WORKER_MALE_WHITE", loadTexture("worker_male_white.png"));
-        textures.put("WORKER_MALE_ORANGE", loadTexture("worker_male_orange.png"));
-        textures.put("WORKER_MALE_PINK", loadTexture("worker_male_pink.png"));
-        textures.put("WORKER_MALE_PURPLE", loadTexture("worker_male_purple.png"));
-        textures.put("WORKER_MALE_TAN", loadTexture("worker_male_tan.png"));
+        textures.put("WORKER_M_BLUE", loadTexture("worker_male_blue.png"));
+        textures.put("WORKER_M_WHITE", loadTexture("worker_male_white.png"));
+        textures.put("WORKER_M_ORANGE", loadTexture("worker_male_orange.png"));
+        textures.put("WORKER_M_PINK", loadTexture("worker_male_pink.png"));
+        textures.put("WORKER_M_PURPLE", loadTexture("worker_male_purple.png"));
+        textures.put("WORKER_M_TAN", loadTexture("worker_male_tan.png"));
 
-        textures.put("WORKER_MALE_ENABLED", loadTexture("worker_male_enabled.png"));
-        textures.put("WORKER_MALE_PREVIEW", loadTexture("worker_male_preview.png"));
-        textures.put("WORKER_MALE_DISABLED", loadTexture("worker_male_disabled.png"));
+        textures.put("WORKER_M_ENABLED", loadTexture("worker_male_enabled.png"));
+        textures.put("WORKER_M_PREVIEW", loadTexture("worker_male_preview.png"));
+        textures.put("WORKER_M_DISABLED", loadTexture("worker_male_disabled.png"));
 
-        textures.put("WORKER_FEMALE_BLUE", loadTexture("worker_female_blue.png"));
-        textures.put("WORKER_FEMALE_WHITE", loadTexture("worker_female_white.png"));
-        textures.put("WORKER_FEMALE_ORANGE", loadTexture("worker_female_orange.png"));
-        textures.put("WORKER_FEMALE_PINK", loadTexture("worker_female_pink.png"));
-        textures.put("WORKER_FEMALE_PURPLE", loadTexture("worker_female_purple.png"));
-        textures.put("WORKER_FEMALE_TAN", loadTexture("worker_female_tan.png"));
+        textures.put("WORKER_F_BLUE", loadTexture("worker_female_blue.png"));
+        textures.put("WORKER_F_WHITE", loadTexture("worker_female_white.png"));
+        textures.put("WORKER_F_ORANGE", loadTexture("worker_female_orange.png"));
+        textures.put("WORKER_F_PINK", loadTexture("worker_female_pink.png"));
+        textures.put("WORKER_F_PURPLE", loadTexture("worker_female_purple.png"));
+        textures.put("WORKER_F_TAN", loadTexture("worker_female_tan.png"));
 
-        textures.put("WORKER_FEMALE_ENABLED", loadTexture("worker_female_enabled.png"));
-        textures.put("WORKER_FEMALE_PREVIEW", loadTexture("worker_female_preview.png"));
-        textures.put("WORKER_FEMALE_DISABLED", loadTexture("worker_female_disabled.png"));
+        textures.put("WORKER_F_ENABLED", loadTexture("worker_female_enabled.png"));
+        textures.put("WORKER_F_PREVIEW", loadTexture("worker_female_preview.png"));
+        textures.put("WORKER_F_DISABLED", loadTexture("worker_female_disabled.png"));
 
         textures.put("LEVEL0_default", loadTexture("LV0_default.png"));
         textures.put("LEVEL0_enabled", loadTexture("LV0_enabled.png"));
@@ -181,30 +184,35 @@ public class GraphicsLoader {
     }
 
     private void loaderMesh(String name, String URI){
-        TriangleMesh mesh = createMeshFromOBJ(URI);
+        TriangleMesh mesh = createMeshFromOBJ("./src/main/resources/"+URI);
         synchronized (meshes){
             meshes.put(name, mesh);
         }
     }
     private void loaderTexture(String name, String URI){
+        File file = new File("./src/main/resources/"+URI);
+        String path = file.getAbsolutePath();
         PhongMaterial texture = new PhongMaterial();
         try{
-            Image i = new Image(URI);
+            Image i = new Image(path);
             texture.setDiffuseMap(i);
         }catch(Exception e){
-            System.out.println("file "+URI+" doesn't exists");
+            System.out.println("file "+path+" doesn't exists");
         }
         synchronized (textures){
             textures.put(name, texture);
         }
     }
     private PhongMaterial loadTexture(String URI){
+        File file = new File("./src/main/resources/"+URI);
+        String path = file.getAbsolutePath();
         PhongMaterial texture = new PhongMaterial();
         try{
-            Image i = new Image(URI);
+            FileInputStream inputStream = new FileInputStream(path);
+            Image i = new Image(inputStream);
             texture.setDiffuseMap(i);
         }catch(Exception e){
-            System.out.println("file "+URI+" doesn't exists");
+            System.out.println("file "+URI+" doesn't exists, "+path);
         }
         return texture;
     }
