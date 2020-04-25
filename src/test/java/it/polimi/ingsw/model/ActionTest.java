@@ -67,5 +67,11 @@ public class ActionTest
         BuildAction b2 = new BuildAction("id", 1, 2, Piece.DOME);
 
         assert(b1.matches(b2.getWorkerID(), b2.getTargetX(), b2.getTargetY(), b2.getPiece()));
+
+        assert(!act1.matches("differentid"));
+
+        assert(!act1.matches("differentid", 1, 2));
+        assert(!act1.matches("id", 4, 2));
+        assert(!act1.matches("id", 1, 3));
     }
 }
