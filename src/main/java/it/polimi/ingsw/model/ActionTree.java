@@ -15,7 +15,6 @@ public class ActionTree {
 
     public ActionTree() {
         //build a root of tree
-
         this.root = true;
         this.win = false;
         this.lose = false;
@@ -80,28 +79,12 @@ public class ActionTree {
         return root;
     }
 
-    public void printAllBranches(int cont){
-        String s = "";
-        if(action != null){
-            s = action.toString();
-        }else{
-            s = "null";
-        }
-        if(win) s+="W";
-        if(endOfTurn) s+="*";
-
-        for(int i=0;i<cont;i++)
-            System.out.print('\t');
-        System.out.println(s);
-
-        for(ActionTree c: children){
-            c.printAllBranches(cont+1);
-        }
-    }
     public boolean isPathPresent(List<Action> actions){
         return isPathPresent(actions, 0);
     }
     private boolean isPathPresent(List<Action> actions, int pos){
+        //actions list of Action
+        //pos count on actions
         if(this.endOfTurn && actions.size() == pos){
             return true;
         }
