@@ -41,7 +41,10 @@ public class PowerStrategyTest {
         }
 
         TurnArchive turnArchive = new TurnArchive();
-        board = new Board(players);
+        board = new Board();
+        for(Player p: players){
+            board.createPlayerWorkers(p);
+        }
 
         HashMap<Integer, PowerTest> powersTest = new HashMap<>();
         powersTest.put(1, new ApolloPowerTest());
@@ -136,7 +139,11 @@ public class PowerStrategyTest {
     public void gameTest(){
         Player p1 = new Player("Matteo", Color.BLUE, 1);
         Player p2 = new Player("Paolo", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
+
+        board.createPlayerWorkers(p1);
+        board.createPlayerWorkers(p2);
+
         Action a1 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 1);
         Action a2 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 2, 2);
         Action a3 = new SetupAction(p2.getWorker(Sex.MALE).toString(), 1, 3);
@@ -355,7 +362,11 @@ public class PowerStrategyTest {
     public void testPruning(){
         Player p1 = new Player("Paolo", Color.BLUE, 1);
         Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
+
+        board.createPlayerWorkers(p1);
+        board.createPlayerWorkers(p2);
+
         Action a1 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);
         Action a2 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 3, 3);
         Action a3 = new SetupAction(p2.getWorker(Sex.MALE).toString(), 0, 4);
@@ -381,7 +392,8 @@ public class PowerStrategyTest {
         ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
         Player p0 = new Player(0, "name1");
         Player p1 = new Player(1, "name2");
-        pw.addMoveLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+        pw.addMoveLayer(t, p0, new Board());
+
     }
 }
 

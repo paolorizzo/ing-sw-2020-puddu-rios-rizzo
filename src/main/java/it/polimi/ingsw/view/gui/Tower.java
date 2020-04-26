@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Piece;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -71,7 +72,7 @@ public class Tower extends Group{
         if(worker != null)
             worker.setToDisableView();
     }
-    public void addBuilding(Building b){
+    public void addBuilding(final Building b){
         buildings.add(b);
         b.setPosition(top);
         //y up is negative, so pick the minY
@@ -79,7 +80,14 @@ public class Tower extends Group{
         if(this.hasWorker()){
             worker.setPosition(top);
         }
-        this.getChildren().add(b);
+        Platform.runLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    getChildren().add(b);
+                }
+            }
+        );
     }
 
     public Building getLastBuilding() {
@@ -87,17 +95,35 @@ public class Tower extends Group{
     }
 
     public void removeLastBuilding(){
-        Building b = buildings.get(buildings.size()-1);
+        final Building b = buildings.get(buildings.size()-1);
         top = new Point3D(top.getX(), top.getY()-b.getLayoutBounds().getMinY(), top.getZ());
         if(this.hasWorker()){
             worker.setPosition(top);
         }
         buildings.remove(b);
-        this.getChildren().remove(b);
+        Platform.runLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    getChildren().remove(b);
+                }
+            }
+        );
     }
     public void setWorker(Worker w){
+
         worker = w;
-        this.getChildren().add(w);
+
+        worker.setVisible(true);
+        Platform.runLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    getChildren().add(worker);
+                }
+            }
+        );
+
         worker.setPosition(top);
         System.out.println("set on "+row+" "+col);
     }
@@ -110,7 +136,15 @@ public class Tower extends Group{
         return worker;
     }
     public void removeWorker(){
-        this.getChildren().remove(worker);
+        worker.setVisible(false);
+        Platform.runLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    getChildren().remove(worker);
+                }
+            }
+        );
         worker = null;
     }
     public void setOnMouseClicked(final ActionFSM actionFSM){

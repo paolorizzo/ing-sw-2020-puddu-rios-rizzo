@@ -1,8 +1,13 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Card;
+import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Message;
+
+import java.util.List;
 
 //TODO test
 public class VirtualView extends View
@@ -45,4 +50,20 @@ public class VirtualView extends View
     }
 
     public synchronized void updateAllPlayersConnected(){ connection.sendMessage("notifyAllPlayersConnected"); }
+
+    public synchronized void updateDeck(Deck deck){
+        connection.sendMessage("notifyDeck", deck);
+    }
+
+    public synchronized void updateCards(int id, List<Card> cards){
+        connection.sendMessage("notifyCards", id, cards);
+    }
+
+    public synchronized void updateGod(int id, Card card) {connection.sendMessage("notifyGod", id, card); }
+
+    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions) {connection.sendMessage("notifyCurrentPlayer", id, possibleActions); }
+
+    public synchronized void updateEndOfTurnPlayer(int id) {connection.sendMessage("notifyEndOfTurnPlayer", id); }
+
+    public synchronized void updateAction(int id, Action action) {connection.sendMessage("notifyAction", id, action); }
 }

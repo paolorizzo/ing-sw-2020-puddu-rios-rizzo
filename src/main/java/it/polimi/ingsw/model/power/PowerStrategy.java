@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PowerStrategy {
 
-    protected ActionTree generateActionTree(Board board, Player player){
+    public ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
         this.addMoveLayer(root, player, board);
         this.addBuildLayer(root, player, board);
@@ -106,11 +106,11 @@ public class PowerStrategy {
     }
 
     //nothing to prune in base case
-    protected boolean requirePruning(Turn lastTurn){
+    public boolean requirePruning(Turn lastTurn){
         return false;
     }
     //nothing change in base case
-    protected void pruneActionTree(ActionTree root){
+    public void pruneActionTree(ActionTree root){
         return;
     }
 

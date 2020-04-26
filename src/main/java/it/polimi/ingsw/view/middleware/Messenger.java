@@ -87,11 +87,14 @@ public abstract class Messenger
                 Object[] methodArgs = args.toArray();
                 try
                 {
-                    //System.out.print("Invoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
-                    //for(Object o:args)
-                    //    System.out.print("" + o + " ");
-                    //System.out.println();
+
+                    System.out.println("Method name "+method.getName());
+                    System.out.print("Invoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
+                    for(Object o:args)
+                        System.out.print("" + o + " ");
+                    System.out.println();
                     method.invoke(target, methodArgs);
+
                 }
                 catch(IllegalAccessException e)
                 {
@@ -99,6 +102,7 @@ public abstract class Messenger
                 }
                 catch(InvocationTargetException e)
                 {
+                    Throwable InterruptedException = e.getCause();
                     System.err.println("Error in invoking the method, InvocationTargetException ");
                     //System.err.println("the cause was " + e.getCause() + " in the called method");
                     e.printStackTrace();

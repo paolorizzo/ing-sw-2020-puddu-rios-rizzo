@@ -25,7 +25,7 @@ public class RequestsObservable extends Observable<RequestsObserver>{
 
     public synchronized void notifyRequestNumPlayers(){
         for(RequestsObserver obs:observers){
-            obs.updateRequestID();
+            obs.updateRequestNumPlayers();
         }
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AthenaPower extends PowerStrategy {
 
-    protected boolean requirePruning(Turn lastTurn){
+    public boolean requirePruning(Turn lastTurn){
         if(lastTurn == null)
             return false;
         else{
@@ -21,7 +21,7 @@ public class AthenaPower extends PowerStrategy {
         return false;
     }
 
-    protected void pruneActionTree(ActionTree curr){
+    public void pruneActionTree(ActionTree curr){
         List<ActionTree> childrenToRemove = new ArrayList<>();
         for(ActionTree child: curr.getChildren()){
             if(child.getAction() instanceof MoveAction && ((MoveAction) child.getAction()).getDirection() == Direction.UP){

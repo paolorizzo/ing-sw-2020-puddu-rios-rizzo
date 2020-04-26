@@ -86,7 +86,7 @@ public class ApolloPowerTest extends PowerTest {
         ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
         Player p0 = new Player(0, "name1");
         Player p1 = new Player(1, "name2");
-        pw.addMoveLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+        pw.addMoveLayer(t, p0, new Board());
     }
 
 }

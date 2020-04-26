@@ -9,16 +9,16 @@ public class Board {
     private PieceBag pieceBag;
     private Deck deck;
     private HashMap<String, Worker> workers;
-    public Board(List<Player> players){
+    public Board(){
         spaces = generateSpaces();
 
         workers = new HashMap<>();
-        for(Player p: players) {
-            workers.put(p.getWorker(Sex.MALE).toString(), p.getWorker(Sex.MALE));
-            workers.put(p.getWorker(Sex.FEMALE).toString(), p.getWorker(Sex.FEMALE));
-        }
         deck = new Deck();
         pieceBag = new PieceBag();
+    }
+    public void createPlayerWorkers(Player p){
+        workers.put(p.getWorker(Sex.MALE).toString(), p.getWorker(Sex.MALE));
+        workers.put(p.getWorker(Sex.FEMALE).toString(), p.getWorker(Sex.FEMALE));
     }
     private Space[][] generateSpaces(){
         Space[][] spaces = new Space[5][5];

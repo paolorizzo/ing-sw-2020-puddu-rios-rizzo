@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Card;
+import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observation.GameObservable;
 import it.polimi.ingsw.observation.PlayersObservable;
@@ -42,14 +45,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadNumPlayers(numPlayers);
     }
 
-    //wrong input is handled by ConnectionState
 
-    private int readInt(){
-        Scanner stdin = new Scanner(System.in);
-        int num = stdin.nextInt();
-        System.out.println();
-        return num;
-    }
 
     @Override
     public void askUsername() {
@@ -58,6 +54,59 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadName(name);
     }
 
+    @Override
+    public void askCard(Deck deck) {
+        List<Card> cards = deck.getCards();
+        for(Card card: cards){
+            CliUtils.printBlueOnWhiteSameLine(card.getNum()+" "+card.getName());
+            System.out.println("\n");
+        }
+        CliUtils.printBlueOnWhiteSameLine("Choose a number card: ");
+        int numCard = readInt();
+        notifyReadNumCard(numCard);
+    }
+
+    @Override
+    public void askGod(List<Card> cards) {
+        for(Card card: cards){
+            CliUtils.printBlueOnWhiteSameLine(card.getNum()+" "+card.getName());
+            System.out.println("\n");
+        }
+        CliUtils.printBlueOnWhiteSameLine("Choose a number card: ");
+        int numCard = readInt();
+        notifyReadGod(numCard);
+    }
+
+    @Override
+    public void askSetupWorker(List<Action> possibleActions) {
+        int cont = 0;
+        for(Action a: possibleActions){
+            CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
+            cont++;
+            System.out.println("\n");
+        }
+        int num = readInt();
+        notifyReadAction(possibleActions.get(num));
+    }
+    @Override
+    public void askAction(List<Action> possibleActions) {
+        int cont = 0;
+        for(Action a: possibleActions){
+            CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
+            cont++;
+            System.out.println("\n");
+        }
+        int num = readInt();
+        notifyReadAction(possibleActions.get(num));
+    }
+    //wrong input is handled by FSM
+
+    private int readInt(){
+        Scanner stdin = new Scanner(System.in);
+        int num = stdin.nextInt();
+        System.out.println();
+        return num;
+    }
 
     //utility function used to get a string from user input
     public String readString(){
@@ -83,7 +132,14 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     public void registerPlayer(int id, String name){
         players.put(id, new Player(id, name));
     }
-
+    @Override
+    public void registerGod(int id, Card card){
+        players.get(id).setCard(card);
+    }
+    @Override
+    public void executeAction(Action action){
+        //TODO execute action
+    }
     @Override
     public int getNumPlayersRegister() {
         return players.size();

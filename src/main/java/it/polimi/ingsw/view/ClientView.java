@@ -2,9 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.exception.IncorrectStateException;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observation.GameObservable;
 import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.observation.UserInterfaceObserver;
@@ -21,8 +19,8 @@ public class ClientView extends View implements UserInterfaceObserver
 {
     //finite state machine states
     ConnectionState currentConnectionState;
-
-
+    SetupState currentSetupState;
+    GameState currentGameState;
     //updates will modify these objects
     Game game;
     private int id;
@@ -38,6 +36,7 @@ public class ClientView extends View implements UserInterfaceObserver
     public void setUi(UserInterface ui){
         this.ui = ui;
     }
+
     public UserInterface getUi(){
         return ui;
     }
@@ -50,14 +49,11 @@ public class ClientView extends View implements UserInterfaceObserver
         game = new Game(numPlayers);
     }
 
-    public ConnectionState getConnectionState(){
-        return currentConnectionState;
-    }
-
     //TODO should not be accepted if ID is already set, meaning it is still -1
     public void setID(int id){
         this.id = id;
     }
+
     //updates relative to UserInterface
     public synchronized void updateReadNumPlayers(int numPlayers){
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
@@ -67,6 +63,21 @@ public class ClientView extends View implements UserInterfaceObserver
         if(currentConnectionState.equals(ConnectionState.READ_NAME))
             currentConnectionState.execute(this, name);
     }
+    public synchronized void updateReadNumCard(int numCard) {
+        if(currentSetupState.equals(SetupState.READ_CARD))
+            currentSetupState.execute(this, numCard);
+    }
+    public synchronized void updateReadGod(int numCard) {
+        if(currentSetupState.equals(SetupState.READ_GOD))
+            currentSetupState.execute(this, numCard);
+    }
+
+    public synchronized void updateReadAction(Action action) {
+        if(currentSetupState.equals(SetupState.READ_SETUP_WORKER))
+            currentSetupState.execute(this, action);
+        if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION))
+            currentGameState.execute(this, action);
+    }
     //updates relative to GameObserver
 
     public synchronized void updateNumPlayers(int numPlayers){
@@ -75,6 +86,26 @@ public class ClientView extends View implements UserInterfaceObserver
             System.out.println("it was already known, state: "+currentConnectionState.toString());
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
+    }
+    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions) {
+        System.out.println("currplayer "+id);
+        if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
+            currentSetupState.execute(this, possibleActions);
+        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS))
+            currentGameState.execute(this, possibleActions);
+    }
+
+    public void updateEndOfTurnPlayer(int id){
+        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
+            //torno in attesa del mio turno
+            currentGameState = GameState.REQUEST_ACTIONS;
+            currentGameState.execute(this, null);
+        }
+    }
+
+    public synchronized void updateAction(int id, Action action){
+        getUi().executeAction(action);
+        System.out.println("Execute action: "+action.toString());
     }
 
     //updates relative to PlayersObserver
@@ -112,13 +143,30 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    public synchronized void updateDeck(Deck deck) {
+        if(currentSetupState == SetupState.RECEIVE_DECK){
+            currentSetupState.execute(this, deck);
+        }
+    }
 
-    public synchronized void updateOk(int id){
+
+    public synchronized void updateCards(int id, List<Card> cards) {
+        if(id == getId() && currentSetupState == SetupState.RECEIVE_CARDS){
+            currentSetupState.execute(this, cards);
+        }
+    }
+
+    public synchronized void updateGod(int id, Card card){
+        getUi().registerGod(id, card);
+    }
+
+    public synchronized void updateOk(int id) {
         if(id == this.id){
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
                 currentConnectionState.execute(this, true);
-            }
-            else{
+            }else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
+                currentSetupState.execute(this, true);
+            }else{
                 throw new IncorrectStateException("Received an okay for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
             }
         }
@@ -140,10 +188,19 @@ public class ClientView extends View implements UserInterfaceObserver
     private void startConnectionFSM(){
         currentConnectionState = ConnectionState.READY;
     }
-
+    public void startSetupFSM() {
+        currentSetupState = SetupState.START_SETUP;
+        currentSetupState.execute(this, null);
+    }
+    public void startGameFSM() {
+        currentGameState = GameState.START_GAME;
+        currentGameState.execute(this, null);
+    }
     //start the first FSM
     public void start(){
         ui.showLogo();
         startConnectionFSM();
     }
+
+
 }

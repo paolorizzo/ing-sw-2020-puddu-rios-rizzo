@@ -15,7 +15,7 @@ public enum ConnectionState {
     READY{
         public void execute(ClientView view, Object input) {
             System.out.println("starting the fsm");
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = REQUEST_ID;
             view.currentConnectionState.execute(view, null);
         }
     },
@@ -24,7 +24,7 @@ public enum ConnectionState {
         public void execute(ClientView view, Object input) {
             System.out.println("Richiedo ID");
             view.getController().generateId();
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = RECEIVE_ID;
         }
     },
     RECEIVE_ID {
@@ -33,7 +33,7 @@ public enum ConnectionState {
             int id = (int) input;
             System.out.println("My id is: " + id);
             view.setID(id);
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = ACK_ID;
             view.currentConnectionState.execute(view, id);
         }
     },
@@ -45,7 +45,7 @@ public enum ConnectionState {
             int id = (int) input;
             view.getController().ackId(id);
             if(id == 0) {
-                view.currentConnectionState = view.currentConnectionState.next();
+                view.currentConnectionState = ASK_NUM_PLAYERS;
                 view.currentConnectionState.execute(view, null);
             }
             else if(id <= 2){
@@ -61,7 +61,7 @@ public enum ConnectionState {
     //TODO should actually read the input to know whether to display a "try again"
     ASK_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = READ_NUM_PLAYERS;
             view.getUi().askNumPlayers();
         }
     },
@@ -160,7 +160,7 @@ public enum ConnectionState {
     },
     ASK_NAME{
         public void execute(ClientView view, Object input) {
-            view.currentConnectionState = view.currentConnectionState.next();
+            view.currentConnectionState = READ_NAME;
             view.getUi().askUsername();
         }
     },
@@ -209,7 +209,7 @@ public enum ConnectionState {
     END{
         public void execute(ClientView view, Object input){
             System.out.println("Connection phase has ended for client " + view.getId());
-            System.out.println("Client " + view.getId() + " may now only receive info until the next phase");
+            view.startSetupFSM();
         }
     };
 
@@ -217,15 +217,6 @@ public enum ConnectionState {
     private static ConnectionState okState = null;
     private static Object koInput = null;
     private static Object okInput = null;
-
-
-    //utility general next state function, returns the next enum instance in order, or null if the FSM has terminated
-    private ConnectionState next(){
-        if(ordinal()==ConnectionState.values().length-1)
-            return null;
-        else
-            return ConnectionState.values()[ this.ordinal()+1 ];
-    }
 
     //default implementation of the body of the state, does nothing
     //TODO change to abstract when all the states are implemented

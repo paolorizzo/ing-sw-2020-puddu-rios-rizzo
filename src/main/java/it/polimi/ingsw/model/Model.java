@@ -16,16 +16,18 @@ public class Model {
     public static Model instance;
 
     Game game;
-    HashMap<Integer ,Player> players;
-
+    HashMap<Integer, Player> players;
+    public TurnArchive turnArchive;
     //feeds
     public GameObservable gameFeed;
     public PlayersObservable playersFeed;
-
+    public Board board;
 
     public Model(){
         game = new Game();
+        board = new Board();
         players = new HashMap<>();
+        turnArchive = new TurnArchive();
         gameFeed = new GameObservable();
         playersFeed = new PlayersObservable();
     }
@@ -50,7 +52,7 @@ public class Model {
     public void addPlayer(Player player){
         int id = player.getId();
         players.put(id, player);
-
+        board.createPlayerWorkers(player);
         //important to notify every name to allow late clients to know all other players before
         //the end of the late client's connection phase
         for(Player p: players.values()){

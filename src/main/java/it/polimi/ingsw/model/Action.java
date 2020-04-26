@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Action {
+public class Action implements Serializable {
     protected String workerID;
     protected int targetX, targetY;
 

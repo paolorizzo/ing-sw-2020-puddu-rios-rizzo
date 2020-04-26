@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.model.*;
+import javafx.application.Platform;
 
 import java.util.List;
 
@@ -19,6 +20,56 @@ public class ActionFSM{
                 worker_id = null;
                 piece = null;
                 return WAIT_INITIALIZE;
+            }
+        },
+        WAIT_TARGET_SETUP_WORKER {
+            public ActionState execute(Object input) {
+                System.out.println("STATE: WAIT_SELECT_WORKER");
+
+
+                board.setAllToDefaultView();
+                board.hideSelectTypeActionMenu();
+                board.hideSelectPieceMenu();
+                resetPreview();
+                worker_id = null;
+                piece = null;
+
+                if(input instanceof String){
+                    switch(((String) input).charAt(0)){
+                        case 'T':
+                            if(previewOn){
+                                resetPreview();
+                            }
+                            int x = ((String) input).charAt(1)-'0';
+                            int y = ((String) input).charAt(2)-'0';
+                            for (final Action action : possibleActions) {
+                                if (action instanceof SetupAction && ((SetupAction)action).matches(x, y)) {
+                                    board.clientView.updateReadAction(action);
+                                    return WAIT_INITIALIZE.execute("");
+                                }
+                            }
+                            break;
+                        case 'P':
+                            //preview
+                            int previewTargetX = ((String) input).charAt(1) - '0';
+                            int previewTargetY = ((String) input).charAt(2) - '0';
+
+                            for (Action action : possibleActions) {
+                                if (action instanceof SetupAction && ((SetupAction)action).matches(previewTargetX, previewTargetY)) {
+                                    setPreview(action);
+                                    System.out.println("PREVIEW "+action);
+                                    break;
+                                }
+                            }
+                            break;
+                        case 'E':
+                            resetPreview();
+                            break;
+                    }
+
+                }
+
+                return WAIT_TARGET_SETUP_WORKER;
             }
         },
         WAIT_SELECT_WORKER {
@@ -116,17 +167,14 @@ public class ActionFSM{
                         default:
                             switch (((String) input).charAt(0)) {
                                 case 'T':
-                                    if(previewOn){
-                                        resetPreview();
-                                    }
                                     int targetX = ((String) input).charAt(1) - '0';
                                     int targetY = ((String) input).charAt(2) - '0';
                                     System.out.println("move to :" + targetX + " " + targetY);
                                     //boolean moveAndForce = board.getTower(targetX, targetY).hasWorker();
                                     for (Action action : possibleActions) {
-                                        //TODO: in action multiple functions to match the action
                                         if (action.matches(worker_id, targetX, targetY) && action instanceof MoveAction) {
                                             System.out.println("Ecco la mia azione " + action);
+                                            board.clientView.updateReadAction(action);
                                             return WAIT_INITIALIZE.execute("");
                                         }
                                     }
@@ -138,7 +186,6 @@ public class ActionFSM{
                                     int previewTargetY = ((String) input).charAt(2) - '0';
 
                                     for (Action action : possibleActions) {
-                                        //TODO: in action multiple functions to match the action
                                         if (action.matches(worker_id, previewTargetX, previewTargetY) && action instanceof MoveAction) {
                                             setPreview(action);
                                             System.out.println("PREVIEW "+action);
@@ -211,6 +258,7 @@ public class ActionFSM{
                                         //TODO: in action multiple functions to match the action
                                         if (action.matches(worker_id, targetX, targetY, piece)) {
                                             System.out.println("Ecco la mia azione " + action);
+                                            board.clientView.updateReadAction(action);
                                             worker_id = null;
                                             board.setAllToDefaultView();
                                             board.hideSelectTypeActionMenu();
@@ -257,7 +305,10 @@ public class ActionFSM{
         public ActionState init(Board b, List<Action> actions){
             possibleActions = actions;
             board = b;
-            return ActionState.WAIT_SELECT_WORKER;
+            if(actions.size()>0 && actions.get(0) instanceof SetupAction)
+                return ActionState.WAIT_TARGET_SETUP_WORKER;
+            else
+                return ActionState.WAIT_SELECT_WORKER;
         }
         public void setPreview(Action action){
             if(previewOn)

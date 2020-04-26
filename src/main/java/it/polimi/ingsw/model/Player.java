@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Player
@@ -72,6 +74,32 @@ public class Player
         this.card = card;
     }
 
+    public List<Action> generateSetupActionsWorker(Board board, Sex sex){
+        List<Action> possibleActions = new ArrayList<>();
+
+        if(getWorker(sex).getSpace() != null)
+            return possibleActions;
+
+        Space [][] spaces = board.getSpaces();
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                if(!spaces[i][j].hasWorkerOnIt()){
+                    possibleActions.add(new SetupAction(getWorker(sex).toString(), i, j));
+                }
+            }
+        }
+        return possibleActions;
+    }
+
+    public ActionTree generateActionTree(Board board){
+        return card.getPowerStrategy().generateActionTree(board, this);
+    }
+    public boolean requirePruning(TurnArchive turnArchive){
+        return card.getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(this));
+    }
+    public void pruneActionTree(ActionTree actionTree){
+        card.getPowerStrategy().pruneActionTree(actionTree);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

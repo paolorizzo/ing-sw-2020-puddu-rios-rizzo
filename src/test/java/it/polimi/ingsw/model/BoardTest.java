@@ -9,7 +9,7 @@ public class BoardTest {
     public void testConstructor(){
         Player p1 = new Player("Paolo", Color.BLUE, 1);
         Player p2 = new Player("Francesco", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
 
         Space[][] spaces = board.getSpaces();
 
@@ -35,7 +35,11 @@ public class BoardTest {
     public void testExecuteAndUndoAction(){
         Player p1 = new Player("Paolo", Color.BLUE, 1);
         Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
+
+        board.createPlayerWorkers(p1);
+        board.createPlayerWorkers(p2);
+
         Action a1 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);
         Action a2 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 3, 3);
         Action a3 = new SetupAction(p2.getWorker(Sex.MALE).toString(), 0, 4);
@@ -136,7 +140,10 @@ public class BoardTest {
 
         Player p1 = new Player("Paolo", Color.BLUE, 1);
         Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
+
+        board.createPlayerWorkers(p1);
+        board.createPlayerWorkers(p2);
 
         Action a = new Action("P1-M", 1, 1);
         board.executeAction(a);
@@ -147,7 +154,9 @@ public class BoardTest {
 
         Player p1 = new Player("Paolo", Color.BLUE, 1);
         Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board(Arrays.asList(p1, p2));
+        Board board = new Board();
+        board.createPlayerWorkers(p1);
+        board.createPlayerWorkers(p2);
 
         Action a = new Action("P1-M", 1, 1);
         board.undoExecuteAction(a);

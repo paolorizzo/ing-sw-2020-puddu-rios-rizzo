@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MinotaurPower extends PowerStrategy {
 
-    protected ActionTree generateActionTree(Board board, Player player){
+    public ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
         this.addMoveLayer(root, player, board);
         super.addBuildLayer(root, player, board);

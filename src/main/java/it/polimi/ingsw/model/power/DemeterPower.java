@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DemeterPower extends PowerStrategy{
-    protected ActionTree generateActionTree(Board board, Player player){
+    public ActionTree generateActionTree(Board board, Player player){
         ActionTree root = new ActionTree();
 
         super.addMoveLayer(root, player, board);

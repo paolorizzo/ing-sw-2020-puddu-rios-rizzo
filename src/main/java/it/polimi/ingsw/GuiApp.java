@@ -84,7 +84,7 @@ public class GuiApp extends Application {
         actions.add(new MoveAction("P1-F", 4, 1, Direction.UP, 3, 1));
         actions.add(new MoveAction("P1-F", 3, 0, Direction.DOWN, 3, 1));
 
-        board.setPossibleActions(actions);
+        board.askAction(actions);
 
         loadScenarioMappa(board);
     }
@@ -100,7 +100,7 @@ public class GuiApp extends Application {
         actions.add(new BuildAction("P1-F", 3, 0, Piece.LEVEL1));
         actions.add(new BuildAction("P1-F", 2, 0, Piece.DOME));
 
-        board.setPossibleActions(actions);
+        board.askAction(actions);
 
         loadScenarioMappa(board);
     }
@@ -123,7 +123,7 @@ public class GuiApp extends Application {
         actions.add(new BuildAction("P1-F", 3, 0, Piece.LEVEL1));
         actions.add(new BuildAction("P1-F", 2, 0, Piece.DOME));
 
-        board.setPossibleActions(actions);
+        board.askAction(actions);
 
         loadScenarioMappa(board);
     }
@@ -139,7 +139,7 @@ public class GuiApp extends Application {
         actions.add(new MoveAction("P1-F", 3, 0, Direction.DOWN, 3, 1));
 
 
-        board.setPossibleActions(actions);
+        board.askAction(actions);
         loadScenarioMappa(board);
     }
     void loadScenarioMappa(Board board){

@@ -2,11 +2,12 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.power.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Deck {
+public class Deck implements Serializable {
     HashMap<Integer, Card> cardsInDeck;
     public Deck(){
         cardsInDeck = new HashMap<>();

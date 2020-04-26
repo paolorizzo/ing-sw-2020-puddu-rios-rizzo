@@ -69,7 +69,7 @@ public class PrometheusPowerTest extends PowerTest {
         ActionTree t = new ActionTree(new MoveAction("P0-M", 1, 1, Direction.UP, 0, 0), false, false, false, true);
         Player p0 = new Player(0, "name1");
         Player p1 = new Player(1, "name2");
-        pw.addBuildLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+        pw.addBuildLayer(t, p0, new Board());
     }
 
     @Test(expected = InvalidActionTreeGenerationException.class)
@@ -77,7 +77,9 @@ public class PrometheusPowerTest extends PowerTest {
     {
         Player p0 = new Player("Matteo", Color.BLUE, 0);
         Player p1 = new Player("Paolo", Color.WHITE, 1);
-        Board board = new Board(Arrays.asList(p0, p1));
+        Board board = new Board();
+        board.createPlayerWorkers(p0);
+        board.createPlayerWorkers(p1);
         Action a1 = new SetupAction(p0.getWorker(Sex.MALE).toString(), 1, 1);
         Action a2 = new SetupAction(p0.getWorker(Sex.FEMALE).toString(), 2, 2);
         Action a3 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);

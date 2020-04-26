@@ -1,14 +1,10 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exception.IncorrectStateException;
-import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //TODO test everything
 public class Controller implements ControllerInterface
@@ -27,6 +23,16 @@ public class Controller implements ControllerInterface
     boolean acceptNumPlayers;
     int ackReceived;
 
+    final Object turnMutex = new Object();
+    private List<Card> chosenCards;
+
+
+    private List<Integer> idCurrentPlayers;
+    private int pointerIdCurrentPlayers;
+
+    private ActionTree actionTreeCurrentPlayer;
+    private List<Action> possibleActions;
+
     public Controller()
     {
         views = new ArrayList<View>();
@@ -38,6 +44,12 @@ public class Controller implements ControllerInterface
         accept = true;              //only accepts a player through an addView if this is true
         acceptNumPlayers = false;   //accepts numPlayers only after connecting the first client, and only before it has been set
         ackReceived = -1;           //only accepts acks sequentially
+
+        //setup game variables
+        chosenCards = null;
+        //game variables
+        actionTreeCurrentPlayer = null;
+
     }
 
     //adds player inside the model
@@ -96,14 +108,18 @@ public class Controller implements ControllerInterface
     //notifies the caller of the success or failure of the operation
     //if the setting is successful, sets acceptNumPlayers as false so that it cannot be set again
     @Override
-    public synchronized void setNumPlayers(int id, int numPlayers)
-    {
+    public synchronized void setNumPlayers(int id, int numPlayers) {
         if(acceptNumPlayers){
             if(id == 0){
                 if(2 <= numPlayers && numPlayers <=3){
                     System.out.println("Setting the number of players as " + numPlayers);
                     model.playersFeed.notifyOk(id);
                     model.setNumPlayers(numPlayers);
+                    idCurrentPlayers = new ArrayList<>();
+                    for(int i=0;i<numPlayers;i++){
+                        idCurrentPlayers.add(i);
+                    }
+                    pointerIdCurrentPlayers = 1;
                     acceptNumPlayers = false;
                 }
                 else{
@@ -127,8 +143,7 @@ public class Controller implements ControllerInterface
     //only reads the name if its id is valid
     //
     @Override
-    public synchronized void setName(int id, String name)
-    {
+    public synchronized void setName(int id, String name) {
         if(0 <= id && id <= 2){
             if(model.playerPresent(id))
                 throw new IllegalArgumentException("there is already a player with this id");
@@ -154,6 +169,144 @@ public class Controller implements ControllerInterface
     public synchronized void requestAllPlayersConnected(){
         if(ackReceived+1 >= model.getNumPlayers())
             model.playersFeed.notifyAllPlayersConnected();
+    }
+    @Override
+    public synchronized void requestDeck() {
+        model.playersFeed.notifyDeck(model.board.getDeck());
+    }
+    @Override
+    public synchronized void publishCards(int id, List<Integer> numCards){
+        try{
+            if(chosenCards != null){
+                throw new IllegalArgumentException("cards already chosen");
+            }
+            if(numCards.size() != model.getNumPlayers()){
+                throw new IllegalArgumentException("number of cards chosen different from the number of players");
+            }
+            chosenCards = new ArrayList<>();
+            for(Integer num: numCards) {
+                chosenCards.add(model.board.getDeck().pickCard(num));
+            }
+        }catch(IllegalArgumentException e){
+            model.playersFeed.notifyKo(id);
+            if(!e.getMessage().equals("cards already chosen")){
+                chosenCards = null;
+            }
+            return;
+        }
+
+        model.playersFeed.notifyOk(id);
+        this.notifyAll();
+    }
+    @Override
+    public synchronized void requestCards(int id) throws InterruptedException {
+        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers) || chosenCards == null || chosenCards.size() == 0) {
+            System.out.println(id+" mi fermo");
+            this.wait();
+        }
+        model.playersFeed.notifyCards(idCurrentPlayers.get(pointerIdCurrentPlayers), chosenCards);
+        this.notifyAll();
+    }
+    @Override
+    public synchronized void setCard(int id, int numCard){
+        Card card = null;
+        for(Card c: chosenCards){
+            if(c.getNum() == numCard)
+                card = c;
+        }
+        if(card == null || id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+            model.playersFeed.notifyKo(id);
+        }else{
+            chosenCards.remove(card);
+            model.getPlayers().get(id).setCard(card);
+            model.playersFeed.notifyOk(id);
+            model.playersFeed.notifyGod(id, card);
+            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
+
+            this.notifyAll();
+        }
+    }
+
+    @Override
+    public synchronized void requestToSetupWorker(int id) throws InterruptedException {
+        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+            this.wait();
+        }
+        possibleActions = null;
+        if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() == null){
+            possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.FEMALE);
+        }else if(model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() == null){
+            possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.MALE);
+        }
+
+        if(possibleActions != null){
+            model.gameFeed.notifyCurrentPlayer(id, possibleActions);
+        }
+
+        this.notifyAll();
+    }
+
+    @Override
+    public synchronized void setupWorker(int id, SetupAction setupAction){
+        if(possibleActions == null || !possibleActions.contains(setupAction) || id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+            model.playersFeed.notifyKo(id);
+            return;
+        }
+        model.board.executeAction(setupAction);
+        model.playersFeed.notifyOk(id);
+        model.gameFeed.notifyAction(id, setupAction);
+        if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() != null && model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() != null){
+            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
+        }
+        this.notifyAll();
+    }
+    @Override
+    public synchronized void requestActions(int id) throws InterruptedException {
+        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers)) {
+            System.out.println(id+" mi fermo");
+            this.wait();
+        }
+        if(actionTreeCurrentPlayer == null){
+            //genererate ActionTree
+            actionTreeCurrentPlayer = model.getPlayers().get(id).generateActionTree(model.board);
+            for(int other: idCurrentPlayers){
+                if(model.getPlayers().get(other).requirePruning(model.turnArchive))
+                    model.getPlayers().get(other).pruneActionTree(actionTreeCurrentPlayer);
+            }
+        }
+        possibleActions = new ArrayList<>();
+        for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
+            possibleActions.add(child.getAction());
+        }
+        if(possibleActions.size() == 0){
+            //endOfTurns;
+            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
+            actionTreeCurrentPlayer = null;
+            model.gameFeed.notifyEndOfTurnPlayer(id);
+
+            System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
+        }else{
+            model.gameFeed.notifyCurrentPlayer(id, possibleActions);
+        }
+        this.notifyAll();
+    }
+    @Override
+    public synchronized void publishAction(int id, Action action){
+        if(id != idCurrentPlayers.get(pointerIdCurrentPlayers)) {
+            return;
+        }
+        if(possibleActions.contains(action)){
+            //ok
+            model.board.executeAction(action);
+            model.gameFeed.notifyAction(id, action);
+            ActionTree nextChild = null;
+            for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
+                if(child.getAction().equals(action))
+                    nextChild = child;
+            }
+            actionTreeCurrentPlayer = nextChild;
+        }
+        this.notifyAll();
     }
     @Override
     public void kill(){

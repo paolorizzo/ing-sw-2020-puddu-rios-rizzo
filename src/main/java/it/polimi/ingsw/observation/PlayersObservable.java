@@ -1,5 +1,7 @@
 package it.polimi.ingsw.observation;
 
+import it.polimi.ingsw.model.Card;
+import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.model.Player;
 
 import java.util.ArrayList;
@@ -31,7 +33,31 @@ public class PlayersObservable extends Observable<PlayersObserver>{
         }
     }
 
-    public synchronized void notifyOk(int id){
+    public synchronized void notifyAllPlayersConnected(){
+        for(PlayersObserver obs:observers){
+            obs.updateAllPlayersConnected();
+        }
+    }
+    public synchronized void notifyDeck(Deck deck) {
+        for(PlayersObserver obs:observers){
+            obs.updateDeck(deck);
+        }
+    }
+
+    public synchronized void notifyCards(Integer id, List<Card> cards) {
+        for(PlayersObserver obs:observers){
+            obs.updateCards(id, cards);
+        }
+    }
+
+    public synchronized void notifyGod(Integer id, Card card){
+        for(PlayersObserver obs:observers){
+            obs.updateGod(id, card);
+        }
+    }
+
+
+    public synchronized void notifyOk(int id) {
         for(PlayersObserver obs:observers){
             obs.updateOk(id);
         }
@@ -42,10 +68,4 @@ public class PlayersObservable extends Observable<PlayersObserver>{
             obs.updateKo(id);
         }
     }
-
-    public synchronized void notifyAllPlayersConnected(){
-        for(PlayersObserver obs:observers){
-            obs.updateAllPlayersConnected();
-        }
-    };
 }

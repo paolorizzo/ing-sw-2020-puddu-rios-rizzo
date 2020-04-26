@@ -6,6 +6,9 @@ public class SetupAction extends Action{
         super(workerID, targetX, targetY);
     }
 
+    public boolean matches(int x, int y){
+        return targetX==x && targetY==y;
+    }
     @Override
     public String toString() {
         return "SetupAction{" +

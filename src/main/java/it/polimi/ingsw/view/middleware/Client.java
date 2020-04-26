@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.middleware;
 
 import it.polimi.ingsw.controller.ControllerInterface;
+import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.SetupAction;
+import it.polimi.ingsw.model.Sex;
 import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.observation.Observable;
 import it.polimi.ingsw.view.ClientView;
@@ -156,7 +159,6 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     @Override
     public void ackId(int id)
     {
-
         sendMessage("ackId", id);
     }
 
@@ -165,18 +167,50 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     {
         sendMessage("setNumPlayers", cw.getId(), numPlayers);
     }
-
     @Override
     public void getNumPlayers()
     {
         sendMessage("getNumPlayers");
     }
+    @Override
     public  void requestAllPlayersConnected() {sendMessage("requestAllPlayersConnected");};
     @Override
     public void setName(int id, String name)
     {
         sendMessage("setName", id, name);
     }
+
+    @Override
+    public void requestDeck() {
+        sendMessage("requestDeck");
+    }
+
+    @Override
+    public void publishCards(int id, List<Integer> numCards) {
+        sendMessage("publishCards", id, numCards);
+    }
+
+    @Override
+    public void requestCards(int id) {
+        sendMessage("requestCards", id);
+    }
+
+    @Override
+    public void setCard(int id, int numCard) {
+        sendMessage("setCard", id, numCard);
+    }
+    @Override
+    public void requestToSetupWorker(int id) {
+        sendMessage("requestToSetupWorker", id);
+    }
+    @Override
+    public void setupWorker(int id, SetupAction setupAction) {
+        sendMessage("setupWorker", id, setupAction);
+    }
+    @Override
+    public void requestActions(int id) { sendMessage("requestActions", id);}
+    @Override
+    public void publishAction(int id, Action action) {sendMessage("publishAction", id, action);}
 
     @Override
     public void kill(){

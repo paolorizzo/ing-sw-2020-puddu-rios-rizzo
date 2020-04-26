@@ -2,12 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.power.PowerStrategy;
 
-public class Card
+import java.io.Serializable;
+
+public class Card implements Serializable
 {
     private String name;
     private int num;
     private String description;
-    private PowerStrategy powerStrategy;
+    transient private PowerStrategy powerStrategy;
 
     public Card(int num, String name, String desc, PowerStrategy ps)
     {

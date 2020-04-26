@@ -65,6 +65,6 @@ public class DemeterPowerTest extends PowerTest {
         ActionTree t = new ActionTree();
         Player p0 = new Player(0, "name1");
         Player p1 = new Player(1, "name2");
-        pw.addBuildLayer(t, p0, new Board(Arrays.asList(p0, p1)));
+        pw.addBuildLayer(t, p0, new Board());
     }
 }

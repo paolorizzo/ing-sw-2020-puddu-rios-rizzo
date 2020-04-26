@@ -4,6 +4,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.cli.CliUtils;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.PhongMaterial;
@@ -21,11 +22,14 @@ public class Board extends Group implements UserInterface {
     SelectPieceMenu selectPieceMenu;
     AskNumPlayersMenu askNumPlayersMenu;
     AskNameMenu askNameMenu;
+    AskCardMenu askCardMenu;
+    AskGodMenu askGodMenu;
     Group group2d, group3d;
     PieceBag pieceBag;
 
-    ClientView cw;
+    ClientView clientView;
     public Board(ClientView cw) {
+        clientView = cw;
         players = new HashMap<>();
 
         group2d = new Group();
@@ -55,13 +59,19 @@ public class Board extends Group implements UserInterface {
         askNumPlayersMenu = new AskNumPlayersMenu(cw);
         group2d.getChildren().add(askNumPlayersMenu);
 
+        askCardMenu = new AskCardMenu(cw);
+        group2d.getChildren().add(askCardMenu);
+
+        askGodMenu = new AskGodMenu(cw);
+        group2d.getChildren().add(askGodMenu);
+
         askNameMenu = new AskNameMenu(cw);
         group2d.getChildren().add(askNameMenu);
 
         pieceBag = new PieceBag();
     }
 
-    public void executeAction(Action action){
+    public synchronized void executeAction(Action action){
         if(action instanceof SetupAction)
             this.executeAction((SetupAction)action);
         else if(action instanceof MoveAndForceAction)
@@ -228,6 +238,19 @@ public class Board extends Group implements UserInterface {
     public void hideAskNameMenu() {
         askNameMenu.hide();
     }
+    public void showAskCardMenu() {
+        askCardMenu.show();
+    }
+    public void hideAskCardMenu() {
+        askCardMenu.hide();
+    }
+    public void showAskGodMenu() {
+        askGodMenu.show();
+    }
+    public void hideAskGodMenu() {
+        askGodMenu.hide();
+    }
+
     public Tower getTower(int targetX, int targetY) {
         return towers[targetX][targetY];
     }
@@ -238,9 +261,6 @@ public class Board extends Group implements UserInterface {
                 towers[i][j].setToDefaultView();
             }
         }
-    }
-    public void setPossibleActions(List<Action> actions){
-        actionFSM.setPossibleActions(this, actions);
     }
 
     private void prepareBoard() {
@@ -267,6 +287,11 @@ public class Board extends Group implements UserInterface {
     }
 
     @Override
+    public void showLogo() {
+
+    }
+
+    @Override
     public void askNumPlayers() {
         showAskNumPlayersMenu();
         System.out.println("Ask num player");
@@ -275,19 +300,42 @@ public class Board extends Group implements UserInterface {
     @Override
     public void askUsername() {
         showAskNameMenu();
-
         System.out.println("Ask name");
     }
 
+
+
     @Override
-    public void showLogo() {
+    public void askCard(Deck deck) {
+        askCardMenu.setDeck(deck);
+        showAskCardMenu();
 
     }
+    @Override
+    public void askGod(List<Card> cards) {
+        askGodMenu.setCards(cards);
+        showAskGodMenu();
+
+    }
+    @Override
+    public void askSetupWorker(List<Action> possibleActions) {
+        actionFSM.setPossibleActions(this, possibleActions);
+    }
+    @Override
+    public void askAction(List<Action> possibleActions){
+        actionFSM.setPossibleActions(this, possibleActions);
+    }
+
 
     @Override
     public void registerPlayer(int id, String name) {
         players.put(id, new Player(id, name));
     }
+    @Override
+    public void registerGod(int id, Card card){
+        players.get(id).setCard(card);
+    }
+
     @Override
     public int getNumPlayersRegister() {
         return players.size();
