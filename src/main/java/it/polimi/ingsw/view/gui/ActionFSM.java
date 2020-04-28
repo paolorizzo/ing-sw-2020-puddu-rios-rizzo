@@ -10,12 +10,13 @@ public class ActionFSM{
     private enum ActionState {
         WAIT_INITIALIZE {
             public ActionState execute(Object input){
-                System.out.println("STATE: WAIT_INIZIALIZE");
                 if(board != null){
                     board.setAllToDefaultView();
                     board.hideSelectTypeActionMenu();
                     board.hideSelectPieceMenu();
+                    board.hideEndOfTurnMenu();
                 }
+
                 resetPreview();
                 worker_id = null;
                 piece = null;
@@ -24,9 +25,6 @@ public class ActionFSM{
         },
         WAIT_TARGET_SETUP_WORKER {
             public ActionState execute(Object input) {
-                System.out.println("STATE: WAIT_SELECT_WORKER");
-
-
                 board.setAllToDefaultView();
                 board.hideSelectTypeActionMenu();
                 board.hideSelectPieceMenu();
@@ -44,6 +42,7 @@ public class ActionFSM{
                             int y = ((String) input).charAt(2)-'0';
                             for (final Action action : possibleActions) {
                                 if (action instanceof SetupAction && ((SetupAction)action).matches(x, y)) {
+                                    resetPreview();
                                     board.clientView.updateReadAction(action);
                                     return WAIT_INITIALIZE.execute("");
                                 }
@@ -74,15 +73,19 @@ public class ActionFSM{
         },
         WAIT_SELECT_WORKER {
             public ActionState execute(Object input) {
-                System.out.println("STATE: WAIT_SELECT_WORKER");
-
-
                 board.setAllToDefaultView();
                 board.hideSelectTypeActionMenu();
                 board.hideSelectPieceMenu();
                 resetPreview();
                 worker_id = null;
                 piece = null;
+
+                if(canEndOfTurn){
+                    System.out.println("mostro end of turn");
+                    board.showEndOfTurnMenu();
+                }else{
+                    board.hideEndOfTurnMenu();
+                }
 
                 if(input instanceof String){
                     if(((String) input).charAt(0) == 'T'){
@@ -121,7 +124,6 @@ public class ActionFSM{
                 resetPreview();
                 piece = null;
 
-                System.out.println("STATE: WAIT_SELECT_TYPE_ACTION worker selected: "+worker_id);
                 if(input instanceof String){
                     switch((String)input) {
                         case "move":
@@ -152,7 +154,6 @@ public class ActionFSM{
                 board.hideSelectPieceMenu();
                 piece = null;
 
-                System.out.println("STATE: WAIT_SELECT_TARGET_MOVE worker selected: "+worker_id);
 
                 board.showSelectTypeActionMenu();
                 board.hideSelectPieceMenu();
@@ -174,6 +175,7 @@ public class ActionFSM{
                                     for (Action action : possibleActions) {
                                         if (action.matches(worker_id, targetX, targetY) && action instanceof MoveAction) {
                                             System.out.println("Ecco la mia azione " + action);
+                                            resetPreview();
                                             board.clientView.updateReadAction(action);
                                             return WAIT_INITIALIZE.execute("");
                                         }
@@ -213,7 +215,6 @@ public class ActionFSM{
                 resetPreview();
                 piece = null;
 
-                System.out.println("STATE: WAIT_SELECT_PIECE worker selected: "+worker_id);
                 if(input instanceof Piece){
                     piece = (Piece)input;
                     System.out.println("pezzo selezionato: "+piece);
@@ -237,7 +238,6 @@ public class ActionFSM{
         },
         WAIT_SELECT_TARGET_BUILD {
             public ActionState execute(Object input) {
-                System.out.println("STATE: WAIT_SELECT_TARGET_BUILD worker selected: "+worker_id+" piece selected:+"+piece);
 
                 board.showSelectTypeActionMenu();
                 board.showSelectPieceMenu();
@@ -255,14 +255,10 @@ public class ActionFSM{
                                     int targetY = ((String) input).charAt(2) - '0';
                                     //boolean moveAndForce = board.getTower(targetX, targetY).hasWorker();
                                     for (Action action : possibleActions) {
-                                        //TODO: in action multiple functions to match the action
                                         if (action.matches(worker_id, targetX, targetY, piece)) {
                                             System.out.println("Ecco la mia azione " + action);
+                                            resetPreview();
                                             board.clientView.updateReadAction(action);
-                                            worker_id = null;
-                                            board.setAllToDefaultView();
-                                            board.hideSelectTypeActionMenu();
-                                            board.hideSelectPieceMenu();
                                             return WAIT_INITIALIZE.execute("");
                                         }
                                     }
@@ -272,7 +268,6 @@ public class ActionFSM{
                                     int previewTargetX = ((String) input).charAt(1) - '0';
                                     int previewTargetY = ((String) input).charAt(2) - '0';
                                     for (Action action : possibleActions) {
-                                        //TODO: in action multiple functions to match the action
                                         if (action.matches(worker_id, previewTargetX, previewTargetY, piece)) {
                                             setPreview(action);
                                             break;
@@ -293,17 +288,21 @@ public class ActionFSM{
             }
         };
 
+        static List<Action> possibleActions;
+        static Board board;
+        static boolean canEndOfTurn;
+
+
         static String worker_id;
         static boolean previewOn;
         static Action previewAction;
         static Piece piece;
-        static List<Action> possibleActions;
-        static Board board;
         public ActionState execute(Object input) {
             return this.execute(input);
         }
-        public ActionState init(Board b, List<Action> actions){
+        public ActionState init(Board b, List<Action> actions, boolean flagEndOfTurn){
             possibleActions = actions;
+            canEndOfTurn = flagEndOfTurn;
             board = b;
             if(actions.size()>0 && actions.get(0) instanceof SetupAction)
                 return ActionState.WAIT_TARGET_SETUP_WORKER;
@@ -325,6 +324,10 @@ public class ActionFSM{
             previewOn = false;
             previewAction = null;
         }
+        public ActionState voluntaryEndOfTurn(){
+            board.clientView.updateReadVoluntaryEndOfTurn();
+            return ActionState.WAIT_INITIALIZE.execute(null);
+        }
     }
 
     ActionState state;
@@ -337,7 +340,10 @@ public class ActionFSM{
         state = state.execute(input);
     }
 
-    public void setPossibleActions(Board board, List<Action> actions){
-        state = state.init(board, actions);
+    public void setPossibleActions(Board board, List<Action> actions, boolean canEndOfTurn){
+        state = state.init(board, actions, canEndOfTurn);
+    }
+    public void voluntaryEndOfTurn(){
+        state = state.voluntaryEndOfTurn();
     }
 }

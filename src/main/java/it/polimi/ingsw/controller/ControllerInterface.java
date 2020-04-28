@@ -25,7 +25,7 @@ public interface ControllerInterface {
     //game phase
     public void requestActions(int id) throws InterruptedException;
     public void publishAction(int id, Action action);
-
+    public void publishVoluntaryEndOfTurn(int id);
     public void deleteId(int id);
     public void kill();
 

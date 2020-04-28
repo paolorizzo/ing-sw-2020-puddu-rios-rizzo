@@ -37,4 +37,10 @@ public class UserInterfaceObservable extends Observable<UserInterfaceObserver>{
             obs.updateReadAction(action);
         }
     }
+    public synchronized void notifyReadVoluntaryEndOfTurn(){
+        for(UserInterfaceObserver obs:observers){
+            obs.updateReadVoluntaryEndOfTurn();
+        }
+    }
+
 }

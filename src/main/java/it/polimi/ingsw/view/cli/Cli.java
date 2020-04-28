@@ -89,15 +89,31 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadAction(possibleActions.get(num));
     }
     @Override
-    public void askAction(List<Action> possibleActions) {
-        int cont = 0;
-        for(Action a: possibleActions){
-            CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
-            cont++;
-            System.out.println("\n");
-        }
-        int num = readInt();
-        notifyReadAction(possibleActions.get(num));
+    public void askAction(List<Action> possibleActions, boolean canEndOfTurn) {
+        boolean repeat = false;
+        do{
+
+            int cont = 0;
+            for(Action a: possibleActions){
+                CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
+                cont++;
+                System.out.println("\n");
+            }
+            if(canEndOfTurn){
+                CliUtils.printBlueOnWhiteSameLine(cont+" End Turn");
+            }
+            int num = readInt();
+            if(num>=0 && num<cont)
+                notifyReadAction(possibleActions.get(num));
+            else if(num == cont)
+                notifyReadVoluntaryEndOfTurn();
+            else
+                repeat = true;
+        }while(repeat);
+    }
+    @Override
+    public void removeWorkersOfPlayer(int id){
+
     }
     //wrong input is handled by FSM
 

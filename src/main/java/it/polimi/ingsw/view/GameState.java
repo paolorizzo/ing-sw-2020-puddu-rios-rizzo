@@ -36,7 +36,15 @@ public enum GameState {
             System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
-            view.getUi().askAction(possibleActions);
+            view.getUi().askAction(possibleActions, false);
+        }
+    },
+    ASK_OPTIONAL_ACTION{
+        public void execute(ClientView view, Object input) {
+            System.out.println("ASK_ACTION");
+            view.currentGameState = READ_ACTION;
+            List<Action> possibleActions = (List<Action>)input;
+            view.getUi().askAction(possibleActions, true);
         }
     },
     READ_ACTION{
@@ -51,6 +59,13 @@ public enum GameState {
             Action action = (Action) input;
             view.currentGameState = REQUEST_ACTIONS;
             view.getController().publishAction(view.getId(), action);
+            view.currentGameState.execute(view, null);
+        }
+    },
+    PUBLISH_VOLUNTARY_END_OF_TURN{
+        public void execute(ClientView view, Object input) {
+            view.currentGameState = REQUEST_ACTIONS;
+            view.getController().publishVoluntaryEndOfTurn(view.getId());
             view.currentGameState.execute(view, null);
         }
     },

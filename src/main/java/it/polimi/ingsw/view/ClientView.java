@@ -78,6 +78,13 @@ public class ClientView extends View implements UserInterfaceObserver
         if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION))
             currentGameState.execute(this, action);
     }
+
+    public synchronized void updateReadVoluntaryEndOfTurn() {
+        if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION)){
+            currentGameState = GameState.PUBLISH_VOLUNTARY_END_OF_TURN;
+            currentGameState.execute(this, null);
+        }
+    }
     //updates relative to GameObserver
 
     public synchronized void updateNumPlayers(int numPlayers){
@@ -87,12 +94,18 @@ public class ClientView extends View implements UserInterfaceObserver
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
-    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions) {
+    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         System.out.println("currplayer "+id);
         if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
             currentSetupState.execute(this, possibleActions);
-        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS))
+        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
+            if(canEndOfTurn){
+                currentGameState = GameState.ASK_OPTIONAL_ACTION;
+                System.out.println("Posso terminare il turno, invece di fare la mossa");
+            }
             currentGameState.execute(this, possibleActions);
+        }
+
     }
 
     public void updateEndOfTurnPlayer(int id){
@@ -160,6 +173,21 @@ public class ClientView extends View implements UserInterfaceObserver
         getUi().registerGod(id, card);
     }
 
+    public synchronized void updatePlayerWin(int id){
+        if(id == getId()){
+            currentGameState = GameState.WIN_STATE;
+        }else{
+            currentGameState = GameState.LOSE_STATE;
+        }
+        currentGameState.execute(this, null);
+    }
+    public synchronized void updatePlayerLose(int id){
+        if(id == getId()){
+            currentGameState = GameState.LOSE_STATE;
+            currentGameState.execute(this, null);
+        }
+        getUi().removeWorkersOfPlayer(id);
+    }
     public synchronized void updateOk(int id) {
         if(id == this.id){
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){

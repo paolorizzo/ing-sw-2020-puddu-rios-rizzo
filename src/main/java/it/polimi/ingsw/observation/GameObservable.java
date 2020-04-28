@@ -17,9 +17,9 @@ public class GameObservable extends Observable<GameObserver>{
             obs.updateNumPlayers(numPlayers);
         }
     }
-    public synchronized void notifyCurrentPlayer(int id, List<Action> possibleActions) throws InterruptedException {
+    public synchronized void notifyCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         for(GameObserver obs:observers){
-            obs.updateCurrentPlayer(id, possibleActions);
+            obs.updateCurrentPlayer(id, possibleActions, canEndOfTurn);
         }
     }
     public synchronized void notifyEndOfTurnPlayer(int id) {
@@ -30,6 +30,16 @@ public class GameObservable extends Observable<GameObserver>{
     public synchronized void notifyAction(int id, Action action){
         for(GameObserver obs:observers){
             obs.updateAction(id, action);
+        }
+    }
+    public synchronized void notifyPlayerWin(int id){
+        for(GameObserver obs:observers){
+            obs.updatePlayerWin(id);
+        }
+    }
+    public synchronized void notifyPlayerLose(int id){
+        for(GameObserver obs:observers){
+            obs.updatePlayerLose(id);
         }
     }
 }

@@ -61,9 +61,13 @@ public class VirtualView extends View
 
     public synchronized void updateGod(int id, Card card) {connection.sendMessage("notifyGod", id, card); }
 
-    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions) {connection.sendMessage("notifyCurrentPlayer", id, possibleActions); }
+    public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {connection.sendMessage("notifyCurrentPlayer", id, possibleActions, canEndOfTurn); }
 
     public synchronized void updateEndOfTurnPlayer(int id) {connection.sendMessage("notifyEndOfTurnPlayer", id); }
 
     public synchronized void updateAction(int id, Action action) {connection.sendMessage("notifyAction", id, action); }
+
+    public synchronized void updatePlayerWin(int id) {connection.sendMessage("notifyPlayerWin", id); }
+
+    public synchronized void updatePlayerLose(int id) {connection.sendMessage("notifyPlayerLose", id); }
 }

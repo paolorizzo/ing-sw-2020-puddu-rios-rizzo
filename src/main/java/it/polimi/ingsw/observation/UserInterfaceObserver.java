@@ -8,4 +8,5 @@ public interface UserInterfaceObserver {
     public void updateReadNumCard(int numCard);
     public void updateReadGod(int numCard);
     public void updateReadAction(Action action);
+    public void updateReadVoluntaryEndOfTurn();
 }

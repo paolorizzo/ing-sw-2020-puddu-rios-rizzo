@@ -9,22 +9,20 @@ import java.util.List;
 
 public interface UserInterface
 {
-    void askNumPlayers();
-    void askUsername();
-    void askGod(List<Card> cards);
-    void askSetupWorker(List<Action> possbileActions);
-    void askAction(List<Action> possibleActions);
-
     void showLogo();
 
-
+    void askNumPlayers();
+    void askUsername();
     void askCard(Deck deck);
+    void askGod(List<Card> cards);
+    void askSetupWorker(List<Action> possibleActions);
+    void askAction(List<Action> possibleActions, boolean canEndOfTurn);
 
     int getNumPlayersRegister();
 
     void registerPlayer(int id, String name);
     void registerGod(int id, Card card);
-
     void executeAction(Action action);
 
+    void removeWorkersOfPlayer(int id);
 }

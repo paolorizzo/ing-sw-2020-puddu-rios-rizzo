@@ -211,7 +211,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     public void requestActions(int id) { sendMessage("requestActions", id);}
     @Override
     public void publishAction(int id, Action action) {sendMessage("publishAction", id, action);}
-
+    @Override
+    public void publishVoluntaryEndOfTurn(int id) {sendMessage("publishVoluntaryEndOfTurn", id);}
     @Override
     public void kill(){
         alive = false;

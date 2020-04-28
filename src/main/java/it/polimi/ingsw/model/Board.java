@@ -11,7 +11,6 @@ public class Board {
     private HashMap<String, Worker> workers;
     public Board(){
         spaces = generateSpaces();
-
         workers = new HashMap<>();
         deck = new Deck();
         pieceBag = new PieceBag();
@@ -152,6 +151,17 @@ public class Board {
     public void undoExecuteAction(BuildAction action){
         pieceBag.undoPickPiece(((BuildAction) action).getPiece());
         spaces[action.getTargetX()][action.getTargetY()].removeLastPiece();
+    }
+
+    public void removeWorkersPlayer(Player p){
+        Worker m = p.getWorker(Sex.MALE);
+        Worker f = p.getWorker(Sex.FEMALE);
+
+        m.getSpace().removeWorkerOnIt();
+        m.setSpace(null);
+
+        f.getSpace().removeWorkerOnIt();
+        f.setSpace(null);
     }
 
 

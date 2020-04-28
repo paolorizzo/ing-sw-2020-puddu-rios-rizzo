@@ -20,6 +20,7 @@ public class Board extends Group implements UserInterface {
     ActionFSM actionFSM;
     SelectTypeActionMenu selectTypeActionMenu;
     SelectPieceMenu selectPieceMenu;
+    EndOfTurnMenu endOfTurnMenu;
     AskNumPlayersMenu askNumPlayersMenu;
     AskNameMenu askNameMenu;
     AskCardMenu askCardMenu;
@@ -50,11 +51,8 @@ public class Board extends Group implements UserInterface {
             }
         }
 
-        selectTypeActionMenu = new SelectTypeActionMenu(actionFSM);
-        group2d.getChildren().add(selectTypeActionMenu);
-
-        selectPieceMenu = new SelectPieceMenu(actionFSM);
-        group2d.getChildren().add(selectPieceMenu);
+        askNameMenu = new AskNameMenu(cw);
+        group2d.getChildren().add(askNameMenu);
 
         askNumPlayersMenu = new AskNumPlayersMenu(cw);
         group2d.getChildren().add(askNumPlayersMenu);
@@ -65,8 +63,14 @@ public class Board extends Group implements UserInterface {
         askGodMenu = new AskGodMenu(cw);
         group2d.getChildren().add(askGodMenu);
 
-        askNameMenu = new AskNameMenu(cw);
-        group2d.getChildren().add(askNameMenu);
+        selectTypeActionMenu = new SelectTypeActionMenu(actionFSM);
+        group2d.getChildren().add(selectTypeActionMenu);
+
+        selectPieceMenu = new SelectPieceMenu(actionFSM);
+        group2d.getChildren().add(selectPieceMenu);
+
+        endOfTurnMenu = new EndOfTurnMenu(actionFSM);
+        group2d.getChildren().add(endOfTurnMenu);
 
         pieceBag = new PieceBag();
     }
@@ -226,6 +230,10 @@ public class Board extends Group implements UserInterface {
     public void hideSelectPieceMenu() {
         selectPieceMenu.hide();
     }
+    public void showEndOfTurnMenu() { endOfTurnMenu.show(); }
+    public void hideEndOfTurnMenu() {
+        endOfTurnMenu.hide();
+    }
     public void showAskNumPlayersMenu() {
         askNumPlayersMenu.show();
     }
@@ -319,13 +327,22 @@ public class Board extends Group implements UserInterface {
     }
     @Override
     public void askSetupWorker(List<Action> possibleActions) {
-        actionFSM.setPossibleActions(this, possibleActions);
+        actionFSM.setPossibleActions(this, possibleActions, false);
     }
     @Override
-    public void askAction(List<Action> possibleActions){
-        actionFSM.setPossibleActions(this, possibleActions);
+    public void askAction(List<Action> possibleActions, boolean canEndOfTurn){
+        actionFSM.setPossibleActions(this, possibleActions, canEndOfTurn);
     }
-
+    @Override
+    public void removeWorkersOfPlayer(int id){
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                if(towers[i][j].hasWorker() && (towers[i][j].getWorker().getWorkerId().charAt(1)-'0' == id)){
+                    towers[i][j].removeWorker();
+                }
+            }
+        }
+    }
 
     @Override
     public void registerPlayer(int id, String name) {

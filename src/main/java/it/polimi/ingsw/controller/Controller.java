@@ -31,8 +31,10 @@ public class Controller implements ControllerInterface
     private int pointerIdCurrentPlayers;
 
     private ActionTree actionTreeCurrentPlayer;
+    private Turn actualTurn;
+    private boolean canEndOfTurn;
     private List<Action> possibleActions;
-
+    private boolean gameFinish = false;
     public Controller()
     {
         views = new ArrayList<View>();
@@ -235,12 +237,13 @@ public class Controller implements ControllerInterface
         possibleActions = null;
         if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() == null){
             possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.FEMALE);
+            actualTurn = new Turn(model.getPlayers().get(id));
         }else if(model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() == null){
             possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.MALE);
         }
 
         if(possibleActions != null){
-            model.gameFeed.notifyCurrentPlayer(id, possibleActions);
+            model.gameFeed.notifyCurrentPlayer(id, possibleActions, false);
         }
 
         this.notifyAll();
@@ -252,10 +255,12 @@ public class Controller implements ControllerInterface
             model.playersFeed.notifyKo(id);
             return;
         }
+        actualTurn.add(setupAction);
         model.board.executeAction(setupAction);
         model.playersFeed.notifyOk(id);
         model.gameFeed.notifyAction(id, setupAction);
         if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() != null && model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() != null){
+            model.turnArchive.addTurn(actualTurn);
             pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
         }
         this.notifyAll();
@@ -268,25 +273,51 @@ public class Controller implements ControllerInterface
         }
         if(actionTreeCurrentPlayer == null){
             //genererate ActionTree
+            canEndOfTurn = false;
+            actualTurn = new Turn(model.getPlayers().get(id));
             actionTreeCurrentPlayer = model.getPlayers().get(id).generateActionTree(model.board);
             for(int other: idCurrentPlayers){
-                if(model.getPlayers().get(other).requirePruning(model.turnArchive))
+                if(other != id && model.getPlayers().get(other).requirePruning(model.turnArchive))
                     model.getPlayers().get(other).pruneActionTree(actionTreeCurrentPlayer);
             }
         }
-        possibleActions = new ArrayList<>();
-        for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
-            possibleActions.add(child.getAction());
-        }
-        if(possibleActions.size() == 0){
-            //endOfTurns;
-            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
-            actionTreeCurrentPlayer = null;
-            model.gameFeed.notifyEndOfTurnPlayer(id);
 
-            System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
+        if(actionTreeCurrentPlayer.isWin()){
+            actionTreeCurrentPlayer = null;
+            model.gameFeed.notifyPlayerWin(id);
+            gameFinish = true;
+        }else if(actionTreeCurrentPlayer.isLose()){
+            actionTreeCurrentPlayer = null;
+            model.board.removeWorkersPlayer(model.getPlayers().get(id));
+            model.gameFeed.notifyPlayerLose(id);
+
+            //find next player
+            int nextPlayer = idCurrentPlayers.get((pointerIdCurrentPlayers+1)%idCurrentPlayers.size());
+            idCurrentPlayers.remove(pointerIdCurrentPlayers);
+            for(int pointer=0;pointer<idCurrentPlayers.size();pointer++){
+                if(idCurrentPlayers.get(pointer) == nextPlayer)
+                    pointerIdCurrentPlayers = pointer;
+            }
+            if(idCurrentPlayers.size() == 1){
+                //last player win
+                model.gameFeed.notifyPlayerWin(idCurrentPlayers.get(0));
+                gameFinish = true;
+            }
         }else{
-            model.gameFeed.notifyCurrentPlayer(id, possibleActions);
+            possibleActions = new ArrayList<>();
+            for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
+                possibleActions.add(child.getAction());
+            }
+            if(possibleActions.size() == 0 && actionTreeCurrentPlayer.isEndOfTurn() && !actionTreeCurrentPlayer.isLose()){
+                //endOfTurns;
+                pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
+                actionTreeCurrentPlayer = null;
+                model.turnArchive.addTurn(actualTurn);
+                model.gameFeed.notifyEndOfTurnPlayer(id);
+                System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
+            }else if(possibleActions.size()>0 && !actionTreeCurrentPlayer.isLose()){
+                model.gameFeed.notifyCurrentPlayer(id, possibleActions, canEndOfTurn);
+            }
         }
         this.notifyAll();
     }
@@ -297,14 +328,26 @@ public class Controller implements ControllerInterface
         }
         if(possibleActions.contains(action)){
             //ok
+            actualTurn.add(action);
             model.board.executeAction(action);
             model.gameFeed.notifyAction(id, action);
+
             ActionTree nextChild = null;
             for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
                 if(child.getAction().equals(action))
                     nextChild = child;
             }
             actionTreeCurrentPlayer = nextChild;
+            canEndOfTurn |= actionTreeCurrentPlayer.isEndOfTurn();
+        }
+        this.notifyAll();
+    }
+    public synchronized void publishVoluntaryEndOfTurn(int id){
+        if(canEndOfTurn){
+            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
+            actionTreeCurrentPlayer = null;
+
+            System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
         }
         this.notifyAll();
     }
