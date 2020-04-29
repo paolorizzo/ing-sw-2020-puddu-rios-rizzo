@@ -110,7 +110,7 @@ public class Tower extends Group{
             }
         );
     }
-    public void setWorker(Worker w){
+    public void setWorker(final Worker w){
 
         worker = w;
 
@@ -119,13 +119,12 @@ public class Tower extends Group{
             new Runnable() {
                 @Override
                 public void run() {
-                    getChildren().add(worker);
+                    getChildren().add(w);
                 }
             }
         );
 
         worker.setPosition(top);
-        System.out.println("set on "+row+" "+col);
     }
     public boolean hasWorker() {
         if(worker == null)
@@ -137,15 +136,17 @@ public class Tower extends Group{
     }
     public void removeWorker(){
         worker.setVisible(false);
+        final Worker w = worker;
         Platform.runLater(
             new Runnable() {
                 @Override
                 public void run() {
-                    getChildren().remove(worker);
+                    getChildren().remove(w);
                 }
             }
         );
         worker = null;
+
     }
     public void setOnMouseClicked(final ActionFSM actionFSM){
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
