@@ -19,15 +19,15 @@ public class AskNumPlayersMenu extends Group {
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(-rect.getWidth()/2);
-        rect.setTranslateY(-100);
-        rect.setTranslateZ(-500);
+        rect.setTranslateX(1400/2-rect.getWidth()/2);
+        rect.setTranslateY(800/2-rect.getHeight()/2);
+        rect.setTranslateZ(0);
         rect.setVisible(false);
 
         twoPlayer = new Rectangle(60, 60);
         twoPlayer.setTranslateX(rect.getTranslateX() + 30);
         twoPlayer.setTranslateY(rect.getTranslateY() + 20);
-        twoPlayer.setTranslateZ(-500);
+        twoPlayer.setTranslateZ(0);
         twoPlayer.setFill(Color.GREEN);
         twoPlayer.setStroke(Color.BLACK);
         twoPlayer.setVisible(false);
@@ -43,7 +43,7 @@ public class AskNumPlayersMenu extends Group {
         treePlayer = new Rectangle(60, 60 );
         treePlayer.setTranslateX(rect.getTranslateX() + 30 + twoPlayer.getWidth() + 20);
         treePlayer.setTranslateY(rect.getTranslateY() + 20);
-        treePlayer.setTranslateZ(-500);
+        treePlayer.setTranslateZ(0);
         treePlayer.setFill(Color.BLUE);
         treePlayer.setStroke(Color.BLACK);
         treePlayer.setVisible(false);

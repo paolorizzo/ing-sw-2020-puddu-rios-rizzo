@@ -20,31 +20,32 @@ public class AskNameMenu extends Group {
     final ClientView cw;
     public AskNameMenu(ClientView clientView) {
         this.cw = clientView;
-        rect = new Rectangle(200, 100);
+        rect = new Rectangle(200, 140);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(-rect.getWidth()/2);
-        rect.setTranslateY(-100);
-        rect.setTranslateZ(-500);
+        rect.setTranslateX(1400/2-rect.getWidth()/2);
+        rect.setTranslateY(800/2-rect.getHeight()/2);
         rect.setVisible(false);
 
-        labelName = new Label("Name: ");
+        labelName = new Label("Insert your name: ");
         labelName.setTranslateX(rect.getTranslateX() + 30);
         labelName.setTranslateY(rect.getTranslateY() + 20);
-        labelName.setTranslateZ(-500);
+        labelName.setMaxWidth(140);
+        labelName.setMaxHeight(30);
         labelName.setVisible(false);
 
         textName = new TextField();
-        textName.setTranslateX(rect.getTranslateX() + labelName.getWidth() +30);
-        textName.setTranslateY(rect.getTranslateY() + 20);
-        textName.setTranslateZ(-500);
+        textName.setMaxHeight(30);
+        textName.setMaxWidth(90);
+        textName.setTranslateX(rect.getTranslateX() + 30);
+        textName.setTranslateY(rect.getTranslateY() + labelName.getMaxHeight()+20);
         textName.setVisible(false);
 
-        enter = new Rectangle(60, 60 );
-        enter.setTranslateX(rect.getTranslateX() + 30 + rect.getWidth() + 20);
-        enter.setTranslateY(rect.getTranslateY() + 20);
-        enter.setTranslateZ(-500);
+        enter = new Rectangle(30, 30 );
+        enter.setTranslateX(rect.getTranslateX() + 30 + textName.getMaxWidth() + 20);
+        enter.setTranslateY(rect.getTranslateY() + labelName.getMaxHeight() + 20);
+        enter.setTranslateZ(0);
         enter.setFill(Color.BLUE);
         enter.setStroke(Color.BLACK);
         enter.setVisible(false);

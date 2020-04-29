@@ -16,8 +16,8 @@ public class SelectTypeActionMenu extends Group {
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400 / 2 - rect.getWidth() - 110);
-        rect.setTranslateY(70 - 800 / 2);
+        rect.setTranslateX(1400-rect.getWidth()-50);
+        rect.setTranslateY(50);
         rect.setVisible(false);
 
         moveButton = new Rectangle(60, 30);

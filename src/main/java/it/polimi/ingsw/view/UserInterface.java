@@ -20,6 +20,7 @@ public interface UserInterface
 
     int getNumPlayersRegister();
 
+    void setNumPlayers(int numPlayers);
     void registerPlayer(int id, String name);
     void registerGod(int id, Card card);
     void executeAction(Action action);

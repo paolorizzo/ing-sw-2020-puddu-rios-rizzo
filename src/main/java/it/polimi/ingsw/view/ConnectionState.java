@@ -135,6 +135,7 @@ public enum ConnectionState {
             if(view.getId() < numPlayers){
                 System.out.println("Creo il game da "+input+" giocatori.");
                 view.setNumPlayers(numPlayers);
+                view.getUi().setNumPlayers(numPlayers);
                 view.currentConnectionState = ConnectionState.REQUEST_ALL_PLAYERS_CONNECTED;
                 view.currentConnectionState.execute(view, null);
             }

@@ -6,7 +6,8 @@ import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.cli.CliUtils;
 import javafx.geometry.Point3D;
-import javafx.scene.Group;
+import javafx.scene.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 
@@ -14,29 +15,50 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.polimi.ingsw.model.Color;
-public class Board extends Group implements UserInterface {
+public class Board implements UserInterface {
+    Scene scene;
     private Tower [][] towers = new Tower[5][5];
     private HashMap<Integer, Player> players;
     ActionFSM actionFSM;
+
+    AskNumPlayersMenu askNumPlayersMenu;
+    AskNameMenu askNameMenu;
+    PlayersMenu playersMenu;
+    AskCardMenu askCardMenu;
+    AskGodMenu askGodMenu;
     SelectTypeActionMenu selectTypeActionMenu;
     SelectPieceMenu selectPieceMenu;
     EndOfTurnMenu endOfTurnMenu;
-    AskNumPlayersMenu askNumPlayersMenu;
-    AskNameMenu askNameMenu;
-    AskCardMenu askCardMenu;
-    AskGodMenu askGodMenu;
-    Group group2d, group3d;
+    Group groupRoot, group3d;
     PieceBag pieceBag;
 
     ClientView clientView;
+
+
+    private final int WIDTH = 1400;
+    private final int HEIGHT = 800;
     public Board(ClientView cw) {
         clientView = cw;
+
+
         players = new HashMap<>();
 
-        group2d = new Group();
+        groupRoot = new Group();
         group3d = new Group3D();
 
-        this.getChildren().addAll(group2d, group3d);
+        scene = new Scene(groupRoot, WIDTH, HEIGHT, true);
+
+        SubScene sub = new SubScene(group3d,WIDTH,HEIGHT,true, SceneAntialiasing.BALANCED);
+
+        groupRoot.getChildren().add(sub);
+
+        Camera camera = new PerspectiveCamera(true);
+        camera.translateXProperty().set(0);
+        camera.translateYProperty().setValue(0);
+        camera.translateZProperty().set(-1300);
+        camera.setNearClip(0.1);
+        camera.setFarClip(8000);
+        sub.setCamera(camera);
 
         prepareBoard();
 
@@ -51,30 +73,36 @@ public class Board extends Group implements UserInterface {
             }
         }
 
-        askNameMenu = new AskNameMenu(cw);
-        group2d.getChildren().add(askNameMenu);
-
         askNumPlayersMenu = new AskNumPlayersMenu(cw);
-        group2d.getChildren().add(askNumPlayersMenu);
+        groupRoot.getChildren().add(askNumPlayersMenu);
+
+        askNameMenu = new AskNameMenu(cw);
+        groupRoot.getChildren().add(askNameMenu);
+
+        playersMenu = new PlayersMenu();
+        groupRoot.getChildren().add(playersMenu);
 
         askCardMenu = new AskCardMenu(cw);
-        group2d.getChildren().add(askCardMenu);
+        groupRoot.getChildren().add(askCardMenu);
 
         askGodMenu = new AskGodMenu(cw);
-        group2d.getChildren().add(askGodMenu);
+        groupRoot.getChildren().add(askGodMenu);
 
         selectTypeActionMenu = new SelectTypeActionMenu(actionFSM);
-        group2d.getChildren().add(selectTypeActionMenu);
+        groupRoot.getChildren().add(selectTypeActionMenu);
 
         selectPieceMenu = new SelectPieceMenu(actionFSM);
-        group2d.getChildren().add(selectPieceMenu);
+        groupRoot.getChildren().add(selectPieceMenu);
 
         endOfTurnMenu = new EndOfTurnMenu(actionFSM);
-        group2d.getChildren().add(endOfTurnMenu);
+        groupRoot.getChildren().add(endOfTurnMenu);
 
         pieceBag = new PieceBag();
-    }
 
+    }
+    public Scene getScene(){
+        return scene;
+    }
     public synchronized void executeAction(Action action){
         if(action instanceof SetupAction)
             this.executeAction((SetupAction)action);
@@ -345,12 +373,19 @@ public class Board extends Group implements UserInterface {
     }
 
     @Override
+    public void setNumPlayers(int numPlayers) {
+        playersMenu.setNumPlayers(numPlayers);
+    }
+
+    @Override
     public void registerPlayer(int id, String name) {
         players.put(id, new Player(id, name));
+        playersMenu.addNamePlayer(players.get(id));
     }
     @Override
     public void registerGod(int id, Card card){
         players.get(id).setCard(card);
+        playersMenu.addGodPlayer(players.get(id));
     }
 
     @Override

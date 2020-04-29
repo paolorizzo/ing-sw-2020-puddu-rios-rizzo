@@ -14,9 +14,8 @@ public class EndOfTurnMenu extends Group {
         endOfTurn.setFill(Color.RED);
         endOfTurn.setStroke(Color.BLACK);
         endOfTurn.setStrokeWidth(2);
-        endOfTurn.setTranslateX(1400/2 -150 -endOfTurn.getWidth());
-        endOfTurn.setTranslateY(800/2 -100 -endOfTurn.getHeight());
-        endOfTurn.setTranslateZ(0);
+        endOfTurn.setTranslateX(1400 - 150 - endOfTurn.getWidth());
+        endOfTurn.setTranslateY(800 - 100 - endOfTurn.getHeight());
         endOfTurn.setVisible(false);
 
         endOfTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {

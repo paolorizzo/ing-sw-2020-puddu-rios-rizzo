@@ -18,8 +18,8 @@ public class SelectPieceMenu extends Group {
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400 / 2 - rect.getWidth() - 110);
-        rect.setTranslateY(70 - 800 / 2 + 150);
+        rect.setTranslateX(1400-rect.getWidth()-50);
+        rect.setTranslateY(200);
         rect.setVisible(false);
 
         LEVEL1Button = new Rectangle(50, 50);

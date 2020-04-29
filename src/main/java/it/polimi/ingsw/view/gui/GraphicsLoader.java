@@ -24,9 +24,12 @@ public class GraphicsLoader {
 
     HashMap<String, TriangleMesh> meshes;
     HashMap<String, PhongMaterial> textures;
+    HashMap<String, Image> images;
+
     private GraphicsLoader() {
         meshes = new HashMap<>();
         textures = new HashMap<>();
+        images = new HashMap<>();
         try {
             loader();
         } catch (InterruptedException e) {
@@ -45,6 +48,10 @@ public class GraphicsLoader {
 
     public PhongMaterial getTexture(String type) {
         return textures.get(type);
+    }
+
+    public Image getImage(String name) {
+        return images.get(name);
     }
 
     void loader() throws InterruptedException {
@@ -83,10 +90,21 @@ public class GraphicsLoader {
                     }
                 }));
             }
-        }catch (Exception e){
-            System.out.println("Error during the loading graphic: "+e.getMessage());
-        }
 
+            JsonArray cards = jsonObject.get("cards").getAsJsonArray();
+            for(JsonElement card: cards){
+                final String name = card.getAsJsonObject().get("name").getAsString();
+                final String image = card.getAsJsonObject().get("file").getAsString();
+                threads.add(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loaderImage(name, image);
+                    }
+                }));
+            }
+        }catch (Exception e){
+            System.out.println("Error during the loading of graphic: "+e.getMessage());
+        }
         for(Thread thread: threads){
             thread.start();
         }
@@ -116,6 +134,20 @@ public class GraphicsLoader {
         synchronized (textures){
             textures.put(name, texture);
         }
+    }
+    private void loaderImage(String name, String URI){
+        File file = new File("./src/main/resources/"+URI);
+        String path = file.getAbsolutePath();
+        try{
+            FileInputStream inputStream = new FileInputStream(path);
+            Image image = new Image(inputStream);
+            synchronized (images){
+                images.put(name, image);
+            }
+        }catch(Exception e){
+            System.out.println("file "+path+" doesn't exists");
+        }
+
     }
     TriangleMesh createMeshFromOBJ(String URI){
         TriangleMesh mesh = new TriangleMesh();

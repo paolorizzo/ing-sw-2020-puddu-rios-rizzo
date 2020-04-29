@@ -145,6 +145,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     }
 
     @Override
+    public void setNumPlayers(int numPlayers) {
+    }
+    @Override
     public void registerPlayer(int id, String name){
         players.put(id, new Player(id, name));
     }

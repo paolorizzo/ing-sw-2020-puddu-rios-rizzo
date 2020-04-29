@@ -214,5 +214,47 @@
 			"name": "SEA",
 			"file": "sea.png"
 		}
+	],
+	"cards": [
+		{
+			"name": "Apollo",
+			"file": "apollo.png"
+		},
+		{
+			"name": "Artemis",
+			"file": "artemis.png"
+		},
+		{
+			"name": "Athena",
+			"file": "athena.png"
+		},
+		{
+			"name": "Atlas",
+			"file": "atlas.png"
+		},
+		{
+			"name": "Demeter",
+			"file": "demeter.png"
+		},
+		{
+			"name": "Hephaestus",
+			"file": "hephaestus.png"
+		},
+		{
+			"name": "Minotaur",
+			"file": "minotaur.png"
+		},
+		{
+			"name": "Pan",
+			"file": "pan.png"
+		},
+		{
+			"name": "Prometheus",
+			"file": "prometheus.png"
+		},
+		{
+			"name": "Anonymous",
+			"file": "anon.png"
+		}
 	]
 }
