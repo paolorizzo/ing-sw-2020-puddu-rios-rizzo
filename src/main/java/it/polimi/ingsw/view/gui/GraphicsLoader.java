@@ -1,5 +1,11 @@
 package it.polimi.ingsw.view.gui;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import it.polimi.ingsw.model.Card;
+import it.polimi.ingsw.model.power.PowerStrategy;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Mesh;
@@ -42,141 +48,48 @@ public class GraphicsLoader {
     }
 
     void loader() throws InterruptedException {
-        //TODO create a file json
         List<Thread> threads = new ArrayList<>();
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("LEVEL0", "LV0.obj");
+        try{
+            File file = new File("./src/main/resources/graphics.json");
+            StringBuilder stringGraphics = new StringBuilder((int)file.length());
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()) {
+                stringGraphics.append(scanner.nextLine() + System.lineSeparator());
             }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("LEVEL1", "LV1.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("LEVEL2", "LV2.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("LEVEL3", "LV3.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("DOME", "DOME.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("WORKER_F", "worker_F.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("WORKER_M", "worker_M.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("INNERWALL", "innerwall.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("OUTERWALL", "outerwall.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("ISLAND", "island.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("ISLANDS", "islands.obj");
-            }
-        }));
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("SEA", "sea.obj");
-            }
-        }));
+            JsonObject jsonObject = (JsonObject) new JsonParser().parse(stringGraphics.toString());
 
-        threads.add(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loaderMesh("SEADOWN", "seadown.obj");
+            JsonArray meshes = jsonObject.get("meshes").getAsJsonArray();
+
+            for(JsonElement mesh: meshes){
+                final String name = mesh.getAsJsonObject().get("name").getAsString();
+                final String uri = mesh.getAsJsonObject().get("file").getAsString();
+                threads.add(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loaderMesh(name, uri);
+                    }
+                }));
             }
-        }));
+
+            JsonArray textures = jsonObject.get("textures").getAsJsonArray();
+
+            for(JsonElement texture: textures){
+                final String name = texture.getAsJsonObject().get("name").getAsString();
+                final String uri = texture.getAsJsonObject().get("file").getAsString();
+                threads.add(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loaderTexture(name, uri);
+                    }
+                }));
+            }
+        }catch (Exception e){
+            System.out.println("Error during the loading graphic: "+e.getMessage());
+        }
 
         for(Thread thread: threads){
             thread.start();
         }
-        textures.put("WORKER_M_BLUE", loadTexture("worker_male_blue.png"));
-        textures.put("WORKER_M_WHITE", loadTexture("worker_male_white.png"));
-        textures.put("WORKER_M_ORANGE", loadTexture("worker_male_orange.png"));
-        textures.put("WORKER_M_PINK", loadTexture("worker_male_pink.png"));
-        textures.put("WORKER_M_PURPLE", loadTexture("worker_male_purple.png"));
-        textures.put("WORKER_M_TAN", loadTexture("worker_male_tan.png"));
-
-        textures.put("WORKER_M_ENABLED", loadTexture("worker_male_enabled.png"));
-        textures.put("WORKER_M_PREVIEW", loadTexture("worker_male_preview.png"));
-        textures.put("WORKER_M_DISABLED", loadTexture("worker_male_disabled.png"));
-
-        textures.put("WORKER_F_BLUE", loadTexture("worker_female_blue.png"));
-        textures.put("WORKER_F_WHITE", loadTexture("worker_female_white.png"));
-        textures.put("WORKER_F_ORANGE", loadTexture("worker_female_orange.png"));
-        textures.put("WORKER_F_PINK", loadTexture("worker_female_pink.png"));
-        textures.put("WORKER_F_PURPLE", loadTexture("worker_female_purple.png"));
-        textures.put("WORKER_F_TAN", loadTexture("worker_female_tan.png"));
-
-        textures.put("WORKER_F_ENABLED", loadTexture("worker_female_enabled.png"));
-        textures.put("WORKER_F_PREVIEW", loadTexture("worker_female_preview.png"));
-        textures.put("WORKER_F_DISABLED", loadTexture("worker_female_disabled.png"));
-
-        textures.put("LEVEL0_default", loadTexture("LV0_default.png"));
-        textures.put("LEVEL0_enabled", loadTexture("LV0_enabled.png"));
-        textures.put("LEVEL0_disabled", loadTexture("LV0_disabled.png"));
-        textures.put("LEVEL0_preview", loadTexture("LV0_preview.png"));
-
-        textures.put("LEVEL1_default", loadTexture("LV1_default.png"));
-        textures.put("LEVEL1_enabled", loadTexture("LV1_enabled.png"));
-        textures.put("LEVEL1_disabled", loadTexture("LV1_disabled.png"));
-        textures.put("LEVEL1_preview", loadTexture("LV1_preview.png"));
-
-        textures.put("LEVEL2_default", loadTexture("LV2_default.png"));
-        textures.put("LEVEL2_enabled", loadTexture("LV2_enabled.png"));
-        textures.put("LEVEL2_disabled", loadTexture("LV2_disabled.png"));
-        textures.put("LEVEL2_preview", loadTexture("LV2_preview.png"));
-
-        textures.put("LEVEL3_default", loadTexture("LV3_default.png"));
-        textures.put("LEVEL3_enabled", loadTexture("LV3_enabled.png"));
-        textures.put("LEVEL3_disabled", loadTexture("LV3_disabled.png"));
-        textures.put("LEVEL3_preview", loadTexture("LV3_preview.png"));
-
-        textures.put("DOME_default", loadTexture("DOME_default.png"));
-        textures.put("DOME_enabled", loadTexture("DOME_enabled.png"));
-        textures.put("DOME_disabled", loadTexture("DOME_disabled.png"));
-        textures.put("DOME_preview", loadTexture("DOME_preview.png"));
-
-        textures.put("ISLAND", loadTexture("island.png"));
-
-        textures.put("SEA", loadTexture("sea.png"));
 
         for(Thread thread: threads){
             thread.join();
@@ -194,7 +107,8 @@ public class GraphicsLoader {
         String path = file.getAbsolutePath();
         PhongMaterial texture = new PhongMaterial();
         try{
-            Image i = new Image(path);
+            FileInputStream inputStream = new FileInputStream(path);
+            Image i = new Image(inputStream);
             texture.setDiffuseMap(i);
         }catch(Exception e){
             System.out.println("file "+path+" doesn't exists");
@@ -202,19 +116,6 @@ public class GraphicsLoader {
         synchronized (textures){
             textures.put(name, texture);
         }
-    }
-    private PhongMaterial loadTexture(String URI){
-        File file = new File("./src/main/resources/"+URI);
-        String path = file.getAbsolutePath();
-        PhongMaterial texture = new PhongMaterial();
-        try{
-            FileInputStream inputStream = new FileInputStream(path);
-            Image i = new Image(inputStream);
-            texture.setDiffuseMap(i);
-        }catch(Exception e){
-            System.out.println("file "+URI+" doesn't exists, "+path);
-        }
-        return texture;
     }
     TriangleMesh createMeshFromOBJ(String URI){
         TriangleMesh mesh = new TriangleMesh();
@@ -272,7 +173,7 @@ public class GraphicsLoader {
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred with "+URI+": can't create the mesh");
             e.printStackTrace();
         }
         return mesh;

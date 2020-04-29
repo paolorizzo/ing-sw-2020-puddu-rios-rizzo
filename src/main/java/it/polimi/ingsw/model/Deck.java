@@ -1,25 +1,45 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.*;
 import it.polimi.ingsw.model.power.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class Deck implements Serializable {
     HashMap<Integer, Card> cardsInDeck;
+
     public Deck(){
         cardsInDeck = new HashMap<>();
-        cardsInDeck.put(1, new Card(1,"Apollo", "Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.", new ApolloPower()));
-        cardsInDeck.put(2, new Card(2,"Artemis", "Your Move: Your Worker may move one additional time, but not back to its initial space. ", new ArtemisPower()));
-        cardsInDeck.put(3, new Card(3, "Athena", "Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.", new AthenaPower()));
-        cardsInDeck.put(4, new Card(4,"Atlas", "Your Build: Your Worker may build a dome at any level.", new AtlasPower()));
-        cardsInDeck.put(5, new Card(5, "Demeter","Your Build: Your Worker may build one additional time, but not on the same space.", new DemeterPower()));
-        cardsInDeck.put(6, new Card(6, "Hephaestus", "Your Build: Your Worker may build one additional block (not dome) on top of your first block.", new HephaestusPower()));
-        cardsInDeck.put(8, new Card(8, "Minotaur", "Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.", new MinotaurPower()));
-        cardsInDeck.put(9, new Card(9, "Pan", "Win Condition: You also win if your Worker moves down two or more levels.", new PanPower()));
-        cardsInDeck.put(10, new Card(10, "Prometheus", "Your Turn: If your Worker does not move up, it may build both before and after moving.", new PrometheusPower()));
+        loadCard();
+    }
+    private void loadCard(){
+        try{
+            File file = new File("./src/main/resources/cards.json");
+            StringBuilder stringCards = new StringBuilder((int)file.length());
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()) {
+                stringCards.append(scanner.nextLine() + System.lineSeparator());
+            }
+
+            JsonObject jsonObject = (JsonObject) new JsonParser().parse(stringCards.toString());
+            JsonArray cards = jsonObject.get("cards").getAsJsonArray();
+
+            for(JsonElement card: cards){
+                int num = card.getAsJsonObject().get("num").getAsInt();
+                String name = card.getAsJsonObject().get("name").getAsString();
+                String desc = card.getAsJsonObject().get("desc").getAsString();
+                PowerStrategy power = (PowerStrategy) Class.forName("it.polimi.ingsw.model.power."+name+"Power").newInstance();
+                cardsInDeck.put(num, new Card(num, name, desc, power));
+            }
+        }catch (Exception e){
+            System.out.println("Error during the loading of deck: "+e.getMessage());
+        }
+
     }
     public Card pickCard(int num){
         if(!cardsInDeck.containsKey(num))

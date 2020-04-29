@@ -1,0 +1,218 @@
+{
+	"meshes": [
+		{
+			"name": "LEVEL0",
+			"file": "LV0.obj"
+		},
+		{
+			"name": "LEVEL1",
+			"file": "LV1.obj"
+		},
+		{
+			"name": "LEVEL2",
+			"file": "LV2.obj"
+		},
+		{
+			"name": "LEVEL3",
+			"file": "LV3.obj"
+		},
+		{
+			"name": "DOME",
+			"file": "DOME.obj"
+		},
+		{
+			"name": "WORKER_F",
+			"file": "worker_F.obj"
+		},
+		{
+			"name": "WORKER_M",
+			"file": "worker_M.obj"
+		},
+		{
+			"name": "INNERWALL",
+			"file": "innerwall.obj"
+		},
+		{
+			"name": "OUTERWALL",
+			"file": "outerwall.obj"
+		},
+		{
+			"name": "ISLAND",
+			"file": "island.obj"
+		},
+		{
+			"name": "ISLANDS",
+			"file": "islands.obj"
+		},
+		{
+			"name": "SEA",
+			"file": "sea.obj"
+		},
+		{
+			"name": "SEADOWN",
+			"file": "seadown.obj"
+		}
+	],
+	"textures": [
+		{
+			"name": "WORKER_M_BLUE",
+			"file": "worker_male_blue.png"
+		},
+		{
+			"name": "WORKER_M_WHITE",
+			"file": "worker_male_white.png"
+		},
+		{
+			"name": "WORKER_M_ORANGE",
+			"file": "worker_male_orange.png"
+		},
+		{
+			"name": "WORKER_M_PINK",
+			"file": "worker_male_pink.png"
+		},
+		{
+			"name": "WORKER_M_PURPLE",
+			"file": "worker_male_purple.png"
+		},
+		{
+			"name": "WORKER_M_TAN",
+			"file": "worker_male_tan.png"
+		},
+		{
+			"name": "WORKER_F_BLUE",
+			"file": "worker_female_blue.png"
+		},
+		{
+			"name": "WORKER_F_WHITE",
+			"file": "worker_female_white.png"
+		},
+		{
+			"name": "WORKER_F_ORANGE",
+			"file": "worker_female_orange.png"
+		},
+		{
+			"name": "WORKER_F_PINK",
+			"file": "worker_female_pink.png"
+		},
+		{
+			"name": "WORKER_F_PURPLE",
+			"file": "worker_female_purple.png"
+		},
+		{
+			"name": "WORKER_F_TAN",
+			"file": "worker_female_tan.png"
+		},
+		{
+			"name": "WORKER_M_ENABLED",
+			"file": "worker_male_enabled.png"
+		},
+		{
+			"name": "WORKER_M_PREVIEW",
+			"file": "worker_male_preview.png"
+		},
+		{
+			"name": "WORKER_M_DISABLED",
+			"file": "worker_male_disabled.png"
+		},
+		{
+			"name": "WORKER_F_ENABLED",
+			"file": "worker_female_enabled.png"
+		},
+		{
+			"name": "WORKER_F_PREVIEW",
+			"file": "worker_female_preview.png"
+		},
+		{
+			"name": "WORKER_F_DISABLED",
+			"file": "worker_female_disabled.png"
+		},
+		{
+			"name": "LEVEL0_default",
+			"file": "LV0_default.png"
+		},
+		{
+			"name": "LEVEL0_enabled",
+			"file": "LV0_enabled.png"
+		},
+		{
+			"name": "LEVEL0_disabled",
+			"file": "LV0_disabled.png"
+		},
+		{
+			"name": "LEVEL0_preview",
+			"file": "LV0_preview.png"
+		},
+		{
+			"name": "LEVEL1_default",
+			"file": "LV1_default.png"
+		},
+		{
+			"name": "LEVEL1_enabled",
+			"file": "LV1_enabled.png"
+		},
+		{
+			"name": "LEVEL1_disabled",
+			"file": "LV1_disabled.png"
+		},
+		{
+			"name": "LEVEL1_preview",
+			"file": "LV1_preview.png"
+		},
+		{
+			"name": "LEVEL2_default",
+			"file": "LV2_default.png"
+		},
+		{
+			"name": "LEVEL2_enabled",
+			"file": "LV2_enabled.png"
+		},
+		{
+			"name": "LEVEL2_disabled",
+			"file": "LV2_disabled.png"
+		},
+		{
+			"name": "LEVEL2_preview",
+			"file": "LV2_preview.png"
+		},
+		{
+			"name": "LEVEL3_default",
+			"file": "LV3_default.png"
+		},
+		{
+			"name": "LEVEL3_enabled",
+			"file": "LV3_enabled.png"
+		},
+		{
+			"name": "LEVEL3_disabled",
+			"file": "LV3_disabled.png"
+		},
+		{
+			"name": "LEVEL3_preview",
+			"file": "LV3_preview.png"
+		},
+		{
+			"name": "DOME_default",
+			"file": "DOME_default.png"
+		},
+		{
+			"name": "DOME_enabled",
+			"file": "DOME_enabled.png"
+		},
+		{
+			"name": "DOME_disabled",
+			"file": "DOME_disabled.png"
+		},
+		{
+			"name": "DOME_preview",
+			"file": "DOME_preview.png"
+		},
+		{
+			"name": "ISLAND",
+			"file": "island.png"
+		},
+		{
+			"name": "SEA",
+			"file": "sea.png"
+		}
+	]
+}
