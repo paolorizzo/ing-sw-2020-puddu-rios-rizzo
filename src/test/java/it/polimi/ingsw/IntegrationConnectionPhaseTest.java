@@ -83,7 +83,7 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
             cws[i] = clients[i].getClientView();
         }
 
-        safeWaitFor(1);
+        safeWaitFor(2);
 
         //we don't know which thread will run first, so both cases are possible
         assert((cws[0].getId()==0 && cws[1].getId()==1) || (cws[0].getId()==1 && cws[1].getId()==0));

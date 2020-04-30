@@ -4,17 +4,13 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.observation.GameObservable;
-import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.observation.UserInterfaceObservable;
-import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
-import it.polimi.ingsw.view.middleware.Client;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
@@ -22,9 +18,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     public Cli(){
         players = new HashMap<>();
     }
+
     @Override
     public void showLogo()
     {
+        /*
         CliUtils.printBlueOnWhite("      ______    ______   __    __  ________  ______   _______   ______  __    __  ______     ");
         CliUtils.printBlueOnWhite("     /      \\  /      \\ /  \\  /  |/        |/      \\ /       \\ /      |/  \\  /  |/      |    ");
         CliUtils.printBlueOnWhite("    /$$$$$$  |/$$$$$$  |$$  \\ $$ |$$$$$$$$//$$$$$$  |$$$$$$$  |$$$$$$/ $$  \\ $$ |$$$$$$/     ");
@@ -36,22 +34,141 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         CliUtils.printBlueOnWhite("     $$$$$$/  $$/   $$/ $$/   $$/    $$/    $$$$$$/  $$/   $$/ $$$$$$/ $$/   $$/ $$$$$$/     ");
         CliUtils.printBlueOnWhite("                                                                                             ");
         System.out.println(AnsiColors.ANSI_RESET);
+         */
     }
 
     @Override
     public void askNumPlayers(){
-        CliUtils.printBlueOnWhiteSameLine("Choose the number of players:");
-        int numPlayers = readInt();
-        notifyReadNumPlayers(numPlayers);
+        int numPlayers = 2;
+        String input;
+        boolean spin = true;
+
+        while(spin)
+        {
+            showControls();
+            System.out.println();
+            showNumPlayersDialog(numPlayers);
+
+            input = readString();
+
+            switch(input)
+            {
+                case("2"):
+                    notifyReadNumPlayers(2);
+                    spin = false;
+                    break;
+                case("3"):
+                    notifyReadNumPlayers(3);
+                    spin = false;
+                    break;
+                case("d"):
+                case("a"):
+                    numPlayers = numPlayers == 3? 2:3;
+                    break;
+                case(""):
+                    notifyReadNumPlayers(numPlayers);
+                    spin = false;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
+    private static void showControls()
+    {
+        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_BLACK+ "Use WASD to control the selection: W to go UP, S to go DOWN, A to go RIGHT, D to go LEFT");
+        System.out.println(AnsiColors.ANSI_RESET);
+    }
 
+    public void showNumPlayersDialog(int num)
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI();
+
+        //create number 2
+        RectangleCLI number2 = new RectangleCLI(5,11,12,12);
+        number2.setMask("./src/main/resources/two.txt");
+        number2.setPalette(num == 2? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
+
+        //create number 3
+        RectangleCLI number3 = new RectangleCLI(17,11,12,12);
+        number3.setMask("./src/main/resources/three.txt");
+        number3.setPalette(num == 3? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(12,5,10,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText(" SELECT THE NUMBER OF PLAYERS");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 12,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(number2);
+        canvas.addOverlappingFigure(number3);
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the figure
+        canvas.printFigure();
+    }
 
     @Override
     public void askUsername() {
-        CliUtils.printBlueOnWhiteSameLine("Choose a username:");
+        showUsernameDialog();
+        System.out.println();
         String name = readString();
+        slideDown(36,1);
         notifyReadName(name);
+    }
+
+    private static void slideDown(int rows, int rateInMilliseconds)
+    {
+        for(int i = 0; i<rows; i++)
+        {
+            try
+            {
+                TimeUnit.MILLISECONDS.sleep(rateInMilliseconds);
+                //System.out.println(".");
+            }
+            catch(InterruptedException e)
+            {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
+    public void showUsernameDialog()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_BG_BLACK);
+
+        /*
+        //create arrow
+        RectangleCLI lowArrow = new RectangleCLI(13,1,9,6);
+        lowArrow.setMask("./src/main/resources/arrow3.txt");
+        lowArrow.setPalette(Color.ANSI_BG_BLACK, Color.ANSI_BRIGHT_BG_BLUE);
+         */
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("      INSERT USERNAME ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE);
+
+        //overlap figures in the correct order
+        //canvas.addOverlappingFigure(lowArrow);
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
     }
 
     @Override

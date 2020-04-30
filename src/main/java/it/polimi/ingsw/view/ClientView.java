@@ -124,10 +124,14 @@ public class ClientView extends View implements UserInterfaceObserver
     //updates relative to PlayersObserver
 
     public synchronized void updateID(int id){
+
+        /*
         if(this.id != -1)
             System.out.println("ClientView.updateID with id "+id+", but was already "+this.id);
         else
             System.out.println("ClientView.updateID with new id "+id);
+
+         */
         if(currentConnectionState.equals(ConnectionState.RECEIVE_ID))
             currentConnectionState.execute(this, id);
     }

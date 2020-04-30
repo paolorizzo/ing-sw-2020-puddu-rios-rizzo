@@ -106,7 +106,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
                     try {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
                         Message message = (Message) ByteIn.readObject();
-                        System.out.println("Messaggio in arrivo sul client! Message method: "+message);
+                        //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
                         //System.out.println(message.getMethodName());
                         callMethod(message);
                     }

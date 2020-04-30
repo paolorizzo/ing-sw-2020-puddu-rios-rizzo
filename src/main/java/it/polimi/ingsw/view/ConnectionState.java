@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public enum ConnectionState {
     READY{
         public void execute(ClientView view, Object input) {
-            System.out.println("starting the fsm");
+            //System.out.println("starting the fsm");
             view.currentConnectionState = REQUEST_ID;
             view.currentConnectionState.execute(view, null);
         }
@@ -22,7 +22,7 @@ public enum ConnectionState {
     REQUEST_ID {
         //publishes the request for an id
         public void execute(ClientView view, Object input) {
-            System.out.println("Richiedo ID");
+            //System.out.println("Richiedo ID");
             view.getController().generateId();
             view.currentConnectionState = RECEIVE_ID;
         }

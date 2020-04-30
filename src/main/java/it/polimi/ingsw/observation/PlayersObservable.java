@@ -14,14 +14,14 @@ public class PlayersObservable extends Observable<PlayersObserver>{
     }
 
     public synchronized void notifyStart(){
-        System.out.println("starting client");
+        //System.out.println("starting client");
         for(PlayersObserver obs:observers){
             obs.updateStart();
         }
     }
 
     public synchronized void notifyID(int id){
-        System.out.println("notifyID with id: "+id);
+        //System.out.println("notifyID with id: "+id);
         for(PlayersObserver obs:observers){
             obs.updateID(id);
         }
