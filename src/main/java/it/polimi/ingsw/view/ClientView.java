@@ -3,8 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.exception.IncorrectStateException;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.observation.GameObservable;
-import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.observation.UserInterfaceObserver;
 import it.polimi.ingsw.view.middleware.Client;
 import it.polimi.ingsw.view.cli.Cli;

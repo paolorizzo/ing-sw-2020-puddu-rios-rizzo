@@ -1,7 +1,5 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.observation.GameObservable;
-import it.polimi.ingsw.observation.PlayersObservable;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.cli.Cli;
 import it.polimi.ingsw.view.middleware.Client;
