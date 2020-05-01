@@ -7,12 +7,10 @@ import java.util.Vector;
 public class Board {
     private Space[][] spaces;
     private PieceBag pieceBag;
-    private Deck deck;
     private HashMap<String, Worker> workers;
     public Board(){
         spaces = generateSpaces();
         workers = new HashMap<>();
-        deck = new Deck();
         pieceBag = new PieceBag();
     }
     public void createPlayerWorkers(Player p){
@@ -54,7 +52,6 @@ public class Board {
         return spaces;
     }
 
-    public Deck getDeck() { return deck;}
     public PieceBag getPieceBag() { return pieceBag;}
 
     public void executeAction(Action action){

@@ -20,14 +20,12 @@ public class ClientView extends View implements UserInterfaceObserver
     SetupState currentSetupState;
     GameState currentGameState;
     //updates will modify these objects
-    Game game;
     private int id;
     private UserInterface ui;
 
     //private because ClientView is singleton. instance() should be called to get an object of this type
     public ClientView(ControllerInterface controller){
         super(controller);
-        game = null;
         id = -1;
     }
 
@@ -44,7 +42,7 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     public void setNumPlayers(int numPlayers){
-        game = new Game(numPlayers);
+        getUi().setNumPlayers(numPlayers);
     }
 
     //TODO should not be accepted if ID is already set, meaning it is still -1
@@ -87,8 +85,6 @@ public class ClientView extends View implements UserInterfaceObserver
 
     public synchronized void updateNumPlayers(int numPlayers){
         System.out.println("received number of players: " + numPlayers);
-        if(game != null)
-            System.out.println("it was already known, state: "+currentConnectionState.toString());
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
@@ -153,7 +149,7 @@ public class ClientView extends View implements UserInterfaceObserver
         }else
             System.out.println("player " + id + " chose " + name + " as their username");
         System.out.println("Player register "+getUi().getNumPlayersRegister());
-        if(getUi().getNumPlayersRegister() == game.getNumPlayers() && currentConnectionState == ConnectionState.WAIT_ALL_PLAYERS_NAME){
+        if(getUi().getNumPlayersRegister() == getUi().getNumPlayers() && currentConnectionState == ConnectionState.WAIT_ALL_PLAYERS_NAME){
             currentConnectionState = ConnectionState.END;
             currentConnectionState.execute(this, null);
         }

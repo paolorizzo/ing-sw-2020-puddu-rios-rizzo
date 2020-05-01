@@ -57,12 +57,13 @@ public class PowerStrategyTest {
         powersTest.put(9, new PanPowerTest());
         powersTest.put(10, new PrometheusPowerTest());
 
+        Deck deck = new Deck();
 
         for(Player player: players) {
 
-            List<Card> cards = board.getDeck().getCards();
+            List<Card> cards = deck.getCards();
 
-            player.setCard(board.getDeck().pickCard(cards.get(rand.nextInt(cards.size())).getNum()));
+            player.setCard(deck.pickCard(cards.get(rand.nextInt(cards.size())).getNum()));
 
             //System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
 

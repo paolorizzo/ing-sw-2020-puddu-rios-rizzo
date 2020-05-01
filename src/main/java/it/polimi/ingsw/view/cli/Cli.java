@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
     private HashMap<Integer, Player> players;
+    private int numPlayers;
     public Cli(){
         players = new HashMap<>();
     }
@@ -263,6 +264,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     @Override
     public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+    @Override
+    public int getNumPlayers() {
+        return numPlayers;
     }
     @Override
     public void registerPlayer(int id, String name){

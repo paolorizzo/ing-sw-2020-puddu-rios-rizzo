@@ -23,18 +23,6 @@ public class Controller implements ControllerInterface
     boolean acceptNumPlayers;
     int ackReceived;
 
-    final Object turnMutex = new Object();
-    private List<Card> chosenCards;
-
-
-    private List<Integer> idCurrentPlayers;
-    private int pointerIdCurrentPlayers;
-
-    private ActionTree actionTreeCurrentPlayer;
-    private Turn actualTurn;
-    private boolean canEndOfTurn;
-    private List<Action> possibleActions;
-    private boolean gameFinish = false;
     public Controller()
     {
         views = new ArrayList<View>();
@@ -47,10 +35,6 @@ public class Controller implements ControllerInterface
         acceptNumPlayers = false;   //accepts numPlayers only after connecting the first client, and only before it has been set
         ackReceived = -1;           //only accepts acks sequentially
 
-        //setup game variables
-        chosenCards = null;
-        //game variables
-        actionTreeCurrentPlayer = null;
 
     }
 
@@ -68,7 +52,6 @@ public class Controller implements ControllerInterface
             viewMap.put(nextId, view);  //enumerates the views
             views.add(view);
             model.addObserver(view);    //adds the view as observer of the feed
-            startClient();
         }
         else{
             throw new IncorrectStateException("Impossible to accept a new view now, must receive an ack first");
@@ -76,11 +59,6 @@ public class Controller implements ControllerInterface
     }
 
     //Connection phase methods
-
-    //notifies the client that it can start
-    public void startClient(){
-        model.feed.notifyStart();
-    }
 
     //publishes the id of the last player that has joined
     //TODO this method should instead publish the id of the first player whose id hasn't been published yet
@@ -121,11 +99,7 @@ public class Controller implements ControllerInterface
                     System.out.println("Setting the number of players as " + numPlayers);
                     model.feed.notifyOk(id);
                     model.setNumPlayers(numPlayers);
-                    idCurrentPlayers = new ArrayList<>();
-                    for(int i=0;i<numPlayers;i++){
-                        idCurrentPlayers.add(i);
-                    }
-                    pointerIdCurrentPlayers = 1;
+
                     acceptNumPlayers = false;
                 }
                 else{
@@ -144,6 +118,12 @@ public class Controller implements ControllerInterface
         if(model.numPlayersIsSet()){
             model.feed.notifyNumPlayers(model.getNumPlayers());
         }
+    }
+
+    @Override
+    public synchronized void requestAllPlayersConnected(){
+        if(ackReceived+1 >= model.getNumPlayers())
+            model.feed.notifyAllPlayersConnected();
     }
 
     //only reads the name if its id is valid
@@ -171,63 +151,49 @@ public class Controller implements ControllerInterface
             }
         }
     }
-    @Override
-    public synchronized void requestAllPlayersConnected(){
-        if(ackReceived+1 >= model.getNumPlayers())
-            model.feed.notifyAllPlayersConnected();
-    }
+
     @Override
     public synchronized void requestDeck() {
-        model.feed.notifyDeck(model.board.getDeck());
+        model.feed.notifyDeck(model.game.getDeck());
     }
+
     @Override
     public synchronized void publishCards(int id, List<Integer> numCards){
         try{
-            if(chosenCards != null){
+            if(id != 0){
+                throw new IllegalArgumentException(id+" can't choose card");
+            }
+            if(model.game.areCardsChosen()){
                 throw new IllegalArgumentException("cards already chosen");
             }
             if(numCards.size() != model.getNumPlayers()){
                 throw new IllegalArgumentException("number of cards chosen different from the number of players");
             }
-            chosenCards = new ArrayList<>();
-            for(Integer num: numCards) {
-                chosenCards.add(model.board.getDeck().pickCard(num));
-            }
+            model.game.setChosenCards(numCards);
+
         }catch(IllegalArgumentException e){
             model.feed.notifyKo(id);
-            if(!e.getMessage().equals("cards already chosen")){
-                chosenCards = null;
-            }
             return;
         }
-
         model.feed.notifyOk(id);
         this.notifyAll();
     }
     @Override
     public synchronized void requestCards(int id) throws InterruptedException {
-        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers) || chosenCards == null || chosenCards.size() == 0) {
+        while(id != model.game.getCurrentPlayerId() || !model.game.areCardsChosen()) { // || chosenCards.size() == 0
             System.out.println(id+" mi fermo");
             this.wait();
         }
-        model.feed.notifyCards(idCurrentPlayers.get(pointerIdCurrentPlayers), chosenCards);
+        model.feed.notifyCards(id, model.game.getChosenCards());
         this.notifyAll();
     }
     @Override
     public synchronized void setCard(int id, int numCard){
-        Card card = null;
-        for(Card c: chosenCards){
-            if(c.getNum() == numCard)
-                card = c;
-        }
-        if(card == null || id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+        if(id != model.game.getCurrentPlayerId() || !model.game.isPresentInChosenCards(numCard)){
             model.feed.notifyKo(id);
         }else{
-            chosenCards.remove(card);
-            model.getPlayers().get(id).setCard(card);
+            model.setCardPlayer(id, numCard);
             model.feed.notifyOk(id);
-            model.feed.notifyGod(id, card);
-            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
 
             this.notifyAll();
         }
@@ -235,123 +201,53 @@ public class Controller implements ControllerInterface
 
     @Override
     public synchronized void requestToSetupWorker(int id) throws InterruptedException {
-        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+        while(id != model.game.getCurrentPlayerId()){
             this.wait();
         }
-        possibleActions = null;
-        if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() == null){
-            possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.FEMALE);
-            actualTurn = new Turn(model.getPlayers().get(id));
-        }else if(model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() == null){
-            possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.MALE);
-        }
-
-        if(possibleActions != null){
+        List<Action> possibleActions = model.game.getPossibleSetupActions(id);
+        if(possibleActions != null)
             model.feed.notifyCurrentPlayer(id, possibleActions, false);
-        }
 
         this.notifyAll();
     }
 
     @Override
     public synchronized void setupWorker(int id, SetupAction setupAction){
-        if(possibleActions == null || !possibleActions.contains(setupAction) || id != idCurrentPlayers.get(pointerIdCurrentPlayers)){
+        if(id != model.game.getCurrentPlayerId() || !model.game.possibleActionsContains(setupAction)){
             model.feed.notifyKo(id);
             return;
         }
-        actualTurn.add(setupAction);
-        model.board.executeAction(setupAction);
+        model.executeSetupAction(id, setupAction);
         model.feed.notifyOk(id);
-        model.feed.notifyAction(id, setupAction);
-        if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() != null && model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() != null){
-            model.turnArchive.addTurn(actualTurn);
-            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
-        }
+
         this.notifyAll();
     }
+
     @Override
     public synchronized void requestActions(int id) throws InterruptedException {
-        while(id != idCurrentPlayers.get(pointerIdCurrentPlayers)) {
+        while(id != model.game.getCurrentPlayerId()) {
             System.out.println(id+" mi fermo");
             this.wait();
         }
-        if(actionTreeCurrentPlayer == null){
-            //genererate ActionTree
-            canEndOfTurn = false;
-            actualTurn = new Turn(model.getPlayers().get(id));
-            actionTreeCurrentPlayer = model.getPlayers().get(id).generateActionTree(model.board);
-            for(int other: idCurrentPlayers){
-                if(other != id && model.getPlayers().get(other).requirePruning(model.turnArchive))
-                    model.getPlayers().get(other).pruneActionTree(actionTreeCurrentPlayer);
-            }
-        }
-
-        if(actionTreeCurrentPlayer.isWin()){
-            actionTreeCurrentPlayer = null;
-            model.feed.notifyPlayerWin(id);
-            gameFinish = true;
-        }else if(actionTreeCurrentPlayer.isLose()){
-            actionTreeCurrentPlayer = null;
-            model.board.removeWorkersPlayer(model.getPlayers().get(id));
-            model.feed.notifyPlayerLose(id);
-
-            //find next player
-            int nextPlayer = idCurrentPlayers.get((pointerIdCurrentPlayers+1)%idCurrentPlayers.size());
-            idCurrentPlayers.remove(pointerIdCurrentPlayers);
-            for(int pointer=0;pointer<idCurrentPlayers.size();pointer++){
-                if(idCurrentPlayers.get(pointer) == nextPlayer)
-                    pointerIdCurrentPlayers = pointer;
-            }
-            if(idCurrentPlayers.size() == 1){
-                //last player win
-                model.feed.notifyPlayerWin(idCurrentPlayers.get(0));
-                gameFinish = true;
-            }
-        }else{
-            possibleActions = new ArrayList<>();
-            for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
-                possibleActions.add(child.getAction());
-            }
-            if(possibleActions.size() == 0 && actionTreeCurrentPlayer.isEndOfTurn() && !actionTreeCurrentPlayer.isLose()){
-                //endOfTurns;
-                pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
-                actionTreeCurrentPlayer = null;
-                model.turnArchive.addTurn(actualTurn);
-                model.feed.notifyEndOfTurnPlayer(id);
-                System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
-            }else if(possibleActions.size()>0 && !actionTreeCurrentPlayer.isLose()){
-                model.feed.notifyCurrentPlayer(id, possibleActions, canEndOfTurn);
-            }
-        }
+        List<Action> possibleActions = model.game.getPossibleActions(id);
+        if(possibleActions != null)
+            model.feed.notifyCurrentPlayer(id, possibleActions, model.game.getCanEndOfTurn());
         this.notifyAll();
     }
     @Override
     public synchronized void publishAction(int id, Action action){
-        if(id != idCurrentPlayers.get(pointerIdCurrentPlayers)) {
+        if(id != model.game.getCurrentPlayerId()) {
             return;
         }
-        if(possibleActions.contains(action)){
+        if(model.game.possibleActionsContains(action)){
             //ok
-            actualTurn.add(action);
-            model.board.executeAction(action);
-            model.feed.notifyAction(id, action);
-
-            ActionTree nextChild = null;
-            for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
-                if(child.getAction().equals(action))
-                    nextChild = child;
-            }
-            actionTreeCurrentPlayer = nextChild;
-            canEndOfTurn |= actionTreeCurrentPlayer.isEndOfTurn();
+            model.executeAction(id, action);
         }
         this.notifyAll();
     }
     public synchronized void publishVoluntaryEndOfTurn(int id){
-        if(canEndOfTurn){
-            pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
-            actionTreeCurrentPlayer = null;
-
-            System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
+        if(model.game.getCanEndOfTurn()){
+            model.game.nextTurn();
         }
         this.notifyAll();
     }

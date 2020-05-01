@@ -26,4 +26,6 @@ public interface UserInterface
     void executeAction(Action action);
 
     void removeWorkersOfPlayer(int id);
+
+    int getNumPlayers();
 }

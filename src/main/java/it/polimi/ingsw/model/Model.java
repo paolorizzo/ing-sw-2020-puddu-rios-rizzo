@@ -13,19 +13,17 @@ import java.util.List;
 public class Model {
     public static Model instance;
 
-    Game game;
+    public Game game;
     HashMap<Integer, Player> players;
-    public TurnArchive turnArchive;
     //feeds
     public FeedObservable feed;
     public Board board;
 
     public Model(){
-        game = new Game();
         board = new Board();
         players = new HashMap<>();
-        turnArchive = new TurnArchive();
         feed = new FeedObservable();
+        game = new Game(this);
     }
 
     FeedObservable getFeed(){
@@ -50,10 +48,7 @@ public class Model {
         players.put(id, player);
         board.createPlayerWorkers(player);
         //important to notify every name to allow late clients to know all other players before
-        //the end of the late client's connection phase
-        for(Player p: players.values()){
-            feed.notifyName(p.getId(), p.getNickname());
-        }
+        feed.notifyName(player.getId(), player.getNickname());
     }
 
     //returns true if someone already claimed the nickname
@@ -74,6 +69,14 @@ public class Model {
         return players.get(id) != null;
     }
 
+    public void setCardPlayer(int id, int numCard){
+        Card card = game.getChosenCard(numCard);
+        players.get(id).setCard(card);
+        game.removeChosenCard(card);
+        game.nextTurn();
+        feed.notifyGod(id, card);
+    }
+
     public int getNumPlayers(){
         return game.getNumPlayers();
     }
@@ -84,10 +87,25 @@ public class Model {
 
     public void addObserver(FeedObserver obs){
         feed.addObserver(obs);
+        feed.notifyStart();
     }
 
     public void removeObserver(FeedObserver obs){
         feed.removeObserver(obs);
     }
 
+    public void executeSetupAction(int id, SetupAction setupAction){
+        board.executeAction(setupAction);
+        game.addSetupActionInActualTurn(setupAction);
+        if(players.get(id).getWorker(Sex.FEMALE).getSpace() != null && players.get(id).getWorker(Sex.MALE).getSpace() != null){
+            game.nextTurn();
+        }
+
+        feed.notifyAction(id, setupAction);
+    }
+    public void executeAction(int id, Action action) {
+        board.executeAction(action);
+        game.addActionInActualTurn(action);
+        feed.notifyAction(id, action);
+    }
 }

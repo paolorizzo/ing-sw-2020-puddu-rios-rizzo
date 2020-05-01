@@ -52,7 +52,7 @@ public enum SetupState {
             }
             numCards.add(numCard);
             System.out.println("Num card chosen :"+numCard);
-            if(numCards.size() == view.game.getNumPlayers())
+            if(numCards.size() == view.getUi().getNumPlayers())
                 view.currentSetupState = PUBLISH_CARDS;
             else
                 view.currentSetupState = ASK_CARD;

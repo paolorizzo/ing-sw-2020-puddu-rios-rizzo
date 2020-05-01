@@ -10,7 +10,6 @@ public class TurnArchive {
     }
 
     public void addTurn(Turn turn){
-        System.out.println("Aggiungo turno");
         turns.add(turn);
     }
 

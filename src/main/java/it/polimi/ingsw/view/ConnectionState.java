@@ -130,8 +130,6 @@ public enum ConnectionState {
         public void execute(ClientView view, Object input){
             System.out.println("RECEIVE_NUM_PLAYERS state execute "+(int)input);
             int numPlayers = (int) input;
-            if(view.game != null)
-                throw new IncorrectStateException("game should not exist in state" + this.name());
             if(view.getId() < numPlayers){
                 System.out.println("Creo il game da "+input+" giocatori.");
                 view.setNumPlayers(numPlayers);

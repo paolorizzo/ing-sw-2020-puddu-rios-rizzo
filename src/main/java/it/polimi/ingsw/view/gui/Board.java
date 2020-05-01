@@ -37,9 +37,11 @@ public class Board implements UserInterface {
 
     private final int WIDTH = 1400;
     private final int HEIGHT = 800;
+    private int numPlayers;
+
     public Board(ClientView cw) {
         clientView = cw;
-
+        numPlayers = -1;
 
         players = new HashMap<>();
 
@@ -374,7 +376,14 @@ public class Board implements UserInterface {
 
     @Override
     public void setNumPlayers(int numPlayers) {
+        if(this.numPlayers == -1)
         playersMenu.setNumPlayers(numPlayers);
+
+        this.numPlayers = numPlayers;
+    }
+    @Override
+    public int getNumPlayers() {
+        return numPlayers;
     }
 
     @Override
