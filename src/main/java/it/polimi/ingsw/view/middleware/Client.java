@@ -20,12 +20,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     private Socket socket;
     private final String ip;
     private final int port;
-    protected Map<String, Observable> methodMap;
 
     private ClientView cw;
 
-    private final GameObservable virtualGameFeed;
-    private final PlayersObservable virtualPlayersFeed;
+    private final FeedObservable virtualFeed;
 
     private boolean alive;
 
@@ -33,9 +31,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
     {
         this.ip = ip;
         this.port = port;
-        virtualGameFeed = new GameObservable();
-        virtualPlayersFeed = new PlayersObservable();
-        methodMap = constructMethodMap();
+        virtualFeed = new FeedObservable();
         alive = true;
     }
     public void setClientView(ClientView cw){
@@ -48,38 +44,15 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
         return cw;
     }
 
-    public void addObserver(ModelObserver view)
+    public void addObserver(FeedObserver view)
     {
-        virtualGameFeed.addObserver(view);
-        virtualPlayersFeed.addObserver(view);
+        virtualFeed.addObserver(view);
     }
 
-    protected Map<String, Observable> constructMethodMap()
-    {
 
-        Map<String, Observable> methodMap = new HashMap<String, Observable>();
-
-        Method[] gameMethods = virtualGameFeed.getClass().getMethods();
-        Method[] playersMethods = virtualPlayersFeed.getClass().getMethods();
-
-        for(Method method:gameMethods) {
-            methodMap.put(method.getName(), virtualGameFeed);
-        }
-        for(Method method:playersMethods) {
-            methodMap.put(method.getName(), virtualPlayersFeed);
-        }
-
-        return methodMap;
-    }
-
-    //returns the observable object from the methodMap
+    //always returns the client itself
     protected Object getObservable(String methodName) {
-        try{
-            return methodMap.get(methodName);
-        }catch(Exception e){
-            System.err.println("Can't find the method called "+methodName);
-        }
-        return null;
+        return virtualFeed;
     }
 
     /**

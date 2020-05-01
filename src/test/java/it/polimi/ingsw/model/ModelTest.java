@@ -17,7 +17,7 @@ public class ModelTest {
         assert (!model.numPlayersIsSet());
         assert (model.getPlayers() != null);
         assert (model.getPlayers().size() == 0);
-        assert (model.getGameFeed() != null);
+        assert (model.getFeed() != null);
     }
     @Test
     public void HandlePlayerTest(){
@@ -36,13 +36,10 @@ public class ModelTest {
     public void HandleObserverTest() throws IOException {
         Model model = new Model();
         View view = new VirtualView(new Connection(new Socket(), new Server(4103)));
-        assert (!model.gameFeed.hasObservers());
-        assert (!model.playersFeed.hasObservers());
+        assert (!model.feed.hasObservers());
         model.addObserver(view);
-        assert (model.gameFeed.hasObservers());
-        assert (model.playersFeed.hasObservers());
+        assert (model.feed.hasObservers());
         model.removeObserver(view);
-        assert (!model.gameFeed.hasObservers());
-        assert (!model.playersFeed.hasObservers());
+        assert (!model.feed.hasObservers());
     }
 }

@@ -142,6 +142,7 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     public synchronized void updateStart(){
+        //System.out.println("starting this client");
         if(currentConnectionState.equals(ConnectionState.READY))
             currentConnectionState.execute(this, null);
     }

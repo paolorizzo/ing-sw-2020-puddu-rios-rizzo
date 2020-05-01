@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.observation.GameObservable;
-import it.polimi.ingsw.observation.ModelObserver;
-import it.polimi.ingsw.observation.PlayersObservable;
+import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
@@ -19,8 +17,7 @@ public class Model {
     HashMap<Integer, Player> players;
     public TurnArchive turnArchive;
     //feeds
-    public GameObservable gameFeed;
-    public PlayersObservable playersFeed;
+    public FeedObservable feed;
     public Board board;
 
     public Model(){
@@ -28,12 +25,11 @@ public class Model {
         board = new Board();
         players = new HashMap<>();
         turnArchive = new TurnArchive();
-        gameFeed = new GameObservable();
-        playersFeed = new PlayersObservable();
+        feed = new FeedObservable();
     }
 
-    GameObservable getGameFeed(){
-        return gameFeed;
+    FeedObservable getFeed(){
+        return feed;
     }
 
     public HashMap<Integer, Player> getPlayers(){
@@ -42,7 +38,7 @@ public class Model {
 
     public void setNumPlayers(int numPlayers){
         game.setNumPlayers(numPlayers);
-        gameFeed.notifyNumPlayers(numPlayers);
+        feed.notifyNumPlayers(numPlayers);
     }
 
     //relies on the controller to only add valid players
@@ -56,7 +52,7 @@ public class Model {
         //important to notify every name to allow late clients to know all other players before
         //the end of the late client's connection phase
         for(Player p: players.values()){
-            playersFeed.notifyName(p.getId(), p.getNickname());
+            feed.notifyName(p.getId(), p.getNickname());
         }
     }
 
@@ -86,14 +82,12 @@ public class Model {
         return game.numPlayersIsSet();
     }
 
-    public void addObserver(ModelObserver obs){
-        gameFeed.addObserver(obs);
-        playersFeed.addObserver(obs);
+    public void addObserver(FeedObserver obs){
+        feed.addObserver(obs);
     }
 
-    public void removeObserver(ModelObserver obs){
-        gameFeed.removeObserver(obs);
-        playersFeed.removeObserver(obs);
+    public void removeObserver(FeedObserver obs){
+        feed.removeObserver(obs);
     }
 
 }

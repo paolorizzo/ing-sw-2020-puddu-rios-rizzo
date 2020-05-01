@@ -30,6 +30,7 @@ public class VirtualView extends View
     //updates relative to PlayersObserver
 
     public synchronized void updateStart(){
+        System.out.println("sending start message");
         connection.sendMessage("notifyStart");
     }
 
