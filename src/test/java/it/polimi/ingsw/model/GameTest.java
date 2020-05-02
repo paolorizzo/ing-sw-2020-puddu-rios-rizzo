@@ -53,18 +53,18 @@ public class GameTest {
         game.setNumPlayers(3);
 
         assert(!game.areCardsChosen());
-        assert(!game.isPresentInChosenCards(1));
+        assert(!game.isCardTaken(1));
 
         game.setChosenCards(Arrays.asList(1, 2, 3));
 
         assert(game.areCardsChosen());
-        assert(game.isPresentInChosenCards(1));
-        assert(game.isPresentInChosenCards(2));
-        assert(game.isPresentInChosenCards(3));
+        assert(game.isCardTaken(1));
+        assert(game.isCardTaken(2));
+        assert(game.isCardTaken(3));
 
         Card card1 = game.getChosenCard(1);
         game.removeChosenCard(card1);
-        assert(!game.isPresentInChosenCards(1));
+        assert(!game.isCardTaken(1));
 
     }
 
@@ -242,7 +242,7 @@ public class GameTest {
             possibleActions = game.getPossibleActions(id);
             List<Action> actions = new ArrayList<>();
             while(possibleActions != null){
-                if(game.getCanEndOfTurn() && rand.nextInt(2)==1){
+                if(game.isEndOfTurnPossible() && rand.nextInt(2)==1){
                     System.out.println("I want to end my turn");
                     game.nextTurn();
                     break;

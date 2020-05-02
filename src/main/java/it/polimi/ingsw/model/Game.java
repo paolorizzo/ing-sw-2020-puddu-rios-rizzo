@@ -21,7 +21,7 @@ public class Game {
     private Turn actualTurn;
     private ActionTree actionTreeCurrentPlayer;
     private List<Action> possibleActions;
-    private boolean canEndOfTurn;
+    private boolean canEndTurn;
 
     boolean finish;
 
@@ -32,7 +32,7 @@ public class Game {
         numPlayers = -1;
         deck = new Deck();
 
-        canEndOfTurn = false;
+        canEndTurn = false;
         possibleActions = null;
         actionTreeCurrentPlayer = null;
 
@@ -107,7 +107,7 @@ public class Game {
         chosenCards.remove(card);
     }
 
-    public boolean isPresentInChosenCards(int numCard) {
+    public boolean isCardTaken(int numCard) {
         if(!areCardsChosen())
             return false;
         if(getChosenCard(numCard) == null)
@@ -140,7 +140,7 @@ public class Game {
         if(actualTurn == null){
             //devo inizializzare e generare il turno
             actualTurn = new Turn(model.getPlayers().get(id));
-            canEndOfTurn = false;
+            canEndTurn = false;
             //genererate ActionTree
             actionTreeCurrentPlayer = generateActionTree(id);
         }
@@ -226,15 +226,15 @@ public class Game {
                 nextChild = child;
         }
         actionTreeCurrentPlayer = nextChild;
-        canEndOfTurn |= actionTreeCurrentPlayer.isEndOfTurn();
+        canEndTurn |= actionTreeCurrentPlayer.isEndOfTurn();
 
     }
     public void addTurnInArchive(){
         turnArchive.addTurn(actualTurn);
     }
 
-    public boolean getCanEndOfTurn() {
-        return canEndOfTurn;
+    public boolean isEndOfTurnPossible() {
+        return canEndTurn;
     }
 
     public boolean isFinish(){

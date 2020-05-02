@@ -23,10 +23,5 @@ public abstract class View implements FeedObserver
         return controller;
     }
 
-    /*
-    public abstract void startNameView();
-    public abstract void startNumberOfPlayersView();
-    public abstract void startOutOfGameView();
 
-     */
 }

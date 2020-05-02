@@ -38,10 +38,15 @@ public class Controller implements ControllerInterface
 
     }
 
-    //adds the view to the controller, and univocally maps it to an integer
-    //blocks further views from being added until an ack for this one is received
-    //adds the view to the model as an observer of the feed
-    //starts the client associated with the view
+    //connection phase methods
+
+    /**
+     * adds the view to the controller, and univocally maps it to an integer
+     * blocks further views from being added until an ack for this one is received
+     * adds the view to the model as an observer of the feed
+     * starts the client associated with the view
+     * @param view that is being added
+     */
     //TODO handle player limit
     public synchronized void addView(View view)
     {
@@ -58,20 +63,21 @@ public class Controller implements ControllerInterface
         }
     }
 
-    //Connection phase methods
 
-    //publishes the id of the last player that has joined
-    //TODO this method should instead publish the id of the first player whose id hasn't been published yet
-    //if the third player connects before the second can solve his id, there may be conflicts
-    //perhaps enforcing sequential connections already solves the problem
+    /**
+     * publishes the next free id
+     */
     @Override
     public synchronized void generateId(){
         model.feed.notifyID(nextId);
     }
 
-    //checks that the ack received is the correct one
-    //this means that it checks that it has received acks for all previous ids
-    //also allows for another view to be added by setting accept to true
+    /**
+     * checks that the ack received is the correct one
+     * this means that it checks that it has received acks for all previous ids
+     * also allows for another view to be added by setting accept to true
+     * @param id of the client that is sending the ack
+     */
     @Override
     public synchronized void ackId(int id)
     {
@@ -87,10 +93,14 @@ public class Controller implements ControllerInterface
         }
     }
 
-    //if the numPlayers is acceptable at the time (which happens after the ack for the id 0
-    //and the numPlayers has an acceptable value, it sets it
-    //notifies the caller of the success or failure of the operation
-    //if the setting is successful, sets acceptNumPlayers as false so that it cannot be set again
+    /**
+     * if the numPlayers is acceptable at the time (which happens after the ack for the id 0
+     * and the numPlayers has an acceptable value, it sets it
+     * notifies the caller of the success or failure of the operation
+     * if the setting is successful, sets acceptNumPlayers as false so that it cannot be set again
+     * @param id of the client that is trying to set the numPlayers
+     * @param numPlayers number of the players that the client wishes to have in the game
+     */
     @Override
     public synchronized void setNumPlayers(int id, int numPlayers) {
         if(acceptNumPlayers){
@@ -113,6 +123,10 @@ public class Controller implements ControllerInterface
         }
     }
 
+    /**
+     * if it has been decided, returns the number of players that will be allowed to participate
+     * in the game through the feed
+     */
     @Override
     public synchronized void getNumPlayers() {
         if(model.numPlayersIsSet()){
@@ -120,14 +134,28 @@ public class Controller implements ControllerInterface
         }
     }
 
+    /**
+     * if all the clients that are allowed to connect have actually connected, notifies this
+     * news through the feed
+     */
     @Override
     public synchronized void requestAllPlayersConnected(){
         if(ackReceived+1 >= model.getNumPlayers())
             model.feed.notifyAllPlayersConnected();
     }
 
-    //only reads the name if its id is valid
-    //
+    /**
+     * checks that the name is valid, and if it is adds the relative Player to the model
+     * in particular, it checks:
+     * that the id belongs to a client that is allowed to join the game,
+     * that there is no registered name for that id
+     * that an ack has been received from that id
+     * that the number of players has been set
+     * that the name has not been claimed already
+     * @param id of the client that is requesting the name
+     * @param name that is being requested
+     */
+    //TODO should also check that if id==2 and numPlayers==2 the name is not accepted
     @Override
     public synchronized void setName(int id, String name) {
         if(0 <= id && id <= 2){
@@ -152,11 +180,46 @@ public class Controller implements ControllerInterface
         }
     }
 
+    /**
+     * gets the view related to the id using the map,
+     * removes it from the model and the controller
+     * and finally deletes the entry of the map that relates to the id
+     * @param id of the client that wants to be deleted
+     */
+    @Override
+    public synchronized void deleteId(int id){
+        System.out.println("client " + id + " died");
+        View toBeRemoved = viewMap.get(id);
+        model.removeObserver(toBeRemoved);
+        views.remove(toBeRemoved);
+        viewMap.remove(id);
+    }
+
+    //setup phase methods
+
+    /**
+     * sends the deck through the feed
+     */
     @Override
     public synchronized void requestDeck() {
         model.feed.notifyDeck(model.game.getDeck());
     }
 
+    /**
+     * checks that the request to publish the cards is legit, by checking:
+     * that the chooser is the first player
+     * that the cards have not yet been chosen
+     * that the number of cards being chosen matches the number of players
+     *
+     * if the request passes these checks, memorizes the chosen cards and notifies
+     * the choice through the feed
+     * Moreover, if the request is accepted awakes a thread that was waiting
+     * This is useful because when these cards are requested the requesting threads go in wait
+     * if the cards haven't been chosen yet
+     * @param id of the client sending his choice of cards
+     * @param numCards list of the cards chosen, identified by their number
+     * @see #requestCards(int id)
+     */
     @Override
     public synchronized void publishCards(int id, List<Integer> numCards){
         try{
@@ -178,6 +241,15 @@ public class Controller implements ControllerInterface
         model.feed.notifyOk(id);
         this.notifyAll();
     }
+
+    /**
+     * waits until it is the requesting client's turn and the cards have been chosen
+     * once that happens, notifies the choice of cards to the requester on the feed
+     * moreover, wakes another thread, which may have been waiting on the same condition
+     * 
+     * @param id of the client that requests the cards
+     * @throws InterruptedException if the wait is interrupted
+     */
     @Override
     public synchronized void requestCards(int id) throws InterruptedException {
         while(id != model.game.getCurrentPlayerId() || !model.game.areCardsChosen()) { // || chosenCards.size() == 0
@@ -187,9 +259,19 @@ public class Controller implements ControllerInterface
         model.feed.notifyCards(id, model.game.getChosenCards());
         this.notifyAll();
     }
+
+    /**
+     * checks that the action is allowed, by checking that:
+     * it is the requesting client's turn
+     * the card has not yet been taken by someone else
+     * if the checks pass, saves the association between the client and the card
+     * and wakes threads that may be waiting
+     * @param id
+     * @param numCard
+     */
     @Override
     public synchronized void setCard(int id, int numCard){
-        if(id != model.game.getCurrentPlayerId() || !model.game.isPresentInChosenCards(numCard)){
+        if(id != model.game.getCurrentPlayerId() || !model.game.isCardTaken(numCard)){
             model.feed.notifyKo(id);
         }else{
             model.setCardPlayer(id, numCard);
@@ -199,6 +281,13 @@ public class Controller implements ControllerInterface
         }
     }
 
+    /**
+     * waits until it is the requesting client's turn
+     * once it is, gets the possible setup actions from the controller and sends them through the feed
+     * moreover, wakes threads that may be waiting
+     * @param id of the requesting client
+     * @throws InterruptedException if the wait is interrupted
+     */
     @Override
     public synchronized void requestToSetupWorker(int id) throws InterruptedException {
         while(id != model.game.getCurrentPlayerId()){
@@ -211,6 +300,12 @@ public class Controller implements ControllerInterface
         this.notifyAll();
     }
 
+    /**
+     * checks that it is the requesting client's turn and that the proposed setup action is possible
+     * if all is well, executes the action and wakes possible waiting threads
+     * @param id of the requesting client
+     * @param setupAction an action that places a worker on the board
+     */
     @Override
     public synchronized void setupWorker(int id, SetupAction setupAction){
         if(id != model.game.getCurrentPlayerId() || !model.game.possibleActionsContains(setupAction)){
@@ -223,6 +318,15 @@ public class Controller implements ControllerInterface
         this.notifyAll();
     }
 
+    //turn phase methods
+
+    /**
+     * waits until it is the requesting player's turn
+     * once it is, sends the possible actions through the feed, if there are any
+     * moreover, wakes possible waiting threads
+     * @param id of the requesting client
+     * @throws InterruptedException if the wait is interrupted
+     */
     @Override
     public synchronized void requestActions(int id) throws InterruptedException {
         while(id != model.game.getCurrentPlayerId()) {
@@ -231,9 +335,17 @@ public class Controller implements ControllerInterface
         }
         List<Action> possibleActions = model.game.getPossibleActions(id);
         if(possibleActions != null)
-            model.feed.notifyCurrentPlayer(id, possibleActions, model.game.getCanEndOfTurn());
+            model.feed.notifyCurrentPlayer(id, possibleActions, model.game.isEndOfTurnPossible());
         this.notifyAll();
     }
+
+    /**
+     * checks that it is the requesting client's turn
+     * and that the proposed action is possible
+     * if the checks go well, executes it and wakes a waiting thread
+     * @param id of the requesting client
+     * @param action an action that the player wants to perform in their turn
+     */
     @Override
     public synchronized void publishAction(int id, Action action){
         if(id != model.game.getCurrentPlayerId()) {
@@ -245,25 +357,25 @@ public class Controller implements ControllerInterface
         }
         this.notifyAll();
     }
+
+    /**
+     * if it is possible to end the turn, initiates the next turn
+     * @param id of the requesting client
+     */
+    @Override
     public synchronized void publishVoluntaryEndOfTurn(int id){
-        if(model.game.getCanEndOfTurn()){
+        if(model.game.isEndOfTurnPossible()){
             model.game.nextTurn();
         }
         this.notifyAll();
     }
+
+
     @Override
     public void kill(){
         //TODO save the game state and shut down the server
         //TODO should not be called from outside the server
     }
 
-    @Override
-    public synchronized void deleteId(int id){
-        System.out.println("client " + id + " died");
-        View toBeRemoved = viewMap.get(id);
-        model.removeObserver(toBeRemoved);
-        views.remove(toBeRemoved);
-        viewMap.remove(id);
-    }
 
 }

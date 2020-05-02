@@ -21,54 +21,70 @@ public class VirtualView extends View
         this.connection = c;
     }
 
-    //updates relative to GameObserver
-
-    public synchronized void updateNumPlayers(int numPlayers){
-        connection.sendMessage("notifyNumPlayers", numPlayers);
-    }
-
-    //updates relative to PlayersObserver
-
-    public synchronized void updateStart(){
-        System.out.println("sending start message");
-        connection.sendMessage("notifyStart");
-    }
-
-    public synchronized void updateID(int id){
-        connection.sendMessage("notifyID", id);
-    }
-
-    public synchronized void updateName(int id, String name){
-        connection.sendMessage("notifyName", id, name);
-    }
-
+    //general updates
+    @Override
     public synchronized void updateOk(int id){
         connection.sendMessage("notifyOk", id);
     }
 
+    @Override
     public synchronized void updateKo(int id){
         connection.sendMessage("notifyKo", id);
     }
 
+
+    //connection phase updates
+    @Override
+    public synchronized void updateStart(){
+        connection.sendMessage("notifyStart");
+    }
+
+    @Override
+    public synchronized void updateID(int id){
+        connection.sendMessage("notifyID", id);
+    }
+
+    @Override
+    public synchronized void updateNumPlayers(int numPlayers){
+        connection.sendMessage("notifyNumPlayers", numPlayers);
+    }
+
+    @Override
     public synchronized void updateAllPlayersConnected(){ connection.sendMessage("notifyAllPlayersConnected"); }
 
+    @Override
+    public synchronized void updateName(int id, String name){
+        connection.sendMessage("notifyName", id, name);
+    }
+
+
+    //setup phase updates@Override
     public synchronized void updateDeck(Deck deck){
         connection.sendMessage("notifyDeck", deck);
     }
 
+    @Override
     public synchronized void updateCards(int id, List<Card> cards){
         connection.sendMessage("notifyCards", id, cards);
     }
 
+    @Override
     public synchronized void updateGod(int id, Card card) {connection.sendMessage("notifyGod", id, card); }
 
+
+    //turn phase updates
+    @Override
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {connection.sendMessage("notifyCurrentPlayer", id, possibleActions, canEndOfTurn); }
 
+    @Override
     public synchronized void updateEndOfTurnPlayer(int id) {connection.sendMessage("notifyEndOfTurnPlayer", id); }
 
+    @Override
     public synchronized void updateAction(int id, Action action) {connection.sendMessage("notifyAction", id, action); }
 
+    @Override
     public synchronized void updatePlayerWin(int id) {connection.sendMessage("notifyPlayerWin", id); }
 
+    @Override
     public synchronized void updatePlayerLose(int id) {connection.sendMessage("notifyPlayerLose", id); }
 }
