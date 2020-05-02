@@ -114,17 +114,17 @@ public class Tower extends Group{
 
         worker = w;
 
-        worker.setVisible(true);
         Platform.runLater(
             new Runnable() {
                 @Override
                 public void run() {
                     getChildren().add(w);
+                    w.setVisible(true);
+                    w.setPosition(top);
                 }
             }
         );
 
-        worker.setPosition(top);
     }
     public boolean hasWorker() {
         if(worker == null)
