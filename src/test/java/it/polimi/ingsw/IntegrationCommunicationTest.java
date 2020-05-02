@@ -30,11 +30,18 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
 
         int port = 40000;
         Server server = buildAndRunServer(port);
+        try{
+            TimeUnit.SECONDS.sleep(1);
+        }
+        catch(InterruptedException e)
+        {
+            System.err.println(e.getMessage());
+        }
         Client client = buildAndRunClient(port);
 
 
         try{
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(1);
         }
         catch(InterruptedException e)
         {

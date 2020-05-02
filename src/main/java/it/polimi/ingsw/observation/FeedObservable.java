@@ -97,5 +97,5 @@ public class FeedObservable extends Observable<FeedObserver> {
             obs.updatePlayerLose(id);
         }
     }
-    
+
 }

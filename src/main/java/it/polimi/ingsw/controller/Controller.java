@@ -23,6 +23,10 @@ public class Controller implements ControllerInterface
     boolean acceptNumPlayers;
     int ackReceived;
 
+    /**
+     * constructs the Model
+     * sets up the internal variables of the controller
+     */
     public Controller()
     {
         views = new ArrayList<View>();
@@ -36,6 +40,20 @@ public class Controller implements ControllerInterface
         ackReceived = -1;           //only accepts acks sequentially
 
 
+    }
+
+    //getters and setters
+    public List<View> getViews() {
+        return views;
+    }
+    public Map<Integer, View> getViewMap() {
+        return viewMap;
+    }
+    public int getNextId() {
+        return nextId;
+    }
+    public Model getModel() {
+        return model;
     }
 
     //connection phase methods
@@ -135,13 +153,16 @@ public class Controller implements ControllerInterface
     }
 
     /**
-     * if all the clients that are allowed to connect have actually connected, notifies this
+     * if the number of players is set
+     * and if all the clients that are allowed to connect have actually connected, notifies this
      * news through the feed
      */
     @Override
     public synchronized void requestAllPlayersConnected(){
-        if(ackReceived+1 >= model.getNumPlayers())
-            model.feed.notifyAllPlayersConnected();
+        if(model.numPlayersIsSet()){
+            if(ackReceived+1 >= model.getNumPlayers())
+                model.feed.notifyAllPlayersConnected();
+        }
     }
 
     /**
@@ -162,9 +183,11 @@ public class Controller implements ControllerInterface
             if(model.playerPresent(id))
                 throw new IllegalArgumentException("there is already a player with this id");
             else if(id > ackReceived)
-                throw new IncorrectStateException("Cannot accept name from client " + id + " before receiveng its ack");
+                throw new IncorrectStateException("Cannot accept name from client " + id + " before receiving its ack");
             else if(!model.numPlayersIsSet())
                 throw new IncorrectStateException("Cannot accept name from client " + id + " before receiving the number of players");
+            else if(id == 2 && model.getNumPlayers()==2)
+                throw new IllegalArgumentException("Cannot set a name for the third player in a two player game");
             else{
 
                 if(model.nicknamePresent(name)){

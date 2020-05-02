@@ -1,7 +1,8 @@
 package it.polimi.ingsw;
 
 import org.junit.Test;
-
+//TODO move this fossil dated around the Pleistocene to some place better suited to it
+//perhaps the trash bin would make a fine museum for this specimen?
 public class ObservableTest
 {
     /*

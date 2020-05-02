@@ -7,6 +7,18 @@ import it.polimi.ingsw.model.Deck;
 import java.util.List;
 
 public class StubView extends View{
+    public int id;
+    public int numPlayers;
+    public boolean allPlayersConnected;
+    public String name;
+
+    public StubView(){
+        super();
+        id = -1;
+        numPlayers = 0;
+        allPlayersConnected = false;
+        name = null;
+    }
 
     //general updates
     @Override
@@ -18,15 +30,25 @@ public class StubView extends View{
     @Override
     public void updateStart(){}
     @Override
-    public void updateID(int id){}
+    public void updateID(int id){
+        if(this.id == -1)
+            this.id = id;
+    }
     @Override
-    public void updateNumPlayers(int numPlayers){}
+    public void updateNumPlayers(int numPlayers){
+        this.numPlayers = numPlayers;
+    }
     @Override
-    public void updateName(int id, String name){}
+    public void updateAllPlayersConnected(){
+        allPlayersConnected = true;
+    }
+    @Override
+    public void updateName(int id, String name){
+        if(this.id == id)
+            this.name = name;
+    }
 
     //setup phase updates
-    @Override
-    public void updateAllPlayersConnected(){}
     @Override
     public void updateDeck(Deck deck){}
     @Override
