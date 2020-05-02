@@ -63,4 +63,20 @@ public class PlayerTest
         assert(!p.equals(new Player("name", Color.BLUE, 2)));
         assert(!p.equals(new Object()));
     }
+    @Test
+    public void checkGenerateSetupActionsWorker(){
+        Player p = new Player(0,"Mark");
+        Board board = new Board();
+        board.createPlayerWorkers(p);
+
+        assert(p.generateSetupActionsWorker(board, Sex.FEMALE).size() == 25);
+        board.executeAction(p.generateSetupActionsWorker(board, Sex.FEMALE).get(0));
+
+        assert(p.generateSetupActionsWorker(board, Sex.FEMALE) == null);
+
+        assert(p.generateSetupActionsWorker(board, Sex.MALE).size() == 24);
+        board.executeAction(p.generateSetupActionsWorker(board, Sex.MALE).get(0));
+
+        assert(p.generateSetupActionsWorker(board, Sex.MALE)== null);
+    }
 }

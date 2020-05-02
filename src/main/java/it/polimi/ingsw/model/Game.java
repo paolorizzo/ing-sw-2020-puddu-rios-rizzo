@@ -32,6 +32,7 @@ public class Game {
         numPlayers = -1;
         deck = new Deck();
 
+        canEndOfTurn = false;
         possibleActions = null;
         actionTreeCurrentPlayer = null;
 
@@ -139,8 +140,8 @@ public class Game {
         if(actualTurn == null){
             //devo inizializzare e generare il turno
             actualTurn = new Turn(model.getPlayers().get(id));
-            //genererate ActionTree
             canEndOfTurn = false;
+            //genererate ActionTree
             actionTreeCurrentPlayer = generateActionTree(id);
         }
 
@@ -190,10 +191,8 @@ public class Game {
             model.feed.notifyEndOfTurnPlayer(id);
             System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
             return null;
-        }else if(possibleActions.size()>0 && !actionTreeCurrentPlayer.isLose()){
-            return possibleActions;
         }
-        return null;
+        return possibleActions;
     }
     public boolean possibleActionsContains(Action action) {
         if(possibleActions == null)

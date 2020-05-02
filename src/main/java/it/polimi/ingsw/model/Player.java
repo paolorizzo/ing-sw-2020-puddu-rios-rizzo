@@ -78,7 +78,7 @@ public class Player
         List<Action> possibleActions = new ArrayList<>();
 
         if(getWorker(sex).getSpace() != null)
-            return possibleActions;
+            return null;
 
         Space [][] spaces = board.getSpaces();
         for(int i=0;i<5;i++){
