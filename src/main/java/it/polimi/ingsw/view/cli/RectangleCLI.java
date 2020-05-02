@@ -153,27 +153,43 @@ public class RectangleCLI
 
 
     //utils
+    //TODO rewrite in a less horrible way
     protected static String[] getChunks(String text)
     {
         String[] chunks;
         if(text.length() > 3)
         {
-            chunks = new String[text.length()%3==0? text.length()/3 : (text.length()/3+1)];
+            //chunks = new String[text.length()%3==0? text.length()/3 : ((text.length()/3)+1)];
+            chunks = new String[(text.length()/3)+1];
 
             int start = 0;
-            for(int i=0; i<chunks.length && start+3<text.length(); i++)
+            for(int i=0; i<chunks.length; i++)
             {
-                chunks[i] = text.substring(start, start+3);
+                chunks[i] = text.substring(start, start + Math.min(3, text.length()-start));
                 start += 3;
             }
 
-            if(text.length()%3 == 2)
+            for(int i=0; i<chunks.length; i++)
             {
-                chunks[chunks.length -1] = text.substring(text.length()-2) + " ";
-            }
-            else if(text.length()%3 == 1)
-            {
-                chunks[chunks.length -1] = text.substring(text.length()-1) + "  ";
+                if(chunks[i] != null)
+                {
+                    if(chunks[i].length() == 2)
+                    {
+                        chunks[i] = chunks[i] + " ";
+                    }
+                    else if(chunks[i].length() == 1)
+                    {
+                        chunks[i] = chunks[i] + "  ";
+                    }
+                    else if(chunks[i].length() ==0)
+                    {
+                        chunks[i] = "   ";
+                    }
+                }
+                else
+                {
+                    chunks[i] = "   ";
+                }
             }
         }
         else
