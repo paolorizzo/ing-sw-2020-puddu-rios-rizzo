@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Card;
-
+import it.polimi.ingsw.model.SetupAction;
+;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class CliUtils
@@ -96,49 +98,81 @@ public class CliUtils
 
     static int handleCardSelection(List<Card> cards)
     {
-        int numCard = 0;
-        int selection = 1;
         String input;
+        SelectionCLI actionSelection = new SelectionCLI(1, 2, true);
+        SelectionCLI cardSelection = new SelectionCLI(0, cards.size()-1, true);
 
         boolean spin = true;
-
         while(spin)
         {
-            //showCardDialog
             showControls();
             System.out.println();
-            showCard(cards.get(numCard).getDescription(), cards.get(numCard).getName().toUpperCase(), selection);
+            showCard(cards.get(cardSelection.getX()).getDescription(), cards.get(cardSelection.getX()).getName().toUpperCase(), actionSelection.getX());
             input = readString();
 
-            switch(input)
+            if(input.equals(""))
             {
-                case "d":
-                    if(selection == 2)
-                        selection = 0;
-                    else
-                        selection++;
-                    break;
-                case "a":
-                    if(selection != 0)
-                        selection--;
-                    break;
-                case "":
-                    if(selection == 1)
-                        spin = false;
+                if(actionSelection.getX() == 1)
+                    spin = false;
 
-                    if(selection == 0)
-                        numCard = Math.max(numCard - 1, 0);
+                if(actionSelection.getX() == 0)
+                    cardSelection.subX();
 
-                    if(selection == 2)
-                        numCard  = Math.min(numCard + 1, cards.size()-1);
-                    selection = 1;
-                    break;
-                default:
-                    break;
+                if(actionSelection.getX() == 2)
+                    cardSelection.addX();
+
+                actionSelection.setX(1);
+            }
+            else
+            {
+                actionSelection.handleWASD(input);
             }
         }
 
-        return numCard;
+        return cardSelection.getX();
+    }
+
+    static int handleWorkerSet(List<Action> possibleActions, int[][] workersMask)
+    {
+        String input;
+        int chosenAction = 0;
+        BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(0,4,true,0,4,true);
+
+        boolean spin = true;
+        while(spin)
+        {
+            showControls();
+            System.out.println();
+
+            showBoard(generateEmptyBoard(), selection, possibleActions, workersMask);
+            input = readString();
+
+            if(input.equals(""))
+            {
+                chosenAction = getActionNumber(selection.getX(), selection.getY(), possibleActions);
+
+                if( chosenAction >= 0)
+                {
+                    spin = false;
+                }
+            }
+            else
+            {
+                selection.handleWASD(input);
+            }
+        }
+        return chosenAction;
+    }
+
+    static int getActionNumber(int x, int y, List<Action> actions)
+    {
+        for(int i = 0; i<actions.size(); i++)
+        {
+            if(actions.get(i).getTargetX() == x && actions.get(i).getTargetY() == y)
+                return i;
+        }
+
+        return -1;
     }
 
     static int handleNumPlayerSelection()
@@ -257,7 +291,7 @@ public class CliUtils
         CliUtils.printRedOnWhite(s);
         System.out.println();
     }
-    
+
     static void slideDown(int rows, int rateInMilliseconds)
     {
         for(int i = 0; i<rows; i++)
@@ -272,5 +306,130 @@ public class CliUtils
                 System.err.println(e.getMessage());
             }
         }
+    }
+
+    private static void showBoard(int [][] intBoard, BidimensionalSelectionCLI selection, List<Action> possibleActions, int[][] workersMask)
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI();
+        canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
+
+        //create selection
+        RectangleCLI selectionFigure = new RectangleCLI(selection.getX()*7, selection.getY()*7, 8,8);
+        selectionFigure.setPalette(AnsiColors.ANSI_BG_RED);
+
+        //create spaces
+        List<RectangleCLI> spaces = new ArrayList<>();
+        for(int row = 1; row<36; row+=7)
+        {
+            for(int col = 1; col<36; col+=7)
+            {
+                spaces.add(new RectangleCLI(row, col, 6,6 ));
+            }
+        }
+
+        //create highlights
+        for(Action a: possibleActions)
+        {
+            RectangleCLI highlightedCell = new RectangleCLI(a.getTargetX()*7, a.getTargetY()*7, 8,8);
+            highlightedCell.setPalette(AnsiColors.ANSI_BG_CYAN);
+            canvas.addOverlappingFigure(highlightedCell);
+        }
+
+        //add the selection to the figure
+        canvas.addOverlappingFigure(selectionFigure);
+
+        //decorate spaces and add them to the figure
+        Iterator<Integer> boardIterator = getBoardIterator(intBoard);
+        for(RectangleCLI s : spaces)
+        {
+            SpaceCLI.buildLevel(s, boardIterator.next());
+            canvas.addOverlappingFigure(s);
+        }
+
+        //create workers
+        for(int row = 0; row<5; row++)
+        {
+            for(int col = 0; col<5; col++)
+            {
+                if(workersMask[row][col] >= 0)
+                {
+                    RectangleCLI worker = new RectangleCLI(row*7+3, col*7+3, 2,2);
+                    worker.setPalette(AnsiColors.ANSI_BG_BLACK);
+                    worker.addText("  /\\    /\\");
+                    canvas.addOverlappingFigure(worker);
+                }
+            }
+        }
+
+        //print the figure
+        canvas.printFigure();
+    }
+
+    private static Iterator<Integer> getBoardIterator(int[][] board)
+    {
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        for(int row = 0; row < 5; row++)
+        {
+            for(int col = 0; col < 5; col++)
+            {
+                numbers.add(board[row][col]);
+            }
+        }
+
+        return numbers.iterator();
+    }
+
+    private static int[][] generateRandomBoard()
+    {
+        int board[][] = new int[5][5];
+        Random rand =  new Random();
+
+        for(int row = 0; row < 5; row++)
+        {
+            for(int col = 0; col < 5; col++)
+            {
+                board[row][col] = rand.nextInt(5);
+            }
+        }
+
+        return board;
+    }
+
+    private static int[][] generateEmptyBoard()
+    {
+        int[][] board = new int[5][5];
+
+        for(int row = 0; row < 5; row++)
+        {
+            for(int col = 0; col < 5; col++)
+            {
+                board[row][col] = 0;
+            }
+        }
+
+        return board;
+    }
+
+    static int[][] generateEmptyWorkersMask()
+    {
+        int[][] board = new int[5][5];
+
+        for(int row = 0; row < 5; row++)
+        {
+            for(int col = 0; col < 5; col++)
+            {
+                board[row][col] = -1;
+            }
+        }
+
+        return board;
+    }
+
+    static void updateWorkersMask(int[][] mask, SetupAction action)
+    {
+
+        mask[action.getTargetX()][action.getTargetY()] = action.getWorkerID().charAt(1)-'0';
     }
 }

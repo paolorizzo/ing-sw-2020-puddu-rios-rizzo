@@ -1,22 +1,27 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.model.Deck;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observation.UserInterfaceObservable;
 import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.gui.Building;
+import it.polimi.ingsw.view.gui.Worker;
 
 import java.util.HashMap;
 import java.util.List;
+
+//TODO check not null where indicated
 
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
     private HashMap<Integer, Player> players;
     private int numPlayers;
 
-    public Cli(){
+    private int[][] workersMask;
+
+    public Cli()
+    {
         players = new HashMap<>();
+        workersMask = CliUtils.generateEmptyWorkersMask();
     }
 
     //UI methods
@@ -46,7 +51,6 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadName(name);
     }
 
-    //TODO check not null
     @Override
     public void askCard(Deck deck)
     {
@@ -64,14 +68,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askSetupWorker(List<Action> possibleActions)
     {
-        int cont = 0;
-        for(Action a: possibleActions){
-            CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
-            cont++;
-            System.out.println("\n");
-        }
-        int num = CliUtils.readInt();
-        notifyReadAction(possibleActions.get(num));
+
+        notifyReadAction(possibleActions.get(CliUtils.handleWorkerSet(possibleActions, workersMask)));
     }
 
     @Override
@@ -123,6 +121,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void registerPlayer(int id, String name)
     {
+
         players.put(id, new Player(id, name));
     }
 
@@ -134,10 +133,37 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     }
 
     @Override
-    public void executeAction(Action action)
+    public synchronized void executeAction(Action action)
+    {
+        if(action instanceof SetupAction)
+            this.executeAction((SetupAction)action);
+        else if(action instanceof MoveAndForceAction)
+            this.executeAction((MoveAndForceAction)action);
+        else if(action instanceof MoveAction)
+            this.executeAction((MoveAction)action);
+        else if(action instanceof BuildAction)
+            this.executeAction((BuildAction)action);
+        else
+            throw new IllegalArgumentException("Can't execute a normal action!");
+    }
+
+    public void executeAction(SetupAction action)
     {
 
-        //TODO execute action
+        CliUtils.updateWorkersMask(workersMask, action);
+    }
+
+    public void executeAction(MoveAction action)
+    {
+
+    }
+    public void executeAction(MoveAndForceAction action)
+    {
+
+    }
+    public void executeAction(BuildAction action)
+    {
+
     }
 
     @Override
