@@ -144,7 +144,7 @@ public class CliUtils
             showControls();
             System.out.println();
 
-            showBoard(generateEmptyBoard(), selection, possibleActions, workersMask);
+            showBoard(generateEmptyBoard(), selection, workersMask);
             input = readString();
 
             if(input.equals(""))
@@ -308,7 +308,7 @@ public class CliUtils
         }
     }
 
-    private static void showBoard(int [][] intBoard, BidimensionalSelectionCLI selection, List<Action> possibleActions, int[][] workersMask)
+    private static void showBoard(int [][] intBoard, BidimensionalSelectionCLI selection, int[][] workersMask)
     {
         //create Canvas
         CanvasCLI canvas = new CanvasCLI();
@@ -328,6 +328,7 @@ public class CliUtils
             }
         }
 
+        /*
         //create highlights
         for(Action a: possibleActions)
         {
@@ -335,6 +336,8 @@ public class CliUtils
             highlightedCell.setPalette(AnsiColors.ANSI_BG_CYAN);
             canvas.addOverlappingFigure(highlightedCell);
         }
+
+         */
 
         //add the selection to the figure
         canvas.addOverlappingFigure(selectionFigure);
