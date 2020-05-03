@@ -1,13 +1,19 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.MvcIntegrationTest;
 import it.polimi.ingsw.exception.IncorrectStateException;
+import it.polimi.ingsw.model.Card;
+import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.view.StubView;
 import it.polimi.ingsw.view.View;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
-public class ControllerTest {
+public class ControllerTest extends MvcIntegrationTest {
 
     //tests related to the connection phase
 
@@ -302,6 +308,150 @@ public class ControllerTest {
         assert(c.getViewMap().get(3) == null);
     }
 
+    //tests related to the setup phase
+
+    /**
+     * tests that after a request deck all clients receive a correctly constructed deck
+     */
+    @Test
+    public void testRequestDeck(){
+        Controller c = new Controller();
+        connectionPhase2(c);
+        c.requestDeck();
+        List<Card> expectedCards = new Deck().getCards();
+        List<Card> cards0 = getStubView(c, 0).deck.getCards();
+        List<Card> cards1 = getStubView(c, 1).deck.getCards();
+
+        assertEquals(expectedCards.size(), cards0.size());
+        assertEquals(expectedCards.size(), cards1.size());
+        for(int i=0; i<expectedCards.size();i++){
+            assertEquals(expectedCards.get(i), cards0.get(i));
+            assertEquals(expectedCards.get(i), cards1.get(i));
+        }
+    }
+
+    /**
+     * tests that publishCards correctly fails if its conditions are not met. It should fail if:
+     * 0: it isn't the first client that publishes them
+     * 1: the number of cards chosen is not equal to the number of players in the game
+     * 2: the cards are already chosen
+     */
+    @Test
+    public void testPublishCardsFailure(){
+        Controller c = new Controller();
+        connectionPhase3(c);
+        ArrayList<Integer> wrongCards = new ArrayList<Integer>();
+        wrongCards.add(1);
+        wrongCards.add(2);
+        wrongCards.add(3);
+        c.publishCards(1, wrongCards);                                 //0
+        assert(!c.getModel().game.cardsAlreadyChosen());
+
+        wrongCards.clear();
+        wrongCards.add(1);
+        wrongCards.add(2);
+        c.publishCards(0, wrongCards);                                 //1
+        assert(!c.getModel().game.cardsAlreadyChosen());
+        wrongCards.add(3);
+        wrongCards.add(4);
+        c.publishCards(0, wrongCards);                                 //1
+        assert(!c.getModel().game.cardsAlreadyChosen());
+
+        ArrayList<Integer> rightCards = new ArrayList<Integer>();
+        rightCards.add(1);
+        rightCards.add(2);
+        rightCards.add(3);
+        c.publishCards(0, rightCards);
+        wrongCards.clear();
+        wrongCards.add(4);
+        wrongCards.add(5);
+        wrongCards.add(6);
+        c.publishCards(0, wrongCards);                                  //2
+        assert(c.getModel().game.cardsAlreadyChosen());
+        List<Card> actualCards = c.getModel().game.getChosenCards();
+        assert(!actualCards.equals(toCards(wrongCards)));
+    }
+
+    /**
+     * tests that if the right conditions are met, publishing the cards results in them being saved on the model
+     */
+    @Test
+    public void testPublishCards(){
+        Controller c = new Controller();
+        connectionPhase3(c);
+        List<Integer> chosenNums = sampleNums(3);
+        c.publishCards(0, chosenNums);
+        assertEquals(toCards(chosenNums), c.getModel().game.getChosenCards());
+    }
+
+    /**
+     * tests that if a thread requests the cards before they have been published,
+     * they don't get a response
+     * but after the cards are published, they get a response
+     */
+    @Test
+    public void testPublishCardsWakeup(){
+        final Controller c = new Controller();
+        connectionPhase2(c);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    c.requestCards(1);
+                }
+                catch(InterruptedException e){
+                    assert(false);
+                }
+            }
+        }).start();
+
+        assert(getStubView(c, 1).chosenCards == null);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                c.publishCards(0, sampleNums(2));
+            }
+        }).start();
+
+        safeWaitFor(1);
+        assertEquals(toCards(sampleNums(2)), getStubView(c, 1).chosenCards);
+    }
+
+    /**
+     * tests that the setCard fails if
+     * 0: it is not the requesting client's turn or
+     * 1: the card has already been claimed
+     */
+    @Test
+    public void testSetCardFailure(){
+        Controller c = new Controller();
+        connectionPhase3(c);    //after this, it is considered player 1's turn
+        c.setCard(2, 1);                                            //0
+        assert(getStubView(c, 2).god == null);
+        c.setCard(1, 1);    //it is now player 2's turn
+        c.setCard(2, 1);                                            //1
+        assert(getStubView(c, 2).god == null);
+    }
+
+    /**
+     * tests that if the proper conditions are met the setCards results in the correct view receiving its god through the feed
+     */
+    @Test
+    public void testSetCard(){
+        Controller c = new Controller();
+        connectionPhase3(c);    //after this, it is considered player 1's turn
+        c.publishCards(0, sampleNums(3));
+        c.setCard(1, 1);
+
+        assertEquals( toCards(sampleNums(3)).get(0), getStubView(c, 1).god);
+    }
+
+
+
+
+
     //utility methods
 
     /**
@@ -384,4 +534,63 @@ public class ControllerTest {
         c.setNumPlayers(0, 3);
     }
 
+    /**
+     * mimics a full correct connection phase involving two clients
+     * their names are "aldo" and "giovanni"
+     */
+    private void connectionPhase2(Controller c){
+        twoPlayersGame(c);
+        c.setName(0, "aldo");
+        c.setName(1, "giovanni");
+    }
+
+    /**
+     * mimics a full correct connection phase involving three clients
+     * their names are "aldo", "giovanni" and "giacomo"
+     */
+    private void connectionPhase3(Controller c){
+        threePlayersGame(c);
+        c.setName(0, "aldo");
+        c.setName(1, "giovanni");
+        c.setName(2, "giacomo");
+    }
+
+    /**
+     * encapsulates the steps need to acquire a view form a controller and cast it as a StubView
+     * @param c controller from which to get the StubView
+     * @param id id of the desired StubView
+     * @return the desired view casted as StubView
+     */
+    private StubView getStubView(Controller c, int id){
+        return (StubView)(c.getViewMap().get(id));
+    }
+
+    /**
+     *
+     * @param chosenNums a list of integer that represents the numbers of the cards chosen
+     * @return a list of the chosen cards corresponding to the chosen numbers
+     */
+    private ArrayList<Card> toCards(List<Integer> chosenNums){
+        List<Card> possibleCards = new Deck().getCards();
+        ArrayList<Card> chosenCards = new ArrayList<Card>();
+        for(int num:chosenNums){
+            for(Card possibleCard:possibleCards){
+                if(possibleCard.getNum() == num)
+                    chosenCards.add(possibleCard);
+            }
+        }
+        return chosenCards;
+    }
+
+    /**
+     *
+     * @param n the number of sample card numbers desired
+     * @return a list of n integers that represent valid cards
+     */
+    private ArrayList<Integer> sampleNums(int n){
+        ArrayList<Integer> sampleNums = new ArrayList<>();
+        for(int i=0; i<n;i++)
+            sampleNums.add(i+1);
+        return sampleNums;
+    }
 }

@@ -249,7 +249,7 @@ public class Controller implements ControllerInterface
             if(id != 0){
                 throw new IllegalArgumentException(id+" can't choose card");
             }
-            if(model.game.areCardsChosen()){
+            if(model.game.cardsAlreadyChosen()){
                 throw new IllegalArgumentException("cards already chosen");
             }
             if(numCards.size() != model.getNumPlayers()){
@@ -275,7 +275,7 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestCards(int id) throws InterruptedException {
-        while(id != model.game.getCurrentPlayerId() || !model.game.areCardsChosen()) { // || chosenCards.size() == 0
+        while(id != model.game.getCurrentPlayerId() || !model.game.cardsAlreadyChosen()) { // || chosenCards.size() == 0
             System.out.println(id+" mi fermo");
             this.wait();
         }
@@ -288,16 +288,18 @@ public class Controller implements ControllerInterface
      * it is the requesting client's turn
      * the card has not yet been taken by someone else
      * if the checks pass, saves the association between the client and the card
-     * and wakes threads that may be waiting
+     * and wakes threads that may be waiting on their turn
+     * Given how the fsm on the client works, this method should only be called
+     * after the client has confirmed that it is their turn by receiving an answer for a requestCards
      * @param id
      * @param numCard
      */
     @Override
     public synchronized void setCard(int id, int numCard){
-        if(id != model.game.getCurrentPlayerId() || !model.game.isCardTaken(numCard)){
+        if(id != model.game.getCurrentPlayerId() || !model.game.isCardPickable(numCard)){
             model.feed.notifyKo(id);
         }else{
-            model.setCardPlayer(id, numCard);
+            model.setCardPlayer(id, numCard);   //ADVANCES THE TURN
             model.feed.notifyOk(id);
 
             this.notifyAll();
@@ -382,6 +384,7 @@ public class Controller implements ControllerInterface
     }
 
     /**
+     * MAY ADVANCE THE TURN
      * if it is possible to end the turn, initiates the next turn
      * @param id of the requesting client
      */

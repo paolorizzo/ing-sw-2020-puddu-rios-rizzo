@@ -1,11 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observation.*;
-import it.polimi.ingsw.view.View;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 //TODO create singleton superclass
 //TODO test whole class
@@ -25,6 +22,8 @@ public class Model {
         feed = new FeedObservable();
         game = new Game(this);
     }
+
+    //general methods
 
     FeedObservable getFeed(){
         return feed;
@@ -69,6 +68,13 @@ public class Model {
         return players.get(id) != null;
     }
 
+    /**
+     * saves the association between the id and the card
+     * ADVANCES THE TURN
+     * notifies the assiociation through the feed
+     * @param id
+     * @param numCard
+     */
     public void setCardPlayer(int id, int numCard){
         Card card = game.getChosenCard(numCard);
         players.get(id).setCard(card);
@@ -94,9 +100,16 @@ public class Model {
         feed.removeObserver(obs);
     }
 
+    /**
+     * MAY ADVANCE THE TURN
+     * updates the board with the setup action, adds it to the game, and if the setup turn is complete advances the turn
+     * also notifies the action through the feed
+     * @param id
+     * @param setupAction
+     */
     public void executeSetupAction(int id, SetupAction setupAction){
         board.executeAction(setupAction);
-        game.addSetupActionInActualTurn(setupAction);
+        game.addSetupAction(setupAction);
         if(players.get(id).getWorker(Sex.FEMALE).getSpace() != null && players.get(id).getWorker(Sex.MALE).getSpace() != null){
             game.nextTurn();
         }
@@ -105,7 +118,9 @@ public class Model {
     }
     public void executeAction(int id, Action action) {
         board.executeAction(action);
-        game.addActionInActualTurn(action);
+        game.addAction(action);
         feed.notifyAction(id, action);
     }
+
+    //setup phase methods
 }

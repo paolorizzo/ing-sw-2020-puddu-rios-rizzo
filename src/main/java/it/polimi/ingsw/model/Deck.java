@@ -13,11 +13,17 @@ import java.util.Scanner;
 public class Deck implements Serializable {
     HashMap<Integer, Card> cardsInDeck;
 
+    /**
+     * constructs a deck that contains all the cards that have been implemented so far
+     */
     public Deck(){
         cardsInDeck = new HashMap<>();
-        loadCard();
+        loadCards();
     }
-    private void loadCard(){
+    /**
+     * reads the cards from a json file and adds them to the deck
+     */
+    private void loadCards(){
         try{
             File file = new File("./src/main/resources/cards.json");
             StringBuilder stringCards = new StringBuilder((int)file.length());
@@ -41,6 +47,12 @@ public class Deck implements Serializable {
         }
 
     }
+    /**
+     * utility methods that allows the user to get a Card object from an integer representing its number
+     * once a card has been picked, it is removed form the deck
+     * @param num the number of the card that is being picked
+     * @return the actual card that corresponds to that number in the map
+     */
     public Card pickCard(int num){
         if(!cardsInDeck.containsKey(num))
             throw new IllegalArgumentException("Card number "+num+" alredy used!");
@@ -48,6 +60,10 @@ public class Deck implements Serializable {
         cardsInDeck.remove(num);
         return card;
     }
+    /**
+     *
+     * @return the list of all the cards that are present in the deck
+     */
     public List<Card> getCards(){
         List<Card> listOfCards = new ArrayList<>();
         for(Card card: cardsInDeck.values())

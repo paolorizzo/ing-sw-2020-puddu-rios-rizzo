@@ -38,4 +38,22 @@ public class Card implements Serializable
         return powerStrategy;
     }
 
+    /**
+     * checks customary equals conditions and
+     * checks that name, num and descriptions are equal
+     * @param o the object against which to compare this
+     * @return whether the object is equal to this
+     */
+    @Override
+    public boolean equals(Object o){
+        if(this == o)
+            return true;
+        if(! (o instanceof Card))
+            return false;
+        Card that = (Card) o;
+        return  this.name.equals(that.name) &&
+                this.num == that.num &&
+                this.description.equals(that.description);
+    }
+
 }

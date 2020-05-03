@@ -18,7 +18,7 @@ public class Game {
     private List<Card> chosenCards;
 
 
-    private Turn actualTurn;
+    private Turn currentTurn;
     private ActionTree actionTreeCurrentPlayer;
     private List<Action> possibleActions;
     private boolean canEndTurn;
@@ -52,6 +52,15 @@ public class Game {
     public void setNumPlayers(int numPlayers) {
         //System.out.println("Setting a game for " + numPlayers + " players");
         this.numPlayers = numPlayers;
+        //TODO move this somewhere more appropriate
+        model.game.initializePlayerSuccession();
+    }
+
+    public boolean playerSuccessionUninitialized(){
+        return idCurrentPlayers == null;
+    }
+
+    public void initializePlayerSuccession(){
         idCurrentPlayers = new ArrayList<>();
         for(int i=0;i<numPlayers;i++){
             idCurrentPlayers.add(i);
@@ -64,10 +73,10 @@ public class Game {
     }
 
     public void nextTurn(){
-        if(actualTurn != null)
-            turnArchive.addTurn(actualTurn);
+        if(currentTurn != null)
+            turnArchive.addTurn(currentTurn);
         pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
-        actualTurn = null;
+        currentTurn = null;
         actionTreeCurrentPlayer = null;
         possibleActions = null;
     }
@@ -81,7 +90,7 @@ public class Game {
         return deck;
     }
 
-    public boolean areCardsChosen() {
+    public boolean cardsAlreadyChosen() {
         return chosenCards != null;
     }
 
@@ -107,8 +116,8 @@ public class Game {
         chosenCards.remove(card);
     }
 
-    public boolean isCardTaken(int numCard) {
-        if(!areCardsChosen())
+    public boolean isCardPickable(int numCard) {
+        if(!cardsAlreadyChosen())
             return false;
         if(getChosenCard(numCard) == null)
             return false;
@@ -121,7 +130,7 @@ public class Game {
         possibleActions = null;
         if(model.getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() == null){
             possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.FEMALE);
-            actualTurn = new Turn(model.getPlayers().get(id));
+            currentTurn = new Turn(model.getPlayers().get(id));
         }else if(model.getPlayers().get(id).getWorker(Sex.MALE).getSpace() == null){
             possibleActions = model.getPlayers().get(id).generateSetupActionsWorker(model.board, Sex.MALE);
         }
@@ -131,15 +140,23 @@ public class Game {
     //views always ask for possible actions to do
     //if an id asks possible actions and he lost, win or finish the actions for this turn
     //this method set all for the next id
+    /**
+     * MAY ADVANCE THE TURN
+     * always called when a view asks for its possible actions
+     * if this is the first time the actions are being asked in the current turn, constructs the turn and generates the full actionTree
+     * //TODO complete the javadoc for this method
+     * @param id for which to calculate the possible actions
+     * @return the actions that are currently possible for the given id
+     */
     public List<Action> getPossibleActions(int id){
         if(finish)
             return null;
         if(id != getCurrentPlayerId())
         return null;
 
-        if(actualTurn == null){
+        if(currentTurn == null){
             //devo inizializzare e generare il turno
-            actualTurn = new Turn(model.getPlayers().get(id));
+            currentTurn = new Turn(model.getPlayers().get(id));
             canEndTurn = false;
             //genererate ActionTree
             actionTreeCurrentPlayer = generateActionTree(id);
@@ -159,7 +176,7 @@ public class Game {
             addTurnInArchive();
             actionTreeCurrentPlayer = null;
             possibleActions = null;
-            actualTurn = null;
+            currentTurn = null;
 
             model.board.removeWorkersPlayer(model.getPlayers().get(id));
             model.feed.notifyPlayerLose(id);
@@ -214,12 +231,12 @@ public class Game {
 
 
 
-    public void addSetupActionInActualTurn(Action action){
-        actualTurn.add(action);
+    public void addSetupAction(Action action){
+        currentTurn.add(action);
     }
 
-    public void addActionInActualTurn(Action action){
-        actualTurn.add(action);
+    public void addAction(Action action){
+        currentTurn.add(action);
         ActionTree nextChild = null;
         for(ActionTree child: actionTreeCurrentPlayer.getChildren()){
             if(child.getAction().equals(action))
@@ -230,7 +247,7 @@ public class Game {
 
     }
     public void addTurnInArchive(){
-        turnArchive.addTurn(actualTurn);
+        turnArchive.addTurn(currentTurn);
     }
 
     public boolean isEndOfTurnPossible() {

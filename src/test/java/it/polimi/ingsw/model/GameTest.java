@@ -52,19 +52,19 @@ public class GameTest {
 
         game.setNumPlayers(3);
 
-        assert(!game.areCardsChosen());
-        assert(!game.isCardTaken(1));
+        assert(!game.cardsAlreadyChosen());
+        assert(!game.isCardPickable(1));
 
         game.setChosenCards(Arrays.asList(1, 2, 3));
 
-        assert(game.areCardsChosen());
-        assert(game.isCardTaken(1));
-        assert(game.isCardTaken(2));
-        assert(game.isCardTaken(3));
+        assert(game.cardsAlreadyChosen());
+        assert(game.isCardPickable(1));
+        assert(game.isCardPickable(2));
+        assert(game.isCardPickable(3));
 
         Card card1 = game.getChosenCard(1);
         game.removeChosenCard(card1);
-        assert(!game.isCardTaken(1));
+        assert(!game.isCardPickable(1));
 
     }
 
