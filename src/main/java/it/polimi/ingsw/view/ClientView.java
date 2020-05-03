@@ -84,12 +84,12 @@ public class ClientView extends View implements UserInterfaceObserver
     //updates relative to GameObserver
 
     public synchronized void updateNumPlayers(int numPlayers){
-        System.out.println("received number of players: " + numPlayers);
+        //System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
-        System.out.println("currplayer "+id);
+        //System.out.println("currplayer "+id);
         if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
             currentSetupState.execute(this, possibleActions);
         if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
@@ -112,7 +112,7 @@ public class ClientView extends View implements UserInterfaceObserver
 
     public synchronized void updateAction(int id, Action action){
         getUi().executeAction(action);
-        System.out.println("Execute action: "+action.toString());
+        //System.out.println("Execute action: "+action.toString());
     }
 
     //updates relative to PlayersObserver
@@ -144,11 +144,6 @@ public class ClientView extends View implements UserInterfaceObserver
     //this method supposes that only valid names are received
     public synchronized void updateName(int id, String name){
         getUi().registerPlayer(id, name);
-        if(id == this.id){
-            System.out.println("my name is " + name);
-        }else
-            System.out.println("player " + id + " chose " + name + " as their username");
-        System.out.println("Player register "+getUi().getNumPlayersRegister());
         if(getUi().getNumPlayersRegister() == getUi().getNumPlayers() && currentConnectionState == ConnectionState.WAIT_ALL_PLAYERS_NAME){
             currentConnectionState = ConnectionState.END;
             currentConnectionState.execute(this, null);

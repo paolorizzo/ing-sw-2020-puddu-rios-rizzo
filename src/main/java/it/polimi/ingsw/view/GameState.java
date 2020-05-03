@@ -8,14 +8,14 @@ import java.util.List;
 public enum GameState {
     START_GAME{
         public void execute(ClientView view, Object input) {
-            System.out.println("START_GAME");
+            //System.out.println("START_GAME");
             view.currentGameState = REQUEST_ACTIONS;
             view.currentGameState.execute(view, null);
         }
     },
     REQUEST_ACTIONS{
         public void execute(ClientView view, Object input){
-            System.out.println("REQUEST_ACTIONS");
+            //System.out.println("REQUEST_ACTIONS");
             view.currentGameState = RECEIVE_ACTIONS;
             try{
                 view.getController().requestActions(view.getId());
@@ -33,7 +33,7 @@ public enum GameState {
     },
     ASK_ACTION{
         public void execute(ClientView view, Object input) {
-            System.out.println("ASK_ACTION");
+            //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
             view.getUi().askAction(possibleActions, false);
@@ -41,7 +41,7 @@ public enum GameState {
     },
     ASK_OPTIONAL_ACTION{
         public void execute(ClientView view, Object input) {
-            System.out.println("ASK_ACTION");
+            //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
             view.getUi().askAction(possibleActions, true);
@@ -49,7 +49,7 @@ public enum GameState {
     },
     READ_ACTION{
         public void execute(ClientView view, Object input) {
-            System.out.println("READ_SETUP_WORKER");
+            //System.out.println("READ_SETUP_WORKER");
             view.currentGameState = PUBLISH_ACTION;
             view.currentGameState.execute(view, input);
         }

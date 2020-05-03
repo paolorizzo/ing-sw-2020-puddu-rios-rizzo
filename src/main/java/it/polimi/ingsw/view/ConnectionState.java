@@ -31,7 +31,7 @@ public enum ConnectionState {
         //sets the id
         public void execute(ClientView view, Object input) {
             int id = (int) input;
-            System.out.println("My id is: " + id);
+            //System.out.println("My id is: " + id);
             view.setID(id);
             view.currentConnectionState = ACK_ID;
             view.currentConnectionState.execute(view, id);
@@ -68,7 +68,7 @@ public enum ConnectionState {
     READ_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
             int numPlayers = (int)input;
-            System.out.println("READ_NUM_PLAYERS "+numPlayers);
+            //System.out.println("READ_NUM_PLAYERS "+numPlayers);
             if(numPlayers < 2 || 3 < numPlayers){
                 view.currentConnectionState = ConnectionState.ASK_NUM_PLAYERS;
                 view.currentConnectionState.execute(view, null);
@@ -82,7 +82,7 @@ public enum ConnectionState {
     PUBLISH_NUM_PLAYERS{
         public void execute(ClientView view, Object input) {
             int numPlayers = (int) input;
-            System.out.println("publishing number of players: "+numPlayers);
+            //System.out.println("publishing number of players: "+numPlayers);
             view.getController().setNumPlayers(view.getId(), numPlayers);
 
             koState = ConnectionState.ASK_NUM_PLAYERS;
@@ -100,12 +100,12 @@ public enum ConnectionState {
             Object nextInput;
 
             if(success){
-                System.out.println("operation successful");
+                //System.out.println("operation successful");
                 nextState = okState;
                 nextInput = okInput;
             }
             else{
-                System.out.println("operation failed");
+                //System.out.println("operation failed");
                 nextState = koState;
                 nextInput = koInput;
             }
@@ -128,10 +128,10 @@ public enum ConnectionState {
     },
     RECEIVE_NUM_PLAYERS{
         public void execute(ClientView view, Object input){
-            System.out.println("RECEIVE_NUM_PLAYERS state execute "+(int)input);
+            //System.out.println("RECEIVE_NUM_PLAYERS state execute "+(int)input);
             int numPlayers = (int) input;
             if(view.getId() < numPlayers){
-                System.out.println("Creo il game da "+input+" giocatori.");
+                //System.out.println("Creo il game da "+input+" giocatori.");
                 view.setNumPlayers(numPlayers);
                 view.getUi().setNumPlayers(numPlayers);
                 view.currentConnectionState = ConnectionState.REQUEST_ALL_PLAYERS_CONNECTED;
@@ -145,14 +145,14 @@ public enum ConnectionState {
     },
     REQUEST_ALL_PLAYERS_CONNECTED{
         public void execute(ClientView view, Object input){
-            System.out.println("Attendo tutti i giocatori ...");
+            //System.out.println("Attendo tutti i giocatori ...");
             view.getController().requestAllPlayersConnected();
             view.currentConnectionState = RECEIVE_ALL_PLAYERS_CONNECTED;
         }
     },
     RECEIVE_ALL_PLAYERS_CONNECTED{
         public void execute(ClientView view, Object input){
-            System.out.println("Tutti i giocatori ora connessi.");
+            //System.out.println("Tutti i giocatori ora connessi.");
             view.currentConnectionState = ConnectionState.ASK_NAME;
             view.currentConnectionState.execute(view, input);
         }
@@ -166,7 +166,7 @@ public enum ConnectionState {
     READ_NAME{
         public void execute(ClientView view, Object input) {
             String name = (String)input;
-            System.out.println("READ_NAME "+name);
+            //System.out.println("READ_NAME "+name);
             view.currentConnectionState = PUBLISH_NAME;
             view.currentConnectionState.execute(view, name);
         }
@@ -174,7 +174,7 @@ public enum ConnectionState {
     PUBLISH_NAME{
         public void execute(ClientView view, Object input) {
             String name = (String) input;
-            System.out.println("publishing name: " + name);
+            //System.out.println("publishing name: " + name);
             view.getController().setName(view.getId(), name);
 
             koState = ConnectionState.ASK_NAME;
@@ -186,12 +186,12 @@ public enum ConnectionState {
     },
     WAIT_ALL_PLAYERS_NAME{
         public void execute(ClientView view, Object input) {
-            System.out.println("Wait all players name");
+            //System.out.println("Wait all players name");
         }
     },
     PUBLISH_HARAKIRI{
         public void execute(ClientView view, Object input) {
-            System.out.println("Communicating shutdown");
+            //System.out.println("Communicating shutdown");
             view.getController().deleteId(view.getId());
             view.currentConnectionState = ConnectionState.HARAKIRI;
             view.currentConnectionState.execute(view, input);
@@ -199,7 +199,7 @@ public enum ConnectionState {
     },
     HARAKIRI{
         public void execute(ClientView view, Object input) {
-            System.out.println("Ho preso il covid-19");
+            //System.out.println("Ho preso il covid-19");
             view.getController().kill();
         }
     },
@@ -207,7 +207,7 @@ public enum ConnectionState {
     //the next phase will begin with a specific notify from the controller
     END{
         public void execute(ClientView view, Object input){
-            System.out.println("Connection phase has ended for client " + view.getId());
+            //System.out.println("Connection phase has ended for client " + view.getId());
             view.startSetupFSM();
         }
     };

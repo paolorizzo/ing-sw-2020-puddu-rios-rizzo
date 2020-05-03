@@ -8,7 +8,7 @@ import java.util.List;
 public enum SetupState {
     START_SETUP{
         public void execute(ClientView view, Object input) {
-            System.out.println("START_SETUP");
+            //System.out.println("START_SETUP");
             if(view.getId() == 0){
                 view.currentSetupState = REQUEST_DECK;
             }else{
@@ -19,7 +19,7 @@ public enum SetupState {
     },
     REQUEST_DECK{
         public void execute(ClientView view, Object input){
-            System.out.println("REQUEST_DECK");
+            //System.out.println("REQUEST_DECK");
             deck = null;
             numCards = new ArrayList<Integer>();
             view.currentSetupState = RECEIVE_DECK;
@@ -29,7 +29,7 @@ public enum SetupState {
     RECEIVE_DECK{
         public void execute(ClientView view, Object input) {
             deck = (Deck)input;
-            System.out.println("Deck ricevuto");
+            //System.out.println("Deck ricevuto");
             view.currentSetupState = ASK_CARD;
             view.currentSetupState.execute(view, null);
         }
@@ -51,7 +51,7 @@ public enum SetupState {
                 return;
             }
             numCards.add(numCard);
-            System.out.println("Num card chosen :"+numCard);
+            //System.out.println("Num card chosen :"+numCard);
             if(numCards.size() == view.getUi().getNumPlayers())
                 view.currentSetupState = PUBLISH_CARDS;
             else
@@ -77,14 +77,14 @@ public enum SetupState {
             Object nextInput;
 
             if(success){
-                System.out.println("operation successful");
+                //System.out.println("operation successful");
                 nextState = okState;
                 nextInput = okInput;
                 if(koState == REQUEST_SETUP_WORKER)
                     countOk++;
             }
             else{
-                System.out.println("operation failed");
+                //System.out.println("operation failed");
                 nextState = koState;
                 nextInput = koInput;
             }
@@ -100,7 +100,7 @@ public enum SetupState {
     },
     REQUEST_CARDS{
         public void execute(ClientView view, Object input) {
-            System.out.println("REQUEST_CARDS");
+            //System.out.println("REQUEST_CARDS");
             try{
                 view.getController().requestCards(view.getId());
             }catch (InterruptedException e){
@@ -135,13 +135,13 @@ public enum SetupState {
     },
     REQUEST_SETUP_WORKER{
         public void execute(ClientView view, Object input) {
-            System.out.println("countOK "+countOk);
+            //System.out.println("countOK "+countOk);
             if(countOk == 2){
                 view.currentSetupState = END_SETUP;
                 view.currentSetupState.execute(view, input);
                 return;
             }
-            System.out.println("SETUP_WORKER");
+            //System.out.println("SETUP_WORKER");
             view.currentSetupState = ASK_SETUP_WORKER;
             try {
                 view.getController().requestToSetupWorker(view.getId());
@@ -152,7 +152,7 @@ public enum SetupState {
     },
     ASK_SETUP_WORKER{
         public void execute(ClientView view, Object input) {
-            System.out.println("ASK_SETUP_WORKER");
+            //System.out.println("ASK_SETUP_WORKER");
             view.currentSetupState = READ_SETUP_WORKER;
             List<Action> possbileActions = (List<Action>)input;
             view.getUi().askSetupWorker(possbileActions);
@@ -160,7 +160,7 @@ public enum SetupState {
     },
     READ_SETUP_WORKER{
         public void execute(ClientView view, Object input) {
-            System.out.println("READ_SETUP_WORKER");
+            //System.out.println("READ_SETUP_WORKER");
             view.currentSetupState = PUBLISH_SETUP_WORKER;
             view.currentSetupState.execute(view, input);
         }
@@ -178,7 +178,7 @@ public enum SetupState {
     },
     END_SETUP{
         public void execute(ClientView view, Object input) {
-            System.out.println("ok ho finito il mio setup");
+            //System.out.println("ok ho finito il mio setup");
             view.startGameFSM();
         }
     };
