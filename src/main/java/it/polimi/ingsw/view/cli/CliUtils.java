@@ -135,6 +135,7 @@ public class CliUtils
         boolean spin = true;
         while(spin)
         {
+            printer.lineBreak();
             showControls();
             printer.print("Now! Select your worker for this turn:");
             printer.resetAndBreak();
@@ -167,6 +168,7 @@ public class CliUtils
 
         while(spin)
         {
+            System.out.println();
             showControls();
             System.out.println();
             showNumPlayersDialog(numPlayers);
@@ -210,6 +212,7 @@ public class CliUtils
         {
             printer.print("INSERT M TO MOVE OR B TO BUILD: ");
             input = readString();
+            printer.resetAndBreak();
 
             switch(input)
             {
@@ -240,6 +243,7 @@ public class CliUtils
         {
             printer.print("WOULD YOU LIKE TO END YOUR TURN HERE? Y/N ");
             input = readString();
+            printer.resetAndBreak();
 
             switch(input)
             {
@@ -377,6 +381,7 @@ public class CliUtils
         boolean spin = true;
         while(spin)
         {
+            printer.lineBreak();
             showControls();
             printer.print(message);
             printer.resetAndBreak();
@@ -408,6 +413,7 @@ public class CliUtils
         boolean spin = true;
         while(spin)
         {
+            printer.lineBreak();
             showControls();
             printer.print("Now! Make your build:");
             printer.resetAndBreak();
@@ -461,6 +467,8 @@ public class CliUtils
     //show methods
     static void showUpdatedBoard(int[][] intBoard, String[][] workersMask)
     {
+        System.out.println();
+        System.out.println();
         //create Canvas
         CanvasCLI canvas = new CanvasCLI();
         canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
