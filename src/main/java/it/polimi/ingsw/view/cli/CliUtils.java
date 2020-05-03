@@ -199,7 +199,6 @@ public class CliUtils
         return numPlayers;
     }
 
-    //0 to move, 1 to build
     static int handleChooseBetweenMoveAndBuild()
     {
         String input;
@@ -795,6 +794,19 @@ public class CliUtils
 
     static void updateBoardOnBuild(int[][] board, BuildAction action)
     {
+
         board[action.getTargetX()][action.getTargetY()] = action.getPiece().getLevel();
+    }
+
+    static void removeWorkersOfPlayer(String[][] mask, int id)
+    {
+        for(int row = 0; row < 5; row++)
+        {
+            for(int col = 0; col < 5; col++)
+            {
+                if(mask[row][col].charAt(1)-'0' == id)
+                    mask[row][col] = "";
+            }
+        }
     }
 }

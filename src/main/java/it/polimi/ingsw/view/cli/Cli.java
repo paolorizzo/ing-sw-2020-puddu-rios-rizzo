@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 
 //TODO check not null where indicated
-
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
     private HashMap<Integer, Player> players;
     private int numPlayers;
 
-    //private int[][] workersMask;
     private String[][] workersMask;
     private int[][] board;
 
@@ -55,8 +53,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askCard(Deck deck)
     {
-        List<Card> cards = deck.getCards();
-        notifyReadNumCard(cards.get(CliUtils.handleCardSelection(cards)).getNum());
+
+        notifyReadNumCard(deck.getCards().get(CliUtils.handleCardSelection(deck.getCards())).getNum());
     }
 
     @Override
@@ -69,8 +67,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askSetupWorker(List<Action> possibleActions)
     {
-        Action selectedAction = possibleActions.get(CliUtils.handleSetupWorker(board, possibleActions, workersMask));
-        notifyReadAction(selectedAction);
+
+        notifyReadAction(possibleActions.get(CliUtils.handleSetupWorker(board, possibleActions, workersMask)));
     }
 
     @Override
@@ -82,36 +80,13 @@ public class Cli extends UserInterfaceObservable implements UserInterface
             notifyReadAction(possibleActions.get(actionSelected));
         else
             notifyReadVoluntaryEndOfTurn();
-
-        /*
-        boolean repeat = false;
-        do{
-
-            int cont = 0;
-            for(Action a: possibleActions){
-                CliUtils.printBlueOnWhiteSameLine(cont+" "+a.toString());
-                cont++;
-                System.out.println("\n");
-            }
-            if(canEndOfTurn){
-                CliUtils.printBlueOnWhiteSameLine(cont+" End Turn");
-            }
-            int num = CliUtils.readInt();
-            if(num>=0 && num<cont)
-                notifyReadAction(possibleActions.get(num));
-            else if(num == cont)
-                notifyReadVoluntaryEndOfTurn();
-            else
-                repeat = true;
-        }while(repeat);
-
-         */
     }
 
     @Override
     public void removeWorkersOfPlayer(int id)
     {
 
+        CliUtils.removeWorkersOfPlayer(workersMask, id);
     }
 
     //gets and sets
