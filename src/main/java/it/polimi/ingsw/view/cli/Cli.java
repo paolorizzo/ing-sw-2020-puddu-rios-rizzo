@@ -3,8 +3,6 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observation.UserInterfaceObservable;
 import it.polimi.ingsw.view.UserInterface;
-import it.polimi.ingsw.view.gui.Building;
-import it.polimi.ingsw.view.gui.Worker;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,15 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     private HashMap<Integer, Player> players;
     private int numPlayers;
 
-    private int[][] workersMask;
+    //private int[][] workersMask;
+    private String[][] workersMask;
+    private int[][] board;
 
     public Cli()
     {
         players = new HashMap<>();
         workersMask = CliUtils.generateEmptyWorkersMask();
+        board = CliUtils.generateEmptyBoard();
     }
 
     //UI methods
@@ -68,13 +69,21 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askSetupWorker(List<Action> possibleActions)
     {
-
-        notifyReadAction(possibleActions.get(CliUtils.handleWorkerSet(possibleActions, workersMask)));
+        Action selectedAction = possibleActions.get(CliUtils.handleSetupWorker(board, possibleActions, workersMask));
+        notifyReadAction(selectedAction);
     }
 
     @Override
     public void askAction(List<Action> possibleActions, boolean canEndOfTurn)
     {
+        int actionSelected = CliUtils.handleAction(possibleActions, canEndOfTurn, board , workersMask);
+
+        if(actionSelected >=0 && actionSelected < possibleActions.size())
+            notifyReadAction(possibleActions.get(actionSelected));
+        else
+            notifyReadVoluntaryEndOfTurn();
+
+        /*
         boolean repeat = false;
         do{
 
@@ -95,6 +104,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
             else
                 repeat = true;
         }while(repeat);
+
+         */
     }
 
     @Override
@@ -149,21 +160,27 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     public void executeAction(SetupAction action)
     {
-
-        CliUtils.updateWorkersMask(workersMask, action);
+        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
+        CliUtils.showUpdatedBoard(board, workersMask);
     }
 
     public void executeAction(MoveAction action)
     {
-
+        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
+        CliUtils.showUpdatedBoard(board, workersMask);
     }
+
     public void executeAction(MoveAndForceAction action)
     {
-
+        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
+        CliUtils.updateMaskOnMove(workersMask, action.getForcedTargetX(), action.getForcedTargetY(), action.getForcedWorkerId());
+        CliUtils.showUpdatedBoard(board, workersMask);
     }
+
     public void executeAction(BuildAction action)
     {
-
+        CliUtils.updateBoardOnBuild(board, action);
+        CliUtils.showUpdatedBoard(board, workersMask);
     }
 
     @Override
