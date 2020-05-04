@@ -9,6 +9,13 @@ import java.util.concurrent.TimeUnit;
 public class CliUtils
 {
     //handler methods
+    static String handleUsername()
+    {
+        showUsernameDialog();
+        System.out.println();
+        return readString();
+    }
+
     static int handleCardSelection(List<Card> cards)
     {
         String input;
@@ -45,30 +52,30 @@ public class CliUtils
         return cardSelection.getX();
     }
 
-    static int handleSetupWorker(int[][] board, List<Action> possibleActions, String[][] workersMask)
+    static int handleSetupWorker(ModelCLI model, List<Action> possibleActions)
     {
         Space chosenSpace;
         int chosenAction = -1;
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectionOnBoard(workersMask, board, "Now! Choose where to put your worker", 0,0);
+            chosenSpace = selectionOnBoard(model, "Now! Choose where to put your worker", 0,0);
             chosenAction = getActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions);
         }
 
         return chosenAction;
     }
 
-    static int handleMoveAction(int[][] board, List<Action> possibleActions, String[][] workersMask, String workerId)
+    static int handleMoveAction(ModelCLI model, List<Action> possibleActions, String workerId)
     {
         Space chosenSpace = null;
         int chosenAction = -1;
-        Space workerInitialPosition = getWorkersPositionFromId(workersMask, workerId);
+        Space workerInitialPosition = getWorkersPositionFromId(model.getWorkers(), workerId);
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectionOnBoard(workersMask, board, "Now! Make your move:", workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
-            chosenAction = getMoveActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions, workerId);
+            chosenSpace = selectionOnBoard(model, "Now! Make your move:", workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
+            chosenAction = getActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions, workerId);
         }
 
         //System.err.println("Sending move" + chosenAction+": X:"+ chosenSpace.getPosX() + " Y:"+chosenSpace.getPosY()+"  "+workerId);
@@ -76,22 +83,22 @@ public class CliUtils
         return chosenAction;
     }
 
-    static int handleBuildAction(int[][] board, List<Action> possibleActions, String[][] workersMask, String workerId)
+    static int handleBuildAction(ModelCLI model, List<Action> possibleActions, String workerId)
     {
         SpaceCLI chosenSpace;
         int chosenAction = -1;
-        Space workerInitialPosition = getWorkersPositionFromId(workersMask, workerId);
+        Space workerInitialPosition = getWorkersPositionFromId(model.getWorkers(), workerId);
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectAndBuildOnBoard(workersMask, board, workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
-            chosenAction = getBuildActionNumber(chosenSpace.getX(),chosenSpace.getY(), possibleActions, workerId, chosenSpace.getLevel());
+            chosenSpace = selectAndBuildOnBoard(model, workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
+            chosenAction = getActionNumber(chosenSpace.getX(),chosenSpace.getY(), possibleActions, workerId, chosenSpace.getLevel());
         }
 
         return chosenAction;
     }
 
-    static int handleAction(List<Action> possibleActions, boolean canEndOfTurn, int[][] board, String[][] workersMask)
+    static int handleAction(ModelCLI model, List<Action> possibleActions, boolean canEndOfTurn)
     {
         if(canEndOfTurn && handleWouldYouLikeToEndYourTurn())
             return possibleActions.size();
@@ -101,36 +108,36 @@ public class CliUtils
         if(isWorkerSelected(possibleActions))
             selectedWorker = possibleActions.get(0).getWorkerID();
         else
-            selectedWorker = handleWorkerSelection(board, workersMask,possibleActions.get(0).getWorkerID().charAt(1)-'0');
+            selectedWorker = handleWorkerSelection(model,possibleActions.get(0).getWorkerID().charAt(1)-'0');
 
         while(selectedAction < 0)
         {
             if(isMoveAction(possibleActions))
             {
                 //System.err.println("This is a move action");
-                selectedAction = handleMoveAction(board, possibleActions, workersMask, selectedWorker);
+                selectedAction = handleMoveAction(model, possibleActions, selectedWorker);
             }
             else if(isBuildAction(possibleActions))
             {
                 //System.err.println("This is a build action");
-                selectedAction = handleBuildAction(board, possibleActions, workersMask, selectedWorker);
+                selectedAction = handleBuildAction(model, possibleActions, selectedWorker);
             }
             else
             {
                 if(handleChooseBetweenMoveAndBuild()==0)
-                    selectedAction = handleMoveAction(board, possibleActions, workersMask, selectedWorker);
+                    selectedAction = handleMoveAction(model, possibleActions, selectedWorker);
                 else
-                    selectedAction = handleBuildAction(board, possibleActions, workersMask, selectedWorker);
+                    selectedAction = handleBuildAction(model, possibleActions, selectedWorker);
             }
         }
         return selectedAction;
     }
 
-    static String handleWorkerSelection(int[][] board, String[][] workersMask, int idPlayer)
+    static String handleWorkerSelection(ModelCLI model, int idPlayer)
     {
         String input;
         PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BLACK);
-        List<Space> workersPositions = getWorkersPositions(workersMask, idPlayer);
+        List<Space> workersPositions = getWorkersPositions(model.getWorkers(), idPlayer);
         SelectionCLI workerSelection = new SelectionCLI(0,workersPositions.size()-1,true);
         BidimensionalSelectionCLI boardSelection = new BidimensionalSelectionCLI(0,4,true,0,4,true);
 
@@ -145,7 +152,7 @@ public class CliUtils
 
             boardSelection.setX(workersPositions.get(workerSelection.getX()).getPosX());
             boardSelection.setY(workersPositions.get(workerSelection.getX()).getPosY());
-            showBoard(board, boardSelection, workersMask);
+            showBoard(model, boardSelection);
 
             input = readString();
 
@@ -159,7 +166,7 @@ public class CliUtils
             }
         }
 
-        return workersMask[boardSelection.getX()][boardSelection.getY()];
+        return model.getWorkers()[boardSelection.getX()][boardSelection.getY()];
     }
 
     static int handleNumPlayerSelection()
@@ -339,8 +346,7 @@ public class CliUtils
         return -1;
     }
 
-    //TODO change to Space and Piece instead of int...
-    static int getMoveActionNumber(int x, int y, List<Action> possibleActions, String workerId)
+    static int getActionNumber(int x, int y, List<Action> possibleActions, String workerId)
     {
         for(int i = 0; i<possibleActions.size(); i++)
         {
@@ -355,8 +361,7 @@ public class CliUtils
         return -1;
     }
 
-    //TODO maybe use generic the unificate the similar methods
-    static int getBuildActionNumber(int x, int y, List<Action> possibleActions, String workerId, int level)
+    static int getActionNumber(int x, int y, List<Action> possibleActions, String workerId, int level)
     {
         for(int i = 0; i<possibleActions.size(); i++)
         {
@@ -372,23 +377,7 @@ public class CliUtils
         return -1;
     }
 
-    static void slideDown(int rows, int rateInMilliseconds)
-    {
-        for(int i = 0; i<rows; i++)
-        {
-            try
-            {
-                TimeUnit.MILLISECONDS.sleep(rateInMilliseconds);
-                System.out.println();
-            }
-            catch(InterruptedException e)
-            {
-                System.err.println(e.getMessage());
-            }
-        }
-    }
-
-    static private Space selectionOnBoard(String[][] workersMask, int[][] board, String message, int startX, int startY)
+    static private Space selectionOnBoard(ModelCLI model, String message, int startX, int startY)
     {
         String input;
         Space chosenSpace = null;
@@ -404,7 +393,7 @@ public class CliUtils
             printer.resetAndBreak();
             printer.lineBreak();
 
-            showBoard(board, selection, workersMask);
+            showBoard(model, selection);
             input = readString();
 
             if(input.equals(""))
@@ -420,8 +409,11 @@ public class CliUtils
         return chosenSpace;
     }
 
-    static private SpaceCLI selectAndBuildOnBoard(String[][] workersMask, int[][] board, int startX, int startY)
+    static private SpaceCLI selectAndBuildOnBoard(ModelCLI model, int startX, int startY)
     {
+        int[][] board = model.getBoard();
+        String[][]  workersMask = model.getWorkers();
+
         String input;
         SpaceCLI chosenSpace = null;
         PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BLACK);
@@ -436,7 +428,7 @@ public class CliUtils
             printer.resetAndBreak();
             printer.lineBreak();
 
-            showBoard(board, selection, workersMask);
+            showBoard(model, selection);
             input = readString();
 
             switch(input)
@@ -463,14 +455,6 @@ public class CliUtils
 
 
     //input-output methods
-    static int readInt()
-    {
-        Scanner stdin = new Scanner(System.in);
-        int num = stdin.nextInt();
-        System.out.println();
-        return num;
-    }
-
     public static String readString()
     {
         Scanner stdin = new Scanner(System.in);
@@ -482,8 +466,11 @@ public class CliUtils
 
 
     //show methods
-    static void showUpdatedBoard(int[][] intBoard, String[][] workersMask)
+    static void showUpdatedBoard(ModelCLI model)
     {
+        int[][] intBoard = model.getBoard();
+        String[][] workersMask = model.getWorkers();
+
         System.out.println();
         System.out.println();
         //create Canvas
@@ -501,7 +488,7 @@ public class CliUtils
         }
 
         //decorate spaces and add them to the figure
-        Iterator<Integer> boardIterator = getBoardIterator(intBoard);
+        Iterator<Integer> boardIterator = model.getBoardIterator();
         for(RectangleCLI s : spaces)
         {
             SpaceCLI.buildLevel(s, boardIterator.next());
@@ -541,8 +528,11 @@ public class CliUtils
         canvas.printFigure();
     }
 
-    static private void showBoard(int [][] intBoard, BidimensionalSelectionCLI selection, String[][] workersMask)
+    static private void showBoard(ModelCLI model, BidimensionalSelectionCLI selection)
     {
+        int[][] intBoard = model.getBoard();
+        String[][] workersMask = model.getWorkers();
+
         //create Canvas
         CanvasCLI canvas = new CanvasCLI();
         canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
@@ -565,7 +555,7 @@ public class CliUtils
         canvas.addOverlappingFigure(selectionFigure);
 
         //decorate spaces and add them to the figure
-        Iterator<Integer> boardIterator = getBoardIterator(intBoard);
+        Iterator<Integer> boardIterator = model.getBoardIterator();
         for(RectangleCLI s : spaces)
         {
             SpaceCLI.buildLevel(s, boardIterator.next());
@@ -732,98 +722,19 @@ public class CliUtils
     }
 
 
-    //matrix methods
-    private static Iterator<Integer> getBoardIterator(int[][] board)
+    //graphics
+    static void slideDown(int rows, int rateInMilliseconds)
     {
-        ArrayList<Integer> numbers = new ArrayList<>();
-
-        for(int row = 0; row < 5; row++)
+        for(int i = 0; i<rows; i++)
         {
-            for(int col = 0; col < 5; col++)
+            try
             {
-                numbers.add(board[row][col]);
+                TimeUnit.MILLISECONDS.sleep(rateInMilliseconds);
+                System.out.println();
             }
-        }
-
-        return numbers.iterator();
-    }
-
-    private static int[][] generateRandomBoard()
-    {
-        int board[][] = new int[5][5];
-        Random rand =  new Random();
-
-        for(int row = 0; row < 5; row++)
-        {
-            for(int col = 0; col < 5; col++)
+            catch(InterruptedException e)
             {
-                board[row][col] = rand.nextInt(5);
-            }
-        }
-
-        return board;
-    }
-
-    static int[][] generateEmptyBoard()
-    {
-        int[][] board = new int[5][5];
-
-        for(int row = 0; row < 5; row++)
-        {
-            for(int col = 0; col < 5; col++)
-            {
-                board[row][col] = 0;
-            }
-        }
-
-        return board;
-    }
-
-    static String[][] generateEmptyWorkersMask()
-    {
-        String[][] board = new String[5][5];
-
-        for(int row = 0; row < 5; row++)
-        {
-            for(int col = 0; col < 5; col++)
-            {
-                board[row][col] = "";
-            }
-        }
-
-        return board;
-    }
-
-
-    //updates
-    static void updateMaskOnMove(String[][] mask, int targetX, int targetY, String workerId)
-    {
-        for(int row = 0; row < 5; row++)
-        {
-            for(int col = 0; col < 5; col++)
-            {
-                if(mask[row][col].equals(workerId))
-                    mask[row][col] = "";
-            }
-        }
-
-        mask[targetX][targetY] = workerId;
-    }
-
-    static void updateBoardOnBuild(int[][] board, BuildAction action)
-    {
-
-        board[action.getTargetX()][action.getTargetY()] = action.getPiece().getLevel();
-    }
-
-    static void removeWorkersOfPlayer(String[][] mask, int id)
-    {
-        for(int row = 0; row < 5; row++)
-        {
-            for(int col = 0; col < 5; col++)
-            {
-                if(mask[row][col].charAt(1)-'0' == id)
-                    mask[row][col] = "";
+                System.err.println(e.getMessage());
             }
         }
     }

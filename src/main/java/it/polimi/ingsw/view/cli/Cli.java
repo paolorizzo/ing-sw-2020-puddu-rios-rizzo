@@ -13,14 +13,12 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     private HashMap<Integer, Player> players;
     private int numPlayers;
 
-    private String[][] workersMask;
-    private int[][] board;
+    private final ModelCLI model;
 
     public Cli()
     {
         players = new HashMap<>();
-        workersMask = CliUtils.generateEmptyWorkersMask();
-        board = CliUtils.generateEmptyBoard();
+        model = new ModelCLI();
     }
 
     //UI methods
@@ -41,12 +39,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askUsername()
     {
-        CliUtils.showUsernameDialog();
-        System.out.println();
 
-        String name = CliUtils.readString();
-
-        notifyReadName(name);
+        notifyReadName(CliUtils.handleUsername());
     }
 
     @Override
@@ -67,13 +61,13 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     public void askSetupWorker(List<Action> possibleActions)
     {
 
-        notifyReadAction(possibleActions.get(CliUtils.handleSetupWorker(board, possibleActions, workersMask)));
+        notifyReadAction(possibleActions.get(CliUtils.handleSetupWorker(model, possibleActions)));
     }
 
     @Override
     public void askAction(List<Action> possibleActions, boolean canEndOfTurn)
     {
-        int actionSelected = CliUtils.handleAction(possibleActions, canEndOfTurn, board , workersMask);
+        int actionSelected = CliUtils.handleAction(model, possibleActions, canEndOfTurn);
 
         if(actionSelected >=0 && actionSelected < possibleActions.size())
             notifyReadAction(possibleActions.get(actionSelected));
@@ -85,7 +79,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     public void removeWorkersOfPlayer(int id)
     {
 
-        CliUtils.removeWorkersOfPlayer(workersMask, id);
+        model.removeWorkersOfPlayer(id);
     }
 
     //gets and sets
@@ -134,27 +128,27 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     public void executeAction(SetupAction action)
     {
-        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
-        CliUtils.showUpdatedBoard(board, workersMask);
+        model.updateMaskOnMove(action);
+        CliUtils.showUpdatedBoard(model);
     }
 
     public void executeAction(MoveAction action)
     {
-        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
-        CliUtils.showUpdatedBoard(board, workersMask);
+        model.updateMaskOnMove(action);
+        CliUtils.showUpdatedBoard(model);
     }
 
     public void executeAction(MoveAndForceAction action)
     {
-        CliUtils.updateMaskOnMove(workersMask, action.getTargetX(), action.getTargetY(), action.getWorkerID());
-        CliUtils.updateMaskOnMove(workersMask, action.getForcedTargetX(), action.getForcedTargetY(), action.getForcedWorkerId());
-        CliUtils.showUpdatedBoard(board, workersMask);
+        model.updateMaskOnMove(action);
+        model.updateMaskOnMove(action);
+        CliUtils.showUpdatedBoard(model);
     }
 
     public void executeAction(BuildAction action)
     {
-        CliUtils.updateBoardOnBuild(board, action);
-        CliUtils.showUpdatedBoard(board, workersMask);
+        model.updateBoardOnBuild(action);
+        CliUtils.showUpdatedBoard(model);
     }
 
     @Override
