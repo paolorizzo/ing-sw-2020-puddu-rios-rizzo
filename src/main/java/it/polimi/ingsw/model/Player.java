@@ -110,4 +110,16 @@ public class Player
                 color == player.color;
     }
 
+    protected Player lightClone(){
+        Player copy = new Player(nickname, color, playerNum);
+        if(card != null)
+            copy.setCard(card.clone());
+        copy.workers = new Worker[2];
+        if(this.workers[0] != null)
+            copy.workers[0] = this.workers[0].lightClone(copy);
+        if(this.workers[1] != null)
+            copy.workers[1] = this.workers[1].lightClone(copy);
+        return copy;
+    }
+
 }

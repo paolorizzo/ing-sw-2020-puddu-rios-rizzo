@@ -567,6 +567,120 @@ public class ControllerTest extends MvcIntegrationTest {
         assertEquals(gods.get(2), getStubView(c, 0).god);
     }
 
+    //turn phase tests
+
+    /**
+     * tests that the requestAction does nothing until it is the requester's turn
+     */
+    @Test
+    public void testRequestActionWait(){
+        final Controller c = new Controller();
+        fullSetupPhase(c, 3);       //it is player 1's turn
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    getStubView(c, 2).possibleActions = null;
+                    c.requestActions(2);
+                }
+                catch(InterruptedException e){
+                    assert(false);
+                }
+            }
+        }).start();
+
+        safeWaitFor(1);
+        assertEquals(null, getStubView(c, 2).possibleActions);
+        c.getModel().game.nextTurn();
+        synchronized (c){
+            c.notifyAll();
+        }
+        safeWaitFor(1);
+        printTurn(c);
+        assertNotEquals(null, getStubView(c, 2).possibleActions);
+    }
+
+    /**
+     * tests that a correct move publishAction results in the position of the worker being updated on the model
+     */
+    @Test
+    public void testAction(){
+        Controller c = new Controller();
+        fullSetupPhase(c, 2);
+        try{
+            c.requestActions(1);
+            getStubView(c, 1).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            assert(false);
+        }
+        assertEquals(2, c.getModel().getWorkerPos(1, Sex.FEMALE, 'x'));
+        assertEquals(0, c.getModel().getWorkerPos(1, Sex.FEMALE, 'y'));     //initial position 2;0
+        c.publishAction(1, new MoveAction( new Worker(Sex.FEMALE, c.getModel().getPlayer(1) ).toString(), 2, 1, Direction.SAME, 2, 0));
+        assertEquals(2, c.getModel().getWorkerPos(1, Sex.FEMALE, 'x'));
+        assertEquals(1, c.getModel().getWorkerPos(1, Sex.FEMALE, 'y'));     //final position 2;1
+    }
+
+    /**
+     * tests that a move action has no effect if it is not the requesting player's turn
+     */
+    @Test
+    public void testActionFailure(){
+        Controller c = new Controller();
+        fullSetupPhase(c, 2);
+        assertEquals(0, c.getModel().getWorkerPos(0, Sex.FEMALE, 'x'));
+        assertEquals(0, c.getModel().getWorkerPos(0, Sex.FEMALE, 'y'));     //initial position 0;0
+        c.publishAction(0, new MoveAction( new Worker(Sex.FEMALE, c.getModel().getPlayer(0) ).toString(), 0, 1, Direction.SAME, 0, 0));
+        assertEquals(0, c.getModel().getWorkerPos(0, Sex.FEMALE, 'x'));
+        assertEquals(0, c.getModel().getWorkerPos(0, Sex.FEMALE, 'y'));     //final position 0;0
+    }
+
+    /**
+     * tests that if the actions performed in a turn make it logically possible to finish it,
+     * it is actually possible to voluntarily end it
+     */
+    @Test
+    public void testVoluntaryEndOfTurn(){
+        Controller c = new Controller();
+        fullSetupPhase(c, 3);   //it is now player 1's turn
+
+        //moving
+        try{
+            c.requestActions(1);
+            getStubView(c, 1).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            assert(false);
+        }
+        c.publishAction(1, new MoveAction( new Worker(Sex.FEMALE, c.getModel().getPlayer(1) ).toString(), 2, 1, Direction.SAME, 2, 0));
+
+        //building
+        try{
+            c.requestActions(1);
+            getStubView(c, 1).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            assert(false);
+        }
+        c.publishAction(1, new BuildAction( new Worker(Sex.FEMALE, c.getModel().getPlayer(1) ).toString(), 2, 0, Piece.LEVEL1));
+
+        c.publishVoluntaryEndOfTurn(1);
+        assertEquals(2, c.getModel().game.getCurrentPlayerId());
+    }
+
+    /**
+     * TODO test this after implementing the method on the controller
+     */
+    @Test
+    public void testKill(){
+        Controller c = new Controller();
+        c.kill();
+        assert(true);
+    }
+
+
+
 
     //utility methods
 
@@ -745,6 +859,12 @@ public class ControllerTest extends MvcIntegrationTest {
         System.out.println("" + c.getModel().game.getCurrentPlayerId() + " playing");
     }
 
+    /**
+     * performs the entire connection and setup phase
+     * after this, it is player 1's turn
+     * @param c the controller on which to perform the phases
+     * @param n the number of players
+     */
     private void fullSetupPhase(Controller c, int n){
         if(!(n==2||n==3))
             throw new IllegalArgumentException("cannot perform setup phase for " + n + " players");

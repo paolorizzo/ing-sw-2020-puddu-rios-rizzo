@@ -31,4 +31,11 @@ public class Worker {
     public String toString(){
         return "P"+player.getPlayerNum()+"-"+sex.name().charAt(0);
     }
+
+    protected Worker lightClone(Player copyPlayer){
+        Worker copy = new Worker(sex, copyPlayer);
+        if(space != null)
+            copy.setSpace(space.lightClone());
+        return copy;
+    }
 }

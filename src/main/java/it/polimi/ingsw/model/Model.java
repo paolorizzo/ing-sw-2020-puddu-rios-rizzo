@@ -29,8 +29,18 @@ public class Model {
         return feed;
     }
 
+    //TODO non esporre verso controller
     public HashMap<Integer, Player> getPlayers(){
-        return players;
+        HashMap<Integer, Player> copy = new HashMap<Integer, Player>();
+        for(HashMap.Entry<Integer, Player> entry:players.entrySet()){
+            copy.put(entry.getKey(), entry.getValue().lightClone());
+        }
+        return copy;
+    }
+
+    //TODO non esporre verso controller
+    public Player getPlayer(int id){
+        return players.get(id).lightClone();
     }
 
     public void setNumPlayers(int numPlayers){

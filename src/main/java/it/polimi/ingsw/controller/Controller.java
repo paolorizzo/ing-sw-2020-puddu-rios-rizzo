@@ -18,7 +18,10 @@ public class Controller implements ControllerInterface
     private Map<Integer, View> viewMap;
     private int nextId;
 
-    //variabili di gestione della fsm di connessione del model
+    /**
+     * these variables are used to check the correctness of the methods called on the controller
+     * by the views during the connection phase
+     */
     boolean accept;
     boolean acceptNumPlayers;
     int ackReceived;

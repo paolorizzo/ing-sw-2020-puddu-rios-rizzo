@@ -56,4 +56,9 @@ public class Card implements Serializable
                 this.description.equals(that.description);
     }
 
+    @Override
+    protected Card clone(){
+        return new Card(num, name, description, powerStrategy);
+    }
+
 }

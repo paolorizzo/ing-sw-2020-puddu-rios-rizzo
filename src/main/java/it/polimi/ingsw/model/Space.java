@@ -93,4 +93,8 @@ public class Space {
     public boolean isPeripheralSpace(){
         return posX == 0 || posX == 4 || posY == 0 || posY == 4;
     }
+
+    protected Space lightClone(){
+        return new Space(posX, posY);
+    }
 }
