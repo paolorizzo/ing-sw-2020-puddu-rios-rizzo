@@ -52,7 +52,7 @@ public class CliUtils
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectionOnBoard(workersMask, board, "Now! Choose where to put your worker");
+            chosenSpace = selectionOnBoard(workersMask, board, "Now! Choose where to put your worker", 0,0);
             chosenAction = getActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions);
         }
 
@@ -63,10 +63,11 @@ public class CliUtils
     {
         Space chosenSpace = null;
         int chosenAction = -1;
+        Space workerInitialPosition = getWorkersPositionFromId(workersMask, workerId);
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectionOnBoard(workersMask, board, "Now! Make your move:");
+            chosenSpace = selectionOnBoard(workersMask, board, "Now! Make your move:", workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
             chosenAction = getMoveActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions, workerId);
         }
 
@@ -79,10 +80,11 @@ public class CliUtils
     {
         SpaceCLI chosenSpace;
         int chosenAction = -1;
+        Space workerInitialPosition = getWorkersPositionFromId(workersMask, workerId);
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectAndBuildOnBoard(workersMask, board);
+            chosenSpace = selectAndBuildOnBoard(workersMask, board, workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
             chosenAction = getBuildActionNumber(chosenSpace.getX(),chosenSpace.getY(), possibleActions, workerId, chosenSpace.getLevel());
         }
 
@@ -168,6 +170,7 @@ public class CliUtils
 
         while(spin)
         {
+            slideDown(36,1);
             System.out.println();
             showControls();
             System.out.println();
@@ -195,6 +198,7 @@ public class CliUtils
                 default:
                     break;
             }
+
         }
         return numPlayers;
     }
@@ -310,6 +314,20 @@ public class CliUtils
         return spaces;
     }
 
+    static private Space getWorkersPositionFromId(String[][] workersMask, String id)
+    {
+        Space position = new Space(0,0);
+        for(int row = 0; row<5; row++)
+        {
+            for(int col = 0; col<5; col++)
+            {
+                if(workersMask[row][col].equals(id))
+                    position = new Space(row,col);
+            }
+        }
+        return position;
+    }
+
     static int getActionNumber(int x, int y, List<Action> actions)
     {
         for(int i = 0; i<actions.size(); i++)
@@ -361,7 +379,7 @@ public class CliUtils
             try
             {
                 TimeUnit.MILLISECONDS.sleep(rateInMilliseconds);
-                //System.out.println(".");
+                System.out.println();
             }
             catch(InterruptedException e)
             {
@@ -370,12 +388,12 @@ public class CliUtils
         }
     }
 
-    static private Space selectionOnBoard(String[][] workersMask, int[][] board, String message)
+    static private Space selectionOnBoard(String[][] workersMask, int[][] board, String message, int startX, int startY)
     {
         String input;
         Space chosenSpace = null;
         PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BLACK);
-        BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(0,4,true,0,4,true);
+        BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(startX,4,true,startY,4,true);
 
         boolean spin = true;
         while(spin)
@@ -402,12 +420,12 @@ public class CliUtils
         return chosenSpace;
     }
 
-    static private SpaceCLI selectAndBuildOnBoard(String[][] workersMask, int[][] board)
+    static private SpaceCLI selectAndBuildOnBoard(String[][] workersMask, int[][] board, int startX, int startY)
     {
         String input;
         SpaceCLI chosenSpace = null;
         PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BLACK);
-        BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(0,4,true,0,4,true);
+        BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(startX,4,true,startY,4,true);
 
         boolean spin = true;
         while(spin)
@@ -681,21 +699,21 @@ public class CliUtils
     public static void showNumPlayersDialog(int num)
     {
         //create Canvas
-        CanvasCLI canvas = new CanvasCLI();
+        CanvasCLI canvas = new CanvasCLI(0,0,36,36);
         canvas.setPalette(AnsiColors.ANSI_RESET);
 
         //create number 2
-        RectangleCLI number2 = new RectangleCLI(5,11,12,12);
+        RectangleCLI number2 = new RectangleCLI(5,7,12,12);
         number2.setMask("./src/main/resources/two.txt");
         number2.setPalette(num == 2? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
 
         //create number 3
-        RectangleCLI number3 = new RectangleCLI(17,11,12,12);
+        RectangleCLI number3 = new RectangleCLI(17,7,12,12);
         number3.setMask("./src/main/resources/three.txt");
         number3.setPalette(num == 3? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
 
         //create text box
-        RectangleCLI textBox = new RectangleCLI(12,5,10,1);
+        RectangleCLI textBox = new RectangleCLI(12,2,10,1);
         textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
         textBox.addText(" SELECT THE NUMBER OF PLAYERS");
 

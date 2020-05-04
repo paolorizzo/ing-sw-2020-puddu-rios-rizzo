@@ -45,7 +45,6 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         System.out.println();
 
         String name = CliUtils.readString();
-        CliUtils.slideDown(36,1);
 
         notifyReadName(name);
     }

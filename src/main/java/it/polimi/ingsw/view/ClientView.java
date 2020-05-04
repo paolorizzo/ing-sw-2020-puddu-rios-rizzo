@@ -95,7 +95,7 @@ public class ClientView extends View implements UserInterfaceObserver
         if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
             if(canEndOfTurn){
                 currentGameState = GameState.ASK_OPTIONAL_ACTION;
-                System.out.println("Posso terminare il turno, invece di fare la mossa");
+                //System.out.println("Posso terminare il turno, invece di fare la mossa");
             }
             currentGameState.execute(this, possibleActions);
         }
