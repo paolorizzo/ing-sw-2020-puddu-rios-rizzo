@@ -2,16 +2,17 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.MvcIntegrationTest;
 import it.polimi.ingsw.exception.IncorrectStateException;
-import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.model.Deck;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.StubView;
 import it.polimi.ingsw.view.View;
+import javafx.scene.control.Control;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ControllerTest extends MvcIntegrationTest {
 
@@ -448,8 +449,123 @@ public class ControllerTest extends MvcIntegrationTest {
         assertEquals( toCards(sampleNums(3)).get(0), getStubView(c, 1).god);
     }
 
+    /**
+     * tests that the request to setup a worker receives no answer until it is the requesting player's turn
+     */
+    @Test
+    public void testRequestSetupWorkerWait(){
+        final Controller c = new Controller();
+        setupToGods(c, 3);  //player 1's turn
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    getStubView(c, 2).possibleActions = null;
+                    c.requestToSetupWorker(2);                      //player 2 tries to request the setup while not in their turn
+                }
+                catch(InterruptedException e){
+                    assert(false);
+                }
+            }
+        }).start();
 
+        assert(getStubView(c, 2).possibleActions == null);
+        //printTurn(c);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    c.requestToSetupWorker(1);                      //player 1 requests the setup in their turn
+                    c.setupWorker(1, new SetupAction(new Worker(Sex.FEMALE, c.getModel().getPlayers().get(1)).toString(), 0, 0 ) );
+                    c.requestToSetupWorker(1);
+                    c.setupWorker(1, new SetupAction(new Worker(Sex.MALE, c.getModel().getPlayers().get(1)).toString(), 0, 1 ) );
+                }
+                catch(InterruptedException e){
+                    assert(false);
+                }
+            }
+        }).start();
+
+        safeWaitFor(1);
+        //printTurn(c);
+        assertNotEquals(null, getStubView(c, 2).possibleActions);
+    }
+
+    /**
+     * tests that a setup fails if:
+     * 0: it is not the client's turn
+     * 1: the setup action is not possible
+     */
+    @Test
+    public void testSetupFailure(){
+        Controller c = new Controller();
+        setupToGods(c, 3);
+        c.setupWorker(2, new SetupAction(new Worker(Sex.FEMALE, c.getModel().getPlayers().get(2)).toString(), 0, 1 ) );         //0
+        assert(!c.getModel().workerIsPlaced(2, Sex.FEMALE));
+
+        try {
+            c.requestToSetupWorker(1);
+        }
+        catch(InterruptedException e){
+            assert false;
+        }
+        try{
+            c.setupWorker(1, new SetupAction(new Worker(Sex.FEMALE, c.getModel().getPlayers().get(2)).toString(), 10, 1 ) );    //1
+            assert(false);
+        }
+        catch(IllegalArgumentException e){
+            assert(true);
+        }
+
+        assert(!c.getModel().workerIsPlaced(1, Sex.FEMALE));
+    }
+
+    /**
+     * tests that it is possible to perform both the connection and setup phase for 2 players
+     * by testing that all the worker end up placed in the correct position
+     * and that the correct views have received the correct gods
+     */
+    @Test
+    public void testSetupPhase2(){
+        int n=2;
+        Controller c = new Controller();
+        fullSetupPhase(c, n);
+        System.out.println("setup complete");
+        int curr;
+        for(int i=0;i<n;i++){
+            curr = (1+i)%n;
+            assertEquals(2*curr, c.getModel().getWorkerPos(curr, Sex.FEMALE, 'x'));
+            assertEquals(0, c.getModel().getWorkerPos(curr, Sex.FEMALE, 'y'));
+        }
+        List<Card> gods = toCards(sampleNums(n));
+        assertEquals(gods.get(0), getStubView(c, 1).god);
+        assertEquals(gods.get(1), getStubView(c, 0).god);
+    }
+
+    /**
+     * tests that it is possible to perform both the connection and setup phase for 3 players
+     * by testing that all the worker end up placed in the correct position
+     * and that the correct views have received the correct gods
+     */
+    @Test
+    public void testSetupPhase3(){
+        int n=3;
+        Controller c = new Controller();
+        fullSetupPhase(c, n);
+        System.out.println("setup complete");
+        int curr;
+        for(int i=0;i<n;i++){
+            curr = (1+i)%n;
+            assertEquals(2*curr, c.getModel().getWorkerPos(curr, Sex.FEMALE, 'x'));
+            assertEquals(0, c.getModel().getWorkerPos(curr, Sex.FEMALE, 'y'));
+        }
+        List<Card> gods = toCards(sampleNums(n));
+        assertEquals(gods.get(0), getStubView(c, 1).god);
+        assertEquals(gods.get(1), getStubView(c, 2).god);
+        assertEquals(gods.get(2), getStubView(c, 0).god);
+    }
 
 
     //utility methods
@@ -537,6 +653,7 @@ public class ControllerTest extends MvcIntegrationTest {
     /**
      * mimics a full correct connection phase involving two clients
      * their names are "aldo" and "giovanni"
+     * after this, it is player 1's turn
      */
     private void connectionPhase2(Controller c){
         twoPlayersGame(c);
@@ -547,6 +664,7 @@ public class ControllerTest extends MvcIntegrationTest {
     /**
      * mimics a full correct connection phase involving three clients
      * their names are "aldo", "giovanni" and "giacomo"
+     * after this, it is player 1's turn
      */
     private void connectionPhase3(Controller c){
         threePlayersGame(c);
@@ -592,5 +710,69 @@ public class ControllerTest extends MvcIntegrationTest {
         for(int i=0; i<n;i++)
             sampleNums.add(i+1);
         return sampleNums;
+    }
+
+    /**
+     * performs the connection phase and the setup phase up to the choice of gods for n players
+     * players 1 and 2 get cards 1 and 2, player 0 gets the remaining card 3
+     * after this, it is player 1's turn
+     * @param c the controller on which to perform the setup
+     * @param n the number of players desired for the game
+     */
+    private void setupToGods(Controller c, int n){
+        if(n == 2){
+            connectionPhase2(c);
+            c.publishCards(0, sampleNums(2));
+            c.setCard(1, 1);
+            c.setCard(0, 2);
+        }
+        else if(n == 3){
+            connectionPhase3(c);
+            c.publishCards(0, sampleNums(3));
+            c.setCard(1, 1);
+            c.setCard(2, 2);
+            c.setCard(0, 3);
+        }
+        else
+            throw new IllegalArgumentException("cannot perform setup phase for "+ n + " players");
+    }
+
+    /**
+     * prints the turn
+     * @param c the controller from which to get the game
+     */
+    private void printTurn(Controller c){
+        System.out.println("" + c.getModel().game.getCurrentPlayerId() + " playing");
+    }
+
+    private void fullSetupPhase(Controller c, int n){
+        if(!(n==2||n==3))
+            throw new IllegalArgumentException("cannot perform setup phase for " + n + " players");
+
+        setupToGods(c, n);
+        int curr ;
+        for(int i=0;i<n;i++){
+            curr = (1+i)%n;
+            printTurn(c);
+            System.out.println("setting up player " + curr);
+
+            try{
+                c.requestToSetupWorker(curr);
+            }
+            catch(InterruptedException e){
+                throw new RuntimeException("request setup worker interrupted");
+            }
+            c.setupWorker(curr, new SetupAction(new Worker(Sex.FEMALE, c.getModel().getPlayers().get(curr)).toString(), 2*curr, 0 ) );
+
+            try{
+                c.requestToSetupWorker(curr);
+            }
+            catch(InterruptedException e){
+                throw new RuntimeException("request setup worker interrupted");
+            }
+            c.setupWorker(curr, new SetupAction(new Worker(Sex.MALE, c.getModel().getPlayers().get(curr)).toString(), 2*curr, 2 ) );
+        }
+
+
     }
 }

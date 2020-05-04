@@ -20,6 +20,7 @@ public class StubView extends View{
     public Deck deck;
     public List<Card> chosenCards;
     public Card god;
+    public List<Action> possibleActions;
 
     public StubView(){
         super();
@@ -30,6 +31,13 @@ public class StubView extends View{
         deck = null;
         chosenCards = null;
         god = null;
+        possibleActions = null;
+    }
+
+
+    public void printPossibleActions(){
+        for(Action a:possibleActions)
+            System.out.println(a.toString());
     }
 
     //general updates
@@ -76,7 +84,10 @@ public class StubView extends View{
             god = card;
     }
     @Override
-    public void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn){}
+    public void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn){
+        if(this.id == id)
+            this.possibleActions = possibleActions;
+    }
 
     //turn phase updates
     @Override
@@ -87,6 +98,5 @@ public class StubView extends View{
     public void updatePlayerWin(int id){}
     @Override
     public void updatePlayerLose(int id){}
-
 
 }

@@ -116,6 +116,33 @@ public class Model {
 
         feed.notifyAction(id, setupAction);
     }
+
+    /**
+     * @param id of the player that owns the worker
+     * @param s sex of the worker
+     * @return true if worker of player id of sex s has been placed
+     */
+    public boolean workerIsPlaced(int id, Sex s){
+        return getPlayers().get(id).getWorker(Sex.FEMALE).getSpace() != null;
+    }
+
+    /**
+     *
+     * @param id of the player that owns the worker
+     * @param s sex of the worker
+     * @param axis on which to get the position
+     * @return position on the requested worker on the given axis
+     */
+    public int getWorkerPos(int id, Sex s, char axis){
+        if(!workerIsPlaced(id, s))
+            throw new IllegalArgumentException("the worker has not been placed yet");
+        if(!(axis == 'x' || axis =='y'))
+            throw new IllegalArgumentException("worker has no position on axis " + axis);
+        if(axis == 'x')
+            return players.get(id).getWorker(s).getSpace().getPosX();
+        return players.get(id).getWorker(s).getSpace().getPosY();
+    }
+
     public void executeAction(int id, Action action) {
         board.executeAction(action);
         game.addAction(action);

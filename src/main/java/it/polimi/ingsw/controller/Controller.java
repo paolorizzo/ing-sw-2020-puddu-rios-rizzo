@@ -326,6 +326,7 @@ public class Controller implements ControllerInterface
     }
 
     /**
+     * MAY ADVANCE THE TURN through model.executeSetupAction
      * checks that it is the requesting client's turn and that the proposed setup action is possible
      * if all is well, executes the action and wakes possible waiting threads
      * @param id of the requesting client
