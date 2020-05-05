@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class CliUtils
 {
     //handler methods
+    //SETUP
     static String handleUsername()
     {
         showUsernameDialog();
@@ -66,6 +67,48 @@ public class CliUtils
         return chosenAction;
     }
 
+    static int handleNumPlayerSelection()
+    {
+        int numPlayers = 2;
+        String input;
+        boolean spin = true;
+
+        while(spin)
+        {
+            slideDown(36,1);
+            System.out.println();
+            showControls();
+            System.out.println();
+            showNumPlayersDialog(numPlayers);
+
+            input = readString();
+
+            switch(input)
+            {
+                case("2"):
+                    spin = false;
+                    numPlayers =  2;
+                    break;
+                case("3"):
+                    spin = false;
+                    numPlayers =  3;
+                    break;
+                case("d"):
+                case("a"):
+                    numPlayers = numPlayers == 3? 2:3;
+                    break;
+                case(""):
+                    spin = false;
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return numPlayers;
+    }
+
+    //GAME
     static int handleMoveAction(ModelCLI model, List<Action> possibleActions, String workerId)
     {
         Space chosenSpace = null;
@@ -167,47 +210,6 @@ public class CliUtils
         }
 
         return model.getWorkers()[boardSelection.getX()][boardSelection.getY()];
-    }
-
-    static int handleNumPlayerSelection()
-    {
-        int numPlayers = 2;
-        String input;
-        boolean spin = true;
-
-        while(spin)
-        {
-            slideDown(36,1);
-            System.out.println();
-            showControls();
-            System.out.println();
-            showNumPlayersDialog(numPlayers);
-
-            input = readString();
-
-            switch(input)
-            {
-                case("2"):
-                    spin = false;
-                    numPlayers =  2;
-                    break;
-                case("3"):
-                    spin = false;
-                    numPlayers =  3;
-                    break;
-                case("d"):
-                case("a"):
-                    numPlayers = numPlayers == 3? 2:3;
-                    break;
-                case(""):
-                    spin = false;
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        return numPlayers;
     }
 
     static int handleChooseBetweenMoveAndBuild()
@@ -339,8 +341,11 @@ public class CliUtils
     {
         for(int i = 0; i<actions.size(); i++)
         {
-            if(actions.get(i).getTargetX() == x && actions.get(i).getTargetY() == y)
+            if(     actions.get(i).getTargetX() == x &&
+                    actions.get(i).getTargetY() == y)
+            {
                 return i;
+            }
         }
 
         return -1;
@@ -411,9 +416,6 @@ public class CliUtils
 
     static private SpaceCLI selectAndBuildOnBoard(ModelCLI model, int startX, int startY)
     {
-        int[][] board = model.getBoard();
-        String[][]  workersMask = model.getWorkers();
-
         String input;
         SpaceCLI chosenSpace = null;
         PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BLACK);
@@ -466,80 +468,29 @@ public class CliUtils
 
 
     //show methods
-    static void showUpdatedBoard(ModelCLI model)
+    static void showBoard(ModelCLI model)
     {
-        int[][] intBoard = model.getBoard();
-        String[][] workersMask = model.getWorkers();
-
-        System.out.println();
-        System.out.println();
-        //create Canvas
-        CanvasCLI canvas = new CanvasCLI();
-        canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
-
-        //create spaces
-        List<RectangleCLI> spaces = new ArrayList<>();
-        for(int row = 1; row<36; row+=7)
-        {
-            for(int col = 1; col<36; col+=7)
-            {
-                spaces.add(new RectangleCLI(row, col, 6,6 ));
-            }
-        }
-
-        //decorate spaces and add them to the figure
-        Iterator<Integer> boardIterator = model.getBoardIterator();
-        for(RectangleCLI s : spaces)
-        {
-            SpaceCLI.buildLevel(s, boardIterator.next());
-            canvas.addOverlappingFigure(s);
-        }
-
-        //create workers
-        for(int row = 0; row<5; row++)
-        {
-            for(int col = 0; col<5; col++)
-            {
-                if(workersMask[row][col] != "")
-                {
-                    RectangleCLI worker = new RectangleCLI(row*7+3, col*7+3, 2,2);
-                    worker.setMask("./src/main/resources/worker.txt");
-
-                    switch(workersMask[row][col].charAt(1))
-                    {
-                        case '0':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_CYAN);
-                            break;
-                        case '1':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_PURPLE);
-                            break;
-                        case '2':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED);
-                            break;
-                        default:
-                            break;
-                    }
-                    canvas.addOverlappingFigure(worker);
-                }
-            }
-        }
-
-        //print the figure
-        canvas.printFigure();
+        showBoard(model, null);
     }
 
     static private void showBoard(ModelCLI model, BidimensionalSelectionCLI selection)
     {
-        int[][] intBoard = model.getBoard();
         String[][] workersMask = model.getWorkers();
 
         //create Canvas
         CanvasCLI canvas = new CanvasCLI();
         canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
 
-        //create selection
-        RectangleCLI selectionFigure = new RectangleCLI(selection.getX()*7, selection.getY()*7, 8,8);
-        selectionFigure.setPalette(AnsiColors.ANSI_BG_RED);
+        if(selection != null)
+        {
+            //create selection
+            RectangleCLI selectionFigure = new RectangleCLI(selection.getX()*7, selection.getY()*7, 8,8);
+            selectionFigure.setPalette(AnsiColors.ANSI_BG_RED);
+
+            //add the selection to the figure
+            canvas.addOverlappingFigure(selectionFigure);
+        }
+
 
         //create spaces
         List<RectangleCLI> spaces = new ArrayList<>();
@@ -550,9 +501,6 @@ public class CliUtils
                 spaces.add(new RectangleCLI(row, col, 6,6 ));
             }
         }
-
-        //add the selection to the figure
-        canvas.addOverlappingFigure(selectionFigure);
 
         //decorate spaces and add them to the figure
         Iterator<Integer> boardIterator = model.getBoardIterator();
@@ -575,13 +523,13 @@ public class CliUtils
                     switch(workersMask[row][col].charAt(1))
                     {
                         case '0':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_CYAN);
+                            worker.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_CYAN);
                             break;
                         case '1':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_PURPLE);
+                            worker.setPalette(AnsiColors.ANSI_BRIGHT_BG_PURPLE, AnsiColors.ANSI_BG_PURPLE);
                             break;
                         case '2':
-                            worker.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED);
+                            worker.setPalette(AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED);
                             break;
                         default:
                             break;
@@ -633,7 +581,6 @@ public class CliUtils
         CanvasCLI canvas = new CanvasCLI();
         canvas.setPalette(AnsiColors.ANSI_RESET);
         canvas.setTextColor(AnsiColors.ANSI_BLACK);
-        //canvas.setPalette(Color.ANSI_BG_BLACK);
 
         //create card
         RectangleCLI card = new RectangleCLI(10,4,16,27);
@@ -647,7 +594,32 @@ public class CliUtils
 
         //create picture box
         RectangleCLI pic = card.createInRelativeFrame(2,2,12,13);
-        pic.setPalette(AnsiColors.ANSI_BG_BLUE);
+        switch(title)
+        {
+            case "PROMETHEUS":
+                pic.setMask("./src/main/resources/prometheus.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_BLACK);
+                break;
+            case "ATLAS":
+                pic.setMask("./src/main/resources/atlas.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_GREEN, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE);
+                break;
+            case "ATHENA":
+                pic.setMask("./src/main/resources/athena.txt");
+                pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_RESET);
+                break;
+            case "DEMETER":
+                pic.setMask("./src/main/resources/demeter.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_YELLOW);
+                break;
+            case "MINOTAUR":
+                pic.setMask("./src/main/resources/minotaur.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_RESET);
+                break;
+            default:
+                pic.setPalette(AnsiColors.ANSI_BG_BLUE);
+                break;
+        }
 
         RectangleCLI name = textBox.createInRelativeFrame(0,-2,12,1);
         name.setPalette(AnsiColors.ANSI_BG_WHITE);

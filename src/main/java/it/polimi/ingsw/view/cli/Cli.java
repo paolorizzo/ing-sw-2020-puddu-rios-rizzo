@@ -129,26 +129,26 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     public void executeAction(SetupAction action)
     {
         model.updateMaskOnMove(action);
-        CliUtils.showUpdatedBoard(model);
+        CliUtils.showBoard(model);
     }
 
     public void executeAction(MoveAction action)
     {
         model.updateMaskOnMove(action);
-        CliUtils.showUpdatedBoard(model);
+        CliUtils.showBoard(model);
     }
 
     public void executeAction(MoveAndForceAction action)
     {
         model.updateMaskOnMove(action);
         model.updateMaskOnMove(action);
-        CliUtils.showUpdatedBoard(model);
+        CliUtils.showBoard(model);
     }
 
     public void executeAction(BuildAction action)
     {
         model.updateBoardOnBuild(action);
-        CliUtils.showUpdatedBoard(model);
+        CliUtils.showBoard(model);
     }
 
     @Override

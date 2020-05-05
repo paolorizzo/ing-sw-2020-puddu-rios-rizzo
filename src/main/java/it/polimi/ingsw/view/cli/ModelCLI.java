@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.BuildAction;
-import it.polimi.ingsw.model.Model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
