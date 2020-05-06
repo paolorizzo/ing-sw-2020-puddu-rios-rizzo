@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+
 public class ControllerTest extends MvcIntegrationTest {
 
     //tests related to the connection phase
@@ -689,6 +690,7 @@ public class ControllerTest extends MvcIntegrationTest {
      * @param c controller to which the fake clients will be connected
      * @return the added view
      */
+
     private StubView connectFirstClient(Controller c){
         StubView view0 = new StubView();
         c.addView(view0);

@@ -25,7 +25,7 @@ public class GuiApp extends Application {
     public void start(Stage stage) throws Exception {
 
 
-        Client client = new Client("127.0.0.1", 42069);
+        Client client = new Client("79.42.255.70", 42069);
         ClientView cw = new ClientView(client);
 
         client.setClientView(cw);
