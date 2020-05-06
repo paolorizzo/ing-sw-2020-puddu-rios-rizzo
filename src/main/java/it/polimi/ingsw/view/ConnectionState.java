@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.view.cli.Cli;
 import it.polimi.ingsw.view.middleware.Connection;
 
-import javax.swing.plaf.IconUIResource;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
