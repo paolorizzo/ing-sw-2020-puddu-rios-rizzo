@@ -91,42 +91,38 @@ public class Server implements Runnable
     {
         System.out.println("Server listening on port: " + PORT);
 
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run() {
-                synchronized (idSetLock)
+        new Thread(() -> {
+            synchronized (idSetLock)
+            {
+                try
                 {
-                    try
+                    while(true)
                     {
-                        while(true)
+                        while(!idSet)
                         {
-                            while(!idSet)
-                            {
-                                idSetLock.wait();
-                            }
-
-                            synchronized (clientReadyLock)
-                            {
-                                while(!nextClientIsReady)
-                                {
-                                    clientReadyLock.wait();
-                                }
-                            }
-
-                            letClientIn();
-                            idSet = false;
-
-                            if(views.size() == nextClientIn )
-                                nextClientIsReady = false;
+                            idSetLock.wait();
                         }
-                    }
-                    catch( InterruptedException e)
-                    {
-                        System.err.println("InterruptedException del thread di Server");
-                    }
 
+                        synchronized (clientReadyLock)
+                        {
+                            while(!nextClientIsReady)
+                            {
+                                clientReadyLock.wait();
+                            }
+                        }
+
+                        letClientIn();
+                        idSet = false;
+
+                        if(views.size() == nextClientIn )
+                            nextClientIsReady = false;
+                    }
                 }
+                catch( InterruptedException e)
+                {
+                    System.err.println("InterruptedException del thread di Server");
+                }
+
             }
         }).start();
 
@@ -140,12 +136,7 @@ public class Server implements Runnable
                     Socket socket = serverSocket.accept();
 
                     final Connection connection = new Connection(socket, this);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            connection.run();
-                        }
-                    }).start();
+                    new Thread(() -> connection.run()).start();
 
                     register(connection);
                 }

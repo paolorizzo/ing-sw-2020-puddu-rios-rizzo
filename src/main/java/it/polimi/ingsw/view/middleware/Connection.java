@@ -16,6 +16,9 @@ public class Connection extends Messenger implements Runnable
     private final Object liveLock;
     private boolean clientIsLive;
 
+    private final Object messageLock;
+    private boolean newMessageReceived;
+
     private final int livenessRate = 5000;
     private final int invalidPongTreshold = 10000;
 
@@ -26,6 +29,8 @@ public class Connection extends Messenger implements Runnable
         this.view = null;
         this.liveLock = new Object();
         this.clientIsLive = false;
+        this.messageLock = new Object();
+        this.newMessageReceived = false;
     }
 
     /**
@@ -106,7 +111,11 @@ public class Connection extends Messenger implements Runnable
         }
         else
         {
-            callMethod(message);
+            synchronized(liveLock)
+            {
+                callMethod(message);
+            }
+
             if(message.getMethodName().equals("ackId"))
             {
                 server.registerIdAck();
@@ -137,7 +146,7 @@ public class Connection extends Messenger implements Runnable
                 synchronized (liveLock)
                 {
                     if(!clientIsLive)
-                        System.out.println("Client not reachable");
+                        System.out.println("Client not reachable "+this);
                     else
                         clientIsLive = false;
                 }
@@ -145,7 +154,6 @@ public class Connection extends Messenger implements Runnable
         }).start();
 
         ObjectInputStream ByteIn;
-
         while(true)
         {
             try

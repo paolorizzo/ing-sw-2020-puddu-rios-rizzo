@@ -518,23 +518,7 @@ public class CliUtils
                 if(workersMask[row][col] != "")
                 {
                     RectangleCLI worker = new RectangleCLI(row*7+3, col*7+3, 2,2);
-                    worker.setMask("./src/main/resources/worker.txt");
-
-                    switch(workersMask[row][col].charAt(1))
-                    {
-                        case '0':
-                            worker.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_CYAN);
-                            break;
-                        case '1':
-                            worker.setPalette(AnsiColors.ANSI_BRIGHT_BG_PURPLE, AnsiColors.ANSI_BG_PURPLE);
-                            break;
-                        case '2':
-                            worker.setPalette(AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED);
-                            break;
-                        default:
-                            break;
-                    }
-
+                    GraphicsElementsCLI.drawWorker(worker, workersMask[row][col].charAt(1));
                     canvas.addOverlappingFigure(worker);
                 }
             }
@@ -584,8 +568,7 @@ public class CliUtils
 
         //create card
         RectangleCLI card = new RectangleCLI(10,4,16,27);
-        card.setMask("./src/main/resources/card.txt");
-        card.setPalette(AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_YELLOW);
+        GraphicsElementsCLI.drawCard(card);
 
         //create text box
         RectangleCLI textBox = card.createInRelativeFrame(2,18,12,7);
@@ -594,33 +577,9 @@ public class CliUtils
 
         //create picture box
         RectangleCLI pic = card.createInRelativeFrame(2,2,12,13);
-        switch(title)
-        {
-            case "PROMETHEUS":
-                pic.setMask("./src/main/resources/prometheus.txt");
-                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_BLACK);
-                break;
-            case "ATLAS":
-                pic.setMask("./src/main/resources/atlas.txt");
-                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_GREEN, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE);
-                break;
-            case "ATHENA":
-                pic.setMask("./src/main/resources/athena.txt");
-                pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_RESET);
-                break;
-            case "DEMETER":
-                pic.setMask("./src/main/resources/demeter.txt");
-                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_YELLOW);
-                break;
-            case "MINOTAUR":
-                pic.setMask("./src/main/resources/minotaur.txt");
-                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_RESET);
-                break;
-            default:
-                pic.setPalette(AnsiColors.ANSI_BG_BLUE);
-                break;
-        }
+        GraphicsElementsCLI.drawGod(pic, title);
 
+        //create name box
         RectangleCLI name = textBox.createInRelativeFrame(0,-2,12,1);
         name.setPalette(AnsiColors.ANSI_BG_WHITE);
         name.addText(title);
@@ -631,15 +590,12 @@ public class CliUtils
 
         //create arrows
         RectangleCLI rightArrow = new RectangleCLI(27,14,8,9);
-        rightArrow.setMask("./src/main/resources/arrow.txt");
-        rightArrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 2? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
+        GraphicsElementsCLI.drawArrow(rightArrow, userSelection, true);
 
         RectangleCLI leftArrow = new RectangleCLI(1,14,8,9);
-        leftArrow.setMask("./src/main/resources/arrow2.txt");
-        leftArrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 0? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
+        GraphicsElementsCLI.drawArrow(leftArrow, userSelection, false);
 
         //overlap figures in the correct order
-
         canvas.addOverlappingFigure(selection);
         canvas.addOverlappingFigure(card);
         canvas.addOverlappingFigure(textBox);
@@ -664,15 +620,12 @@ public class CliUtils
         CanvasCLI canvas = new CanvasCLI(0,0,36,36);
         canvas.setPalette(AnsiColors.ANSI_RESET);
 
-        //create number 2
+        //create numbers
         RectangleCLI number2 = new RectangleCLI(5,7,12,12);
-        number2.setMask("./src/main/resources/two.txt");
-        number2.setPalette(num == 2? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        GraphicsElementsCLI.drawNumber(number2, 2, num);
 
-        //create number 3
         RectangleCLI number3 = new RectangleCLI(17,7,12,12);
-        number3.setMask("./src/main/resources/three.txt");
-        number3.setPalette(num == 3? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        GraphicsElementsCLI.drawNumber(number3, 3, num);
 
         //create text box
         RectangleCLI textBox = new RectangleCLI(12,2,10,1);
