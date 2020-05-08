@@ -3,20 +3,19 @@ package it.polimi.ingsw.view.middleware;
 import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.SetupAction;
-import it.polimi.ingsw.model.Sex;
 import it.polimi.ingsw.observation.*;
-import it.polimi.ingsw.observation.Observable;
 import it.polimi.ingsw.view.ClientView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Timestamp;
 import java.util.*;
-import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-public class Client extends Messenger implements ControllerInterface, Runnable {
+public class Client extends Messenger implements ControllerInterface, Runnable
+{
     private Socket socket;
     private final String ip;
     private final int port;
@@ -34,10 +33,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
         virtualFeed = new FeedObservable();
         alive = true;
     }
-    public void setClientView(ClientView cw){
+
+    public void setClientView(ClientView cw)
+    {
         this.cw = cw;
         addObserver(cw);
     }
+
     public ClientView getClientView()
     {
 
@@ -46,17 +48,20 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
 
     public void addObserver(FeedObserver view)
     {
+
         virtualFeed.addObserver(view);
     }
 
-
     //always returns the client itself
-    protected Object getObservable(String methodName) {
+    protected Object getObservable(String methodName)
+    {
+
         return virtualFeed;
     }
 
     /**
      * Handles the messages coming from the stream (the server), de-serializing and calling callMethod.
+     * Creates and runs the thread responsible to send "pong" messages to the server, to notify the client aliveness.
      */
     public void run()
     {
@@ -66,7 +71,22 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
             try
             {
                 socket = new Socket(ip, port);
-                //System.out.println("Connected to the server");
+
+                new Thread(() -> {
+                    while(alive)
+                    {
+                        try
+                        {
+                            Thread.sleep(2500);
+                        }
+                        catch(InterruptedException ex)
+                        {
+                            Thread.currentThread().interrupt();
+                        }
+                        sendMessage("pong", new Timestamp(System.currentTimeMillis()));
+                    }
+                }).start();
+
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
@@ -109,6 +129,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
         }
     }
 
+    /**
+     * Delegate the sending of messages to the Messenger superclass, handling the socket output stream.
+     * @param methodName the name of the method to be called via reflection on the server.
+     * @param arg the args of the target method.
+     */
     public void sendMessage(String methodName, Object ...arg)
     {
         try{
@@ -119,80 +144,122 @@ public class Client extends Messenger implements ControllerInterface, Runnable {
         }
     }
 
-    //TODO test updates inside Client
-
-    //Connection phase methods used for communication to the controller
-
     @Override
     public void generateId()
     {
+
         sendMessage("generateId");
     }
 
     @Override
     public void ackId(int id)
     {
+
         sendMessage("ackId", id);
     }
 
     @Override
     public void setNumPlayers(int id, int numPlayers)
     {
+
         sendMessage("setNumPlayers", cw.getId(), numPlayers);
     }
+
     @Override
     public void getNumPlayers()
     {
+
         sendMessage("getNumPlayers");
     }
+
     @Override
-    public  void requestAllPlayersConnected() {sendMessage("requestAllPlayersConnected");};
+    public  void requestAllPlayersConnected()
+    {
+
+        sendMessage("requestAllPlayersConnected");
+    }
+
     @Override
     public void setName(int id, String name)
     {
+
         sendMessage("setName", id, name);
     }
 
     @Override
-    public void requestDeck() {
+    public void requestDeck()
+    {
+
         sendMessage("requestDeck");
     }
 
     @Override
-    public void publishCards(int id, List<Integer> numCards) {
+    public void publishCards(int id, List<Integer> numCards)
+    {
+
         sendMessage("publishCards", id, numCards);
     }
 
     @Override
-    public void requestCards(int id) {
+    public void requestCards(int id)
+    {
+
         sendMessage("requestCards", id);
     }
 
     @Override
-    public void setCard(int id, int numCard) {
+    public void setCard(int id, int numCard)
+    {
+
         sendMessage("setCard", id, numCard);
     }
+
     @Override
-    public void requestToSetupWorker(int id) {
+    public void requestToSetupWorker(int id)
+    {
+
         sendMessage("requestToSetupWorker", id);
     }
+
     @Override
-    public void setupWorker(int id, SetupAction setupAction) {
+    public void setupWorker(int id, SetupAction setupAction)
+    {
+
         sendMessage("setupWorker", id, setupAction);
     }
+
     @Override
-    public void requestActions(int id) { sendMessage("requestActions", id);}
+    public void requestActions(int id)
+    {
+
+        sendMessage("requestActions", id);
+    }
+
     @Override
-    public void publishAction(int id, Action action) {sendMessage("publishAction", id, action);}
+    public void publishAction(int id, Action action)
+    {
+
+        sendMessage("publishAction", id, action);
+    }
+
     @Override
-    public void publishVoluntaryEndOfTurn(int id) {sendMessage("publishVoluntaryEndOfTurn", id);}
+    public void publishVoluntaryEndOfTurn(int id)
+    {
+
+        sendMessage("publishVoluntaryEndOfTurn", id);
+    }
+
     @Override
-    public void kill(){
+    public void kill()
+    {
+
         alive = false;
     }
 
     @Override
-    public void deleteId(int id){
+    public void deleteId(int id)
+    {
+
         sendMessage("deleteId", id);
     }
 }

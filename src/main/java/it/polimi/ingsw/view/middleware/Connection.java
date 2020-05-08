@@ -1,13 +1,10 @@
 package it.polimi.ingsw.view.middleware;
 
-import it.polimi.ingsw.observation.Observable;
 import it.polimi.ingsw.view.View;
-
-import java.lang.reflect.Method;
 
 import java.net.Socket;
 import java.io.*;
-import java.util.*;
+import java.sql.Timestamp;
 
 public class Connection extends Messenger implements Runnable
 {
@@ -16,11 +13,19 @@ public class Connection extends Messenger implements Runnable
 
     private View view;
 
+    private final Object liveLock;
+    private boolean clientIsLive;
+
+    private final int livenessRate = 5000;
+    private final int invalidPongTreshold = 10000;
+
     public Connection(Socket socket, Server server)
     {
         this.socket = socket;
         this.server = server;
         this.view = null;
+        this.liveLock = new Object();
+        this.clientIsLive = false;
     }
 
     /**
@@ -33,11 +38,15 @@ public class Connection extends Messenger implements Runnable
         this.view = view;
     }
 
-    //always returns the controller, regardless of the methodName
-    //this happens because the communication from on object that implements
-    //the View interface to an object that implements the ControllerInterface
-    //happens directly, and not through an observable class
-    protected Object getObservable(String methodName) {
+    /**
+     * Always returns the controller, regardless of the methodName.
+     * This happens because the communication from on object that implements the View interface to an object that implements the ControllerInterface happens directly, and not through an observable class.
+     * @param methodName the useless parameter...
+     * @return the controller.
+     */
+    protected Object getObservable(String methodName)
+    {
+
         return view.getController();
     }
 
@@ -60,12 +69,81 @@ public class Connection extends Messenger implements Runnable
         }
     }
 
-    // TODO test
+    /**
+     * Accepts the pong message from the client only if the associated timestamp is reasonably close to the current time.
+     * In that case, the aliveness flag gets updated to acknowledge it.
+     * @param message the "pong" message.
+     */
+    private void pongHandler(Message message)
+    {
+        //filter pongs upon timestamps
+        if(message.hasArgs() && message.getArg(0) instanceof Timestamp)
+        {
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Timestamp ts = (Timestamp) message.getArg(0);
+
+            if(now.getTime()-ts.getTime()<invalidPongTreshold)
+            {
+                synchronized(liveLock)
+                {
+                    clientIsLive = true;
+                }
+            }
+
+        }
+    }
+
+    /**
+     * Filters the messages incoming from the client.
+     * Useful for the messages that do not automatically translate in a correspondent method in the virtual view and have to be handled by the middleware.
+     * @param message the message that needs to be handled.
+     */
+    private void filterMessages(Message message)
+    {
+        if(message.getMethodName().equals("pong"))
+        {
+            pongHandler(message);
+        }
+        else
+        {
+            callMethod(message);
+            if(message.getMethodName().equals("ackId"))
+            {
+                server.registerIdAck();
+            }
+        }
+    }
+
+    //TODO handle the client disconnecting
     /**
      * Runs in a separate thread on the server's side, handling incoming communications from the client to the server.
+     * Creates and runs the thread checking periodically the client's liveness.
      */
     public void run()
     {
+        new Thread(() -> {
+
+            while(true)
+            {
+                try
+                {
+                    Thread.sleep(livenessRate);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
+
+                synchronized (liveLock)
+                {
+                    if(!clientIsLive)
+                        System.out.println("Client not reachable");
+                    else
+                        clientIsLive = false;
+                }
+            }
+        }).start();
+
         ObjectInputStream ByteIn;
 
         while(true)
@@ -73,12 +151,7 @@ public class Connection extends Messenger implements Runnable
             try
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
-                Message message = (Message) ByteIn.readObject();
-                callMethod(message);
-                if(message.getMethodName().equals("ackId"))
-                {
-                    server.registerIdAck();
-                }
+                filterMessages((Message) ByteIn.readObject());
             }
             catch (ClassNotFoundException e)
             {
@@ -92,6 +165,9 @@ public class Connection extends Messenger implements Runnable
         }
     }
 
+    /**
+     * Closes the socket connection.
+     */
     private void close()
     {
         try{
