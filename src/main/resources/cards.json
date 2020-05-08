@@ -53,6 +53,12 @@
          "name": "Prometheus",
          "num": "10",
          "image": "prometheus.png"
+      },
+      {
+         "desc": "Your Build: Your Worker may build a block under itself.",
+         "name": "Zeus",
+         "num": "30",
+         "image": "anon.png"
       }
    ]
 }

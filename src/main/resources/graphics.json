@@ -253,6 +253,10 @@
 			"file": "prometheus.png"
 		},
 		{
+			"name": "Zeus",
+			"file": "anon.png"
+		},
+		{
 			"name": "Anonymous",
 			"file": "anon.png"
 		}

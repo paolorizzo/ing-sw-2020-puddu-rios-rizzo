@@ -56,6 +56,7 @@ public class PowerStrategyTest {
         powersTest.put(8, new MinotaurPowerTest());
         powersTest.put(9, new PanPowerTest());
         powersTest.put(10, new PrometheusPowerTest());
+        powersTest.put(30, new ZeusPowerTest());
 
         Deck deck = new Deck();
 

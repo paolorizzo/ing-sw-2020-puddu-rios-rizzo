@@ -30,6 +30,13 @@ public class PowerTest {
                 countBuild++;
                 Piece piece = ((BuildAction) action).getPiece();
                 assert(board.getSpaces()[targetX][targetY].getLastPiece().nextPiece() == piece);
+                for(int i=0;i<5;i++){
+                    for(int j=0;j<5;j++){
+                        Space space = board.getSpaces()[i][j];
+                        if(space.hasWorkerOnIt() && space.getWorkerOnIt().toString().equals(workerID))
+                            assert(board.getSpaces()[targetX][targetY].getAdjacentSpaces().contains(space));
+                    }
+                }
             } else {
                 assert(false);
             }
