@@ -40,7 +40,7 @@ public class RectangleCLI
         this.figures = new ArrayList<>();
         this.chunks = null;
     }
-
+    
     public RectangleCLI createInRelativeFrame(int x, int y, int sideX, int sideY)
     {
 

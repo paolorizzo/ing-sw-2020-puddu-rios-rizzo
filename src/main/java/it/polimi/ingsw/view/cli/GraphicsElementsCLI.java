@@ -1,7 +1,15 @@
 package it.polimi.ingsw.view.cli;
 
-public class GraphicsElementsCLI
+/**
+ * Encapsulates all the loadings of textures for the CLI.
+ */
+class GraphicsElementsCLI
 {
+    /**
+     * Sets up graphics for a determinate level of a building.
+     * @param figure the RectangleCLI instance to set the texture on.
+     * @param level the requested level to draw.
+     */
     public static void drawLevel(RectangleCLI figure, int level)
     {
         switch (level) {
@@ -29,6 +37,11 @@ public class GraphicsElementsCLI
         }
     }
 
+    /**
+     * Sets up graphics for the picture of a God, to be inserted in a card.
+     * @param pic the RectangleCLI instance to set the texture on.
+     * @param title the name of the god on the card.
+     */
     public static void drawGod(RectangleCLI pic, String title)
     {
         switch(title)
@@ -71,6 +84,12 @@ public class GraphicsElementsCLI
         }
     }
 
+    /**
+     * Sets up graphics for an arrow used to iterate through cards.
+     * @param arrow the RectangleCLI instance to set the texture on.
+     * @param userSelection an integer representing which part of the scene the user is selecting. Based on the selection, the color changes.
+     * @param right a flag to distinguish between right and left arrow. True if the arrow to draw is the arrow pointing right.
+     */
     public static void drawArrow(RectangleCLI arrow, int userSelection, boolean right)
     {
         if(right)
@@ -85,12 +104,22 @@ public class GraphicsElementsCLI
         }
     }
 
+    /**
+     * Sets up graphics for the card background.
+     * @param card the RectangleCLI instance to set the texture on.
+     */
     public static void drawCard(RectangleCLI card)
     {
         card.setMask("./src/main/resources/card.txt");
         card.setPalette(AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_YELLOW);
     }
 
+    /**
+     * Sets up graphics for a number, used in the setup phase to select the number of players.
+     * @param figure the RectangleCLI instance to set the texture on.
+     * @param num an integer indicating which number to draw. Only "2" or "3" are allowed.
+     * @param selection an integer representing which part of the scene the user is selecting. Based on the selection, the color changes.
+     */
     public static void drawNumber(RectangleCLI figure, int num, int selection)
     {
         if(num==2)
@@ -105,6 +134,11 @@ public class GraphicsElementsCLI
         }
     }
 
+    /**
+     * Sets up graphics for a worker to be represented on the game board.
+     * @param worker the RectangleCLI instance to set the texture on.
+     * @param player the ID number of the player, necessary to pick the correct color for the worker.
+     */
     public static void drawWorker(RectangleCLI worker, char player)
     {
         worker.setMask("./src/main/resources/worker.txt");
