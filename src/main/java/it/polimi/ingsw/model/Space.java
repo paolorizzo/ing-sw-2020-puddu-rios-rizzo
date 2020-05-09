@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Space {
 
@@ -97,4 +98,14 @@ public class Space {
     protected Space lightClone(){
         return new Space(posX, posY);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Space)) return false;
+        Space space = (Space) o;
+        return posX == space.posX &&
+                posY == space.posY;
+    }
+
 }

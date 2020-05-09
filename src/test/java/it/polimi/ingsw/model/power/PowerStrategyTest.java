@@ -10,7 +10,7 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 10000;
+        int numberOfTest = 1000000;
 
         for(int seed=0;seed<numberOfTest;seed++){
             gameRandomTest(seed);
@@ -60,6 +60,8 @@ public class PowerStrategyTest {
         powersTest.put(10, new PrometheusPowerTest());
         powersTest.put(20, new HeraPowerTest());
         powersTest.put(21, new HestiaPowerTest());
+        powersTest.put(22, new HypnusPowerTest());
+        powersTest.put(23, new LimusPowerTest());
         powersTest.put(30, new ZeusPowerTest());
         Deck deck = new Deck();
 
@@ -97,9 +99,8 @@ public class PowerStrategyTest {
             result = currPlayer.getCard().getPowerStrategy().generateActionTree(board, currPlayer);
             //pruning ActionTree
             for(Player opponent: players){
-                if(!opponent.equals(currPlayer) && opponent.getCard().getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(opponent))){
-                        opponent.getCard().getPowerStrategy().pruneActionTree(result);
-                }
+                if(opponent != currPlayer)
+                    opponent.getCard().getPowerStrategy().pruneOtherActionTree(board, opponent, currPlayer, turnArchive.getLastTurnOf(opponent), result);
             }
 
             //generate random turn
@@ -116,9 +117,8 @@ public class PowerStrategyTest {
                 turn.add(curr.getAction());
             }
             for(Player opponent: players){
-                if(!opponent.equals(currPlayer) && opponent.getCard().getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(opponent))){
-                    powersTest.get(opponent.getCard().getNum()).assertPruning(turn, curr);
-                }
+                if(opponent!=currPlayer)
+                    powersTest.get(opponent.getCard().getNum()).assertPruning(board, opponent, currPlayer, turnArchive.getLastTurnOf(opponent), turn, curr);
             }
             //assert and execute turn
             powersTest.get(currPlayer.getCard().getNum()).assertPower(board, turn, curr);
@@ -366,32 +366,6 @@ public class PowerStrategyTest {
 
     }
 
-    @Test
-    public void testPruning(){
-        Player p1 = new Player("Paolo", Color.BLUE, 1);
-        Player p2 = new Player("Federico", Color.WHITE, 2);
-        Board board = new Board();
-
-        board.createPlayerWorkers(p1);
-        board.createPlayerWorkers(p2);
-
-        Action a1 = new SetupAction(p1.getWorker(Sex.MALE).toString(), 1, 3);
-        Action a2 = new SetupAction(p1.getWorker(Sex.FEMALE).toString(), 3, 3);
-        Action a3 = new SetupAction(p2.getWorker(Sex.MALE).toString(), 0, 4);
-        Action a4 = new SetupAction(p2.getWorker(Sex.FEMALE).toString(), 2, 2);
-        board.executeAction(a1);
-        board.executeAction(a2);
-        board.executeAction(a3);
-        board.executeAction(a4);
-
-        PowerStrategy powerStrategy = new PowerStrategy();
-        assert(!powerStrategy.requirePruning(null));
-        ActionTree result = powerStrategy.generateActionTree(board, p1);
-        ActionTree result2 = powerStrategy.generateActionTree(board, p1);
-        powerStrategy.pruneActionTree(result2);
-
-        assert(result.equals(result2));
-    }
 
     @Test(expected = InvalidActionTreeGenerationException.class)
     public void tryMoveAfterAction()

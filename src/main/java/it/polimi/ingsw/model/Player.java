@@ -94,11 +94,8 @@ public class Player
     public ActionTree generateActionTree(Board board){
         return card.getPowerStrategy().generateActionTree(board, this);
     }
-    public boolean requirePruning(TurnArchive turnArchive){
-        return card.getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(this));
-    }
-    public void pruneActionTree(ActionTree actionTree){
-        card.getPowerStrategy().pruneActionTree(actionTree);
+    public void pruneOtherActionTree(Board board, Player other, Turn myLastTurn, ActionTree otherActionTree){
+        card.getPowerStrategy().pruneOtherActionTree(board,this, other, myLastTurn, otherActionTree);
     }
     @Override
     public boolean equals(Object o) {

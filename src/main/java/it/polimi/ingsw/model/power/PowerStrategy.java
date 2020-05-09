@@ -105,12 +105,7 @@ public class PowerStrategy {
         }
     }
 
-    //nothing to prune in base case
-    public boolean requirePruning(Turn lastTurn){
-        return false;
-    }
-    //nothing change in base case
-    public void pruneActionTree(ActionTree root){
+    public void pruneOtherActionTree(Board board, Player myself, Player other, Turn myLastTurn, ActionTree otherActionTree){
         return;
     }
 

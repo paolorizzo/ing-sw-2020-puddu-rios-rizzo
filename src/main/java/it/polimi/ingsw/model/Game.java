@@ -222,9 +222,9 @@ public class Game {
 
     private ActionTree generateActionTree(int id){
         ActionTree actionTree = model.players.get(id).generateActionTree(model.board);
-        for(int other: idCurrentPlayers){
-            if(other != id && model.getPlayers().get(other).requirePruning(turnArchive))
-                model.getPlayers().get(other).pruneActionTree(actionTree);
+        for(int opponent: idCurrentPlayers){
+            if(opponent != id)
+                model.getPlayers().get(opponent).pruneOtherActionTree(model.board, model.getPlayer(id), turnArchive.getLastTurnOf(model.getPlayer(opponent)), actionTree);
         }
         return actionTree;
     }

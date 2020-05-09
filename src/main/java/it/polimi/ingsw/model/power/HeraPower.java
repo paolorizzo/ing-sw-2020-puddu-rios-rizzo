@@ -4,11 +4,11 @@ import it.polimi.ingsw.model.*;
 
 
 public class HeraPower extends PowerStrategy{
-    public boolean requirePruning(Turn lastTurn){
-        return true;
+    public void pruneOtherActionTree(Board board, Player myself, Player other, Turn myLastTurn, ActionTree otherActionTree){
+        prune(otherActionTree);
     }
 
-    public void pruneActionTree(ActionTree curr){
+    public void prune(ActionTree curr){
 
         for(ActionTree child: curr.getChildren()){
             int targetX = child.getAction().getTargetX();
@@ -23,7 +23,7 @@ public class HeraPower extends PowerStrategy{
                 }
 
             }
-            pruneActionTree(child);
+            prune(child);
         }
     }
 }

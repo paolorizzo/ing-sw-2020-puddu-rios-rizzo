@@ -4,13 +4,13 @@ import it.polimi.ingsw.model.*;
 
 public class HeraPowerTest extends PowerTest{
     @Override
-    public void assertPruning(Turn turn, ActionTree lastLayer) {
-        Action action = lastLayer.getAction();
-        if(lastLayer.isLose())
+    public void assertPruning(Board board, Player myself, Player other, Turn myLastTurn,  Turn otherTurn, ActionTree otherLastLayer) {
+        Action action = otherLastLayer.getAction();
+        if(otherLastLayer.isLose())
             return;
         int targetX = action.getTargetX();
         int targetY = action.getTargetY();
-        if(action instanceof MoveAction && lastLayer.isWin())
+        if(action instanceof MoveAction && otherLastLayer.isWin())
             assert(!(targetX == 0 || targetY == 0 || targetX == 4 || targetY == 4));
 
     }

@@ -67,6 +67,18 @@
          "image": "anon.png"
       },
       {
+         "desc": "Start of Opponent’s Turn: If one of your opponent’s Workers is higher than all of their others, it cannot move.",
+         "name": "Hypnus",
+         "num": "22",
+         "image": "anon.png"
+      },
+      {
+         "desc": "Opponent’s Turn: Opponent Workers cannot build on spaces neighboring your Workers, unless building a dome to create a Complete Tower.",
+         "name": "Limus",
+         "num": "23",
+         "image": "anon.png"
+      },
+      {
          "desc": "Your Build: Your Worker may build a block under itself.",
          "name": "Zeus",
          "num": "30",

@@ -22,10 +22,10 @@ public class GuiApp extends Application {
     private static final int HEIGHT = 800;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage){
 
 
-        Client client = new Client("79.42.255.70", 42069);
+        Client client = new Client("127.0.0.1", 42069);
         ClientView cw = new ClientView(client);
 
         client.setClientView(cw);
