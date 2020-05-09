@@ -111,10 +111,9 @@ public class Connection extends Messenger implements Runnable
         }
         else
         {
-            synchronized(liveLock)
-            {
+            new Thread(() -> {
                 callMethod(message);
-            }
+            }).start();
 
             if(message.getMethodName().equals("ackId"))
             {
