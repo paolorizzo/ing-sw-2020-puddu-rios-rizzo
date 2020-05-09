@@ -61,6 +61,12 @@
          "image": "anon.png"
       },
       {
+         "desc": "Your Build: Your Worker may build one additional time, but this cannot be on a perimeter space.",
+         "name": "Hestia",
+         "num": "21",
+         "image": "anon.png"
+      },
+      {
          "desc": "Your Build: Your Worker may build a block under itself.",
          "name": "Zeus",
          "num": "30",

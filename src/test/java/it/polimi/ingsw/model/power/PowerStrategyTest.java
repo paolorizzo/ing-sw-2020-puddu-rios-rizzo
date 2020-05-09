@@ -10,7 +10,7 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 1000000;
+        int numberOfTest = 10000;
 
         for(int seed=0;seed<numberOfTest;seed++){
             gameRandomTest(seed);
@@ -59,8 +59,8 @@ public class PowerStrategyTest {
         powersTest.put(9, new PanPowerTest());
         powersTest.put(10, new PrometheusPowerTest());
         powersTest.put(20, new HeraPowerTest());
+        powersTest.put(21, new HestiaPowerTest());
         powersTest.put(30, new ZeusPowerTest());
-
         Deck deck = new Deck();
 
         for(Player player: players) {
