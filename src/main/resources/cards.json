@@ -55,6 +55,12 @@
          "image": "prometheus.png"
       },
       {
+         "desc": "Opponent’s Turn: An opponent cannot win by moving into a perimeter space.",
+         "name": "Hera",
+         "num": "20",
+         "image": "anon.png"
+      },
+      {
          "desc": "Your Build: Your Worker may build a block under itself.",
          "name": "Zeus",
          "num": "30",

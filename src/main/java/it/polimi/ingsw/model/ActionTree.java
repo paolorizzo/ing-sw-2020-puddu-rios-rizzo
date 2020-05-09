@@ -44,6 +44,9 @@ public class ActionTree {
         return endOfTurn;
     }
 
+    public void setWin(boolean win){
+        this.win = win;
+    }
     public void setLose(boolean lose){
         this.lose = lose;
     }

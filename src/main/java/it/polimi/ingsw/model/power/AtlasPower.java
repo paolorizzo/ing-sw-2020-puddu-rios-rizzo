@@ -51,6 +51,12 @@ public class AtlasPower extends PowerStrategy {
                         }
                     }
                 }
+                if(!built && !curr.isWin()){
+                    //can't built with the worker selected
+                    // lose
+                    curr.setLose(true);
+                    curr.setEndOfTurn(true);
+                }
             }
         }
 

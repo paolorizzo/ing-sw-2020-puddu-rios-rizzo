@@ -10,18 +10,20 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 10000;
+        int numberOfTest = 1000000;
 
-        Random rand = new Random(42);
         for(int seed=0;seed<numberOfTest;seed++){
-            gameRandomTest(seed, rand.nextInt(2)+2);
+            gameRandomTest(seed);
         }
     }
-    public void gameRandomTest(int seed, int numOfPlayer) {
+    public void gameRandomTest(int seed) {
+
+        boolean verbose = false; // true to active verbose
+        Random rand = new Random(seed);
+        rand.nextInt();
+        int numOfPlayer = rand.nextInt(2)+2;
 
         System.out.println("Game #"+seed+" numOfPlayer "+numOfPlayer);
-
-        Random rand = new Random(seed);
 
         rand.nextInt();
 
@@ -56,6 +58,7 @@ public class PowerStrategyTest {
         powersTest.put(8, new MinotaurPowerTest());
         powersTest.put(9, new PanPowerTest());
         powersTest.put(10, new PrometheusPowerTest());
+        powersTest.put(20, new HeraPowerTest());
         powersTest.put(30, new ZeusPowerTest());
 
         Deck deck = new Deck();
@@ -65,8 +68,8 @@ public class PowerStrategyTest {
             List<Card> cards = deck.getCards();
 
             player.setCard(deck.pickCard(cards.get(rand.nextInt(cards.size())).getNum()));
-
-            //System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
+            if(verbose)
+                System.out.println(player.getNickname()+" pick the card "+player.getCard().getName());
 
             for(Sex sex: Sex.values()){
                 int x = rand.nextInt(5), y = rand.nextInt(5);
@@ -75,7 +78,8 @@ public class PowerStrategyTest {
                     y = rand.nextInt(5);
                 }
                 board.executeAction(new SetupAction(player.getWorker(sex).toString(), x, y));
-                //System.out.println(player.getNickname()+" setup worker "+sex+" on "+x+" "+y);
+                if(verbose)
+                    System.out.println(player.getNickname()+" setup worker "+sex+" on "+x+" "+y);
             }
 
         }
@@ -86,7 +90,8 @@ public class PowerStrategyTest {
         ActionTree result;
         while(true){
             Player currPlayer = players.get(playerTurn%players.size());
-            //System.out.println("Num Turn "+numTurn+" player: "+currPlayer.getNickname());
+            if(verbose)
+                System.out.println("Num Turn "+numTurn+" player: "+currPlayer.getNickname());
 
             //generate ActionTree
             result = currPlayer.getCard().getPowerStrategy().generateActionTree(board, currPlayer);
@@ -106,12 +111,13 @@ public class PowerStrategyTest {
                     assert(false);
                 int numChild = rand.nextInt(size);
                 curr = curr.getChildren().get(numChild);
-                //System.out.println("\t"+curr.getAction());
+                if(verbose)
+                    System.out.println("\t"+curr.getAction());
                 turn.add(curr.getAction());
             }
             for(Player opponent: players){
                 if(!opponent.equals(currPlayer) && opponent.getCard().getPowerStrategy().requirePruning(turnArchive.getLastTurnOf(opponent))){
-                    powersTest.get(opponent.getCard().getNum()).assertPruning(turn);
+                    powersTest.get(opponent.getCard().getNum()).assertPruning(turn, curr);
                 }
             }
             //assert and execute turn

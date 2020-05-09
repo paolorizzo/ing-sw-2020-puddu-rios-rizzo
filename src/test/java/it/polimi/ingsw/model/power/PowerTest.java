@@ -52,7 +52,7 @@ public class PowerTest {
         }
     }
 
-    public void assertPruning(Turn turn){
+    public void assertPruning(Turn turn, ActionTree lastLayer){
         assert(true);
     }
 
