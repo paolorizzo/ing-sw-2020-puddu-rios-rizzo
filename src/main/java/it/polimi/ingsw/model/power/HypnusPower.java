@@ -20,11 +20,11 @@ public class HypnusPower extends PowerStrategy {
     }
 
 
-    public void prune(ActionTree root, Worker cantmoveworker){
+    public void prune(ActionTree root, Worker blockedWorker){
 
         List<ActionTree> childrenToRemove = new ArrayList<>();
         for(ActionTree child: root.getChildren()){
-            if(child.getAction().getWorkerID().equals(cantmoveworker.toString())){
+            if(child.getAction().getWorkerID().equals(blockedWorker.toString())){
                 //prune branch
                 childrenToRemove.add(child);
             }
