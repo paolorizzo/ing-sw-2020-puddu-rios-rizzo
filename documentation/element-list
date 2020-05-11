@@ -1,6 +1,11 @@
+module:ing.sw.puddu.rios.rizzo
 it.polimi.ingsw
 it.polimi.ingsw.controller
+it.polimi.ingsw.exception
 it.polimi.ingsw.model
 it.polimi.ingsw.model.power
+it.polimi.ingsw.observation
 it.polimi.ingsw.view
+it.polimi.ingsw.view.cli
+it.polimi.ingsw.view.gui
 it.polimi.ingsw.view.middleware
