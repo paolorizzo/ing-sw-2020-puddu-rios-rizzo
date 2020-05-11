@@ -10,7 +10,7 @@ public class PowerStrategyTest {
 
     @Test
     public void gameRandomTest(){
-        int numberOfTest = 1000000;
+        int numberOfTest = 10000;
 
         for(int seed=0;seed<numberOfTest;seed++){
             gameRandomTest(seed);

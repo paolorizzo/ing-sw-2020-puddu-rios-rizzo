@@ -44,7 +44,7 @@ public class StubView extends View{
     @Override
     public void updateOk(int id){}
     @Override
-    public void updateKo(int id){}
+    public void updateKo(int id, String problem){}
 
     //connection phase updates
     @Override

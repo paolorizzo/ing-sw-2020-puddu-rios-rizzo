@@ -135,7 +135,7 @@ public class Controller implements ControllerInterface
                 }
                 else{
                     System.out.println("Number of players " + numPlayers + " rejected");
-                    model.feed.notifyKo(id);
+                    model.feed.notifyKo(id, "number of players must be 2 or 3");
                 }
             }
         }
@@ -195,7 +195,7 @@ public class Controller implements ControllerInterface
 
                 if(model.nicknamePresent(name)){
                     System.out.println("name not accepted because already present");
-                    model.feed.notifyKo(id);
+                    model.feed.notifyKo(id, "this name is already taken");
                 }
                 else{
                     System.out.println("name " + name + " accepted for player " + id);
@@ -250,18 +250,21 @@ public class Controller implements ControllerInterface
     public synchronized void publishCards(int id, List<Integer> numCards){
         try{
             if(id != 0){
+                model.feed.notifyKo(id, "You do not possess the right to choose the cards");
                 throw new IllegalArgumentException(id+" can't choose card");
             }
             if(model.game.cardsAlreadyChosen()){
+                model.feed.notifyKo(id, "The cards have already been chosen");
                 throw new IllegalArgumentException("cards already chosen");
             }
             if(numCards.size() != model.getNumPlayers()){
+                model.feed.notifyKo(id, "You must choose a number of cards equal to the number of players");
                 throw new IllegalArgumentException("number of cards chosen different from the number of players");
             }
             model.game.setChosenCards(numCards);
 
         }catch(IllegalArgumentException e){
-            model.feed.notifyKo(id);
+            //model.feed.notifyKo(id, "");
             return;
         }
         model.feed.notifyOk(id);
@@ -300,7 +303,7 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void setCard(int id, int numCard){
         if(id != model.game.getCurrentPlayerId() || !model.game.isCardPickable(numCard)){
-            model.feed.notifyKo(id);
+            model.feed.notifyKo(id, "God choice unacceptable: either out of turn or not amongst picked cards");
         }else{
             model.setCardPlayer(id, numCard);   //ADVANCES THE TURN
             model.feed.notifyOk(id);
@@ -338,7 +341,7 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void setupWorker(int id, SetupAction setupAction){
         if(id != model.game.getCurrentPlayerId() || !model.game.possibleActionsContains(setupAction)){
-            model.feed.notifyKo(id);
+            model.feed.notifyKo(id, "Worker placement unacceptable: either out of turn of not possible");
             return;
         }
         model.executeSetupAction(id, setupAction);

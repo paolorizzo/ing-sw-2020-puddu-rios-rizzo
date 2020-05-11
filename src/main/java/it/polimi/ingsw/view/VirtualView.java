@@ -28,8 +28,8 @@ public class VirtualView extends View
     }
 
     @Override
-    public synchronized void updateKo(int id){
-        connection.sendMessage("notifyKo", id);
+    public synchronized void updateKo(int id, String problem){
+        connection.sendMessage("notifyKo", id, problem);
     }
 
 

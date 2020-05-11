@@ -18,9 +18,9 @@ public class FeedObservable extends Observable<FeedObserver> {
             obs.updateOk(id);
         }
     }
-    public synchronized void notifyKo(int id){
+    public synchronized void notifyKo(int id, String problem){
         for(FeedObserver obs:observers){
-            obs.updateKo(id);
+            obs.updateKo(id, problem);
         }
     }
     public synchronized void notifyCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {

@@ -10,7 +10,7 @@ public interface FeedObserver {
 
     //general updates
     public void updateOk(int id);
-    public void updateKo(int id);
+    public void updateKo(int id, String problem);
     public void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn);
 
     //connection phase updates

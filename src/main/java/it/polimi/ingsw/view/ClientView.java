@@ -51,23 +51,28 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //updates relative to UserInterface
+    @Override
     public synchronized void updateReadNumPlayers(int numPlayers){
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
+    @Override
     public synchronized void updateReadName(String name){
         if(currentConnectionState.equals(ConnectionState.READ_NAME))
             currentConnectionState.execute(this, name);
     }
+    @Override
     public synchronized void updateReadNumCard(int numCard) {
         if(currentSetupState.equals(SetupState.READ_CARD))
             currentSetupState.execute(this, numCard);
     }
+    @Override
     public synchronized void updateReadGod(int numCard) {
         if(currentSetupState.equals(SetupState.READ_GOD))
             currentSetupState.execute(this, numCard);
     }
 
+    @Override
     public synchronized void updateReadAction(Action action) {
         if(currentSetupState.equals(SetupState.READ_SETUP_WORKER))
             currentSetupState.execute(this, action);
@@ -75,6 +80,7 @@ public class ClientView extends View implements UserInterfaceObserver
             currentGameState.execute(this, action);
     }
 
+    @Override
     public synchronized void updateReadVoluntaryEndOfTurn() {
         if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION)){
             currentGameState = GameState.PUBLISH_VOLUNTARY_END_OF_TURN;
@@ -83,11 +89,13 @@ public class ClientView extends View implements UserInterfaceObserver
     }
     //updates relative to GameObserver
 
+    @Override
     public synchronized void updateNumPlayers(int numPlayers){
         //System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
+    @Override
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         //System.out.println("currplayer "+id);
         if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
@@ -102,6 +110,7 @@ public class ClientView extends View implements UserInterfaceObserver
 
     }
 
+    @Override
     public void updateEndOfTurnPlayer(int id){
         if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
             //torno in attesa del mio turno
@@ -110,6 +119,7 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    @Override
     public synchronized void updateAction(int id, Action action){
         getUi().executeAction(action);
         //System.out.println("Execute action: "+action.toString());
@@ -117,6 +127,7 @@ public class ClientView extends View implements UserInterfaceObserver
 
     //updates relative to PlayersObserver
 
+    @Override
     public synchronized void updateID(int id){
 
         /*
@@ -130,11 +141,13 @@ public class ClientView extends View implements UserInterfaceObserver
             currentConnectionState.execute(this, id);
     }
 
+    @Override
     public synchronized void updateAllPlayersConnected(){
         if(currentConnectionState.equals(ConnectionState.RECEIVE_ALL_PLAYERS_CONNECTED))
             currentConnectionState.execute(this, null);
     }
 
+    @Override
     public synchronized void updateStart(){
         //System.out.println("starting this client");
         if(currentConnectionState.equals(ConnectionState.READY))
@@ -142,6 +155,7 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //this method supposes that only valid names are received
+    @Override
     public synchronized void updateName(int id, String name){
         getUi().registerPlayer(id, name);
         if(getUi().getNumPlayersRegister() == getUi().getNumPlayers() && currentConnectionState == ConnectionState.WAIT_ALL_PLAYERS_NAME){
@@ -150,6 +164,7 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    @Override
     public synchronized void updateDeck(Deck deck) {
         if(currentSetupState == SetupState.RECEIVE_DECK){
             currentSetupState.execute(this, deck);
@@ -157,16 +172,19 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
 
+    @Override
     public synchronized void updateCards(int id, List<Card> cards) {
         if(id == getId() && currentSetupState == SetupState.RECEIVE_CARDS){
             currentSetupState.execute(this, cards);
         }
     }
 
+    @Override
     public synchronized void updateGod(int id, Card card){
         getUi().registerGod(id, card);
     }
 
+    @Override
     public synchronized void updatePlayerWin(int id){
         if(id == getId()){
             currentGameState = GameState.WIN_STATE;
@@ -175,6 +193,7 @@ public class ClientView extends View implements UserInterfaceObserver
         }
         currentGameState.execute(this, null);
     }
+    @Override
     public synchronized void updatePlayerLose(int id){
         if(id == getId()){
             currentGameState = GameState.LOSE_STATE;
@@ -182,22 +201,24 @@ public class ClientView extends View implements UserInterfaceObserver
         }
         getUi().removeWorkersOfPlayer(id);
     }
+    @Override
     public synchronized void updateOk(int id) {
         if(id == this.id){
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
-                currentConnectionState.execute(this, true);
+                currentConnectionState.execute(this, null);
             }else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
-                currentSetupState.execute(this, true);
+                currentSetupState.execute(this, null);
             }else{
                 throw new IncorrectStateException("Received an okay for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
             }
         }
     }
 
-    public synchronized void updateKo(int id){
+    @Override
+    public synchronized void updateKo(int id, String problem){
         if(id == this.id){
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
-                currentConnectionState.execute(this, false);
+                currentConnectionState.execute(this, problem);
             }
             else{
                 throw new IncorrectStateException("Received a ko for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());

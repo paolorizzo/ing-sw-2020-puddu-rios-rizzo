@@ -71,7 +71,8 @@ public enum SetupState {
     },
     RECEIVE_CHECK{
         public void execute(ClientView view, Object input) {
-            boolean success = (boolean) input;
+            String problem = (String) input;
+            boolean success = (problem == null);
 
             SetupState nextState;
             Object nextInput;
