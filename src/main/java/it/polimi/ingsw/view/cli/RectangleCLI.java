@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * The basic printable entity for the CLI graphics.
+ */
 public class RectangleCLI
 {
     protected final int originX;
@@ -41,6 +44,14 @@ public class RectangleCLI
         this.chunks = null;
     }
 
+    /**
+     * Factory method useful to design figures in a relative position to an existing one.
+     * @param x the desired horizontal delta whit respect to the object the method is called on.
+     * @param y the desired vertical delta whit respect to the object the method is called on.
+     * @param sideX the horizontal side of the desired figure.
+     * @param sideY the vertical side of the desired figure.
+     * @return the new RectangleCLI object.
+     */
     public RectangleCLI createInRelativeFrame(int x, int y, int sideX, int sideY)
     {
 
@@ -49,26 +60,44 @@ public class RectangleCLI
 
 
     //modifiers
-    public void addOverlappingFigure(RectangleCLI figure)
+    /**
+     * Adds a new figure as overlapping, meaning that it will be printed on the top of this.
+     * Multiple overlapping figures are allowed, but every new figure is added as top layer.
+     * @param figure the overlapping RectangleCLI object.
+     */
+    void addOverlappingFigure(RectangleCLI figure)
     {
 
         figures.add(0,figure);
     }
 
-    public void addText(String s)
+    /**
+     * Adds text to be printed on this.
+     * @param s the text to be printed.
+     */
+    void addText(String s)
     {
+
         this.chunks = Arrays.asList(getChunks(s)).iterator();
-        //System.out.println(s);
     }
 
-    public void setPalette(String... colors)
+    //TODO test if they're actually color strings.
+    /**
+     * Sets a set of colors to be mapped on the texture.
+     * @param colors a set of color strings.
+     */
+    void setPalette(String... colors)
     {
         List<String> pal = new ArrayList();
         Collections.addAll(pal, colors);
         this.palette = pal.toArray(new String[0]);
     }
 
-    public void setMask(String URI)
+    /**
+     * Sets a texture mask to be mapped on the local palette.
+     * @param URI the location of the text file storing the mask.
+     */
+    void setMask(String URI)
     {
 
         this.mask = obtainMask(URI);
@@ -76,18 +105,34 @@ public class RectangleCLI
 
 
     //observers
-    public boolean isItIn(int x, int y)
+    /**
+     * Checks if a pair of coordinates belongs to this rectangle's area, considered in the canvas frame.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return true if the considered position is in the rectangle, else otherwise.
+     */
+    boolean isItIn(int x, int y)
     {
         return x >= originX && y >= originY && x < (originX+sideX) && y < (originY+sideY);
     }
 
-    public boolean hasText()
+    /**
+     * Checks if this rectangle has some text on it.
+     * @return true if text has been set on this.
+     */
+    boolean hasText()
     {
 
         return chunks != null;
     }
 
-    public boolean hasOverlapHere(int x, int y)
+    /**
+     * Checks if this has overlapping figures in a certain point.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return true if this has overlapping figures in the defined position.
+     */
+    boolean hasOverlapHere(int x, int y)
     {
         for(RectangleCLI r:figures)
         {
@@ -100,7 +145,13 @@ public class RectangleCLI
         return false;
     }
 
-    public String getTopLayerText(int x, int y)
+    /**
+     * Recursively compute the top layer's text in a certain position.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return the text if present, a blank string otherwise.
+     */
+    String getTopLayerText(int x, int y)
     {
         if(hasOverlapHere(x, y))
         {
@@ -119,7 +170,13 @@ public class RectangleCLI
         return "   ";
     }
 
-    public String getTopLayerColor(int x, int y)
+    /**
+     * Recursively compute the top layer's background color in a certain position.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return the color string.
+     */
+    String getTopLayerColor(int x, int y)
     {
         if(hasOverlapHere(x, y))
         {
@@ -134,7 +191,13 @@ public class RectangleCLI
         return getColor(x,y);
     }
 
-    public String getColor(int x, int y)
+    /**
+     * Gets the background color of a determinate point of this.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return the color string.
+     */
+    String getColor(int x, int y)
     {
         if(mask != null && palette != null)
         {
@@ -146,6 +209,15 @@ public class RectangleCLI
         }
     }
 
+    //TODO handle requests out of the area
+    /**
+     * Actually computes the background color in a certain position, mapping the palette on the texture mask.
+     * @param mask a matrix of chars representing the color in every point of the figure.
+     * @param palette a set of color strings.
+     * @param x the x coordinate, considered in the local frame.
+     * @param y the y coordinate, considered in the local frame.
+     * @return the color string.
+     */
     protected static String getBG(char[][] mask, String[] palette, int x, int y)
     {
         return palette[Character.getNumericValue(mask[y][x])];
@@ -154,6 +226,12 @@ public class RectangleCLI
 
     //utils
     //TODO rewrite in a less horrible way
+    /**
+     * Splits a single string in an array of multiple strings of length 3.
+     * This is needed to correctly display the text on the picture, as the basic printable unit is composed of  chars.
+     * @param text the original string to be split up.
+     * @return the array of strings.
+     */
     protected static String[] getChunks(String text)
     {
         String[] chunks;
@@ -200,12 +278,21 @@ public class RectangleCLI
         return chunks;
     }
 
+    //TODO create palette class
+    /**
+     * Initialize the palette field with a white background color.
+     * @return the newly created palette.
+     */
     protected String[] setDefaultPalette()
     {
 
         return new String[]{AnsiColors.ANSI_BG_WHITE};
     }
 
+    /**
+     * Initialize the mask field with an empty texture composed only by one background color.
+     * @return the newly created mask.
+     */
     protected char[][] setDefaultMask()
     {
         char[][] defMask = new char[sideY][sideX];
@@ -222,12 +309,19 @@ public class RectangleCLI
         return defMask;
     }
 
+    //TODO check the validity of URI
+    //TODO create mask class
+    /**
+     * Extract the mask from the text file storing it.
+     * @param URI the location of the file.
+     * @return the char matrix representing the texture.
+     */
     protected static char[][] obtainMask(String URI)
     {
-        File file = new File(URI); //"./src/main/resources/two.txt"
         List<char[]> l = new ArrayList();
         try
         {
+            File file = new File(URI);
             Scanner myReader = new Scanner(file);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -236,7 +330,7 @@ public class RectangleCLI
         }
         catch(FileNotFoundException e)
         {
-            System.out.println("file non trovato");
+            System.out.println("File not found!");
         }
 
         char[][] matr2 = new char[12][12];
@@ -245,12 +339,22 @@ public class RectangleCLI
         return matr2;
     }
 
+    /**
+     * Converts x coordinate from the canvas frame to the local frame.
+     * @param x the x coordinate, considered in the canvas frame.
+     * @return the converted coordinate.
+     */
     protected int XInRelativeFrame(int x)
     {
 
         return x - originX;
     }
 
+    /**
+     * Converts y coordinate from the canvas frame to the local frame.
+     * @param y the y coordinate, considered in the canvas frame.
+     * @return the converted coordinate.
+     */
     protected int YInRelativeFrame(int y)
     {
 

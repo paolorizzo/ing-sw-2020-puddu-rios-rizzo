@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.BuildAction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * Stores the data required for CLI representations.

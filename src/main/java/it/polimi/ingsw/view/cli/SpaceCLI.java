@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.cli;
 
+/**
+ * A CLI-oriented version of the Space class.
+ */
 public class SpaceCLI
 {
     private int x;
@@ -35,6 +38,12 @@ public class SpaceCLI
         return this.level;
     }
 
+    //TODO check if acceptable level
+    /**
+     * Sets texture and colors to a RectangleCLI instance representing a building.
+     * @param figure the figure to be decorated.
+     * @param level the top level of the building.
+     */
     public static void buildLevel(RectangleCLI figure, int level)
     {
         GraphicsElementsCLI.drawLevel(figure, level);
