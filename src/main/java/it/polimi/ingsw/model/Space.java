@@ -96,7 +96,10 @@ public class Space {
     }
 
     protected Space lightClone(){
-        return new Space(posX, posY);
+        Space space = new Space(posX, posY);
+        for(Piece piece: pieces)
+            space.addPiece(piece);
+        return space;
     }
 
     @Override

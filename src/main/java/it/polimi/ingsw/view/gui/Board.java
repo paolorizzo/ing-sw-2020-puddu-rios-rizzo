@@ -16,9 +16,16 @@ import java.util.List;
 
 import it.polimi.ingsw.model.Color;
 public class Board implements UserInterface {
+    Group groupRoot, group3d;
     Scene scene;
+
     private Tower [][] towers = new Tower[5][5];
     private HashMap<Integer, Player> players;
+
+    PieceBag pieceBag;
+
+    ClientView clientView;
+
     ActionFSM actionFSM;
 
     AskNumPlayersMenu askNumPlayersMenu;
@@ -29,11 +36,7 @@ public class Board implements UserInterface {
     SelectTypeActionMenu selectTypeActionMenu;
     SelectPieceMenu selectPieceMenu;
     EndOfTurnMenu endOfTurnMenu;
-    Group groupRoot, group3d;
-    PieceBag pieceBag;
-
-    ClientView clientView;
-
+    WinMenu winMenu;
 
     private final int WIDTH = 1400;
     private final int HEIGHT = 800;
@@ -98,7 +101,10 @@ public class Board implements UserInterface {
 
         endOfTurnMenu = new EndOfTurnMenu(actionFSM);
         groupRoot.getChildren().add(endOfTurnMenu);
-
+        /*
+        winMenu = new WinMenu();
+        groupRoot.getChildren().add(winMenu);
+        */
         pieceBag = new PieceBag();
 
     }

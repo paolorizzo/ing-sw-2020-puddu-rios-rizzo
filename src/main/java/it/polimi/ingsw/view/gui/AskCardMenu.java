@@ -31,7 +31,7 @@ public class AskCardMenu extends Group {
     HashMap<Integer, Label> cardLabels;
     public AskCardMenu(ClientView clientView) {
         this.cw = clientView;
-        rect = new Rectangle(740, 440);
+        rect = new Rectangle(740, 650);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);

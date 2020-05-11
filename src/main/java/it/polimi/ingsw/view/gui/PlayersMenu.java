@@ -2,13 +2,10 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Player;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -26,9 +23,6 @@ public class PlayersMenu extends Group {
     public PlayersMenu(){
         offsetX = 20;
         offsetY = 20;
-
-
-
     }
     public void addNamePlayer(Player player){
         String name = player.getNickname();
