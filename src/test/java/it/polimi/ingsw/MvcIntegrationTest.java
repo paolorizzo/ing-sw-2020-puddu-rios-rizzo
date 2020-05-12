@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MvcIntegrationTest
 {
-    protected ExecutorService executor = Executors.newFixedThreadPool(128);
+    protected ExecutorService executor = Executors.newFixedThreadPool(256);
 
     /**
      * Util to construct and run the server in a separate thread.

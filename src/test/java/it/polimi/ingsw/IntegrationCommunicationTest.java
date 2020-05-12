@@ -19,35 +19,32 @@ import static org.junit.Assert.assertEquals;
 
 public class IntegrationCommunicationTest extends MvcIntegrationTest {
 
-    private ExecutorService executor = Executors.newFixedThreadPool(128);
+    int port = 50000;
 
     //tests that one view can correctly receive a start signal, request and receive its id
     //runs the server and connects one view
     //this test is very significative because it is dependent on the entire chain of observer/observable patterns
     //to work, and on the network connection between Client and Server
-    @Test
-    public void loopTest(){
+    //@Test
+    public void loopTest(int port){
 
-        int port = 40000;
         Server server = buildAndRunServer(port);
-        try{
-            TimeUnit.SECONDS.sleep(1);
-        }
-        catch(InterruptedException e)
-        {
-            System.err.println(e.getMessage());
-        }
+        safeWaitFor(1);
         Client client = buildAndRunClient(port);
 
 
-        try{
-            TimeUnit.SECONDS.sleep(1);
+        safeWaitFor(2);
+        System.out.println(client.getClientView());
+        assertEquals(0, client.getClientView().getId());
+    }
+
+    @Test
+    public void loopLoopTest(){
+        super.executor = Executors.newFixedThreadPool(256);
+        int diocane = 100;
+        for (int i=0; i<diocane;i++){
+            loopTest(port-i);
         }
-        catch(InterruptedException e)
-        {
-            System.err.println(e.getMessage());
-        }
-        assert(client.getClientView().getId() == 0);
     }
 
     /*

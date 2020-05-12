@@ -32,8 +32,10 @@ public enum ConnectionState {
             int id = (int) input;
             //System.out.println("My id is: " + id);
             view.setID(id);
+            System.out.println("My id is: " + view.getId());
+            System.out.println(view);
             view.currentConnectionState = ACK_ID;
-            view.currentConnectionState.execute(view, id);
+            view.currentConnectionState.execute(view, null);
         }
     },
     //decides the branch of the fsm to take based on the id
@@ -41,7 +43,7 @@ public enum ConnectionState {
         //sends ack of the reception of the id to the controller
         //this is used to synchronize the connection of the different clients
         public void execute(ClientView view, Object input) {
-            int id = (int) input;
+            int id = view.getId();
             view.getController().ackId(id);
             if(id == 0) {
                 view.currentConnectionState = ASK_NUM_PLAYERS;

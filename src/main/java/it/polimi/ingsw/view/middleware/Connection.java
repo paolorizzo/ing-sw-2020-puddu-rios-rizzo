@@ -22,6 +22,8 @@ public class Connection extends Messenger implements Runnable
     private final int livenessRate = 5000;
     private final int invalidPongTreshold = 10000;
 
+    private Integer currMessage;
+
     public Connection(Socket socket, Server server)
     {
         this.socket = socket;
@@ -31,6 +33,7 @@ public class Connection extends Messenger implements Runnable
         this.clientIsLive = false;
         this.messageLock = new Object();
         this.newMessageReceived = false;
+        this.currMessage = 0;
     }
 
     /**
@@ -103,7 +106,7 @@ public class Connection extends Messenger implements Runnable
      * Useful for the messages that do not automatically translate in a correspondent method in the virtual view and have to be handled by the middleware.
      * @param message the message that needs to be handled.
      */
-    private void filterMessages(Message message)
+    private void filterMessages(Message message, final int messageReceived)
     {
         if(message.getMethodName().equals("pong"))
         {
@@ -112,7 +115,18 @@ public class Connection extends Messenger implements Runnable
         else
         {
             new Thread(() -> {
-                callMethod(message);
+                synchronized(currMessage){
+                    while(messageReceived < currMessage){
+                        try{
+                            currMessage.wait();
+                        }
+                        catch(InterruptedException e){
+                            e.getStackTrace();
+                        }
+                    }
+                    callMethod(message);
+                    currMessage++;
+                }
             }).start();
 
             if(message.getMethodName().equals("ackId"))
@@ -153,12 +167,14 @@ public class Connection extends Messenger implements Runnable
         }).start();
 
         ObjectInputStream ByteIn;
+        int messageReceived = 0;
         while(true)
         {
             try
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
-                filterMessages((Message) ByteIn.readObject());
+                filterMessages((Message) ByteIn.readObject(), messageReceived);
+                messageReceived++;
             }
             catch (ClassNotFoundException e)
             {
@@ -183,4 +199,5 @@ public class Connection extends Messenger implements Runnable
             System.err.println(e.getMessage());
         }
     }
+
 }

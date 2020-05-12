@@ -71,7 +71,7 @@ public class Controller implements ControllerInterface
     //TODO handle player limit
     public synchronized void addView(View view)
     {
-        //System.out.println("trying to add a view");
+        System.out.println("trying to add a view");
         if(accept){
             accept = false;             //makes it impossible to accept more views until an ack is received
             nextId++;
@@ -90,6 +90,7 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void generateId(){
+        System.out.println("generating id " + nextId);
         model.feed.notifyID(nextId);
     }
 
