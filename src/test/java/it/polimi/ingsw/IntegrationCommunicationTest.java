@@ -41,7 +41,7 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
     @Test
     public void loopLoopTest(){
         super.executor = Executors.newFixedThreadPool(256);
-        int diocane = 100;
+        int diocane = 5;
         for (int i=0; i<diocane;i++){
             loopTest(port-i);
         }

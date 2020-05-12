@@ -69,9 +69,11 @@ public class Controller implements ControllerInterface
      * @param view that is being added
      */
     //TODO handle player limit
-    public synchronized void addView(View view)
-    {
+    public synchronized void addView(View view) throws InterruptedException {
         System.out.println("trying to add a view");
+        while(!accept){
+            this.wait();
+        }
         if(accept){
             accept = false;             //makes it impossible to accept more views until an ack is received
             nextId++;
@@ -109,6 +111,7 @@ public class Controller implements ControllerInterface
             if(id == 0)
                 acceptNumPlayers = true;
             ackReceived++;
+            this.notifyAll();
         }
         else{
             throw new IncorrectStateException("cannot accept an ack for id " + id + "because not all previous acks have been received");
@@ -325,6 +328,7 @@ public class Controller implements ControllerInterface
         while(id != model.game.getCurrentPlayerId()){
             this.wait();
         }
+        System.out.println("Richiedo piazzare worker");
         List<Action> possibleActions = model.game.getPossibleSetupActions(id);
         if(possibleActions != null)
             model.feed.notifyCurrentPlayer(id, possibleActions, false);
@@ -345,6 +349,7 @@ public class Controller implements ControllerInterface
             model.feed.notifyKo(id, "Worker placement unacceptable: either out of turn of not possible");
             return;
         }
+        System.out.println("Piazzo worker");
         model.executeSetupAction(id, setupAction);
         model.feed.notifyOk(id);
 
@@ -362,10 +367,12 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestActions(int id) throws InterruptedException {
+
         while(id != model.game.getCurrentPlayerId()) {
             System.out.println(id+" mi fermo");
             this.wait();
         }
+        System.out.println("Richiedo azioni");
         List<Action> possibleActions = model.game.getPossibleActions(id);
         if(possibleActions != null)
             model.feed.notifyCurrentPlayer(id, possibleActions, model.game.isEndOfTurnPossible());
@@ -381,9 +388,11 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void publishAction(int id, Action action){
+
         if(id != model.game.getCurrentPlayerId()) {
             return;
         }
+        System.out.println("pubblico azione "+action);
         if(model.game.possibleActionsContains(action)){
             //ok
             model.executeAction(id, action);

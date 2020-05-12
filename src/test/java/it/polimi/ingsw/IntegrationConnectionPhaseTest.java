@@ -80,11 +80,14 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         for (int i=0;i<n;i++)
         {
             clients[i] = buildAndRunClient(port);
-            cws[i] = clients[i].getClientView();
+
         }
 
         safeWaitFor(2);
-
+        for (int i=0;i<n;i++)
+        {
+            cws[i] = clients[i].getClientView();
+        }
         //we don't know which thread will run first, so both cases are possible
         assert((cws[0].getId()==0 && cws[1].getId()==1) || (cws[0].getId()==1 && cws[1].getId()==0));
     }

@@ -16,8 +16,6 @@ public class Connection extends Messenger implements Runnable
     private final Object liveLock;
     private boolean clientIsLive;
 
-    private final Object messageLock;
-    private boolean newMessageReceived;
 
     private final int livenessRate = 5000;
     private final int invalidPongTreshold = 10000;
@@ -31,8 +29,8 @@ public class Connection extends Messenger implements Runnable
         this.view = null;
         this.liveLock = new Object();
         this.clientIsLive = false;
-        this.messageLock = new Object();
-        this.newMessageReceived = false;
+        this.messageOrderLock = new Object();
+        this.messageNotInOrder = false;
         this.currMessage = 0;
     }
 
@@ -106,33 +104,71 @@ public class Connection extends Messenger implements Runnable
      * Useful for the messages that do not automatically translate in a correspondent method in the virtual view and have to be handled by the middleware.
      * @param message the message that needs to be handled.
      */
-    private void filterMessages(Message message, final int messageReceived)
-    {
+    private final Object messageOrderLock;
+    private boolean messageNotInOrder;
+    private void filterMessages(Message message){
         if(message.getMethodName().equals("pong"))
         {
             pongHandler(message);
-        }
-        else
-        {
-            new Thread(() -> {
-                synchronized(currMessage){
-                    while(messageReceived < currMessage){
-                        try{
-                            currMessage.wait();
+        }else {
+            callMethod(message);
+            if (message.getMethodName().equals("ackId")) {
+                System.out.println("ackId");
+                server.registerIdAck();
+            }
+            /*
+            Thread t = new Thread(() -> {
+                synchronized (messageOrderLock){
+                    while(messageNotInOrder) {
+                        try {
+                            messageOrderLock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        catch(InterruptedException e){
+                    }
+                    messageNotInOrder = true;
+                    callMethod(message);
+                    if (message.getMethodName().equals("ackId")) {
+                        System.out.println("ackId");
+                        server.registerIdAck();
+                    }
+                }
+            });
+            t.start();
+            new Thread(() -> {
+                    try{
+                        t.join();
+                    }catch (InterruptedException e){
+                        e.getStackTrace();
+                    }
+                    messageNotInOrder = false;
+                }
+            );
+            */
+            /*
+            new Thread(() -> {
+                synchronized (currMessage) {
+                    while (messageId < currMessage) {
+                        try {
+                            currMessage.wait();
+                        } catch (InterruptedException e) {
                             e.getStackTrace();
                         }
                     }
-                    callMethod(message);
+                }
+                callMethod(message);
+                System.out.println("continuo "+message.getMethodName());
+                if (message.getMethodName().equals("ackId")) {
+                    System.out.println("ackId");
+                    server.registerIdAck();
+                }
+                synchronized (currMessage){
                     currMessage++;
                 }
             }).start();
+            messageReceived++;
+            */
 
-            if(message.getMethodName().equals("ackId"))
-            {
-                server.registerIdAck();
-            }
         }
     }
 
@@ -167,14 +203,12 @@ public class Connection extends Messenger implements Runnable
         }).start();
 
         ObjectInputStream ByteIn;
-        int messageReceived = 0;
         while(true)
         {
             try
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
-                filterMessages((Message) ByteIn.readObject(), messageReceived);
-                messageReceived++;
+                filterMessages((Message) ByteIn.readObject());
             }
             catch (ClassNotFoundException e)
             {

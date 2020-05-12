@@ -79,7 +79,11 @@ public class Server implements Runnable
      */
     public void letClientIn()
     {
-        controller.addView(views.get(nextClientIn));
+        try{
+            controller.addView(views.get(nextClientIn));
+        }catch (Exception e){
+            e.getStackTrace();
+        }
         views.get(nextClientIn).setController(controller);
         nextClientIn++;
     }
