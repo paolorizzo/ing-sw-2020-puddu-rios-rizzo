@@ -5,6 +5,8 @@ import it.polimi.ingsw.view.View;
 import java.net.Socket;
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Connection extends Messenger implements Runnable
 {
@@ -16,11 +18,11 @@ public class Connection extends Messenger implements Runnable
     private final Object liveLock;
     private boolean clientIsLive;
 
-
     private final int livenessRate = 5000;
     private final int invalidPongTreshold = 10000;
 
-    private Integer currMessage;
+    private final Object messageSynchronizer;
+    private List<Message> messageQueue;
 
     public Connection(Socket socket, Server server)
     {
@@ -29,9 +31,8 @@ public class Connection extends Messenger implements Runnable
         this.view = null;
         this.liveLock = new Object();
         this.clientIsLive = false;
-        this.messageOrderLock = new Object();
-        this.messageNotInOrder = false;
-        this.currMessage = 0;
+        this.messageSynchronizer = new Object();
+        this.messageQueue = new ArrayList<>();
     }
 
     /**
@@ -104,81 +105,35 @@ public class Connection extends Messenger implements Runnable
      * Useful for the messages that do not automatically translate in a correspondent method in the virtual view and have to be handled by the middleware.
      * @param message the message that needs to be handled.
      */
-    private final Object messageOrderLock;
-    private boolean messageNotInOrder;
-    private void filterMessages(Message message){
+    private synchronized void filterMessages(Message message)
+    {
         if(message.getMethodName().equals("pong"))
         {
             pongHandler(message);
-        }else {
-            callMethod(message);
-            if (message.getMethodName().equals("ackId")) {
-                System.out.println("ackId");
-                server.registerIdAck();
-            }
-            /*
-            Thread t = new Thread(() -> {
-                synchronized (messageOrderLock){
-                    while(messageNotInOrder) {
-                        try {
-                            messageOrderLock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    messageNotInOrder = true;
-                    callMethod(message);
-                    if (message.getMethodName().equals("ackId")) {
-                        System.out.println("ackId");
-                        server.registerIdAck();
-                    }
-                }
-            });
-            t.start();
-            new Thread(() -> {
-                    try{
-                        t.join();
-                    }catch (InterruptedException e){
-                        e.getStackTrace();
-                    }
-                    messageNotInOrder = false;
-                }
-            );
-            */
-            /*
-            new Thread(() -> {
-                synchronized (currMessage) {
-                    while (messageId < currMessage) {
-                        try {
-                            currMessage.wait();
-                        } catch (InterruptedException e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }
-                callMethod(message);
-                System.out.println("continuo "+message.getMethodName());
-                if (message.getMethodName().equals("ackId")) {
-                    System.out.println("ackId");
-                    server.registerIdAck();
-                }
-                synchronized (currMessage){
-                    currMessage++;
-                }
-            }).start();
-            messageReceived++;
-            */
+        }
+        else
+        {
+            enqueueMessage(message);
+        }
+    }
 
+    private void enqueueMessage(Message message)
+    {
+        synchronized(messageSynchronizer)
+        {
+            messageQueue.add(message);
+            messageSynchronizer.notify();
         }
     }
 
     //TODO handle the client disconnecting
     /**
      * Runs in a separate thread on the server's side, handling incoming communications from the client to the server.
-     * Creates and runs the thread checking periodically the client's liveness.
+     * Creates and runs the thread checking periodically the client's aliveness.
      */
     public void run()
     {
+        //the thread checking for aliveness
         new Thread(() -> {
 
             while(true)
@@ -202,6 +157,34 @@ public class Connection extends Messenger implements Runnable
             }
         }).start();
 
+        //the thread executing the calls on the virtual view sequentially
+        new Thread(() -> {
+            try
+            {
+                while(true)
+                {
+                    synchronized (messageSynchronizer)
+                    {
+                        while(messageQueue.size()==0)
+                            messageSynchronizer.wait();
+
+                        callMethod(messageQueue.get(0));
+
+                        if (messageQueue.get(0).getMethodName().equals("ackId"))
+                            server.registerIdAck();
+
+                        messageQueue.remove(0);
+                    }
+                }
+            }
+            catch(InterruptedException e)
+            {
+                System.err.println("There is a problem in the message synchronizer");
+            }
+
+        }).start();
+
+        //tha main loop listening for messages on the socket
         ObjectInputStream ByteIn;
         while(true)
         {
