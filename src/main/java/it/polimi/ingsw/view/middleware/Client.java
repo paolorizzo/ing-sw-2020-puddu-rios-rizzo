@@ -20,6 +20,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable
     private final String ip;
     private final int port;
 
+    private final MessageSynchronizer synchronizer;
+
     private ClientView cw;
 
     private final FeedObservable virtualFeed;
@@ -32,6 +34,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         this.port = port;
         virtualFeed = new FeedObservable();
         alive = true;
+        this.synchronizer = new MessageSynchronizer(this);
     }
 
     public void setClientView(ClientView cw)
@@ -87,6 +90,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable
                     }
                 }).start();
 
+                synchronizer.run();
+
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
@@ -101,7 +106,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
                         Message message = (Message) ByteIn.readObject();
                         //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
                         //System.out.println(message.getMethodName());
-                        callMethod(message);
+                        synchronizer.enqueueMessage(message);
                     }
                     catch (ClassNotFoundException e)
                     {

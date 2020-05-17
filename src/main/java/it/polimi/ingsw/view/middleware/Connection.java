@@ -13,6 +13,7 @@ public class Connection extends Messenger implements Runnable
     private final Socket socket;
     private final Server server;
     private View view;
+    private final MessageSynchronizer synchronizer;
 
     private final Object liveLock;
     private boolean clientIsLive;
@@ -32,6 +33,7 @@ public class Connection extends Messenger implements Runnable
         this.clientIsLive = false;
         this.messageSynchronizer = new Object();
         this.messageQueue = new ArrayList<>();
+        this.synchronizer = new MessageSynchronizer(this);
     }
 
     /**
@@ -99,36 +101,6 @@ public class Connection extends Messenger implements Runnable
         }
     }
 
-    /**
-     * Filters the messages incoming from the client.
-     * Useful for the messages that do not automatically translate in a correspondent method in the virtual view and have to be handled by the middleware.
-     * @param message the message that needs to be handled.
-     */
-    private synchronized void filterMessages(Message message)
-    {
-        if(message.getMethodName().equals("pong"))
-        {
-            pongHandler(message);
-        }
-        else
-        {
-            enqueueMessage(message);
-        }
-    }
-
-    /**
-     * Adds a message to the FIFO waiting queue. Each message will be later executed in a separate thread.
-     * @param message the newly received message to be added to the queue.
-     */
-    private void enqueueMessage(Message message)
-    {
-        synchronized(messageSynchronizer)
-        {
-            messageQueue.add(message);
-            messageSynchronizer.notify();
-        }
-    }
-
     //TODO handle the client disconnecting
     /**
      * Runs in a separate thread on the server's side, handling incoming communications from the client to the server.
@@ -163,32 +135,7 @@ public class Connection extends Messenger implements Runnable
             }
         }).start();
 
-        //the thread executing the calls on the virtual view sequentially
-        new Thread(() -> {
-            try
-            {
-                while(true)
-                {
-                    synchronized (messageSynchronizer)
-                    {
-                        while(messageQueue.size()==0)
-                            messageSynchronizer.wait();
-
-                        callMethod(messageQueue.get(0));
-
-                        if (messageQueue.get(0).getMethodName().equals("ackId"))
-                            server.registerIdAck();
-
-                        messageQueue.remove(0);
-                    }
-                }
-            }
-            catch(InterruptedException e)
-            {
-                System.err.println("There is a problem in the message synchronizer");
-            }
-
-        }).start();
+        synchronizer.run();
 
         //tha main loop listening for messages on the socket
         ObjectInputStream ByteIn;
@@ -197,7 +144,13 @@ public class Connection extends Messenger implements Runnable
             try
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
-                filterMessages((Message) ByteIn.readObject());
+                Message currentMessage = (Message) ByteIn.readObject();
+                if(currentMessage.getMethodName().equals("ackId"))
+                    server.registerIdAck();
+                if(currentMessage.getMethodName().equals("pong"))
+                    pongHandler(currentMessage);
+                else
+                    synchronizer.enqueueMessage(currentMessage);
             }
             catch (ClassNotFoundException e)
             {
