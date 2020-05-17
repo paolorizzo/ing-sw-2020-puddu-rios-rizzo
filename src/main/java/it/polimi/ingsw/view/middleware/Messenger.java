@@ -79,8 +79,6 @@ public abstract class Messenger
     //TODO perhaps there is a more efficient way to get the method from the name? some Class.getMethod(String name)?
     private void callMethod(Object target, String methodName, List<Object> args)
     {
-
-
         Method[] possibleMethods = target.getClass().getMethods();
         for(Method method:possibleMethods){
             if(method.getName().equals(methodName)){
@@ -109,8 +107,6 @@ public abstract class Messenger
                     System.err.println("Error in invoking the method, NullPointerException");
                 }
             }
-
         }
     }
-
 }

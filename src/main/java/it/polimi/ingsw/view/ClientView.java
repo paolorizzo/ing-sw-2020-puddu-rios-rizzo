@@ -29,6 +29,11 @@ public class ClientView extends View implements UserInterfaceObserver
         id = -1;
     }
 
+    public void clientNotReachable()
+    {
+        System.out.println("Client not reachable " + this);
+    }
+
     public void setUi(UserInterface ui){
         this.ui = ui;
     }

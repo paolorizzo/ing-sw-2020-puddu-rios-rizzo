@@ -12,7 +12,6 @@ public class Connection extends Messenger implements Runnable
 {
     private final Socket socket;
     private final Server server;
-
     private View view;
 
     private final Object liveLock;
@@ -22,7 +21,7 @@ public class Connection extends Messenger implements Runnable
     private final int invalidPongTreshold = 10000;
 
     private final Object messageSynchronizer;
-    private List<Message> messageQueue;
+    private final List<Message> messageQueue;
 
     public Connection(Socket socket, Server server)
     {
@@ -117,6 +116,10 @@ public class Connection extends Messenger implements Runnable
         }
     }
 
+    /**
+     * Adds a message to the FIFO waiting queue. Each message will be later executed in a separate thread.
+     * @param message the newly received message to be added to the queue.
+     */
     private void enqueueMessage(Message message)
     {
         synchronized(messageSynchronizer)
@@ -129,7 +132,8 @@ public class Connection extends Messenger implements Runnable
     //TODO handle the client disconnecting
     /**
      * Runs in a separate thread on the server's side, handling incoming communications from the client to the server.
-     * Creates and runs the thread checking periodically the client's aliveness.
+     * Creates and runs the thread checking periodically the client's aliveness and the one that actually executes the calls on
+     * the the virtual view, according to the message queue.
      */
     public void run()
     {
@@ -150,7 +154,9 @@ public class Connection extends Messenger implements Runnable
                 synchronized (liveLock)
                 {
                     if(!clientIsLive)
-                        System.out.println("Client not reachable "+this);
+                    {
+                        view.clientNotReachable();
+                    }
                     else
                         clientIsLive = false;
                 }
@@ -210,9 +216,12 @@ public class Connection extends Messenger implements Runnable
      */
     private void close()
     {
-        try{
+        try
+        {
             socket.close();
-        }catch (IOException e){
+        }
+        catch (IOException e)
+        {
             System.err.println(e.getMessage());
         }
     }

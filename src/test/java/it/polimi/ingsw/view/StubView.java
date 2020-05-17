@@ -34,6 +34,11 @@ public class StubView extends View{
         possibleActions = null;
     }
 
+    @Override
+    public void clientNotReachable()
+    {
+
+    }
 
     public void printPossibleActions(){
         for(Action a:possibleActions)

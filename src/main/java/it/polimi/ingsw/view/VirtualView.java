@@ -21,6 +21,11 @@ public class VirtualView extends View
         this.connection = c;
     }
 
+    public synchronized void clientNotReachable()
+    {
+        System.out.println("Client not reachable " + this);
+    }
+
     //general updates
     @Override
     public synchronized void updateOk(int id){
@@ -31,7 +36,6 @@ public class VirtualView extends View
     public synchronized void updateKo(int id, String problem){
         connection.sendMessage("notifyKo", id, problem);
     }
-
 
     //connection phase updates
     @Override
