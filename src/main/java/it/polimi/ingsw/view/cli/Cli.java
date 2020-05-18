@@ -140,8 +140,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     public void executeAction(MoveAndForceAction action)
     {
+        MoveAction forcedAction = new MoveAction(action.getForcedWorkerId(), action.getForcedTargetX(), action.getForcedTargetY(), action.getDirection(), action.getForcedStartX(), action.getForcedStartY());
         model.updateMaskOnMove(action);
-        model.updateMaskOnMove(action);
+        model.updateMaskOnMove(forcedAction);
         CliUtils.showBoard(model);
     }
 
