@@ -35,7 +35,7 @@ public class StubView extends View{
     }
 
     @Override
-    public void clientNotReachable()
+    public void connectionLost()
     {
 
     }

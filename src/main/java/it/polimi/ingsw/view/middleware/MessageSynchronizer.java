@@ -36,15 +36,21 @@ public class MessageSynchronizer
             {
                 while(true)
                 {
+                    Message currentMessage;
                     synchronized (messageSynchronizer)
                     {
                         while(messageQueue.size()==0)
                             messageSynchronizer.wait();
+                    }
 
-                        messenger.callMethod(messageQueue.get(0));
+                    currentMessage = messageQueue.get(0);
+                    messenger.callMethod(currentMessage);
 
+                    synchronized (messageSynchronizer)
+                    {
                         messageQueue.remove(0);
                     }
+
                 }
             }
             catch(InterruptedException e)

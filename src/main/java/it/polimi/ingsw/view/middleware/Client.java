@@ -21,6 +21,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
     private final int port;
 
     private final MessageSynchronizer synchronizer;
+    private AlivenessHandler alivenessHandler;
 
     private ClientView cw;
 
@@ -41,6 +42,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
     {
         this.cw = cw;
         addObserver(cw);
+        this.alivenessHandler = new AlivenessHandler(this, cw);
     }
 
     public ClientView getClientView()
@@ -75,38 +77,26 @@ public class Client extends Messenger implements ControllerInterface, Runnable
             {
                 socket = new Socket(ip, port);
 
-                new Thread(() -> {
-                    while(alive)
-                    {
-                        try
-                        {
-                            Thread.sleep(2500);
-                        }
-                        catch(InterruptedException ex)
-                        {
-                            Thread.currentThread().interrupt();
-                        }
-                        sendMessage("pong", new Timestamp(System.currentTimeMillis()));
-                    }
-                }).start();
-
                 synchronizer.run();
 
                 waitingForServer = false;
 
                 //starts the clientView therefore initiating the message exchange
                 cw.start();
-
+                alivenessHandler.startPing();
+                alivenessHandler.startMonitoringLiveness();
                 ObjectInputStream ByteIn;
 
-                while(alive)
+                while(true)
                 {
-                    try {
+                    try
+                    {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
                         Message message = (Message) ByteIn.readObject();
-                        //System.out.println("Messaggio in arrivo sul client! Message method: "+message);
-                        //System.out.println(message.getMethodName());
-                        synchronizer.enqueueMessage(message);
+                        if(message.getMethodName().equals("pong"))
+                            alivenessHandler.pongHandler(message);
+                        else
+                            synchronizer.enqueueMessage(message);
                     }
                     catch (ClassNotFoundException e)
                     {
@@ -116,19 +106,22 @@ public class Client extends Messenger implements ControllerInterface, Runnable
             }
             catch(IOException e)
             {
-                try
+                if(waitingForServer)
                 {
-                    System.out.print("Waiting for the server to start");
-                    TimeUnit.MILLISECONDS.sleep(500);
-                    System.out.print(" .");
-                    TimeUnit.MILLISECONDS.sleep(500);
-                    System.out.print(".");
-                    TimeUnit.MILLISECONDS.sleep(500);
-                    System.out.print(".\n");
-                }
-                catch(InterruptedException t)
-                {
-                    System.err.println(t.getMessage());
+                    try
+                    {
+                        System.out.print("Waiting for the server to start");
+                        TimeUnit.MILLISECONDS.sleep(500);
+                        System.out.print(" .");
+                        TimeUnit.MILLISECONDS.sleep(500);
+                        System.out.print(".");
+                        TimeUnit.MILLISECONDS.sleep(500);
+                        System.out.print(".\n");
+                    }
+                    catch(InterruptedException t)
+                    {
+                        System.err.println(t.getMessage());
+                    }
                 }
             }
         }
@@ -144,8 +137,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         try{
             super.sendMessage(new ObjectOutputStream(socket.getOutputStream()), methodName, arg);
         }
-        catch (IOException e){
-            System.err.println("Error in creating output socket");
+        catch (IOException e)
+        {
+            if(getClientView() !=null)
+            {
+                alivenessHandler.registerDisconnection();
+                getClientView().connectionLost();
+            }
         }
     }
 

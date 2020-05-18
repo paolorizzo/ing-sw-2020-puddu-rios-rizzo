@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ public abstract class Messenger
 {
 
     protected abstract Object getObservable(String methodName);
+    public abstract void sendMessage(String methodName, Object ...arg);
 
     /**
      * Low level sendMessage, simply serializes and sends a Message object through an output stream
@@ -27,6 +29,7 @@ public abstract class Messenger
     {
         try
         {
+            //System.out.println("About to send "+msg.getMethodName() +" from "+this);
             outByte.writeObject(msg);
             outByte.flush();
         }

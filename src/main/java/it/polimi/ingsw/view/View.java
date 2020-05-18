@@ -23,7 +23,7 @@ public abstract class View implements FeedObserver
         return controller;
     }
 
-    public abstract void clientNotReachable();
+    public abstract void connectionLost();
 
 
 }

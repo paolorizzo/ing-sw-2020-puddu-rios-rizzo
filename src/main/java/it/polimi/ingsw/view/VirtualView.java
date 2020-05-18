@@ -21,9 +21,9 @@ public class VirtualView extends View
         this.connection = c;
     }
 
-    public synchronized void clientNotReachable()
+    public synchronized void connectionLost()
     {
-        System.out.println("Client not reachable " + this);
+        System.out.println("Connection lost " + this);
     }
 
     //general updates

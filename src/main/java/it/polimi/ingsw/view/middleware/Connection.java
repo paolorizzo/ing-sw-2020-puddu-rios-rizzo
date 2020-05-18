@@ -4,6 +4,7 @@ import it.polimi.ingsw.view.View;
 
 import java.net.Socket;
 import java.io.*;
+import java.net.SocketException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Connection extends Messenger implements Runnable
     private final Server server;
     private View view;
     private final MessageSynchronizer synchronizer;
+    private AlivenessHandler alivenessHandler;
 
     private final Object liveLock;
     private boolean clientIsLive;
@@ -44,6 +46,9 @@ public class Connection extends Messenger implements Runnable
     public void setView(View view)
     {
         this.view = view;
+        this.alivenessHandler = new AlivenessHandler(this, view);
+        alivenessHandler.startPing();
+        alivenessHandler.startMonitoringLiveness();
     }
 
     /**
@@ -64,6 +69,7 @@ public class Connection extends Messenger implements Runnable
      * @param methodName the name of the method triggered by the message.
      * @param arg the object representing the eventual arguments to be passed.
      */
+    @Override
     public void sendMessage(String methodName, Object ...arg)
     {
         try
@@ -72,32 +78,11 @@ public class Connection extends Messenger implements Runnable
         }
         catch (IOException e)
         {
-            System.err.println("Error in creating output socket");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Accepts the pong message from the client only if the associated timestamp is reasonably close to the current time.
-     * In that case, the aliveness flag gets updated to acknowledge it.
-     * @param message the "pong" message.
-     */
-    private void pongHandler(Message message)
-    {
-        //filter pongs upon timestamps
-        if(message.hasArgs() && message.getArg(0) instanceof Timestamp)
-        {
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            Timestamp ts = (Timestamp) message.getArg(0);
-
-            if(now.getTime()-ts.getTime()<invalidPongTreshold)
+            if(view !=null)
             {
-                synchronized(liveLock)
-                {
-                    clientIsLive = true;
-                }
+                alivenessHandler.registerDisconnection();
+                view.connectionLost();
             }
-
         }
     }
 
@@ -109,31 +94,6 @@ public class Connection extends Messenger implements Runnable
      */
     public void run()
     {
-        //the thread checking for aliveness
-        new Thread(() -> {
-
-            while(true)
-            {
-                try
-                {
-                    Thread.sleep(livenessRate);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-
-                synchronized (liveLock)
-                {
-                    if(!clientIsLive)
-                    {
-                        view.clientNotReachable();
-                    }
-                    else
-                        clientIsLive = false;
-                }
-            }
-        }).start();
 
         synchronizer.run();
 
@@ -148,7 +108,7 @@ public class Connection extends Messenger implements Runnable
                 if(currentMessage.getMethodName().equals("ackId"))
                     server.registerIdAck();
                 if(currentMessage.getMethodName().equals("pong"))
-                    pongHandler(currentMessage);
+                    alivenessHandler.pongHandler(currentMessage);
                 else
                     synchronizer.enqueueMessage(currentMessage);
             }
