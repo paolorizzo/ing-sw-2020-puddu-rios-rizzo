@@ -167,6 +167,9 @@ public class CliUtils
             }
             else
             {
+                BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(getWorkersPositionFromId(model.getWorkers(), selectedWorker).getPosX(),4,true,getWorkersPositionFromId(model.getWorkers(), selectedWorker).getPosY(), 4, true);
+                System.out.println("\n\n\n");
+                showBoard(model, selection);
                 if(handleChooseBetweenMoveAndBuild()==0)
                     selectedAction = handleMoveAction(model, possibleActions, selectedWorker);
                 else
@@ -223,8 +226,8 @@ public class CliUtils
         while(spin)
         {
             printer.print("INSERT M TO MOVE OR B TO BUILD: ");
+            System.out.print(AnsiColors.ANSI_RESET);
             input = readString();
-            printer.resetAndBreak();
 
             switch(input)
             {
@@ -254,8 +257,8 @@ public class CliUtils
         while(spin)
         {
             printer.print("WOULD YOU LIKE TO END YOUR TURN HERE? Y/N ");
+            System.out.print(AnsiColors.ANSI_RESET);
             input = readString();
-            printer.resetAndBreak();
 
             switch(input)
             {
@@ -270,7 +273,6 @@ public class CliUtils
                     break;
             }
         }
-        printer.resetAndBreak();
         return choice;
     }
 
@@ -470,6 +472,7 @@ public class CliUtils
     //show methods
     static void showBoard(ModelCLI model)
     {
+        System.out.println("\n\n\n");
         showBoard(model, null);
     }
 

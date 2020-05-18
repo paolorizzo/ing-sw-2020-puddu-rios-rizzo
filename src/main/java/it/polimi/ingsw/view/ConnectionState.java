@@ -32,8 +32,6 @@ public enum ConnectionState {
             int id = (int) input;
             //System.out.println("My id is: " + id);
             view.setID(id);
-            System.out.println("My id is: " + view.getId());
-            System.out.println(view);
             view.currentConnectionState = ACK_ID;
             view.currentConnectionState.execute(view, null);
         }

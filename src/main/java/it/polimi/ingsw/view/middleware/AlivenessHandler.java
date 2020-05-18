@@ -93,6 +93,7 @@ public class AlivenessHandler
                     Thread.currentThread().interrupt();
                 }
 
+                //System.out.println("Sending pong to "+this);
                 messenger.sendMessage("pong", new Timestamp(System.currentTimeMillis()));
             }
         }).start();
