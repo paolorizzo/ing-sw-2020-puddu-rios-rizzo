@@ -52,45 +52,6 @@ public class ControllerTest extends MvcIntegrationTest {
     }
 
     /**
-     * tests that it is impossible to add a view before giving out its id and receiving its ack
-     */
-    //@Test this test has been solved in checkConcurrentJoin
-    public void testAddViewFailure(){
-        Controller c = new Controller();
-        View v0 = new StubView();
-        View v1 = new StubView();
-
-        try{
-            c.addView(v0);
-        }catch (InterruptedException e){
-            e.getStackTrace();
-        }
-
-        try{
-            c.addView(v1);
-            assert(false);
-        }
-        catch(IncorrectStateException e){
-            assert(true);
-        } catch (InterruptedException e){
-            e.getStackTrace();
-        }
-
-        c.generateId();
-        c.ackId(0);
-        try{
-            c.addView(v1);
-            assert(true);
-        }
-        catch(IncorrectStateException e){
-            assert(false);
-        }
-        catch (InterruptedException e){
-            e.getStackTrace();
-        }
-    }
-
-    /**
      * tests that the ids given by the controller are strictly sequential
      */
     @Test
