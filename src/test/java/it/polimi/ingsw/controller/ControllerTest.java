@@ -868,7 +868,7 @@ public class ControllerTest extends MvcIntegrationTest {
      * @param c the controller on which to perform the phases
      * @param n the number of players
      */
-    private void fullSetupPhase(Controller c, int n){
+    public void fullSetupPhase(Controller c, int n){
         if(!(n==2||n==3))
             throw new IllegalArgumentException("cannot perform setup phase for " + n + " players");
 
