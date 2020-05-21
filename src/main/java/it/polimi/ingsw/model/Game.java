@@ -3,10 +3,12 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO test Game
-//TODO this class should become a GameObservable, and other observables should be incorporated in other classes
-//that actually modify what is later notified
 //this class should always call notifies upon any modification
+
+/**
+ * stores information about the general state of the game, such as what cards compose the deck,
+ * whose turn it is and what are the possible actions for the current player's turn
+ */
 public class Game {
     Model model;
     private int numPlayers;
