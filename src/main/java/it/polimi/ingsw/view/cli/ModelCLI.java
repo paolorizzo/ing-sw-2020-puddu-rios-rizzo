@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.BuildAction;
+import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -21,10 +21,40 @@ public class ModelCLI
      */
     String [][] workers;
 
+    private HashMap<Integer, Player> players;
+    private HashMap<Integer, Integer> pieceBag;
+
     public ModelCLI()
     {
         board = generateEmptyBoard();
         workers = generateEmptyWorkersMask();
+        players = new HashMap<>();
+        pieceBag = new HashMap<>();
+
+        pieceBag.put(1, 22);
+        pieceBag.put(2, 18);
+        pieceBag.put(3, 14);
+        pieceBag.put(4, 18);
+    }
+
+    int getPiecesLeft(int level)
+    {
+        return pieceBag.get(level);
+    }
+
+    void addPlayer(int id, Player player)
+    {
+        players.put(id, player);
+    }
+
+    Player getPlayer(int id)
+    {
+        return players.get(id);
+    }
+
+    int getNumPlayers()
+    {
+        return players.size();
     }
 
     public int[][] getBoard()
@@ -123,6 +153,7 @@ public class ModelCLI
     {
 
         board[action.getTargetX()][action.getTargetY()] = action.getPiece().getLevel();
+        pieceBag.put(action.getPiece().getLevel(), pieceBag.get(action.getPiece().getLevel()) - 1);
     }
 
     /**

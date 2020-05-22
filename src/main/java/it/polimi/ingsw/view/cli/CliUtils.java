@@ -476,13 +476,63 @@ public class CliUtils
         showBoard(model, null);
     }
 
+    //TODO: clean this
     static private void showBoard(ModelCLI model, BidimensionalSelectionCLI selection)
     {
         String[][] workersMask = model.getWorkers();
 
         //create Canvas
-        CanvasCLI canvas = new CanvasCLI();
-        canvas.setPalette(AnsiColors.ANSI_BG_GREEN);
+        CanvasCLI back_canvas = new CanvasCLI(0,0,65,36);
+        back_canvas.setPalette(AnsiColors.ANSI_RESET);
+        back_canvas.setTextColor(AnsiColors.ANSI_BLACK);
+
+        RectangleCLI playerLable  = new RectangleCLI(37,0,16,9);
+        playerLable.setPalette(AnsiColors.ANSI_BG_CYAN);
+        back_canvas.addOverlappingFigure(playerLable);
+
+        RectangleCLI innerLable  = playerLable.createInRelativeFrame(1,1,14,7);
+        innerLable.setPalette(AnsiColors.ANSI_BG_BLACK);
+        back_canvas.addOverlappingFigure(innerLable);
+
+        RectangleCLI buildLabel  = new RectangleCLI(37,11,16,11);
+        buildLabel.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+        back_canvas.addOverlappingFigure(buildLabel);
+
+        RectangleCLI innerBuildLabel  = buildLabel.createInRelativeFrame(1,1,14,9);
+        innerBuildLabel.setPalette(AnsiColors.ANSI_BG_BLACK);
+        back_canvas.addOverlappingFigure(innerBuildLabel);
+
+        for(int i=0; i<model.getNumPlayers(); i++)
+        {
+            RectangleCLI label = innerLable.createInRelativeFrame(3, (1+2*i), 5, 1);
+            label.addText(" "+model.getPlayer(i).getNickname().toUpperCase()+" ");
+            RectangleCLI god = innerLable.createInRelativeFrame(9,(1+2*i), 4,1);
+            god.addText(" "+model.getPlayer(i).getCard().getName().toUpperCase());
+            RectangleCLI activePlayer = innerLable.createInRelativeFrame(1,(1+2*i), 1,1);
+            activePlayer.setPalette(AnsiColors.ANSI_BRIGHT_BG_GREEN);
+            label.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN);
+            back_canvas.addOverlappingFigure(label);
+            back_canvas.addOverlappingFigure(activePlayer);
+            back_canvas.addOverlappingFigure(god);
+        }
+
+        for(int i=0; i<4; i++)
+        {
+            RectangleCLI label = innerBuildLabel.createInRelativeFrame(1, (1+2*i), 3, 1);
+            label.setPalette(AnsiColors.ANSI_BG_RED);
+            label.addText(" LEVEL "+ Integer.toString(i + 1) +" ");
+
+            RectangleCLI num = label.createInRelativeFrame(4, 0, 8, 1);
+            num.setPalette(AnsiColors.ANSI_BG_RED);
+            GraphicsElementsCLI.drawBuildCounter(num, model.getPiecesLeft(i+1));
+            back_canvas.addOverlappingFigure(num);
+            back_canvas.addOverlappingFigure(label);
+
+        }
+
+        RectangleCLI canvas = new RectangleCLI(0,0,36,36);
+        back_canvas.addOverlappingFigure(canvas);
+        canvas.setPalette(AnsiColors.ANSI_BG_YELLOW);
 
         if(selection != null)
         {
@@ -527,8 +577,12 @@ public class CliUtils
             }
         }
 
+        //create players window
+
+
         //print the figure
-        canvas.printFigure();
+
+        back_canvas.printFigure();
     }
 
     static void showUsernameDialog()

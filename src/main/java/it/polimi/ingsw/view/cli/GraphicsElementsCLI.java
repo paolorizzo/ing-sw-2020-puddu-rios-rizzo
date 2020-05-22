@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.model.Player;
+
 /**
  * Encapsulates all the loadings of textures for the CLI.
  */
@@ -157,5 +159,18 @@ class GraphicsElementsCLI
             default:
                 break;
         }
+    }
+
+    public static void drawBuildCounter(RectangleCLI bar, int num)
+    {
+        String s = "|";
+        StringBuilder result = new StringBuilder();
+
+        for(int i=0; i<num; i++)
+        {
+            result.append(s);
+        }
+
+        bar.addText(result.toString());
     }
 }

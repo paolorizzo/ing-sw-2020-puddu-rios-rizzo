@@ -116,6 +116,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     {
 
         players.get(id).setCard(card);
+        model.addPlayer(id, players.get(id));
     }
 
     @Override
