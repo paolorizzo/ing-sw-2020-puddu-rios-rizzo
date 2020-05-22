@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static org.junit.Assert.assertEquals;
+
 public class PersistenceGameTest {
 
 
@@ -49,5 +51,20 @@ public class PersistenceGameTest {
             System.out.println();
         }
         assert true;
+    }
+
+    /**
+     * tests that it is possible to correctly generate a persistance game, save it, and load another one
+     * that is equal to the first
+     */
+    @Test
+    public void testSaveLoad(){
+        Controller c = new Controller();
+        ControllerTest ct = new ControllerTest();
+        ct.fullSetupPhase(c, 3);
+        PersistenceGame pg = new PersistenceGame(c.getModel().game);
+        pg.save();
+        PersistenceGame new_pg = PersistenceGame.load();
+        assertEquals(pg.toString(), new_pg.toString());
     }
 }

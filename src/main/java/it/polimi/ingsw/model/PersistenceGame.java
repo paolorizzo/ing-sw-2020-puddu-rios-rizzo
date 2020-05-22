@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -76,6 +77,38 @@ public class PersistenceGame {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * compares the toString of this object and the argument
+     * @param o the other object to compare
+     * @return true if the toString of the objects are equal
+     */
+    @Override
+    public boolean equals(Object o){
+        if(this == o)
+            return true;
+        if(! (o instanceof PersistenceGame))
+            return false;
+        PersistenceGame that = (PersistenceGame) o;
+        return  this.toString().equals(that.toString());
+    }
+
+    /**
+     * creates a string detailing the content of the object
+     * @return a string detailing the contents of the object
+     */
+    @Override
+    public String toString(){
+        String s = "";
+        s += "numPlayers = " + this.numPlayers;
+        s += "\nphase = " + this.phase;
+        s += "\nchosenCards = " + this.chosenCards.toString();
+        s += "\nnumCardsChosen = " + this.numCardsChosen;
+        s += "\nids = " + Arrays.toString(this.ids);
+        s += "\nnames = " + Arrays.toString(this.names);
+        s += "\nnumGods = " + Arrays.toString(this.numGods);
+        return s;
     }
 }
 
