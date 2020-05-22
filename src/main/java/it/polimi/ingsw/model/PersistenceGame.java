@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -47,7 +50,7 @@ public class PersistenceGame {
      */
     boolean save(){
         Gson gson = new Gson();
-        String pathToGameJson = "documentation/persistence/game.json";
+        String pathToGameJson = "src/main/resources/persistence/game.json";
         try{
             FileWriter writer = new FileWriter(pathToGameJson);
             gson.toJson(this, writer);
@@ -59,6 +62,20 @@ public class PersistenceGame {
             return false;
         }
         return true;
+    }
+
+    static PersistenceGame load(){
+        Gson gson = new Gson();
+        String pathToGameJson = "src/main/resources/persistence/game.json";
+        try{
+            JsonReader reader = new JsonReader(new FileReader(pathToGameJson));
+            PersistenceGame instance = gson.fromJson(reader, PersistenceGame.class);
+            return instance;
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

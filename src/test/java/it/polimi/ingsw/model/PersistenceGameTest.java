@@ -31,9 +31,11 @@ public class PersistenceGameTest {
      */
     @Test
     public void testFilePath(){
-        String[] components = new String[2];
-        components[0] = "documentation";
-        components[1] = "/persistence";
+        String[] components = new String[4];
+        components[0] = "src";
+        components[1] = "/main";
+        components[2] = "/resources";
+        components[3] = "/persistence";
         String path = "";
         for (String component:components){
             path = path + component;
