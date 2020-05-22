@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.observation.UserInterfaceObservable;
+import it.polimi.ingsw.observation.UserInterfaceObserver;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.cli.CliUtils;
@@ -15,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.polimi.ingsw.model.Color;
-public class Board implements UserInterface {
+public class Board extends UserInterfaceObservable implements UserInterface {
     Group groupRoot, group3d;
     Scene scene;
 
@@ -37,6 +39,7 @@ public class Board implements UserInterface {
     SelectPieceMenu selectPieceMenu;
     EndOfTurnMenu endOfTurnMenu;
     WinMenu winMenu;
+    LoseMenu loseMenu;
 
     private final int WIDTH = 1400;
     private final int HEIGHT = 800;
@@ -45,6 +48,8 @@ public class Board implements UserInterface {
     public Board(ClientView cw) {
         clientView = cw;
         numPlayers = -1;
+
+        this.addObserver(cw);
 
         players = new HashMap<>();
 
@@ -67,7 +72,10 @@ public class Board implements UserInterface {
 
         prepareBoard();
 
+
+        //create fsm
         actionFSM = new ActionFSM();
+
         for(int i=0;i<5;i++){
             for(int j=0;j<5;j++){
                 towers[i][j] = new Tower(i, j, new Point3D(i*100-200, 0, j*100-200));
@@ -78,33 +86,45 @@ public class Board implements UserInterface {
             }
         }
 
-        askNumPlayersMenu = new AskNumPlayersMenu(cw);
-        groupRoot.getChildren().add(askNumPlayersMenu);
 
-        askNameMenu = new AskNameMenu(cw);
-        groupRoot.getChildren().add(askNameMenu);
+
+        askNumPlayersMenu = new AskNumPlayersMenu();
+        askNumPlayersMenu.addObserver(cw);
+        groupRoot.getChildren().add(askNumPlayersMenu.getGroup());
+
+        askNameMenu = new AskNameMenu();
+        askNameMenu.addObserver(cw);
+        groupRoot.getChildren().add(askNameMenu.getGroup());
 
         playersMenu = new PlayersMenu();
-        groupRoot.getChildren().add(playersMenu);
+        groupRoot.getChildren().add(playersMenu.getGroup());
 
-        askCardMenu = new AskCardMenu(cw);
-        groupRoot.getChildren().add(askCardMenu);
+        askCardMenu = new AskCardMenu();
+        askCardMenu.addObserver(cw);
+        groupRoot.getChildren().add(askCardMenu.getGroup());
 
-        askGodMenu = new AskGodMenu(cw);
-        groupRoot.getChildren().add(askGodMenu);
+        askGodMenu = new AskGodMenu();
+        askGodMenu.addObserver(cw);
+        groupRoot.getChildren().add(askGodMenu.getGroup());
 
         selectTypeActionMenu = new SelectTypeActionMenu(actionFSM);
-        groupRoot.getChildren().add(selectTypeActionMenu);
+        groupRoot.getChildren().add(selectTypeActionMenu.getGroup());
 
         selectPieceMenu = new SelectPieceMenu(actionFSM);
-        groupRoot.getChildren().add(selectPieceMenu);
+        groupRoot.getChildren().add(selectPieceMenu.getGroup());
 
         endOfTurnMenu = new EndOfTurnMenu(actionFSM);
-        groupRoot.getChildren().add(endOfTurnMenu);
-        /*
+        groupRoot.getChildren().add(endOfTurnMenu.getGroup());
+        //assigning menus
+        actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
+
+
         winMenu = new WinMenu();
-        groupRoot.getChildren().add(winMenu);
-        */
+        groupRoot.getChildren().add(winMenu.getGroup());
+
+        loseMenu = new LoseMenu();
+        groupRoot.getChildren().add(loseMenu.getGroup());
+
         pieceBag = new PieceBag();
 
     }
@@ -253,48 +273,6 @@ public class Board implements UserInterface {
         undoExecuteAction(action);
     }
 
-
-    public void showSelectTypeActionMenu() {
-        selectTypeActionMenu.show();
-    }
-    public void hideSelectTypeActionMenu() {
-        selectTypeActionMenu.hide();
-    }
-    public void showSelectPieceMenu() {
-        selectPieceMenu.show();
-    }
-    public void hideSelectPieceMenu() {
-        selectPieceMenu.hide();
-    }
-    public void showEndOfTurnMenu() { endOfTurnMenu.show(); }
-    public void hideEndOfTurnMenu() {
-        endOfTurnMenu.hide();
-    }
-    public void showAskNumPlayersMenu() {
-        askNumPlayersMenu.show();
-    }
-    public void hideAskNumPlayersMenu() {
-        askNumPlayersMenu.hide();
-    }
-    public void showAskNameMenu() {
-        askNameMenu.show();
-    }
-    public void hideAskNameMenu() {
-        askNameMenu.hide();
-    }
-    public void showAskCardMenu() {
-        askCardMenu.show();
-    }
-    public void hideAskCardMenu() {
-        askCardMenu.hide();
-    }
-    public void showAskGodMenu() {
-        askGodMenu.show();
-    }
-    public void hideAskGodMenu() {
-        askGodMenu.hide();
-    }
-
     public Tower getTower(int targetX, int targetY) {
         return towers[targetX][targetY];
     }
@@ -337,28 +315,27 @@ public class Board implements UserInterface {
 
     @Override
     public void askNumPlayers() {
-        showAskNumPlayersMenu();
+        askNumPlayersMenu.show();
         System.out.println("Ask num player");
     }
 
     @Override
     public void askUsername() {
-        showAskNameMenu();
+        askNameMenu.show();
         System.out.println("Ask name");
     }
-
 
 
     @Override
     public void askCard(Deck deck) {
         askCardMenu.setDeck(deck);
-        showAskCardMenu();
+        askCardMenu.show();
 
     }
     @Override
     public void askGod(List<Card> cards) {
         askGodMenu.setCards(cards);
-        showAskGodMenu();
+        askGodMenu.show();
 
     }
     @Override
@@ -379,12 +356,21 @@ public class Board implements UserInterface {
             }
         }
     }
-
+    @Override
+    public void winAnnounce(int id){
+        winMenu.setGodView(players.get(id).getCard());
+        winMenu.show();
+    }
+    @Override
+    public void loseAnnounce(int id){
+        loseMenu.setGodView(players.get(id).getCard());
+        loseMenu.show();
+    }
     @Override
     public void setNumPlayers(int numPlayers) {
         if(this.numPlayers == -1)
         playersMenu.setNumPlayers(numPlayers);
-
+        playersMenu.show();
         this.numPlayers = numPlayers;
     }
     @Override

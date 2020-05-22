@@ -24,13 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class AskCardMenu extends Group {
+public class AskCardMenu extends Menu {
     Rectangle rect;
-    final ClientView cw;
-
     HashMap<Integer, Label> cardLabels;
-    public AskCardMenu(ClientView clientView) {
-        this.cw = clientView;
+    public AskCardMenu() {
+        super();
         rect = new Rectangle(740, 650);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
@@ -39,7 +37,7 @@ public class AskCardMenu extends Group {
         rect.setTranslateY(800/2-rect.getHeight()/2);
         rect.setTranslateZ(0);
 
-        this.getChildren().add(rect);
+        group.getChildren().add(rect);
         cardLabels = new HashMap<>();
 
         try{
@@ -67,10 +65,10 @@ public class AskCardMenu extends Group {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         hide();
-                        cw.updateReadNumCard(num);
+                        notifyReadNumCard(num);
                     }
                 });
-                this.getChildren().add(cardLabels.get(num));
+                group.getChildren().add(cardLabels.get(num));
                 final Rectangle rectDesc = new Rectangle(200,130);
                 rectDesc.setFill(Color.LIGHTGRAY);
                 rectDesc.setStroke(Color.BLACK);
@@ -103,8 +101,8 @@ public class AskCardMenu extends Group {
                         rectDesc.setVisible(false);
                     }
                 });
-                this.getChildren().add(rectDesc);
-                this.getChildren().add(cardDesc);
+                group.getChildren().add(rectDesc);
+                group.getChildren().add(cardDesc);
 
             }
         }catch (Exception e){
@@ -128,16 +126,5 @@ public class AskCardMenu extends Group {
                 offsetY +=200;
             }
         }
-    }
-
-    public void show(){
-        rect.setVisible(true);
-        this.setVisible(true);
-    }
-    public void hide(){
-        this.setVisible(false);
-        rect.setVisible(false);
-        for(Label label: cardLabels.values())
-            label.setVisible(false);
     }
 }

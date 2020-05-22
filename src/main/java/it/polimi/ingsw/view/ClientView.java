@@ -192,8 +192,12 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updatePlayerWin(int id){
         if(id == getId()){
+            getUi().winAnnounce(getId());
             currentGameState = GameState.WIN_STATE;
         }else{
+            if(currentGameState != GameState.LOSE_STATE){
+                getUi().loseAnnounce(getId());
+            }
             currentGameState = GameState.LOSE_STATE;
         }
         currentGameState.execute(this, null);
@@ -201,6 +205,7 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updatePlayerLose(int id){
         if(id == getId()){
+            getUi().loseAnnounce(id);
             currentGameState = GameState.LOSE_STATE;
             currentGameState.execute(this, null);
         }

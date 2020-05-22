@@ -215,7 +215,7 @@
 			"file": "sea.png"
 		}
 	],
-	"cards": [
+	"images": [
 		{
 			"name": "Apollo",
 			"file": "apollo.png"
@@ -271,6 +271,82 @@
 		{
 			"name": "Zeus",
 			"file": "zeus.png"
+		},
+		{
+			"name": "Anonymous",
+			"file": "anon.png"
+		},
+		{
+			"name": "podium",
+			"file": "podium.png"
+		},
+		{
+			"name": "parthenon",
+			"file": "parthenon.png"
+		},
+		{
+			"name": "cage",
+			"file": "cage.png"
+		},
+		{
+			"name": "volcano",
+			"file": "volcano.png"
+		},
+		{
+			"name": "Apollo_podium",
+			"file": "apollo_podium.png"
+		},
+		{
+			"name": "Artemis_podium",
+			"file": "artemis_podium.png"
+		},
+		{
+			"name": "Athena_podium",
+			"file": "athena_podium.png"
+		},
+		{
+			"name": "Atlas_podium",
+			"file": "atlas_podium.png"
+		},
+		{
+			"name": "Demeter_podium",
+			"file": "demeter_podium.png"
+		},
+		{
+			"name": "Hephaestus_podium",
+			"file": "hephaestus_podium.png"
+		},
+		{
+			"name": "Minotaur_podium",
+			"file": "minotaur_podium.png"
+		},
+		{
+			"name": "Pan_podium",
+			"file": "pan_podium.png"
+		},
+		{
+			"name": "Prometheus_podium",
+			"file": "prometheus_podium.png"
+		},
+		{
+			"name": "Hera_podium",
+			"file": "hera_podium.png"
+		},
+		{
+			"name": "Hestia_podium",
+			"file": "hestia_podium.png"
+		},
+		{
+			"name": "Hypnus_podium",
+			"file": "hypnus_podium.png"
+		},
+		{
+			"name": "Limus_podium",
+			"file": "limus_podium.png"
+		},
+		{
+			"name": "Zeus_podium",
+			"file": "zeus_podium.png"
 		},
 		{
 			"name": "Anonymous",

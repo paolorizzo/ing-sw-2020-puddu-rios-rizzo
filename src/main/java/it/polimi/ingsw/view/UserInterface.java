@@ -24,6 +24,8 @@ public interface UserInterface
     void registerPlayer(int id, String name);
     void registerGod(int id, Card card);
     void executeAction(Action action);
+    void winAnnounce(int id);
+    void loseAnnounce(int id);
 
     void removeWorkersOfPlayer(int id);
 

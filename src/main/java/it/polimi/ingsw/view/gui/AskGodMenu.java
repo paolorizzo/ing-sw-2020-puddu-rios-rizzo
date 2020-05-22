@@ -24,12 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class AskGodMenu extends Group {
+public class AskGodMenu extends Menu {
     Rectangle rect;
-    final ClientView cw;
     HashMap<Integer, Label> cardLabels;
-    public AskGodMenu(ClientView clientView) {
-        this.cw = clientView;
+    public AskGodMenu() {
+        super();
         rect = new Rectangle(460, 240);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
@@ -38,7 +37,7 @@ public class AskGodMenu extends Group {
         rect.setTranslateY(800/2-rect.getHeight()/2);
         rect.setTranslateZ(0);
 
-        this.getChildren().add(rect);
+        group.getChildren().add(rect);
         cardLabels = new HashMap<>();
 
         try{
@@ -66,10 +65,11 @@ public class AskGodMenu extends Group {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         hide();
-                        cw.updateReadGod(num);
+                        notifyReadGod(num);
                     }
                 });
-                this.getChildren().add(cardLabels.get(num));
+                cardLabels.get(num).setVisible(false);
+                group.getChildren().add(cardLabels.get(num));
                 final Rectangle rectDesc = new Rectangle(200,130);
                 rectDesc.setFill(Color.LIGHTGRAY);
                 rectDesc.setStroke(Color.BLACK);
@@ -102,14 +102,13 @@ public class AskGodMenu extends Group {
                         rectDesc.setVisible(false);
                     }
                 });
-                this.getChildren().add(rectDesc);
-                this.getChildren().add(cardDesc);
+                group.getChildren().add(rectDesc);
+                group.getChildren().add(cardDesc);
 
             }
         }catch (Exception e){
             System.out.println("Error during the loading of deck: "+e.getMessage());
         }
-        hide();
     }
     public void setCards(List<Card> cards){
         double offsetX = 10;
@@ -123,14 +122,4 @@ public class AskGodMenu extends Group {
         }
     }
 
-    public void show(){
-        rect.setVisible(true);
-        this.setVisible(true);
-    }
-    public void hide(){
-        this.setVisible(false);
-        rect.setVisible(false);
-        for(Label label: cardLabels.values())
-            label.setVisible(false);
-    }
 }

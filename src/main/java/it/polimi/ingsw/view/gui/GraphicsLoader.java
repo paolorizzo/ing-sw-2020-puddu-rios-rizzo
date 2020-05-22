@@ -90,10 +90,10 @@ public class GraphicsLoader {
                 }));
             }
 
-            JsonArray cards = jsonObject.get("cards").getAsJsonArray();
-            for(JsonElement card: cards){
-                final String name = card.getAsJsonObject().get("name").getAsString();
-                final String image = card.getAsJsonObject().get("file").getAsString();
+            JsonArray images = jsonObject.get("images").getAsJsonArray();
+            for(JsonElement im: images){
+                final String name = im.getAsJsonObject().get("name").getAsString();
+                final String image = im.getAsJsonObject().get("file").getAsString();
                 threads.add(new Thread(new Runnable() {
                     @Override
                     public void run() {

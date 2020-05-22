@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.view.cli.RectangleCLI;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -13,10 +10,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class WinMenu extends Menu {
+public class LoseMenu extends Menu {
     ImageView godView;
 
-    public WinMenu(){
+    public LoseMenu(){
         super();
 
         Rectangle rect = new Rectangle(500, 300);
@@ -36,9 +33,9 @@ public class WinMenu extends Menu {
         textPane.setTranslateY(rect.getTranslateY()+20);
 
         Text text = new Text();
-        text.setText("YOU WIN");
+        text.setText("YOU LOSE");
         text.setFont(new Font("Forte", 30));
-        text.setFill(Color.GOLD);
+        text.setFill(Color.RED);
         text.setStroke(Color.BLACK);
         text.setStrokeWidth(1);
         text.setTextAlignment(TextAlignment.CENTER);
@@ -48,36 +45,38 @@ public class WinMenu extends Menu {
         group.getChildren().add(textPane);
 
 
-        Image parthenon = GraphicsLoader.instance().getImage("parthenon");
-        ImageView parthenonView1 = new ImageView(parthenon);
-        parthenonView1.setFitHeight(200);
-        parthenonView1.setFitWidth(200);
-        parthenonView1.setTranslateX(rect.getTranslateX()+rect.getWidth()/2);
-        parthenonView1.setTranslateY(rect.getTranslateY()+40);
-        group.getChildren().add(parthenonView1);
+        Image volcano = GraphicsLoader.instance().getImage("volcano");
+        ImageView volcanoView1 = new ImageView(volcano);
+        volcanoView1.setFitHeight(200);
+        volcanoView1.setFitWidth(200);
+        volcanoView1.setTranslateX(rect.getTranslateX()+rect.getWidth()/2);
+        volcanoView1.setTranslateY(rect.getTranslateY()+40);
+        group.getChildren().add(volcanoView1);
 
-        ImageView parthenonView2 = new ImageView(parthenon);
-        parthenonView2.setFitHeight(200);
-        parthenonView2.setFitWidth(200);
-        parthenonView2.setTranslateX(rect.getTranslateX()+rect.getWidth()/2-parthenonView2.getFitWidth());
-        parthenonView2.setTranslateY(rect.getTranslateY()+40);
-        group.getChildren().add(parthenonView2);
+        ImageView volcanoView2 = new ImageView(volcano);
+        volcanoView2.setFitHeight(200);
+        volcanoView2.setFitWidth(200);
+        volcanoView2.setTranslateX(rect.getTranslateX()+rect.getWidth()/2-volcanoView2.getFitWidth());
+        volcanoView2.setTranslateY(rect.getTranslateY()+40);
+        group.getChildren().add(volcanoView2);
 
-        Image podium = GraphicsLoader.instance().getImage("podium");
-        ImageView podiumView = new ImageView(podium);
-        podiumView.setFitHeight(120);
-        podiumView.setFitWidth(150);
-        podiumView.setTranslateX(rect.getTranslateX()+rect.getWidth()/2-podiumView.getFitWidth()/2);
-        podiumView.setTranslateY(rect.getTranslateY()+150);
-        group.getChildren().add(podiumView);
 
         Image god = GraphicsLoader.instance().getImage("Zeus_podium");
         godView = new ImageView(god);
         godView.setFitHeight(150);
         godView.setFitWidth(150);
         godView.setTranslateX(rect.getTranslateX()+rect.getWidth()/2-godView.getFitWidth()/2);
-        godView.setTranslateY(rect.getTranslateY()+30);
+        godView.setTranslateY(rect.getTranslateY()+80);
         group.getChildren().add(godView);
+
+        Image cage = GraphicsLoader.instance().getImage("cage");
+        ImageView cageView = new ImageView(cage);
+        cageView.setFitHeight(150);
+        cageView.setFitWidth(150);
+        cageView.setTranslateX(rect.getTranslateX()+rect.getWidth()/2-cageView.getFitWidth()/2);
+        cageView.setTranslateY(rect.getTranslateY()+120);
+        group.getChildren().add(cageView);
+
     }
 
     public void setGodView(Card card){

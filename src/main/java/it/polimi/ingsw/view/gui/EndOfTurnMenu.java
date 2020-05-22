@@ -6,17 +6,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class EndOfTurnMenu extends Group {
+public class EndOfTurnMenu extends Menu {
     Rectangle endOfTurn;
 
     public EndOfTurnMenu(final ActionFSM actionFSM) {
+        super();
+
         endOfTurn = new Rectangle(30, 30);
         endOfTurn.setFill(Color.RED);
         endOfTurn.setStroke(Color.BLACK);
         endOfTurn.setStrokeWidth(2);
         endOfTurn.setTranslateX(1400 - 150 - endOfTurn.getWidth());
         endOfTurn.setTranslateY(800 - 100 - endOfTurn.getHeight());
-        endOfTurn.setVisible(false);
 
         endOfTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -26,13 +27,7 @@ public class EndOfTurnMenu extends Group {
             }
         });
 
-        this.getChildren().add(endOfTurn);
+        group.getChildren().add(endOfTurn);
 
-    }
-    public void show(){
-        endOfTurn.setVisible(true);
-    }
-    public void hide(){
-        endOfTurn.setVisible(false);
     }
 }

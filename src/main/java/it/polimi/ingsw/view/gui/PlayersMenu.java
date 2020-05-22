@@ -14,13 +14,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 
-public class PlayersMenu extends Group {
+public class PlayersMenu extends Menu {
     private int offsetX, offsetY;
 
     private Text [] playerNames;
     private Label [] playerCardLabels;
 
     public PlayersMenu(){
+        super();
         offsetX = 20;
         offsetY = 20;
     }
@@ -97,9 +98,9 @@ public class PlayersMenu extends Group {
                     playerCardLabels[i].setVisible(true);
                     playerCardLabels[i].setTranslateX(offsetX);
                     playerCardLabels[i].setTranslateY(offsetY + rect.getHeight() + 20);
-                    getChildren().add(playerCardLabels[i]);
+                    group.getChildren().add(playerCardLabels[i]);
 
-                    getChildren().add(playerPane);
+                    group.getChildren().add(playerPane);
                     offsetX += 90+15;
                 }
             }
