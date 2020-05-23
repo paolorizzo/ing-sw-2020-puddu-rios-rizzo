@@ -593,13 +593,6 @@ public class CliUtils
         CanvasCLI canvas = new CanvasCLI(0,0,36,5);
         canvas.setPalette(AnsiColors.ANSI_RESET);
 
-        /*
-        //create arrow
-        RectangleCLI lowArrow = new RectangleCLI(13,1,9,6);
-        lowArrow.setMask("./src/main/resources/arrow3.txt");
-        lowArrow.setPalette(Color.ANSI_BG_BLACK, Color.ANSI_BRIGHT_BG_BLUE);
-         */
-
         //create text box
         RectangleCLI textBox = new RectangleCLI(13,2,9,1);
         textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);

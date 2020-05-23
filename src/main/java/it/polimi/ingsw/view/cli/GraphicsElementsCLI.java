@@ -22,15 +22,15 @@ class GraphicsElementsCLI
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK);
                 break;
             case 2:
-                figure.setMask("./src/main/resources/level2.txt");
+                figure.setMask("./src/main/resources/cli_textures/level2.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             case 3:
-                figure.setMask("./src/main/resources/level3.txt");
+                figure.setMask("./src/main/resources/cli_textures/level3.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             case 4:
-                figure.setMask("./src/main/resources/level3.txt");
+                figure.setMask("./src/main/resources/cli_textures/level3.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             default:
@@ -49,35 +49,35 @@ class GraphicsElementsCLI
         switch(title)
         {
             case "PROMETHEUS":
-                pic.setMask("./src/main/resources/prometheus.txt");
+                pic.setMask("./src/main/resources/cli_textures/prometheus.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_BLACK);
                 break;
             case "ATLAS":
-                pic.setMask("./src/main/resources/atlas.txt");
+                pic.setMask("./src/main/resources/cli_textures/atlas.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_GREEN, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE);
                 break;
             case "ATHENA":
-                pic.setMask("./src/main/resources/athena.txt");
+                pic.setMask("./src/main/resources/cli_textures/athena.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_RESET);
                 break;
             case "DEMETER":
-                pic.setMask("./src/main/resources/demeter.txt");
+                pic.setMask("./src/main/resources/cli_textures/demeter.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_YELLOW);
                 break;
             case "MINOTAUR":
-                pic.setMask("./src/main/resources/minotaur.txt");
+                pic.setMask("./src/main/resources/cli_textures/minotaur.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_RESET);
                 break;
             case "ZEUS":
-                pic.setMask("./src/main/resources/zeus.txt");
+                pic.setMask("./src/main/resources/cli_textures/zeus.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BG_WHITE);
                 break;
             case "HEPHAESTUS":
-                pic.setMask("./src/main/resources/efesto.txt");
+                pic.setMask("./src/main/resources/cli_textures/efesto.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_WHITE);
                 break;
             case "APOLLO":
-                pic.setMask("./src/main/resources/pan.txt");
+                pic.setMask("./src/main/resources/cli_textures/pan.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_CYAN, AnsiColors.ANSI_BG_PURPLE, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_PURPLE, AnsiColors.ANSI_BG_BLUE);
                 break;
             default:
@@ -96,12 +96,12 @@ class GraphicsElementsCLI
     {
         if(right)
         {
-            arrow.setMask("./src/main/resources/arrow.txt");
+            arrow.setMask("./src/main/resources/cli_textures/arrow.txt");
             arrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 2? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
         }
         else
         {
-            arrow.setMask("./src/main/resources/arrow2.txt");
+            arrow.setMask("./src/main/resources/cli_textures/arrow2.txt");
             arrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 0? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
         }
     }
@@ -112,7 +112,7 @@ class GraphicsElementsCLI
      */
     public static void drawCard(RectangleCLI card)
     {
-        card.setMask("./src/main/resources/card.txt");
+        card.setMask("./src/main/resources/cli_textures/card.txt");
         card.setPalette(AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_YELLOW);
     }
 
@@ -126,12 +126,12 @@ class GraphicsElementsCLI
     {
         if(num==2)
         {
-            figure.setMask("./src/main/resources/two.txt");
+            figure.setMask("./src/main/resources/cli_textures/two.txt");
             figure.setPalette(selection == 2? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
         }
         else if(num == 3)
         {
-            figure.setMask("./src/main/resources/three.txt");
+            figure.setMask("./src/main/resources/cli_textures/three.txt");
             figure.setPalette(selection == 3? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
         }
     }
@@ -143,7 +143,7 @@ class GraphicsElementsCLI
      */
     public static void drawWorker(RectangleCLI worker, char player)
     {
-        worker.setMask("./src/main/resources/worker.txt");
+        worker.setMask("./src/main/resources/cli_textures/worker.txt");
 
         switch(player)
         {
