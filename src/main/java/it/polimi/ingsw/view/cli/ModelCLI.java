@@ -2,9 +2,7 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Stores the data required for CLI representations.
@@ -88,6 +86,12 @@ public class ModelCLI
         return numbers.iterator();
     }
 
+    Iterator<Player> getPlayersIterator()
+    {
+        Collection<Player> players_list = players.values();
+        return players_list.iterator();
+    }
+
     /**
      * Create and initialize the representation of an empty 5x5 game board.
      * @return the board matrix.
@@ -166,9 +170,10 @@ public class ModelCLI
         {
             for(int col = 0; col < 5; col++)
             {
-                if(workers[row][col].charAt(1)-'0' == id)
+                if(!workers[row][col].equals("") && workers[row][col].charAt(1)-'0' == id)
                     workers[row][col] = "";
             }
         }
+        players.remove(id);
     }
 }

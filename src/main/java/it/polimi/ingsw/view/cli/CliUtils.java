@@ -502,12 +502,14 @@ public class CliUtils
         innerBuildLabel.setPalette(AnsiColors.ANSI_BG_BLACK);
         back_canvas.addOverlappingFigure(innerBuildLabel);
 
-        for(int i=0; i<model.getNumPlayers(); i++)
+        Iterator<Player> playersIterator = model.getPlayersIterator();
+        for(int i=0; playersIterator.hasNext(); i++)
         {
+            Player currentPlayer = playersIterator.next();
             RectangleCLI label = innerLable.createInRelativeFrame(3, (1+2*i), 5, 1);
-            label.addText(" "+model.getPlayer(i).getNickname().toUpperCase()+" ");
+            label.addText(" "+currentPlayer.getNickname().toUpperCase()+" ");
             RectangleCLI god = innerLable.createInRelativeFrame(9,(1+2*i), 4,1);
-            god.addText(" "+model.getPlayer(i).getCard().getName().toUpperCase());
+            god.addText(" "+currentPlayer.getCard().getName().toUpperCase());
             RectangleCLI activePlayer = innerLable.createInRelativeFrame(1,(1+2*i), 1,1);
             activePlayer.setPalette(AnsiColors.ANSI_BRIGHT_BG_GREEN);
             label.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN);

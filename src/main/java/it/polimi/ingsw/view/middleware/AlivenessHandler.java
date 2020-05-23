@@ -13,7 +13,7 @@ public class AlivenessHandler
     private boolean alive;
 
 
-    private final int livenessRate = 5000;
+    private final int livenessRate = 6000;
     private final int invalidPongTreshold = 10000;
 
 
