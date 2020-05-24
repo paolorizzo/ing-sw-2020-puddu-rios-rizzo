@@ -4,85 +4,85 @@
          "desc": "Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.",
          "name": "Apollo",
          "num": "1",
-         "image": "apollo.png"
+         "image": "gui/gods/cards/apollo.png"
       },
       {
          "desc": "Your Move: Your Worker may move one additional time, but not back to its initial space.",
          "name": "Artemis",
          "num": "2",
-         "image": "artemis.png"
+         "image": "gui/gods/cards/artemis.png"
       },
       {
          "desc": "Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.",
          "name": "Athena",
          "num": "3",
-         "image": "athena.png"
+         "image": "gui/gods/cards/athena.png"
       },
       {
          "desc": "Your Build: Your Worker may build a dome at any level.",
          "name": "Atlas",
          "num": "4",
-         "image": "atlas.png"
+         "image": "gui/gods/cards/atlas.png"
       },
       {
          "desc": "Your Build: Your Worker may build one additional time, but not on the same space.",
          "name": "Demeter",
          "num": "5",
-         "image": "demeter.png"
+         "image": "gui/gods/cards/demeter.png"
       },
       {
          "desc": "Your Build: Your Worker may build one additional block (not dome) on top of your first block.",
          "name": "Hephaestus",
          "num": "6",
-         "image": "hephaestus.png"
+         "image": "gui/gods/cards/hephaestus.png"
       },
       {
          "desc": "Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.",
          "name": "Minotaur",
          "num": "8",
-         "image": "minotaur.png"
+         "image": "gui/gods/cards/minotaur.png"
       },
       {
          "desc": "Win Condition: You also win if your Worker moves down two or more levels.",
          "name": "Pan",
          "num": "9",
-         "image": "pan.png"
+         "image": "gui/gods/cards/pan.png"
       },
       {
          "desc": "Your Turn: If your Worker does not move up, it may build both before and after moving.",
          "name": "Prometheus",
          "num": "10",
-         "image": "prometheus.png"
+         "image": "gui/gods/cards/prometheus.png"
       },
       {
          "desc": "Opponent’s Turn: An opponent cannot win by moving into a perimeter space.",
          "name": "Hera",
          "num": "20",
-         "image": "hera.png"
+         "image": "gui/gods/cards/hera.png"
       },
       {
          "desc": "Your Build: Your Worker may build one additional time, but this cannot be on a perimeter space.",
          "name": "Hestia",
          "num": "21",
-         "image": "hestia.png"
+         "image": "gui/gods/cards/hestia.png"
       },
       {
          "desc": "Start of Opponent’s Turn: If one of your opponent’s Workers is higher than all of their others, it cannot move.",
          "name": "Hypnus",
          "num": "22",
-         "image": "hypnus.png"
+         "image": "gui/gods/cards/hypnus.png"
       },
       {
          "desc": "Opponent’s Turn: Opponent Workers cannot build on spaces neighboring your Workers, unless building a dome to create a Complete Tower.",
          "name": "Limus",
          "num": "23",
-         "image": "limus.png"
+         "image": "gui/gods/cards/limus.png"
       },
       {
          "desc": "Your Build: Your Worker may build a block under itself.",
          "name": "Zeus",
          "num": "30",
-         "image": "zeus.png"
+         "image": "gui/gods/cards/zeus.png"
       }
    ]
 }

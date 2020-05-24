@@ -2,359 +2,355 @@
 	"meshes": [
 		{
 			"name": "LEVEL0",
-			"file": "LV0.obj"
+			"file": "gui/meshes/LV0.obj"
 		},
 		{
 			"name": "LEVEL1",
-			"file": "LV1.obj"
+			"file": "gui/meshes/LV1.obj"
 		},
 		{
 			"name": "LEVEL2",
-			"file": "LV2.obj"
+			"file": "gui/meshes/LV2.obj"
 		},
 		{
 			"name": "LEVEL3",
-			"file": "LV3.obj"
+			"file": "gui/meshes/LV3.obj"
 		},
 		{
 			"name": "DOME",
-			"file": "DOME.obj"
+			"file": "gui/meshes/DOME.obj"
 		},
 		{
 			"name": "WORKER_F",
-			"file": "worker_F.obj"
+			"file": "gui/meshes/worker_F.obj"
 		},
 		{
 			"name": "WORKER_M",
-			"file": "worker_M.obj"
+			"file": "gui/meshes/worker_M.obj"
 		},
 		{
 			"name": "INNERWALL",
-			"file": "innerwall.obj"
+			"file": "gui/meshes/innerwall.obj"
 		},
 		{
 			"name": "OUTERWALL",
-			"file": "outerwall.obj"
+			"file": "gui/meshes/outerwall.obj"
 		},
 		{
 			"name": "ISLAND",
-			"file": "island.obj"
+			"file": "gui/meshes/island.obj"
 		},
 		{
 			"name": "ISLANDS",
-			"file": "islands.obj"
+			"file": "gui/meshes/islands.obj"
 		},
 		{
 			"name": "SEA",
-			"file": "sea.obj"
+			"file": "gui/meshes/sea.obj"
 		},
 		{
 			"name": "SEADOWN",
-			"file": "seadown.obj"
+			"file": "gui/meshes/seadown.obj"
 		}
 	],
 	"textures": [
 		{
 			"name": "WORKER_M_BLUE",
-			"file": "worker_male_blue.png"
+			"file": "gui/textures/worker_male_blue.png"
 		},
 		{
 			"name": "WORKER_M_WHITE",
-			"file": "worker_male_white.png"
+			"file": "gui/textures/worker_male_white.png"
 		},
 		{
 			"name": "WORKER_M_ORANGE",
-			"file": "worker_male_orange.png"
+			"file": "gui/textures/worker_male_orange.png"
 		},
 		{
 			"name": "WORKER_M_PINK",
-			"file": "worker_male_pink.png"
+			"file": "gui/textures/worker_male_pink.png"
 		},
 		{
 			"name": "WORKER_M_PURPLE",
-			"file": "worker_male_purple.png"
+			"file": "gui/textures/worker_male_purple.png"
 		},
 		{
 			"name": "WORKER_M_TAN",
-			"file": "worker_male_tan.png"
+			"file": "gui/textures/worker_male_tan.png"
 		},
 		{
 			"name": "WORKER_F_BLUE",
-			"file": "worker_female_blue.png"
+			"file": "gui/textures/worker_female_blue.png"
 		},
 		{
 			"name": "WORKER_F_WHITE",
-			"file": "worker_female_white.png"
+			"file": "gui/textures/worker_female_white.png"
 		},
 		{
 			"name": "WORKER_F_ORANGE",
-			"file": "worker_female_orange.png"
+			"file": "gui/textures/worker_female_orange.png"
 		},
 		{
 			"name": "WORKER_F_PINK",
-			"file": "worker_female_pink.png"
+			"file": "gui/textures/worker_female_pink.png"
 		},
 		{
 			"name": "WORKER_F_PURPLE",
-			"file": "worker_female_purple.png"
+			"file": "gui/textures/worker_female_purple.png"
 		},
 		{
 			"name": "WORKER_F_TAN",
-			"file": "worker_female_tan.png"
+			"file": "gui/textures/worker_female_tan.png"
 		},
 		{
 			"name": "WORKER_M_ENABLED",
-			"file": "worker_male_enabled.png"
+			"file": "gui/textures/worker_male_enabled.png"
 		},
 		{
 			"name": "WORKER_M_PREVIEW",
-			"file": "worker_male_preview.png"
+			"file": "gui/textures/worker_male_preview.png"
 		},
 		{
 			"name": "WORKER_M_DISABLED",
-			"file": "worker_male_disabled.png"
+			"file": "gui/textures/worker_male_disabled.png"
 		},
 		{
 			"name": "WORKER_F_ENABLED",
-			"file": "worker_female_enabled.png"
+			"file": "gui/textures/worker_female_enabled.png"
 		},
 		{
 			"name": "WORKER_F_PREVIEW",
-			"file": "worker_female_preview.png"
+			"file": "gui/textures/worker_female_preview.png"
 		},
 		{
 			"name": "WORKER_F_DISABLED",
-			"file": "worker_female_disabled.png"
+			"file": "gui/textures/worker_female_disabled.png"
 		},
 		{
 			"name": "LEVEL0_default",
-			"file": "LV0_default.png"
+			"file": "gui/textures/LV0_default.png"
 		},
 		{
 			"name": "LEVEL0_enabled",
-			"file": "LV0_enabled.png"
+			"file": "gui/textures/LV0_enabled.png"
 		},
 		{
 			"name": "LEVEL0_disabled",
-			"file": "LV0_disabled.png"
+			"file": "gui/textures/LV0_disabled.png"
 		},
 		{
 			"name": "LEVEL0_preview",
-			"file": "LV0_preview.png"
+			"file": "gui/textures/LV0_preview.png"
 		},
 		{
 			"name": "LEVEL1_default",
-			"file": "LV1_default.png"
+			"file": "gui/textures/LV1_default.png"
 		},
 		{
 			"name": "LEVEL1_enabled",
-			"file": "LV1_enabled.png"
+			"file": "gui/textures/LV1_enabled.png"
 		},
 		{
 			"name": "LEVEL1_disabled",
-			"file": "LV1_disabled.png"
+			"file": "gui/textures/LV1_disabled.png"
 		},
 		{
 			"name": "LEVEL1_preview",
-			"file": "LV1_preview.png"
+			"file": "gui/textures/LV1_preview.png"
 		},
 		{
 			"name": "LEVEL2_default",
-			"file": "LV2_default.png"
+			"file": "gui/textures/LV2_default.png"
 		},
 		{
 			"name": "LEVEL2_enabled",
-			"file": "LV2_enabled.png"
+			"file": "gui/textures/LV2_enabled.png"
 		},
 		{
 			"name": "LEVEL2_disabled",
-			"file": "LV2_disabled.png"
+			"file": "gui/textures/LV2_disabled.png"
 		},
 		{
 			"name": "LEVEL2_preview",
-			"file": "LV2_preview.png"
+			"file": "gui/textures/LV2_preview.png"
 		},
 		{
 			"name": "LEVEL3_default",
-			"file": "LV3_default.png"
+			"file": "gui/textures/LV3_default.png"
 		},
 		{
 			"name": "LEVEL3_enabled",
-			"file": "LV3_enabled.png"
+			"file": "gui/textures/LV3_enabled.png"
 		},
 		{
 			"name": "LEVEL3_disabled",
-			"file": "LV3_disabled.png"
+			"file": "gui/textures/LV3_disabled.png"
 		},
 		{
 			"name": "LEVEL3_preview",
-			"file": "LV3_preview.png"
+			"file": "gui/textures/LV3_preview.png"
 		},
 		{
 			"name": "DOME_default",
-			"file": "DOME_default.png"
+			"file": "gui/textures/DOME_default.png"
 		},
 		{
 			"name": "DOME_enabled",
-			"file": "DOME_enabled.png"
+			"file": "gui/textures/DOME_enabled.png"
 		},
 		{
 			"name": "DOME_disabled",
-			"file": "DOME_disabled.png"
+			"file": "gui/textures/DOME_disabled.png"
 		},
 		{
 			"name": "DOME_preview",
-			"file": "DOME_preview.png"
+			"file": "gui/textures/DOME_preview.png"
 		},
 		{
 			"name": "ISLAND",
-			"file": "island.png"
+			"file": "gui/textures/island.png"
 		},
 		{
 			"name": "SEA",
-			"file": "sea.png"
+			"file": "gui/textures/sea.png"
 		}
 	],
 	"images": [
 		{
 			"name": "Apollo",
-			"file": "apollo.png"
+			"file": "gui/gods/cards/apollo.png"
 		},
 		{
 			"name": "Artemis",
-			"file": "artemis.png"
+			"file": "gui/gods/cards/artemis.png"
 		},
 		{
 			"name": "Athena",
-			"file": "athena.png"
+			"file": "gui/gods/cards/athena.png"
 		},
 		{
 			"name": "Atlas",
-			"file": "atlas.png"
+			"file": "gui/gods/cards/atlas.png"
 		},
 		{
 			"name": "Demeter",
-			"file": "demeter.png"
+			"file": "gui/gods/cards/demeter.png"
 		},
 		{
 			"name": "Hephaestus",
-			"file": "hephaestus.png"
+			"file": "gui/gods/cards/hephaestus.png"
 		},
 		{
 			"name": "Minotaur",
-			"file": "minotaur.png"
+			"file": "gui/gods/cards/minotaur.png"
 		},
 		{
 			"name": "Pan",
-			"file": "pan.png"
+			"file": "gui/gods/cards/pan.png"
 		},
 		{
 			"name": "Prometheus",
-			"file": "prometheus.png"
+			"file": "gui/gods/cards/prometheus.png"
 		},
 		{
 			"name": "Hera",
-			"file": "hera.png"
+			"file": "gui/gods/cards/hera.png"
 		},
 		{
 			"name": "Hestia",
-			"file": "hestia.png"
+			"file": "gui/gods/cards/hestia.png"
 		},
 		{
 			"name": "Hypnus",
-			"file": "hypnus.png"
+			"file": "gui/gods/cards/hypnus.png"
 		},
 		{
 			"name": "Limus",
-			"file": "limus.png"	
+			"file": "gui/gods/cards/limus.png"	
 		},
 		{
 			"name": "Zeus",
-			"file": "zeus.png"
+			"file": "gui/gods/cards/zeus.png"
 		},
 		{
 			"name": "Anonymous",
-			"file": "anon.png"
+			"file": "gui/gods/cards/anon.png"
 		},
 		{
 			"name": "CurrentPlayer",
-			"file": "current_player.png"
+			"file": "gui/menu/current_player.png"
 		},
 		{
 			"name": "podium",
-			"file": "podium.png"
+			"file": "gui/menu/podium.png"
 		},
 		{
 			"name": "parthenon",
-			"file": "parthenon.png"
+			"file": "gui/menu/parthenon.png"
 		},
 		{
 			"name": "cage",
-			"file": "cage.png"
+			"file": "gui/menu/cage.png"
 		},
 		{
 			"name": "volcano",
-			"file": "volcano.png"
+			"file": "gui/menu/volcano.png"
 		},
 		{
 			"name": "Apollo_podium",
-			"file": "apollo_podium.png"
+			"file": "gui/gods/podium/apollo_podium.png"
 		},
 		{
 			"name": "Artemis_podium",
-			"file": "artemis_podium.png"
+			"file": "gui/gods/podium/artemis_podium.png"
 		},
 		{
 			"name": "Athena_podium",
-			"file": "athena_podium.png"
+			"file": "gui/gods/podium/athena_podium.png"
 		},
 		{
 			"name": "Atlas_podium",
-			"file": "atlas_podium.png"
+			"file": "gui/gods/podium/atlas_podium.png"
 		},
 		{
 			"name": "Demeter_podium",
-			"file": "demeter_podium.png"
+			"file": "gui/gods/podium/demeter_podium.png"
 		},
 		{
 			"name": "Hephaestus_podium",
-			"file": "hephaestus_podium.png"
+			"file": "gui/gods/podium/hephaestus_podium.png"
 		},
 		{
 			"name": "Minotaur_podium",
-			"file": "minotaur_podium.png"
+			"file": "gui/gods/podium/minotaur_podium.png"
 		},
 		{
 			"name": "Pan_podium",
-			"file": "pan_podium.png"
+			"file": "gui/gods/podium/pan_podium.png"
 		},
 		{
 			"name": "Prometheus_podium",
-			"file": "prometheus_podium.png"
+			"file": "gui/gods/podium/prometheus_podium.png"
 		},
 		{
 			"name": "Hera_podium",
-			"file": "hera_podium.png"
+			"file": "gui/gods/podium/hera_podium.png"
 		},
 		{
 			"name": "Hestia_podium",
-			"file": "hestia_podium.png"
+			"file": "gui/gods/podium/hestia_podium.png"
 		},
 		{
 			"name": "Hypnus_podium",
-			"file": "hypnus_podium.png"
+			"file": "gui/gods/podium/hypnus_podium.png"
 		},
 		{
 			"name": "Limus_podium",
-			"file": "limus_podium.png"
+			"file": "gui/gods/podium/limus_podium.png"
 		},
 		{
 			"name": "Zeus_podium",
-			"file": "zeus_podium.png"
-		},
-		{
-			"name": "Anonymous",
-			"file": "anon.png"
+			"file": "gui/gods/podium/zeus_podium.png"
 		}
 	]
 }
