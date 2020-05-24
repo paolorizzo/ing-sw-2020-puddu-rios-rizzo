@@ -109,7 +109,6 @@ public class AskCardMenu extends Menu {
             System.out.println("Error during the loading of deck: "+e.getMessage());
         }
 
-        hide();
     }
     public void setDeck(Deck deck){
         int offsetX = 30, offsetY = 30;
@@ -124,6 +123,15 @@ public class AskCardMenu extends Menu {
             if(countcard%5 == 0){
                 offsetX = 30;
                 offsetY +=200;
+            }
+        }
+    }
+    public void hide(){
+        group.setVisible(false);
+        if(cardLabels != null){
+
+            for(Label cardLabel: cardLabels.values()){
+                cardLabel.setVisible(false);
             }
         }
     }
