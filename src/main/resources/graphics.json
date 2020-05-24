@@ -277,6 +277,10 @@
 			"file": "anon.png"
 		},
 		{
+			"name": "CurrentPlayer",
+			"file": "current_player.png"
+		},
+		{
 			"name": "podium",
 			"file": "podium.png"
 		},

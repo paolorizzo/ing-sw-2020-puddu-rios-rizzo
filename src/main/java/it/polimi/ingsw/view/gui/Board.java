@@ -314,6 +314,11 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     }
 
     @Override
+    public void setCurrentPlayer(int id){
+        playersMenu.setCurrentPlayer(id);
+    }
+
+    @Override
     public void askNumPlayers() {
         askNumPlayersMenu.show();
         System.out.println("Ask num player");

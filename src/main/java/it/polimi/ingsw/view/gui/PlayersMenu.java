@@ -19,11 +19,19 @@ public class PlayersMenu extends Menu {
 
     private Text [] playerNames;
     private Label [] playerCardLabels;
-
+    private Label currentPlayerLabel;
     public PlayersMenu(){
         super();
         offsetX = 20;
         offsetY = 20;
+        currentPlayerLabel = new Label("");
+        Image image = GraphicsLoader.instance().getImage("CurrentPlayer");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(100);
+        currentPlayerLabel.setGraphic(imageView);
+        currentPlayerLabel.setVisible(false);
+        group.getChildren().add(currentPlayerLabel);
     }
     public void addNamePlayer(Player player){
         String name = player.getNickname();
@@ -44,7 +52,6 @@ public class PlayersMenu extends Menu {
 
     }
     public void addGodPlayer(Player player){
-
         String nameGod = player.getCard().getName();
         final int id = player.getId();
 
@@ -60,7 +67,20 @@ public class PlayersMenu extends Menu {
         });
 
     }
-    public void setPlayerTurn(int id){
+    public void setCurrentPlayer(int id){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                /*
+                currentPlayerLabel.setTranslateX(playerCardLabels[id].getTranslateX());
+                currentPlayerLabel.setTranslateY(offsetY + playerCardLabels[id].getTranslateY()+playerCardLabels[id].getMaxHeight());
+                */
+                System.out.println();
+                currentPlayerLabel.setTranslateX(playerCardLabels[id].getTranslateX());
+                currentPlayerLabel.setTranslateY(playerCardLabels[id].getTranslateY()+playerCardLabels[id].getGraphic().getLayoutBounds().getHeight()+10);
+                currentPlayerLabel.setVisible(true);
+            }
+        });
 
     }
     public void setNumPlayers(final int numPlayers){

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserInterface
 {
-    void showLogo();
+
 
     void askNumPlayers();
     void askUsername();
@@ -30,4 +30,7 @@ public interface UserInterface
     void removeWorkersOfPlayer(int id);
 
     int getNumPlayers();
+
+    void showLogo();
+    void setCurrentPlayer(int id);
 }

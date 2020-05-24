@@ -102,6 +102,7 @@ public class ClientView extends View implements UserInterfaceObserver
     }
     @Override
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
+        getUi().setCurrentPlayer(id);
         //System.out.println("currplayer "+id);
         if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
             currentSetupState.execute(this, possibleActions);
@@ -171,6 +172,8 @@ public class ClientView extends View implements UserInterfaceObserver
 
     @Override
     public synchronized void updateDeck(Deck deck) {
+
+        getUi().setCurrentPlayer(0);
         if(currentSetupState == SetupState.RECEIVE_DECK){
             currentSetupState.execute(this, deck);
         }
@@ -179,6 +182,7 @@ public class ClientView extends View implements UserInterfaceObserver
 
     @Override
     public synchronized void updateCards(int id, List<Card> cards) {
+        getUi().setCurrentPlayer(id);
         if(id == getId() && currentSetupState == SetupState.RECEIVE_CARDS){
             currentSetupState.execute(this, cards);
         }

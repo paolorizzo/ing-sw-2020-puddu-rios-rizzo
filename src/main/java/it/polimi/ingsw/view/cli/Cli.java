@@ -28,6 +28,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
 
     }
+    @Override
+    public void setCurrentPlayer(int id){
+        //TODO to complete this method
+
+    }
 
     @Override
     public void askNumPlayers()
