@@ -29,8 +29,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     }
     @Override
-    public void setCurrentPlayer(int id){
-        //TODO to complete this method
+    public void setCurrentPlayer(int id)
+    {
+
+        CliUtils.handleCurrentPlayer(id, model);
 
     }
     @Override

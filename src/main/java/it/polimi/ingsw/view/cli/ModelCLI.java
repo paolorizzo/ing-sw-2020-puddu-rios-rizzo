@@ -14,6 +14,10 @@ public class ModelCLI
      */
     int[][] board;
 
+    private int currentPlayerId;
+
+    private boolean gameMode;
+
     /**
      * A mask is a String matrix that stores workers' IDs in the cells corresponding to their position on the board.
      */
@@ -28,11 +32,36 @@ public class ModelCLI
         workers = generateEmptyWorkersMask();
         players = new HashMap<>();
         pieceBag = new HashMap<>();
+        currentPlayerId = 0;
+        gameMode = false;
 
         pieceBag.put(1, 22);
         pieceBag.put(2, 18);
         pieceBag.put(3, 14);
         pieceBag.put(4, 18);
+    }
+
+    boolean isGameOn()
+    {
+        return gameMode;
+    }
+
+    void setGameMode()
+    {
+        this.gameMode = true;
+    }
+
+    void setCurrentPlayerId(int id)
+    {
+        if(players.keySet().contains(id))
+        {
+            this.currentPlayerId = id;
+        }
+    }
+
+    int getCurrentPlayerId()
+    {
+        return currentPlayerId;
     }
 
     int getPiecesLeft(int level)

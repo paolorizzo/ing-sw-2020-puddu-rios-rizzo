@@ -57,6 +57,7 @@ public class CliUtils
     {
         Space chosenSpace;
         int chosenAction = -1;
+        model.setGameMode();
 
         while(chosenAction < 0)
         {
@@ -276,6 +277,14 @@ public class CliUtils
         return choice;
     }
 
+    static void handleCurrentPlayer(int id, ModelCLI model)
+    {
+        model.setCurrentPlayerId(id);
+
+        if(model.isGameOn())
+            showBoard(model);
+    }
+
 
     //utils for handlers
     static private boolean isMoveAction(List<Action> possibleActions)
@@ -486,38 +495,64 @@ public class CliUtils
         back_canvas.setPalette(AnsiColors.ANSI_RESET);
         back_canvas.setTextColor(AnsiColors.ANSI_BLACK);
 
-        RectangleCLI playerLable  = new RectangleCLI(37,0,16,9);
+        //create the (empty) players label
+        RectangleCLI playerLable  = new RectangleCLI(37,0,16,24);
         playerLable.setPalette(AnsiColors.ANSI_BG_CYAN);
         back_canvas.addOverlappingFigure(playerLable);
-
-        RectangleCLI innerLable  = playerLable.createInRelativeFrame(1,1,14,7);
+        RectangleCLI innerLable  = playerLable.createInRelativeFrame(1,1,14,22);
         innerLable.setPalette(AnsiColors.ANSI_BG_BLACK);
         back_canvas.addOverlappingFigure(innerLable);
 
-        RectangleCLI buildLabel  = new RectangleCLI(37,11,16,11);
+        //create the (empty) piecebag label
+        RectangleCLI buildLabel  = new RectangleCLI(37,25,16,11);
         buildLabel.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
         back_canvas.addOverlappingFigure(buildLabel);
-
         RectangleCLI innerBuildLabel  = buildLabel.createInRelativeFrame(1,1,14,9);
         innerBuildLabel.setPalette(AnsiColors.ANSI_BG_BLACK);
         back_canvas.addOverlappingFigure(innerBuildLabel);
 
+        //populate the players label
         Iterator<Player> playersIterator = model.getPlayersIterator();
         for(int i=0; playersIterator.hasNext(); i++)
         {
             Player currentPlayer = playersIterator.next();
-            RectangleCLI label = innerLable.createInRelativeFrame(3, (1+2*i), 5, 1);
+            RectangleCLI label = innerLable.createInRelativeFrame(3, (1+7*i), 5, 1);
             label.addText(" "+currentPlayer.getNickname().toUpperCase()+" ");
-            RectangleCLI god = innerLable.createInRelativeFrame(9,(1+2*i), 4,1);
+            RectangleCLI god = innerLable.createInRelativeFrame(9,(1+7*i), 4,1);
             god.addText(" "+currentPlayer.getCard().getName().toUpperCase());
-            RectangleCLI activePlayer = innerLable.createInRelativeFrame(1,(1+2*i), 1,1);
-            activePlayer.setPalette(AnsiColors.ANSI_BRIGHT_BG_GREEN);
+
+            switch(currentPlayer.getId())
+            {
+                case 0:
+                    god.setPalette(AnsiColors.ANSI_BG_CYAN);
+                    break;
+                case 1:
+                    god.setPalette(AnsiColors.ANSI_BRIGHT_BG_PURPLE);
+                    break;
+                case 2:
+                    god.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+                    break;
+                default:
+                    break;
+            }
+
+
+            RectangleCLI activePlayer = innerLable.createInRelativeFrame(1,(1+7*i), 1,1);
+
+            activePlayer.setPalette( model.getCurrentPlayerId() == currentPlayer.getId()? AnsiColors.ANSI_BRIGHT_BG_GREEN : AnsiColors.ANSI_BG_RED);
+
+            RectangleCLI godDescription = activePlayer.createInRelativeFrame(0,1,12, 5);
+            godDescription.setPalette(AnsiColors.ANSI_BG_WHITE);
+            godDescription.addText(currentPlayer.getCard().getDescription());
+
             label.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN);
             back_canvas.addOverlappingFigure(label);
             back_canvas.addOverlappingFigure(activePlayer);
             back_canvas.addOverlappingFigure(god);
+            back_canvas.addOverlappingFigure(godDescription);
         }
 
+        //populate the piecebag label
         for(int i=0; i<4; i++)
         {
             RectangleCLI label = innerBuildLabel.createInRelativeFrame(1, (1+2*i), 3, 1);
@@ -532,10 +567,12 @@ public class CliUtils
 
         }
 
+        //create the board
         RectangleCLI canvas = new RectangleCLI(0,0,36,36);
         back_canvas.addOverlappingFigure(canvas);
         canvas.setPalette(AnsiColors.ANSI_BG_YELLOW);
 
+        //create selection
         if(selection != null)
         {
             //create selection
@@ -545,7 +582,6 @@ public class CliUtils
             //add the selection to the figure
             canvas.addOverlappingFigure(selectionFigure);
         }
-
 
         //create spaces
         List<RectangleCLI> spaces = new ArrayList<>();
@@ -579,11 +615,7 @@ public class CliUtils
             }
         }
 
-        //create players window
-
-
         //print the figure
-
         back_canvas.printFigure();
     }
 
