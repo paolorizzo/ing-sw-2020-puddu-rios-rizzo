@@ -75,6 +75,7 @@ public class Game {
     }
 
     public void nextTurn(){
+        System.out.println("advancing turn");
         if(currentTurn != null)
             turnArchive.addTurn(currentTurn);
         pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();

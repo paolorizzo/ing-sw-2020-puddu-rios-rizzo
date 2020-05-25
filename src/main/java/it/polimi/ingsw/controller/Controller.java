@@ -359,6 +359,7 @@ public class Controller implements ControllerInterface
     //turn phase methods
 
     /**
+     * MAY ADVANCE THE TURN THROUGH Game.getPossibleActions()
      * waits until it is the requesting player's turn
      * once it is, sends the possible actions through the feed, if there are any
      * moreover, wakes possible waiting threads

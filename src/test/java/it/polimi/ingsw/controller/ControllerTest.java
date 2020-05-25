@@ -660,6 +660,31 @@ public class ControllerTest extends MvcIntegrationTest {
     }
 
     /**
+     * tests that it is possible to play some correct turns without getting any exceptions, and resulting in the correct position of the workers
+     */
+    @Test
+    public void testSomeTurns(){
+        Controller c = new Controller();
+        playSomeTurns(c);
+        printWorkerPositions(c);
+        // checks the position of all workers
+        assertEquals(4, c.getModel().getPlayer(0).getWorker(Sex.FEMALE).getSpace().getPosX());
+        assertEquals(1, c.getModel().getPlayer(0).getWorker(Sex.FEMALE).getSpace().getPosY());
+        assertEquals(0, c.getModel().getPlayer(0).getWorker(Sex.MALE).getSpace().getPosX());
+        assertEquals(2, c.getModel().getPlayer(0).getWorker(Sex.MALE).getSpace().getPosY());
+
+        assertEquals(2, c.getModel().getPlayer(1).getWorker(Sex.FEMALE).getSpace().getPosX());
+        assertEquals(0, c.getModel().getPlayer(1).getWorker(Sex.FEMALE).getSpace().getPosY());
+        assertEquals(0, c.getModel().getPlayer(1).getWorker(Sex.MALE).getSpace().getPosX());
+        assertEquals(3, c.getModel().getPlayer(1).getWorker(Sex.MALE).getSpace().getPosY());
+
+        assertEquals(4, c.getModel().getPlayer(2).getWorker(Sex.FEMALE).getSpace().getPosX());
+        assertEquals(0, c.getModel().getPlayer(2).getWorker(Sex.FEMALE).getSpace().getPosY());
+        assertEquals(3, c.getModel().getPlayer(2).getWorker(Sex.MALE).getSpace().getPosX());
+        assertEquals(2, c.getModel().getPlayer(2).getWorker(Sex.MALE).getSpace().getPosY());
+    }
+
+    /**
      * TODO test this after implementing the method on the controller
      */
     @Test
@@ -895,7 +920,89 @@ public class ControllerTest extends MvcIntegrationTest {
             }
             c.setupWorker(curr, new SetupAction(new Worker(Sex.MALE, c.getModel().getPlayers().get(curr)).toString(), 2*curr, 2 ) );
         }
+    }
 
 
+    /**
+     * executes some scripted actions, for 5 total turns
+     * @param c the controller on which to operate
+     */
+    public void playSomeTurns(Controller c){
+        int n = 3;
+        fullSetupPhase(c, n);
+        // initialize sexes
+        Sex[] sexes = {Sex.FEMALE, Sex.MALE, Sex.MALE};
+        // initialize positions
+        int[][] xPositions = new int[3][];
+        int[][] yPositions = new int[3][];
+        xPositions[0] = new int[]{0, 0, 1, 2, 3, 4};
+        yPositions[0] = new int[]{0, 1, 1, 1, 1, 1};
+        xPositions[1] = new int[]{2, 1, 1, 1, 0, 0};
+        yPositions[1] = new int[]{2, 2, 3, 4, 4, 3};
+        xPositions[2] = new int[]{4, 4, 4, 3, 3, 3};
+        yPositions[2] = new int[]{2, 3, 4, 4, 3, 2};
+        //execute actions following positions
+        for(int i=0;i<5;i++){
+            for(int j=0;j<n;j++){
+                int curr = (j+1)%n;
+                safeAction(c, curr, sexes[curr], xPositions[curr][i], yPositions[curr][i], xPositions[curr][i+1], yPositions[curr][i+1]);
+                printTurn(c);
+            }
+        }
+    }
+
+
+    /**
+     * executes an action safely, building a level 1 block on the previous position
+     * @param c the controller on which to operate
+     * @param id the id of the player
+     * @param s the sex of the worker chosen for the action
+     * @param startX the starting x coordinate of the worker. Will be built upon
+     * @param startY the starting y coordinate of the worker. Will be built upon
+     * @param targetX the target x coordinate of the worker. No check is made
+     * @param targetY the target y coordinate of the worker. No check is made
+     */
+    public void safeAction(Controller c, int id, Sex s, int startX, int startY, int targetX, int targetY){
+        Worker w = c.getModel().getPlayer(id).getWorker(s);
+
+        try{
+            c.requestActions(id);
+            //getStubView(c, id).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            throw new RuntimeException("request move action interrupted");
+        }
+        c.publishAction(id, new MoveAction( w.toString(), targetX, targetY, Direction.SAME, startX, startY));
+
+        try{
+            c.requestActions(id);
+            //getStubView(c, id).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            throw new RuntimeException("request build action interrupted");
+        }
+        c.publishAction(id, new BuildAction( w.toString(), startX, startY, Piece.LEVEL1));
+
+        try{
+            c.requestActions(id);
+            //getStubView(c, id).printPossibleActions();
+        }
+        catch(InterruptedException e){
+            throw new RuntimeException("request build action interrupted");
+        }
+    }
+
+    /**
+     * prints the positions of all the workers
+     * @param c the controller from which to get the info
+     */
+    public void printWorkerPositions(Controller c){
+        int numPlayers = c.getModel().game.getNumPlayers();
+        for(int i=0;i<numPlayers;i++){
+            for(Sex s:Sex.values()){
+                Space space = c.getModel().getPlayer(i).getWorker(s).getSpace();
+                System.out.println("id = " + i + ", sex = " + s.name() + ", x = " + space.getPosX() + ", y = " + space.getPosY());
+            }
+        }
     }
 }
