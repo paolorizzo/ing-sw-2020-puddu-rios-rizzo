@@ -64,8 +64,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askGod(List<Card> cards)
     {
-
         notifyReadGod(cards.get(CliUtils.handleCardSelection(cards)).getNum());
+        model.setGameMode();
     }
 
     @Override

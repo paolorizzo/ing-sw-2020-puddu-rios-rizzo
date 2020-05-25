@@ -57,7 +57,7 @@ public class CliUtils
     {
         Space chosenSpace;
         int chosenAction = -1;
-        model.setGameMode();
+
 
         while(chosenAction < 0)
         {
