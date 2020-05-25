@@ -12,7 +12,7 @@ public class TurnTest {
     public void testEmptyConstructor(){
         Player player = new Player("Federico", Color.BLUE, 1);
         Turn turn= new Turn(player);
-        assert(player.equals(turn.getPlayer()));
+        assert(player.getId() == turn.getPlayerId());
         assert(turn.isEmpty());
     }
 
@@ -24,7 +24,7 @@ public class TurnTest {
         Action action=new Action("workerID", 2, 2);
         Turn turn = new Turn(player, action);
         assertEquals(turn.size(), 1);
-        assert(player.equals(turn.getPlayer()));
+        assert(player.getId() == turn.getPlayerId());
         assert(turn.contains(action));
     }
 

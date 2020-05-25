@@ -38,7 +38,7 @@ public class TurnArchive {
      */
     public Turn getLastTurnOf(Player player){
         for(int i=turns.size()-1;i>=0;i--){
-            if(turns.get(i).getPlayer().equals(player))
+            if(turns.get(i).getPlayerId() == player.getId())
                 return turns.get(i);
         }
         //not found

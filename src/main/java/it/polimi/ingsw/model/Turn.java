@@ -12,14 +12,14 @@ import java.util.ArrayList;
  */
 public class Turn{
     ArrayList<Action> actions;
-    Player player;
+    int playerId;
 
     /**
      * constructs an empty turn
      * @param player the player that plays the turn
      */
     public Turn(Player player){
-        this.player = player;
+        this.playerId = player.getId();
         actions=new ArrayList();
     }
 
@@ -55,8 +55,8 @@ public class Turn{
      * returns the player that plays this turn
      * @return the player that plays this turn
      */
-    public Player getPlayer() {
-        return player;
+    public int getPlayerId() {
+        return playerId;
     }
 
     /**
