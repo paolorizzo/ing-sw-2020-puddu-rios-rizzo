@@ -30,6 +30,8 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
     ActionFSM actionFSM;
 
+    ErrorVisualizer errorVisualizer;
+
     AskNumPlayersMenu askNumPlayersMenu;
     AskNameMenu askNameMenu;
     PlayersMenu playersMenu;
@@ -86,7 +88,8 @@ public class Board extends UserInterfaceObservable implements UserInterface {
             }
         }
 
-
+        errorVisualizer = new ErrorVisualizer();
+        groupRoot.getChildren().add(errorVisualizer);
 
         askNumPlayersMenu = new AskNumPlayersMenu();
         askNumPlayersMenu.addObserver(cw);
@@ -316,6 +319,10 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     @Override
     public void setCurrentPlayer(int id){
         playersMenu.setCurrentPlayer(id);
+    }
+    @Override
+    public void showError(String e){
+        errorVisualizer.showError(e);
     }
 
     @Override

@@ -33,6 +33,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         //TODO to complete this method
 
     }
+    @Override
+    public void showError(String e){
+        //TODO to complete this method
+    }
 
     @Override
     public void askNumPlayers()

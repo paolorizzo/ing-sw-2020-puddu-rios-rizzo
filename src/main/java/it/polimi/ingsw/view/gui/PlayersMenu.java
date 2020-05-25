@@ -67,22 +67,6 @@ public class PlayersMenu extends Menu {
         });
 
     }
-    public void setCurrentPlayer(int id){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                /*
-                currentPlayerLabel.setTranslateX(playerCardLabels[id].getTranslateX());
-                currentPlayerLabel.setTranslateY(offsetY + playerCardLabels[id].getTranslateY()+playerCardLabels[id].getMaxHeight());
-                */
-                System.out.println();
-                currentPlayerLabel.setTranslateX(playerCardLabels[id].getTranslateX());
-                currentPlayerLabel.setTranslateY(playerCardLabels[id].getTranslateY()+playerCardLabels[id].getGraphic().getLayoutBounds().getHeight()+10);
-                currentPlayerLabel.setVisible(true);
-            }
-        });
-
-    }
     public void setNumPlayers(final int numPlayers){
         Platform.runLater(new Runnable() {
             @Override
@@ -125,6 +109,17 @@ public class PlayersMenu extends Menu {
                 }
             }
         });
-
     }
+
+    public void setCurrentPlayer(int id){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                currentPlayerLabel.setTranslateX(playerCardLabels[id].getTranslateX());
+                currentPlayerLabel.setTranslateY(playerCardLabels[id].getTranslateY()+playerCardLabels[id].getGraphic().getLayoutBounds().getHeight()+10);
+                currentPlayerLabel.setVisible(true);
+            }
+        });
+    }
+
 }

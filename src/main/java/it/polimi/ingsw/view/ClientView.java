@@ -231,6 +231,7 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateKo(int id, String problem){
         if(id == this.id){
+            getUi().showError(problem);
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
                 currentConnectionState.execute(this, problem);
             }
