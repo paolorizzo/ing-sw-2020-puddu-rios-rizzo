@@ -82,4 +82,16 @@ public class TurnArchive {
         }
         return null;
     }
+
+    /**
+     * builds a string that represents the turn archive by concatenating the strings representing the turns
+     * @return a string that represents the turn archive
+     */
+    @Override
+    public String toString(){
+        String s = "";
+        for(Turn t:turns)
+            s += t.toString();
+        return s;
+    }
 }

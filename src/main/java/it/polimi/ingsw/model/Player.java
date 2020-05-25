@@ -23,9 +23,9 @@ public class Player
             this.nickname = nickname;
             this.color = color;
             this.workers = new Worker[2];
+            this.playerNum = playerNum;
             this.workers[1] = new Worker(Sex.MALE, this);
             this.workers[0] = new Worker(Sex.FEMALE, this);
-            this.playerNum = playerNum;
         }
     }
 
@@ -37,9 +37,9 @@ public class Player
             this.nickname = nickname;
             this.color = Color.values()[playerNum];
             this.workers = new Worker[2];
+            this.playerNum = playerNum;
             this.workers[1] = new Worker(Sex.MALE, this);
             this.workers[0] = new Worker(Sex.FEMALE, this);
-            this.playerNum = playerNum;
         }
     }
 

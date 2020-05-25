@@ -888,6 +888,19 @@ public class ControllerTest extends MvcIntegrationTest {
     }
 
     /**
+     * prints the ownership of each worker
+     * @param c the controller from which to get the info
+     */
+    private void printWorkerOwnership(Controller c){
+        int n = c.getModel().game.getNumPlayers();
+        for (int i=0;i<n;i++){
+            System.out.println("player " + i + " has workers");
+            System.out.println("F who thinks it belongs to " + c.getModel().getPlayer(i).getWorker(Sex.FEMALE).getPlayer());
+            System.out.println("M who thinks it belongs to " + c.getModel().getPlayer(i).getWorker(Sex.MALE).getPlayer());
+        }
+    }
+
+    /**
      * performs the entire connection and setup phase
      * after this, it is player 1's turn
      * @param c the controller on which to perform the phases
@@ -898,9 +911,11 @@ public class ControllerTest extends MvcIntegrationTest {
             throw new IllegalArgumentException("cannot perform setup phase for " + n + " players");
 
         setupToGods(c, n);
+        printWorkerOwnership(c);
         int curr ;
         for(int i=0;i<n;i++){
             curr = (1+i)%n;
+            printWorkerPositions(c);
             printTurn(c);
             System.out.println("setting up player " + curr);
 
@@ -911,7 +926,7 @@ public class ControllerTest extends MvcIntegrationTest {
                 throw new RuntimeException("request setup worker interrupted");
             }
             c.setupWorker(curr, new SetupAction(new Worker(Sex.FEMALE, c.getModel().getPlayers().get(curr)).toString(), 2*curr, 0 ) );
-
+            printWorkerPositions(c);
             try{
                 c.requestToSetupWorker(curr);
             }
@@ -919,6 +934,7 @@ public class ControllerTest extends MvcIntegrationTest {
                 throw new RuntimeException("request setup worker interrupted");
             }
             c.setupWorker(curr, new SetupAction(new Worker(Sex.MALE, c.getModel().getPlayers().get(curr)).toString(), 2*curr, 2 ) );
+            printWorkerPositions(c);
         }
     }
 
@@ -1000,8 +1016,13 @@ public class ControllerTest extends MvcIntegrationTest {
         int numPlayers = c.getModel().game.getNumPlayers();
         for(int i=0;i<numPlayers;i++){
             for(Sex s:Sex.values()){
-                Space space = c.getModel().getPlayer(i).getWorker(s).getSpace();
-                System.out.println("id = " + i + ", sex = " + s.name() + ", x = " + space.getPosX() + ", y = " + space.getPosY());
+                if(c.getModel().getPlayer(i).getWorker(s).getSpace() != null){
+                    Space space = c.getModel().getPlayer(i).getWorker(s).getSpace();
+                    System.out.println("id = " + i + ", sex = " + s.name() + ", x = " + space.getPosX() + ", y = " + space.getPosY());
+                }
+                else{
+                    System.out.println("player " + i + " hasn't set up worker " + s.name());
+                }
             }
         }
     }

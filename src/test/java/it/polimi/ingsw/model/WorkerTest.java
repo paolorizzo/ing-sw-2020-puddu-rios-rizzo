@@ -27,7 +27,7 @@ public class WorkerTest
     {
         Player player = new Player("name", Color.BLUE, 1);
         Worker worker = new Worker(Sex.MALE, player);
-        assertEquals(worker.getPlayer(), player);
+        assertEquals(worker.getPlayer(), 1);
     }
 
     @Test

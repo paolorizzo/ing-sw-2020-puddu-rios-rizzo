@@ -2,12 +2,12 @@ package it.polimi.ingsw.model;
 
 public class Worker {
     private Sex sex;
-    private Player player;
+    private int playerId;
     private Space space;
 
     public Worker(Sex sex, Player player) {
         this.sex = sex;
-        this.player = player;
+        this.playerId = player.getId();
         this.space = null;
     }
 
@@ -15,8 +15,8 @@ public class Worker {
         return sex;
     }
 
-    public Player getPlayer() {
-        return player;
+    public int getPlayer() {
+        return playerId;
     }
 
     public Space getSpace() {
@@ -29,7 +29,7 @@ public class Worker {
 
     @Override
     public String toString(){
-        return "P"+player.getPlayerNum()+"-"+sex.name().charAt(0);
+        return "P"+playerId+"-"+sex.name().charAt(0);
     }
 
     protected Worker lightClone(Player copyPlayer){

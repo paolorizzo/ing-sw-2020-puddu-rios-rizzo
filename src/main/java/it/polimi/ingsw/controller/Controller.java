@@ -346,6 +346,9 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void setupWorker(int id, SetupAction setupAction){
         if(id != model.game.getCurrentPlayerId() || !model.game.possibleActionsContains(setupAction)){
+            System.out.println("Unacceptable action: " + setupAction.toString());
+            System.out.println("player " + model.game.getCurrentPlayerId() + "'s turn");
+            //model.game.printPossibleSetupActions();
             model.feed.notifyKo(id, "Worker placement unacceptable: either out of turn of not possible");
             return;
         }

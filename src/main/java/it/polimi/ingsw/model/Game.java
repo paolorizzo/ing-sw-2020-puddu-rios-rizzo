@@ -139,6 +139,17 @@ public class Game {
         }
         return possibleActions;
     }
+
+    /**
+     * prints the list of possible actions
+     */
+    public void printPossibleSetupActions(){
+        System.out.println("possible actions:");
+        List<Action> possibleActions = this.possibleActions;
+        for (Action a:possibleActions){
+            System.out.println("\t" + a.toString());
+        }
+    }
     //return the possible actions for an id.
     //views always ask for possible actions to do
     //if an id asks possible actions and he lost, win or finish the actions for this turn
