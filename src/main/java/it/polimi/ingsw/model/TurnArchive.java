@@ -1,14 +1,18 @@
 package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * stores memory of all the actions taken by the players during the game
@@ -54,7 +58,9 @@ public class TurnArchive {
         String pathToTurnsJson = "src/main/resources/persistence/turns.json";
         try{
             FileWriter writer = new FileWriter(pathToTurnsJson);
-            gson.toJson(this, writer);
+            Map<String, Object> turnArchiveMap = this.toMap();
+            System.out.println(turnArchiveMap.toString());
+            gson.toJson(turnArchiveMap, writer);
             writer.flush();
             writer.close();
         }
@@ -74,13 +80,49 @@ public class TurnArchive {
         String pathToTurnsJson = "src/main/resources/persistence/turns.json";
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToTurnsJson));
-            TurnArchive instance = gson.fromJson(reader, TurnArchive.class);
+            Type mapType = new TypeToken<HashMap<String, Object>>(){}.getType();
+            Map<String, Object> turnArchiveMap =gson.fromJson(reader, mapType);
+            TurnArchive instance = TurnArchive.fromMap(turnArchiveMap);
             return instance;
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * converts the turn archive to a map
+     * @return a map representing the turn archive
+     */
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("class", this.getClass());
+        int size = this.turns.size();
+        map.put("size", size);
+        for(int i=0;i<size;i++){
+            map.put(String.valueOf(i), this.turns.get(i).toMap());
+        }
+        return map;
+    }
+
+    /**
+     * converts a map into a valid TurnArchive object
+     * @param map the map to convert
+     * @return a TurnArchive object as described in the map
+     */
+    static public TurnArchive fromMap(Map<String, Object> map){
+        Class mapClass = (Class) map.get("class");
+        if(!TurnArchive.class.equals(mapClass))
+            throw new IllegalArgumentException("Tried to build an object of type TurnArchive from a map of type " + mapClass.toString());
+        TurnArchive turnArchive = new TurnArchive();
+        int size = (int) map.get("size");
+        for(int i=0;i<size;i++){
+            Map<String, Object> turnMap = (Map<String, Object>) map.get(String.valueOf(i));
+            Turn turn = Turn.fromMap(turnMap);
+            turnArchive.addTurn(turn);
+        }
+        return turnArchive;
     }
 
     /**
