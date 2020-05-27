@@ -100,6 +100,10 @@ public class Action implements Serializable {
         }
     }
 
+    /**
+     * returns a string that represents this action
+     * @return a string that represents this action
+     */
     @Override
     public String toString() {
         return "Action{" +
@@ -109,6 +113,11 @@ public class Action implements Serializable {
                 '}';
     }
 
+    /**
+     * compares two actions and returns true if their attributes correspond
+     * @param o the object against which to compare this one
+     * @return true if theattribute of the compared object correspond to those of the current object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

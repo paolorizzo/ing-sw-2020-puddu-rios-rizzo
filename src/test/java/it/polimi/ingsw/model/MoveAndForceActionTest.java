@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class MoveAndForceActionTest {
+public class MoveAndForceActionTest extends ActionTest{
 
     @Test
     public void checkToString()
@@ -28,5 +28,15 @@ public class MoveAndForceActionTest {
         assert(!m1.equals(new MoveAndForceAction("id", 1, 2, Direction.SAME, 2, 2, "forcedId", 2, 1, 1, 2)));
         assert(!m1.equals(new MoveAndForceAction("id", 1, 2, Direction.SAME, 2, 2, "forcedId", 2, 2, 0, 2)));
         assert(!m1.equals(new MoveAndForceAction("id", 1, 2, Direction.SAME, 2, 2, "forcedId", 2, 2, 1, 5)));
+    }
+
+    /**
+     * tests that a MoveAndForceAction can be correctly converted to a map
+     * and back to an equal object
+     */
+    @Test
+    public void testMapConversion(){
+        MoveAndForceAction original = new MoveAndForceAction("id", 2, 2, Direction.SAME, 2, 2, "forcedId", 2, 2, 1, 2);
+        checkConversion(original);
     }
 }
