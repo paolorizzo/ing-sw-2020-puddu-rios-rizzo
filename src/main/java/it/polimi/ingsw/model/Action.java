@@ -7,10 +7,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.lang.reflect.Method;
 
+/**
+ * represents a generalization of the actions that a worker can perform
+ */
 public class Action implements Serializable {
     protected String workerID;
     protected int targetX, targetY;
 
+    /**
+     * constructs a basic action
+     * @param workerID the id of the worker that performs the action. Contains info about the id of the player that owns it
+     * @param targetX the x coordinate on the board of the designated action
+     * @param targetY the y coordinate on the board of the designated action
+     */
     public Action(String workerID, int targetX, int targetY) {
 
         if(!(targetX >= 0 && targetX <= 4) || !(targetY >= 0 && targetY <= 4))
@@ -21,14 +30,26 @@ public class Action implements Serializable {
         this.targetY = targetY;
     }
 
+    /**
+     * returns a string that represents the worker
+     * @return a string that represents the worker
+     */
     public String getWorkerID() {
         return workerID;
     }
 
+    /**
+     * returns the x coordinate of the target of the action
+     * @return the x coordinate of the target of the action
+     */
     public int getTargetX() {
         return targetX;
     }
 
+    /**
+     * returns the y coordinate of the target of the action
+     * @return the y coordinate of the target of the action
+     */
     public int getTargetY() {
         return targetY;
     }

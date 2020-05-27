@@ -4,11 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * represents the action of moving a worker, as performed by a player in their turn
+ */
 public class MoveAction extends Action{
 
     protected Direction direction;
     protected int startX, startY;
 
+    /**
+     * constructs a complete MoveAction
+     * @param workerID a string that univocally represents a worker
+     * @param targetX the x coordinate on the board of the space on which to move
+     * @param targetY the y coordinate on the board of the space on which to move
+     * @param direction the direction of the movement. Can be either up, down, or on the same level
+     * @param startX  the x coordinate on the board of the space from which the worker moves
+     * @param startY  the y coordinate on the board of the space from which the worker moves
+     */
     public MoveAction(String workerID, int targetX, int targetY, Direction direction, int startX, int startY) {
         super(workerID, targetX, targetY);
         this.direction = direction;
@@ -16,14 +28,26 @@ public class MoveAction extends Action{
         this.startY = startY;
     }
 
+    /**
+     * returns the direction of the movement of the worker
+     * @return the direction of the movement of the worker
+     */
     public Direction getDirection() {
         return direction;
     }
 
+    /**
+     * returns the starting x coordinate of the worker
+     * @return the starting x coordinate of the worker
+     */
     public int getStartX() {
         return startX;
     }
 
+    /**
+     * returns the starting y coordinate of the worker
+     * @return the starting y coordinate of the worker
+     */
     public int getStartY() {
         return startY;
     }

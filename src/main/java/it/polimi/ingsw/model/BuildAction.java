@@ -4,13 +4,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * represents the action of building any type of building on a space
+ */
 public class BuildAction extends Action{
     private Piece piece;
 
+    /**
+     * contructs a complete BuildAction
+     * @param workerID a string that univocally represents a worker
+     * @param targetX the x coordinate on the board of the space on which the building is erected
+     * @param targetY the y coordinate on the board of the space on which the building is erected
+     * @param piece the type of building that is being erected
+     */
     public BuildAction(String workerID, int targetX, int targetY, Piece piece) {
         super(workerID, targetX, targetY);
         this.piece = piece;
     }
+
+    /**
+     * returns the type of building that is being erected
+     * @return the type of building that is being erected
+     */
     public Piece getPiece() {
         return piece;
     }
