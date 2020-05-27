@@ -92,7 +92,7 @@ public class ActionTest
      * between static methods
      */
     @Test
-    public void checkConversionDynamicTypingBuildAction(){
+    public void checkConversionDynamicTyping(){
         Action original = new BuildAction("id", 1, 1, Piece.LEVEL1);
         checkConversion(original);
     }
