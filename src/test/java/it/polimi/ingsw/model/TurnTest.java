@@ -100,4 +100,20 @@ public class TurnTest {
         turn.add(third);
         assert(!turn.isEmpty());
     }
+
+    /**
+     * tests that it is possible to build a turn, convert it to a map
+     * and then back to an equal turn
+     */
+    @Test
+    public void testMapConversion(){
+        Turn original = new Turn(0);
+        original.add(new MoveAction("P0-F", 1, 1, Direction.SAME, 0, 0));
+        original.add(new MoveAction("P0-F", 2, 2, Direction.UP, 1, 1));
+        original.add(new BuildAction("P0-F", 3, 3, Piece.LEVEL1));
+        System.out.println(original.toString());
+        Turn processed = Turn.fromMap(original.toMap());
+        System.out.println(processed.toString());
+        assertEquals(original.toString(), processed.toString());
+    }
 }

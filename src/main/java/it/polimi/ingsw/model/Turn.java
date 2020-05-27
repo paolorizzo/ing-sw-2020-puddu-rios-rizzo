@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.exception.AlreadyFullException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //Turn currently implements no logic to check whether the actions that make it up have any coherence
 //this task is deferred to the controller, which should check for coherence when taking user input.
@@ -20,6 +22,15 @@ public class Turn{
      */
     public Turn(Player player){
         this.playerId = player.getId();
+        actions=new ArrayList();
+    }
+
+    /**
+     * constructs an empty turn
+     * @param id the id of the player that plays the turn
+     */
+    public Turn(int id){
+        this.playerId = id;
         actions=new ArrayList();
     }
 
@@ -104,6 +115,41 @@ public class Turn{
         }
         s += "\n";
         return s;
+    }
+
+    /**
+     * converts the turn to a map that contains all information about the turn object
+     * @return a map that completely describes this object
+     */
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("class", this.getClass());
+        map.put("playerId", this.playerId);
+        int size = this.actions.size();
+        map.put("size", size);
+        for(int i=0;i<size;i++){
+            map.put(String.valueOf(i), this.actions.get(i).toMap());
+        }
+        return map;
+    }
+
+    /**
+     * converts a map into a valid Turn object
+     * @param map the map to convert
+     * @return a Turn object as described in the map
+     */
+    static public Turn fromMap(Map<String, Object> map){
+        Class mapClass = (Class) map.get("class");
+        if(!Turn.class.equals(mapClass))
+            throw new IllegalArgumentException("Tried to build an object of type Turn from a map of type " + mapClass.toString());
+        Turn turn = new Turn((int) map.get("playerId"));
+        int size = (int) map.get("size");
+        for(int i=0;i<size;i++){
+            Map<String, Object> actionMap = (Map<String, Object>) map.get(String.valueOf(i));
+            Action action = Action.fromMap(actionMap);
+            turn.add(action);
+        }
+        return turn;
     }
 }
 
