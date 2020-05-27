@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class BuildAction extends Action{
@@ -11,6 +13,39 @@ public class BuildAction extends Action{
     }
     public Piece getPiece() {
         return piece;
+    }
+
+    /**
+     * converts a BuildAction object to a map, embedding dynamic type information
+     * @return a map representing the object
+     */
+    @Override
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("class", this.getClass());
+        map.put("piece", this.piece.ordinal());
+        map.put("workerId", this.workerID);
+        map.put("targetX", this.targetX);
+        map.put("targetY", this.targetY);
+        return map;
+    }
+
+    /**
+     * Will be called through simulated override
+     * converts a map back to a BuildAction object
+     * @param map the map that will be used to convert
+     * @return a BuildAction object as described in the map
+     */
+    static public BuildAction fromMap(Map<String, Object> map){
+        Class mapClass = (Class) map.get("class");
+        if(!BuildAction.class.equals(mapClass))
+            throw new IllegalArgumentException("Tried to build an object of type BuildAction from a map of type " + mapClass.toString());
+        String workerId = (String) map.get("workerId");
+        int targetX = (int) map.get("targetX");
+        int targetY = (int) map.get("targetY");
+        int pieceNum = (int) map.get("piece");
+        Piece piece = Piece.values()[pieceNum];
+        return new BuildAction(workerId, targetX, targetY, piece);
     }
 
     @Override

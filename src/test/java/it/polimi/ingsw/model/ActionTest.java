@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 public class ActionTest
@@ -73,5 +75,38 @@ public class ActionTest
         assert(!act1.matches("differentid", 1, 2));
         assert(!act1.matches("id", 4, 2));
         assert(!act1.matches("id", 1, 3));
+    }
+
+    /**
+     * tests that it is possible to convert an action to a map, and back to an equal action again
+     */
+    @Test
+    public void checkMapConversion(){
+        Action original = new Action("id", 1, 1);
+        checkConversion(original);
+    }
+
+    /**
+     * tests that it is possible to convert a BuildAction to a map, and back to a BuildAction,
+     * even though we're using the fromMethod in Action and java disallows overriding
+     * between static methods
+     */
+    @Test
+    public void checkConversionDynamicTypingBuildAction(){
+        Action original = new BuildAction("id", 1, 1, Piece.LEVEL1);
+        checkConversion(original);
+    }
+
+    /**
+     * utility method to incapsulate the actual conversion and check
+     * @param original the original action to be converted to map and back
+     */
+    public void checkConversion(Action original){
+        System.out.println(original.toString());
+        Map map = original.toMap();
+        System.out.println(map.toString());
+        Action processed = Action.fromMap(map);
+        System.out.println(processed.toString());
+        assertEquals(original, processed);
     }
 }
