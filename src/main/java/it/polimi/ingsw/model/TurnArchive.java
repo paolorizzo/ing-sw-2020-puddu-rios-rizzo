@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * stores memory of all the actions taken by the players during the game
  */
-public class TurnArchive {
+public class TurnArchive extends MapConvertible{
     List<Turn> turns;
 
     /**
@@ -107,22 +107,27 @@ public class TurnArchive {
     }
 
     /**
+     * puts into the map all the info regarding the action
+     * @param map the map in which to put the info
+     */
+    public void putEntries(Map<String, Object> map){
+        super.putEntries(map);;
+        int size = this.turns.size();
+        map.put("size", size);
+        for(int i=0;i<size;i++){
+            map.put(String.valueOf(i), this.turns.get(i).toMap());
+        }
+    }
+
+    /**
      * converts a map into a valid TurnArchive object
      * @param map the map to convert
      * @return a TurnArchive object as described in the map
      */
     static public TurnArchive fromMap(Map<String, Object> map){
-        String mapClassName = (String) map.get("class");
-        Class<?> mapClass = null;
-        try {
-            mapClass = Class.forName(mapClassName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        if(!TurnArchive.class.equals(mapClass))
-            throw new IllegalArgumentException("Tried to build an object of type TurnArchive from a map of type " + mapClass.toString());
+        checkTypeCorrectness(map, TurnArchive.class);
         TurnArchive turnArchive = new TurnArchive();
-        int size = (int) map.get("size");
+        int size = getInt(map, "size");
         for(int i=0;i<size;i++){
             Map<String, Object> turnMap = (Map<String, Object>) map.get(String.valueOf(i));
             Turn turn = Turn.fromMap(turnMap);

@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * aggregates multiple actions that belong to the same player, representing the more complex idea of turn
  */
-public class Turn{
+public class Turn extends MapConvertible{
     ArrayList<Action> actions;
     int playerId;
 
@@ -118,19 +118,17 @@ public class Turn{
     }
 
     /**
-     * converts the turn to a map that contains all information about the turn object
-     * @return a map that completely describes this object
+     * puts into the map all the info regarding the action
+     * @param map the map in which to put the info
      */
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("class", this.getClass().getName());
+    public void putEntries(Map<String, Object> map){
+        super.putEntries(map);;
         map.put("playerId", this.playerId);
         int size = this.actions.size();
         map.put("size", size);
         for(int i=0;i<size;i++){
             map.put(String.valueOf(i), this.actions.get(i).toMap());
         }
-        return map;
     }
 
     /**
@@ -139,17 +137,9 @@ public class Turn{
      * @return a Turn object as described in the map
      */
     static public Turn fromMap(Map<String, Object> map){
-        String mapClassName = (String) map.get("class");
-        Class<?> mapClass = null;
-        try {
-            mapClass = Class.forName(mapClassName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        if(!Turn.class.equals(mapClass))
-            throw new IllegalArgumentException("Tried to build an object of type Turn from a map of type " + mapClass.toString());
-        Turn turn = new Turn((int) map.get("playerId"));
-        int size = (int) map.get("size");
+        checkTypeCorrectness(map, Turn.class);
+        Turn turn = new Turn(getInt(map, "playerId"));
+        int size = getInt(map, "size");
         for(int i=0;i<size;i++){
             Map<String, Object> actionMap = (Map<String, Object>) map.get(String.valueOf(i));
             Action action = Action.fromMap(actionMap);

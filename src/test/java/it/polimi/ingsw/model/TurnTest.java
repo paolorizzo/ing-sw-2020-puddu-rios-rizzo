@@ -116,4 +116,9 @@ public class TurnTest {
         System.out.println(processed.toString());
         assertEquals(original.toString(), processed.toString());
     }
+
+    @Test
+    public void stupidTest(){
+        System.out.println(Object.class);
+    }
 }

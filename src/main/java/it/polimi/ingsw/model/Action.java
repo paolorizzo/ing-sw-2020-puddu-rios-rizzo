@@ -59,7 +59,7 @@ public class Action extends MapConvertible implements Serializable {
      * @param map the map in which to put the info
      */
     public void putEntries(Map<String, Object> map){
-        putClass(map);
+        super.putEntries(map);
         map.put("workerId", this.workerID);
         map.put("targetX", this.targetX);
         map.put("targetY", this.targetY);
