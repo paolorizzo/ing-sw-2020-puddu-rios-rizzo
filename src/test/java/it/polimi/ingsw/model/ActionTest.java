@@ -109,4 +109,26 @@ public class ActionTest
         System.out.println(processed.toString());
         assertEquals(original, processed);
     }
+
+    /**
+     * exploratory test to investigate the possibility of fetching a class from its name,
+     * getting the name from the class object
+     */
+    @Test
+    public void testClassStringConversion(){
+        Action a = new Action("id", 1, 1);
+        Class actionClass = Action.class;
+        assertEquals(actionClass, a.getClass());
+        System.out.println(actionClass.toString());
+        System.out.println(actionClass.getName());
+        System.out.println(actionClass.getSimpleName());
+        Class<?> processedClass = null;
+        try {
+            processedClass = Class.forName(actionClass.getName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        assertEquals(actionClass, processedClass);
+        System.out.println(processedClass.getName());
+    }
 }

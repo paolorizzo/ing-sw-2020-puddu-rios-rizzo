@@ -123,7 +123,7 @@ public class Turn{
      */
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("class", this.getClass());
+        map.put("class", this.getClass().getName());
         map.put("playerId", this.playerId);
         int size = this.actions.size();
         map.put("size", size);
@@ -139,7 +139,13 @@ public class Turn{
      * @return a Turn object as described in the map
      */
     static public Turn fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
+        String mapClassName = (String) map.get("class");
+        Class<?> mapClass = null;
+        try {
+            mapClass = Class.forName(mapClassName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if(!Turn.class.equals(mapClass))
             throw new IllegalArgumentException("Tried to build an object of type Turn from a map of type " + mapClass.toString());
         Turn turn = new Turn((int) map.get("playerId"));

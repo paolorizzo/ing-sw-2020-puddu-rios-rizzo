@@ -35,6 +35,25 @@ public class MoveAndForceAction extends MoveAction {
     }
 
     /**
+     * constructs a MoveAndForceACtion object by decorating a MoveAction
+     * @param moveAction the MoveAction to decorate
+     * @param forcedWorkerId a string that univocally represents the opponent's forced worker
+     * @param forcedStartX the x coordinate of the space on which the opponent's forced worker moves
+     * @param forcedStartY the y coordinate of the space on which the opponent's forced worker moves
+     * @param forcedTargetX the x coordinate of the starting space of the opponent's forced worker
+     * @param forcedTargetY the y coordinate of the starting space of the opponent's forced worker
+     */
+    public MoveAndForceAction(MoveAction moveAction, String forcedWorkerId, int forcedStartX, int forcedStartY, int forcedTargetX, int forcedTargetY){
+        super(moveAction.workerID, moveAction.targetX, moveAction.targetY, moveAction.direction, moveAction.startX, moveAction.startY);
+        this.forcedWorkerId = forcedWorkerId;
+        this.forcedStartX = forcedStartX;
+        this.forcedStartY = forcedStartY;
+        this.forcedTargetX = forcedTargetX;
+        this.forcedTargetY = forcedTargetY;
+
+    }
+
+    /**
      * returns a string that univocally represent's the opponent's forced worker
      * @return a string that univocally represent's the opponent's forced worker
      */
@@ -75,26 +94,17 @@ public class MoveAndForceAction extends MoveAction {
     }
 
     /**
-     * converts a MoveAction object to a map, while also embedding in it information about
-     * the dynamic type
-     * @return a map representing the object
+     * when saving this object to a map, puts the relevant info inside it
+     * @param map the map in which to put the info
      */
     @Override
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("class", this.getClass());
-        map.put("workerId", this.workerID);
-        map.put("targetX", this.targetX);
-        map.put("targetY", this.targetY);
-        map.put("direction", this.direction.ordinal());
-        map.put("startX", this.startX);
-        map.put("startY", this.startY);
+    public void putEntries(Map<String, Object> map){
+        super.putEntries(map);
         map.put("forcedWorkerId", this.forcedWorkerId);
         map.put("forcedStartX", this.forcedStartX);
         map.put("forcedStartY", this.forcedStartY);
         map.put("forcedTargetX", this.forcedTargetX);
         map.put("forcedTargetY", this.forcedTargetY);
-        return map;
     }
 
     /**
@@ -104,22 +114,14 @@ public class MoveAndForceAction extends MoveAction {
      * @return a MoveAndForceAction object as described in the map
      */
     static public MoveAndForceAction fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
-        if(!MoveAndForceAction.class.equals(mapClass))
-            throw new IllegalArgumentException("Tried to build an object of type MoveAndForceAction from a map of type " + mapClass.toString());
-        String workerId = (String) map.get("workerId");
-        int targetX = (int) map.get("targetX");
-        int targetY = (int) map.get("targetY");
-        int directionNum = (int) map.get("direction");
-        Direction direction = Direction.values()[directionNum];
-        int startX = (int) map.get("startX");
-        int startY = (int) map.get("startY");
+        checkTypeCorrectness(map, MoveAndForceAction.class);
+        MoveAction moveAction = MoveAction.fromMap(map);
         String forcedWorkerId = (String) map.get("forcedWorkerId");
-        int forcedStartX = (int) map.get("forcedStartX");
-        int forcedStartY = (int) map.get("forcedStartY");
-        int forcedTargetX = (int) map.get("forcedTargetX");
-        int forcedTargetY = (int) map.get("forcedTargetY");
-        return new MoveAndForceAction(workerId, targetX, targetY, direction, startX, startY, forcedWorkerId, forcedStartX, forcedStartY, forcedTargetX, forcedTargetY);
+        int forcedStartX = getInt(map, "forcedStartX");
+        int forcedStartY = getInt(map, "forcedStartY");
+        int forcedTargetX = getInt(map, "forcedTargetX");
+        int forcedTargetY = getInt(map, "forcedTargetY");
+        return new MoveAndForceAction(moveAction, forcedWorkerId, forcedStartX, forcedStartY, forcedTargetX, forcedTargetY);
     }
 
     /**

@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class SetupActionTest extends ActionTest{
 
-    /**
     @Test
     public void checkMatches()
     {

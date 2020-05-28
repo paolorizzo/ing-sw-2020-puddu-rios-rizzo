@@ -97,7 +97,7 @@ public class TurnArchive {
      */
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("class", this.getClass());
+        map.put("class", this.getClass().getName());
         int size = this.turns.size();
         map.put("size", size);
         for(int i=0;i<size;i++){
@@ -112,7 +112,13 @@ public class TurnArchive {
      * @return a TurnArchive object as described in the map
      */
     static public TurnArchive fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
+        String mapClassName = (String) map.get("class");
+        Class<?> mapClass = null;
+        try {
+            mapClass = Class.forName(mapClassName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if(!TurnArchive.class.equals(mapClass))
             throw new IllegalArgumentException("Tried to build an object of type TurnArchive from a map of type " + mapClass.toString());
         TurnArchive turnArchive = new TurnArchive();

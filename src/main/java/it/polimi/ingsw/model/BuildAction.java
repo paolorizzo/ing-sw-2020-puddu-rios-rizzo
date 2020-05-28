@@ -23,6 +23,16 @@ public class BuildAction extends Action{
     }
 
     /**
+     * constructs a BuildAction by decorating an Action
+     * @param action the action to decorate
+     * @param piece the type of building that is being built
+     */
+    public BuildAction(Action action, Piece piece){
+        super(action.workerID, action.targetX, action.targetY);
+        this.piece = piece;
+    }
+
+    /**
      * returns the type of building that is being erected
      * @return the type of building that is being erected
      */
@@ -31,18 +41,13 @@ public class BuildAction extends Action{
     }
 
     /**
-     * converts a BuildAction object to a map, embedding dynamic type information
-     * @return a map representing the object
+     * when saving this object to a map, puts the relevant info inside it
+     * @param map the map in which to put the info
      */
     @Override
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("class", this.getClass());
+    public void putEntries(Map<String, Object> map){
+        super.putEntries(map);
         map.put("piece", this.piece.ordinal());
-        map.put("workerId", this.workerID);
-        map.put("targetX", this.targetX);
-        map.put("targetY", this.targetY);
-        return map;
     }
 
     /**
@@ -52,15 +57,11 @@ public class BuildAction extends Action{
      * @return a BuildAction object as described in the map
      */
     static public BuildAction fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
-        if(!BuildAction.class.equals(mapClass))
-            throw new IllegalArgumentException("Tried to build an object of type BuildAction from a map of type " + mapClass.toString());
-        String workerId = (String) map.get("workerId");
-        int targetX = (int) map.get("targetX");
-        int targetY = (int) map.get("targetY");
-        int pieceNum = (int) map.get("piece");
+        checkTypeCorrectness(map, BuildAction.class);
+        Action action = Action.parseMap(map);
+        int pieceNum = getInt(map, "piece");
         Piece piece = Piece.values()[pieceNum];
-        return new BuildAction(workerId, targetX, targetY, piece);
+        return new BuildAction(action, piece);
     }
 
     /**

@@ -29,6 +29,20 @@ public class MoveAction extends Action{
     }
 
     /**
+     * constructs a MoveAction by decorating an Action
+     * @param action the action to decorate
+     * @param direction the direction of the movement
+     * @param startX the starting x coordinate of the worker
+     * @param startY the starting y coordinate of the worker
+     */
+    public MoveAction(Action action, Direction direction, int startX, int startY){
+        super(action.workerID, action.targetX, action.targetY);
+        this.direction = direction;
+        this.startX = startX;
+        this.startY = startY;
+    }
+
+    /**
      * returns the direction of the movement of the worker
      * @return the direction of the movement of the worker
      */
@@ -53,21 +67,15 @@ public class MoveAction extends Action{
     }
 
     /**
-     * converts a MoveAction object to a map, while also embedding in it information about
-     * the dynamic type
-     * @return a map representing the object
+     * when saving this object to a map, puts the relevant info inside it
+     * @param map the map in which to put the info
      */
     @Override
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("class", this.getClass());
-        map.put("workerId", this.workerID);
-        map.put("targetX", this.targetX);
-        map.put("targetY", this.targetY);
+    public void putEntries(Map<String, Object> map){
+        super.putEntries(map);
         map.put("direction", this.direction.ordinal());
         map.put("startX", this.startX);
         map.put("startY", this.startY);
-        return map;
     }
 
     /**
@@ -77,17 +85,13 @@ public class MoveAction extends Action{
      * @return a MoveAction object as described in the map
      */
     static public MoveAction fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
-        if(!MoveAction.class.equals(mapClass))
-            throw new IllegalArgumentException("Tried to build an object of type MoveAction from a map of type " + mapClass.toString());
-        String workerId = (String) map.get("workerId");
-        int targetX = (int) map.get("targetX");
-        int targetY = (int) map.get("targetY");
-        int directionNum = (int) map.get("direction");
+        checkTypeCorrectness(map, MoveAction.class);
+        Action action = Action.parseMap(map);
+        int directionNum = getInt(map, "direction");
         Direction direction = Direction.values()[directionNum];
-        int startX = (int) map.get("startX");
-        int startY = (int) map.get("startY");
-        return new MoveAction(workerId, targetX, targetY, direction, startX, startY);
+        int startX = getInt(map, "startX");
+        int startY = getInt(map, "startY");
+        return new MoveAction(action, direction, startX, startY);
     }
 
     /**

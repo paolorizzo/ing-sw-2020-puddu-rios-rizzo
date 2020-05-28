@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * represents a generalization of the actions that a worker can perform
  */
-public class Action implements Serializable {
+public class Action extends MapConvertible implements Serializable {
     protected String workerID;
     protected int targetX, targetY;
 
@@ -55,16 +55,14 @@ public class Action implements Serializable {
     }
 
     /**
-     * returns a map that represents an Action Object, embedding the information about the dynamic type in the map
-     * @return a map representing the Action object
+     * puts into the map all the info regarding the action
+     * @param map the map in which to put the info
      */
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("class", this.getClass());
+    public void putEntries(Map<String, Object> map){
+        putClass(map);
         map.put("workerId", this.workerID);
         map.put("targetX", this.targetX);
         map.put("targetY", this.targetY);
-        return map;
     }
 
     /**
@@ -77,7 +75,7 @@ public class Action implements Serializable {
      * @return the appropriate subclassed action converted from the map
      */
     static public Action fromMap(Map<String, Object> map){
-        Class mapClass = (Class) map.get("class");
+        Class<?> mapClass = getClass(map);
         if(!Action.class.equals(mapClass)){
             Method[] possibleMethods = mapClass.getMethods();
             for(Method method:possibleMethods){
@@ -93,12 +91,22 @@ public class Action implements Serializable {
             throw new IllegalArgumentException("Class " + mapClass.toString() + " does not have a fromMap method");
         }
         else{
-            String workerId = (String) map.get("workerId");
-            int targetX = (int) map.get("targetX");
-            int targetY = (int) map.get("targetY");
-            return new Action(workerId, targetX, targetY);
+            return parseMap(map);
         }
     }
+
+    /**
+     * parses a map to extract an Action object, without checking for type
+     * @param map the map to parse
+     * @return the Action object as read from the map
+     */
+    public static Action parseMap(Map<String, Object> map){
+        String workerId = (String) map.get("workerId");
+        int targetX = getInt(map, "targetX");
+        int targetY = getInt(map, "targetY");
+        return new Action(workerId, targetX, targetY);
+    }
+
 
     /**
      * returns a string that represents this action
