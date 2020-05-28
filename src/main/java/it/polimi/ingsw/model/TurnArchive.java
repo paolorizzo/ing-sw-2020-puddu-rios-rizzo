@@ -53,9 +53,9 @@ public class TurnArchive extends MapConvertible{
      * saves the turn archive to a json file
      * @return true if the operations raise no exceptions
      */
-    boolean save(){
+    boolean save(String names){
         Gson gson = new Gson();
-        String pathToTurnsJson = "src/main/resources/persistence/turns.json";
+        String pathToTurnsJson = "src/main/resources/persistence/turns" + names + ".json";
         try{
             FileWriter writer = new FileWriter(pathToTurnsJson);
             Map<String, Object> turnArchiveMap = this.toMap();
@@ -75,9 +75,9 @@ public class TurnArchive extends MapConvertible{
      * constructs a valid TurnArchive object from a json file that stores its contents
      * @return a TurnArchive object loaded from storage
      */
-    static TurnArchive load(){
+    static TurnArchive load(String names){
         Gson gson = new Gson();
-        String pathToTurnsJson = "src/main/resources/persistence/turns.json";
+        String pathToTurnsJson = "src/main/resources/persistence/turns" + names + ".json";
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToTurnsJson));
             Type mapType = new TypeToken<HashMap<String, Object>>(){}.getType();

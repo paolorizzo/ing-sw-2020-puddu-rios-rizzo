@@ -24,7 +24,7 @@ public class PersistenceGameTest {
         System.out.println(c.getModel().game.getChosenCards());
         Gson gson = new Gson();
         System.out.println(gson.toJson(pg));
-        assert pg.save();
+        assert pg.save("");
     }
 
     /**
@@ -63,8 +63,8 @@ public class PersistenceGameTest {
         ControllerTest ct = new ControllerTest();
         ct.fullSetupPhase(c, 3);
         PersistenceGame pg = new PersistenceGame(c.getModel().game);
-        pg.save();
-        PersistenceGame new_pg = PersistenceGame.load();
+        pg.save("");
+        PersistenceGame new_pg = PersistenceGame.load("");
         assertEquals(pg.toString(), new_pg.toString());
     }
 }

@@ -21,8 +21,8 @@ public class TurnArchiveTest {
         ControllerTest ct = new ControllerTest();
         ct.playSomeTurns(c);
         TurnArchive original = c.getModel().game.turnArchive;
-        original.save();
-        TurnArchive loaded = TurnArchive.load();
+        original.save("");
+        TurnArchive loaded = TurnArchive.load("");
         assertEquals(original.toString(), loaded.toString());
     }
 

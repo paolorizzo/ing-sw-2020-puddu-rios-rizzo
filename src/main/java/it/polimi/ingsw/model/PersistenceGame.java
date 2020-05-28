@@ -49,9 +49,9 @@ public class PersistenceGame {
      * saves the object to a json file in the proper location
      * @return a boolean value representing whether the save operation was successful
      */
-    boolean save(){
+    boolean save(String names){
         Gson gson = new Gson();
-        String pathToGameJson = "src/main/resources/persistence/game.json";
+        String pathToGameJson = "src/main/resources/persistence/game" + names + ".json";
         try{
             FileWriter writer = new FileWriter(pathToGameJson);
             gson.toJson(this, writer);
@@ -65,9 +65,9 @@ public class PersistenceGame {
         return true;
     }
 
-    static PersistenceGame load(){
+    static PersistenceGame load(String names){
         Gson gson = new Gson();
-        String pathToGameJson = "src/main/resources/persistence/game.json";
+        String pathToGameJson = "src/main/resources/persistence/game" + names + ".json";
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToGameJson));
             PersistenceGame instance = gson.fromJson(reader, PersistenceGame.class);

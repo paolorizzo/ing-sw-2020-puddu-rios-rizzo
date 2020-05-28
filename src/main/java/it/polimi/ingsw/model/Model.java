@@ -2,7 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 //TODO create singleton superclass
 //TODO test whole class
@@ -167,5 +170,35 @@ public class Model {
         feed.notifyAction(id, action);
     }
 
-    //setup phase methods
+    /**
+     * instantiates a PersistenceGame, and saves both that and the TurnArchive to a json file
+     * the files that are saved have a name that is non ambiguous for any given set of players
+     */
+    public void save(){
+        PersistenceGame pg = new PersistenceGame(game);
+        TurnArchive ta = game.turnArchive;
+        String saveName = saveName();
+        System.out.println("saving game persistence files with name suffix:");
+        System.out.println("\t" + saveName);
+        pg.save(saveName);
+        ta.save(saveName);
+    }
+
+    /**
+     * retrieves the names of the players, and concatenates them to act a suffix for the file names
+     * @return a concatenation of the names of the players, sorted alphabetically
+     */
+    String saveName(){
+        List<String> names = new ArrayList<>();
+        int numPlayers = game.getNumPlayers();
+        for(int i=0;i<numPlayers;i++){
+            names.add(players.get(i).getNickname());
+        }
+        Collections.sort(names);
+        String saveName = "";
+        for(String name:names){
+            saveName += "_" + name;
+        }
+        return saveName;
+    }
 }

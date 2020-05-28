@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.ControllerTest;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.view.middleware.Connection;
@@ -41,5 +43,18 @@ public class ModelTest {
         assert (model.feed.hasObservers());
         model.removeObserver(view);
         assert (!model.feed.hasObservers());
+    }
+
+    /**
+     * tests that it is possible to save the state of the game without exceptions
+     * TODO once the loading steps are implemented, test that it is possible to save and load the state
+     */
+    @Test
+    public void testSave(){
+        Controller c = new Controller();
+        ControllerTest ct = new ControllerTest();
+        Model m = c.getModel();
+        ct.playSomeTurns(c);
+        m.save();
     }
 }
