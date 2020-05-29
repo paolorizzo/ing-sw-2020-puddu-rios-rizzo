@@ -107,6 +107,20 @@ public class Player
                 color == player.color;
     }
 
+    /**
+     * checks every field of that against every field of this
+     * @param that the other player
+     * @return true if all the fields match
+     */
+    public boolean fullEquals(Player that){
+        boolean equality = this.equals(that);
+        equality &= (this.card.equals(that.card));
+        for(int i=0;i<2;i++){
+            equality &= ( this.workers[i].equals(that.workers[i]) );
+        }
+        return equality;
+    }
+
     protected Player lightClone(){
         Player copy = new Player(nickname, color, playerNum);
         if(card != null)

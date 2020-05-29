@@ -213,4 +213,16 @@ public class Board {
         s += "\n";
         return s;
     }
+
+    public boolean fullEquals(Board that){
+        boolean equality = true;
+        equality &= this.pieceBag.equals(that.pieceBag);
+        for(int i=0;i<5;i++){
+            for (int j=0;j<5;j++){
+                equality &= this.spaces[i][j].equals(that.spaces[i][j]);
+            }
+        }
+        equality &= this.workers.equals(that.workers);
+        return equality;
+    }
 }

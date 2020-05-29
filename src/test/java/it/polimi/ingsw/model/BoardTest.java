@@ -190,4 +190,20 @@ public class BoardTest {
         System.out.println(b.buildingsRep());
     }
 
+    /**
+     * tests that full equals works as intended
+     */
+    @Test
+    public void testFullEquals(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Board b1 = c1.getModel().board;
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        ct2.playSomeTurns(c2);
+        Board b2 = c2.getModel().board;
+        assert(b1.fullEquals(b2));
+    }
+
 }
