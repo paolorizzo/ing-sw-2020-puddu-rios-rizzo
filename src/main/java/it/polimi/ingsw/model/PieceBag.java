@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.Arrays;
+
 public class PieceBag {
     int countLevel[] = new int[5];
 
@@ -33,5 +35,22 @@ public class PieceBag {
     public void undoPickPiece(Piece p)
     {
         countLevel[p.getLevel()]++;
+    }
+
+    /**
+     * returns true if the count of levels match
+     * @param o the other object
+     * @return true if the other object is a piecebag and the level counts match
+     */
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof PieceBag)) return false;
+        PieceBag that = (PieceBag) o;
+        boolean equality = true;
+        for(int i=0;i<5;i++)
+            equality &= (this.countLevel[i] == that.countLevel[i]);
+
+        return equality;
     }
 }

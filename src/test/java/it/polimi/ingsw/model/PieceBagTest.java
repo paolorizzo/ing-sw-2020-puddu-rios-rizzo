@@ -24,4 +24,19 @@ public class PieceBagTest
             bag.pickPiece(Piece.LEVEL2);
         }
     }
+
+    /**
+     * tests that the equals method works as intended
+     */
+    @Test
+    public void testEquals(){
+        PieceBag pb1 = new PieceBag();
+        PieceBag pb2 = new PieceBag();
+        Piece p = Piece.LEVEL1;
+        assert pb1.equals(pb2);
+        assertEquals(pb1, pb2);
+        assertNotEquals(pb1, p);
+        pb1.pickPiece(p);
+        assertNotEquals(pb1, pb2);
+    }
 }
