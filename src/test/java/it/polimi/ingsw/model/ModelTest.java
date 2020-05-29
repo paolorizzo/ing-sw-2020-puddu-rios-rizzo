@@ -79,6 +79,9 @@ public class ModelTest {
         assert(m1.fullEquals(m2));
     }
 
+    /**
+     * tests that it is possible to restore the model up to the connection phase
+     */
     @Test
     public void testConnectionPhaseRestoration(){
         Controller c1 = new Controller();
@@ -94,6 +97,29 @@ public class ModelTest {
         for(int key:m1.players.keySet()){
             assertEquals(m1.players.get(key), m2.players.get(key));
         }
+        assertEquals(m1.game.getCurrentPlayerId(), m2.game.getCurrentPlayerId());
+    }
+
+    /**
+     * tests that it is possible to restore the model up to the choice of gods
+     */
+    @Test
+    public void testSetupPhaseRestoration(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Model m1 = c1.getModel();
+        m1.save();
+        Model m2 = new Model();
+        PersistenceGame pg = PersistenceGame.load(m1.saveName());
+        m2.restoreConnectionPhase(pg);
+        m2.restoreSetupPhase(pg);
+        assertEquals(m1.players.keySet(), m2.players.keySet());
+        for(int key:m1.players.keySet()){
+            assert(m1.players.get(key).equals(m2.players.get(key)));
+            assertEquals(m1.players.get(key).getCard(), m2.players.get(key).getCard());
+        }
+        assertEquals(m1.game.getDeck(), m2.game.getDeck());
     }
 
 }

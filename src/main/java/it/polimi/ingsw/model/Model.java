@@ -3,10 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.observation.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 //TODO create singleton superclass
 //TODO test whole class
@@ -231,16 +228,31 @@ public class Model {
      * @param pg the PersistenceGame from which to restore
      */
     void restoreConnectionPhase(PersistenceGame pg){
+        System.out.println("Restoring connection phase");
         game.setNumPlayers(pg.numPlayers);
         int numPlayers = game.getNumPlayers();
         players.clear();
         for(int i=0;i<numPlayers;i++){
-            Player p = new Player(pg.ids[i], pg.names[i]);
-            players.put(pg.ids[i], p);
+            addPlayer(new Player(pg.ids[i], pg.names[i]));
         }
     }
 
-
+    /**
+     * restores the game up to the choice of gods
+     * @param pg the PersistenceGame from whihch to perform the restoration
+     */
+    void restoreSetupPhase(PersistenceGame pg){
+        System.out.println("Restoring setup phase");
+        int numPlayers = game.getNumPlayers();
+        List<Integer> chosenCards = new ArrayList<>();
+        for(int i=0;i<numPlayers;i++){
+            chosenCards.add(pg.numGods[i]);
+        }
+        game.setChosenCards(chosenCards);
+        for(int i=0;i<numPlayers;i++){
+            setCardPlayer(pg.ids[i], pg.numGods[i]);
+        }
+    }
 
     /**
      * deep comparison that sets off comparisons of all the objects that should be restored
