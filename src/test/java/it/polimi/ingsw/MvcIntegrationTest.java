@@ -76,4 +76,20 @@ public class MvcIntegrationTest
             System.err.println(e.getMessage());
         }
     }
+
+    /**
+     * Util to wait for a certain amount of seconds in a safe way
+     * @param seconds the desired waiting time expressed in seconds
+     */
+    public void safeWaitFor(double seconds)
+    {
+        try
+        {
+            Thread.sleep((long) seconds*1000);
+        }
+        catch(InterruptedException e)
+        {
+            System.err.println(e.getMessage());
+        }
+    }
 }

@@ -219,8 +219,10 @@ public class Model {
     public void load(){
         PersistenceGame pg = PersistenceGame.load(saveName());
         TurnArchive ta = TurnArchive.load(saveName());
-        game.turnArchive = ta;
         restoreConnectionPhase(pg);
+        restoreSetupPhase(pg);
+        restoreGamePhase(ta);
+        game.turnArchive = ta;
     }
 
     /**
@@ -255,6 +257,39 @@ public class Model {
     }
 
     /**
+     * restores the game phase from a previous game
+     * @param ta the TurnArchive from which to get the turns
+     */
+    void restoreGamePhase(TurnArchive ta){
+        System.out.println("Restoring game phase");
+        for(Turn t:ta.turns){
+            restoreTurn(t);
+            safeWait();
+        }
+
+    }
+
+    /**
+     * restores a single turn
+     * @param t the turn to restore
+     */
+    void restoreTurn(Turn t){
+        for(Action a:t.actions){
+            System.out.println("\tRestoring " + a.toString());
+            if (a instanceof SetupAction){
+                game.getPossibleSetupActions(t.playerId);
+                executeSetupAction(t.playerId, (SetupAction) a);
+            }
+            else{
+                game.getPossibleActions(t.playerId);
+                executeAction(t.playerId, a);
+            }
+        }
+        if(! (t.actions.get(0) instanceof SetupAction))
+            game.getPossibleActions(t.playerId);
+    }
+
+    /**
      * deep comparison that sets off comparisons of all the objects that should be restored
      * after loading a previous game
      * @param that the other Model
@@ -271,5 +306,17 @@ public class Model {
         equality &= this.feed != null && that.feed != null;
         equality &= this.board.fullEquals(that.board);
         return equality;
+    }
+
+    /**
+     * waits for a predetermined amount of time
+     */
+    private void safeWait(){
+        try{
+            Thread.sleep(100);
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
     }
 }

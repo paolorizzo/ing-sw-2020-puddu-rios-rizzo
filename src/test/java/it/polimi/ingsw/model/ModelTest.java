@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.MvcIntegrationTest;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.ControllerTest;
 import it.polimi.ingsw.view.View;
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ModelTest {
+public class ModelTest extends MvcIntegrationTest {
     @Test
     public void ConstructorTest(){
         Model model = new Model();
@@ -120,6 +121,19 @@ public class ModelTest {
             assertEquals(m1.players.get(key).getCard(), m2.players.get(key).getCard());
         }
         assertEquals(m1.game.getDeck(), m2.game.getDeck());
+    }
+
+
+    @Test
+    public void testFullRestore(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Model m1 = c1.getModel();
+        m1.save();
+        Model m2 = new Model();
+        m2.load();
+        assert (m1.fullEquals(m2));
     }
 
 }
