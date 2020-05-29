@@ -118,6 +118,19 @@ public class Turn extends MapConvertible{
     }
 
     /**
+     * compares this Turn to another Object
+     * @param o the other object
+     * @return true if the other object is a Turn, and their toStrings match
+     */
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof Turn)) return false;
+        Turn that = (Turn) o;
+        return this.toString().equals(that.toString());
+    }
+
+    /**
      * puts into the map all the info regarding the action
      * @param map the map in which to put the info
      */

@@ -149,6 +149,19 @@ public class TurnArchive extends MapConvertible{
     }
 
     /**
+     * compares this object against any other
+     * @param o the other object
+     * @return true if o is a TurnArchive, and their toString match
+     */
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof TurnArchive)) return false;
+        TurnArchive that = (TurnArchive) o;
+        return this.toString().equals(that.toString());
+    }
+
+    /**
      * returns the save path of a turnArchive json file, given the concatenated names of the players
      * @param names the concatenated names of the players of a game
      * @return the path to a json file that serializes the turns for a game with those players

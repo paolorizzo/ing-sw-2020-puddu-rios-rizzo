@@ -4,6 +4,7 @@ import it.polimi.ingsw.exception.AlreadyFullException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class TurnTest {
 
@@ -117,8 +118,21 @@ public class TurnTest {
         assertEquals(original.toString(), processed.toString());
     }
 
+    /**
+     * tests that the equals method works as intended
+     */
     @Test
-    public void stupidTest(){
-        System.out.println(Object.class);
+    public void testEquals(){
+        Turn t1 = new Turn(0);
+        t1.add(new MoveAction("P0-F", 1, 1, Direction.SAME, 0, 0));
+        t1.add(new MoveAction("P0-F", 2, 2, Direction.UP, 1, 1));
+        Turn t2 = new Turn(0);
+        t2.add(new MoveAction("P0-F", 1, 1, Direction.SAME, 0, 0));
+        t2.add(new MoveAction("P0-F", 2, 2, Direction.UP, 1, 1));
+        assertEquals(t1, t2);
+        BuildAction b = new BuildAction("P0-F", 3, 3, Piece.LEVEL1);
+        assertNotEquals(t1, b);
+        t1.add(b);
+        assertNotEquals(t1, t2);
     }
 }

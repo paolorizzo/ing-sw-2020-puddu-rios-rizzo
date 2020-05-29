@@ -48,4 +48,20 @@ public class TurnArchiveTest {
         String names = "abcd";
         assertEquals("src/main/resources/persistence/turns" + names + ".json", TurnArchive.savePath(names));
     }
+
+    /**
+     * tests that the equals method works as expected
+     */
+    @Test
+    public void testEquals(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        TurnArchive ta1 = c1.getModel().game.turnArchive;
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        ct2.playSomeTurns(c2);
+        TurnArchive ta2 = c2.getModel().game.turnArchive;
+        assertEquals(ta1, ta2);
+    }
 }
