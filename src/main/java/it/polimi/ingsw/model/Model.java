@@ -215,4 +215,23 @@ public class Model {
         File turnsFile = new File(turnsPath);
         return (gameFile.exists() && turnsFile.exists());
     }
+
+    /**
+     * deep comparison that sets off comparisons of all the objects that should be restored
+     * after loading a previous game
+     * @param that the other Model
+     * @return true if the two models are functionally indistinguishable
+     */
+    public boolean fullEquals(Model that){
+        boolean equality = true;
+        equality &= this.game.fullEquals(that.game);
+        equality &= this.players.keySet().equals(that.players.keySet());
+        if(!equality)
+            return equality;
+        for(int key:players.keySet())
+            equality &= this.players.get(key).fullEquals(that.players.get(key));
+        equality &= this.feed != null && that.feed != null;
+        equality &= this.board.fullEquals(that.board);
+        return equality;
+    }
 }

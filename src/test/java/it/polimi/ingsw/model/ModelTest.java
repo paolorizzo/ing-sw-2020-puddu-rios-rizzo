@@ -59,5 +59,23 @@ public class ModelTest {
         assert m.isSaved();
     }
 
+    /**
+     * test that fullEquals works as intended
+     */
+    @Test
+    public void testFullEquals(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Model m1 = c1.getModel();
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        Model m2 = c2.getModel();
+
+        assert(! m1.fullEquals(m2));
+        ct2.playSomeTurns(c2);
+        assert(m1.fullEquals(m2));
+    }
+
 
 }
