@@ -7,6 +7,8 @@ import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Server;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -77,5 +79,21 @@ public class ModelTest {
         assert(m1.fullEquals(m2));
     }
 
+    @Test
+    public void testConnectionPhaseRestoration(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Model m1 = c1.getModel();
+        m1.save();
+        Model m2 = new Model();
+        PersistenceGame pg = PersistenceGame.load(m1.saveName());
+        m2.restoreConnectionPhase(pg);
+        assertEquals(m1.game.getNumPlayers(), m2.game.getNumPlayers());
+        assertEquals(m1.players.keySet(), m2.players.keySet());
+        for(int key:m1.players.keySet()){
+            assertEquals(m1.players.get(key), m2.players.get(key));
+        }
+    }
 
 }

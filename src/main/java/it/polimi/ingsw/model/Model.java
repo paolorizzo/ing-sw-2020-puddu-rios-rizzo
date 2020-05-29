@@ -217,6 +217,32 @@ public class Model {
     }
 
     /**
+     * loads the model from file
+     */
+    public void load(){
+        PersistenceGame pg = PersistenceGame.load(saveName());
+        TurnArchive ta = TurnArchive.load(saveName());
+        game.turnArchive = ta;
+        restoreConnectionPhase(pg);
+    }
+
+    /**
+     * restores all the things that have happened in the connection phase of the saved game
+     * @param pg the PersistenceGame from which to restore
+     */
+    void restoreConnectionPhase(PersistenceGame pg){
+        game.setNumPlayers(pg.numPlayers);
+        int numPlayers = game.getNumPlayers();
+        players.clear();
+        for(int i=0;i<numPlayers;i++){
+            Player p = new Player(pg.ids[i], pg.names[i]);
+            players.put(pg.ids[i], p);
+        }
+    }
+
+
+
+    /**
      * deep comparison that sets off comparisons of all the objects that should be restored
      * after loading a previous game
      * @param that the other Model
