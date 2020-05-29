@@ -112,6 +112,22 @@ public class Space {
     }
 
     /**
+     * compares all the fields of the 2 spaces
+     * @param that the other space against which to coampare this one
+     * @return true if all the fields are equal, false otherwise
+     */
+    public boolean fullEquals(Space that){
+        boolean equality = this.equals(that);
+        equality &= (this.pieces.equals(that.pieces));
+        equality &= (this.adjacentSpaces.equals(that.adjacentSpaces));
+        if(this.worker == null)
+            equality &= (that.worker == null);
+        else
+            equality &= (this.worker.equals(that.worker));
+        return equality;
+    }
+
+    /**
      * returns the worker string if there is one,
      * or 4 spaces if there isn't
      * @return the worker identifier if there is a worker, 4 empty spaces otherwise

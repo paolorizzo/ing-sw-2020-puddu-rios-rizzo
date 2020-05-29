@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.ControllerTest;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -66,6 +68,27 @@ public class SpaceTest {
         Worker w = new Worker(Sex.FEMALE, p);
         s.setWorkerOnIt(w);
         assertEquals("P0-F", s.toString());
+    }
+
+    /**
+     * tests that the fullEquals method works as intended
+     */
+    @Test
+    public void checkFullEquals(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        ct2.playSomeTurns(c2);
+        Space[][] s1 = c1.getModel().board.getSpaces();
+        Space[][] s2 = c2.getModel().board.getSpaces();
+        for(int i=0; i<5; i++){
+            for(int j=0;j<5;j++){
+                assert( s1[i][j].fullEquals(s2[i][j]));
+            }
+        }
+        assert(! s1[0][1].equals(s2[1][0]));
     }
 
 }

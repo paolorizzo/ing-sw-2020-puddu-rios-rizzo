@@ -38,4 +38,21 @@ public class Worker {
             copy.setSpace(space.lightClone());
         return copy;
     }
+
+    /**
+     * compares all the fields of the workers and returns true if they all match
+     * @param o the other worker
+     * @return true if all the fields of the workers are equal
+     */
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof Worker)) return false;
+        Worker that = (Worker) o;
+        return this.playerId == that.playerId &&
+                this.sex.equals(that.sex) &&
+                ( (this.space == null && that.space == null) ||
+                        this.space.equals(that.space)
+                );
+    }
 }
