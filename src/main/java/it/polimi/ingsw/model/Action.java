@@ -122,18 +122,16 @@ public class Action extends MapConvertible implements Serializable {
     }
 
     /**
-     * compares two actions and returns true if their attributes correspond
+     * compares two actions and returns true if their toStrings
      * @param o the object against which to compare this one
-     * @return true if theattribute of the compared object correspond to those of the current object
+     * @return true if the toStrings match, false otherwise
      */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Action action = (Action) o;
-        return targetX == action.targetX &&
-                targetY == action.targetY &&
-                workerID.equals(action.workerID);
+        Action that = (Action) o;
+        return this.toString().equals(that.toString());
     }
 
     public boolean matches(String workerID){

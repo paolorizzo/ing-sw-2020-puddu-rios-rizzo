@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ActionTest
 {
@@ -130,5 +131,21 @@ public class ActionTest
         }
         assertEquals(actionClass, processedClass);
         System.out.println(processedClass.getName());
+    }
+
+    /**
+     * tests that the equals method works, even when comparing
+     * dynamically typed actions
+     */
+    @Test
+    public void testEquals(){
+        Action a1 = new Action("id", 0, 0);
+        Action a2 = new BuildAction("id", 0,0, Piece.LEVEL1);
+        System.out.println(a1.toString());
+        System.out.println(a2.toString());
+        System.out.println(a1.equals(a2));
+        assertNotEquals(a1, a2);
+        Action a3 = new BuildAction("id", 0,0, Piece.LEVEL1);
+        assertEquals(a2, a3);
     }
 }

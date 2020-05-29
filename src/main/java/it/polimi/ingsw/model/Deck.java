@@ -70,4 +70,17 @@ public class Deck implements Serializable {
             listOfCards.add(card);
         return listOfCards;
     }
+
+    /**
+     * compares this object against any other
+     * @param o the other object
+     * @return true if the other object is a Deck, and their remaining cards match
+     */
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof Deck)) return false;
+        Deck that = (Deck) o;
+        return this.cardsInDeck.equals(that.cardsInDeck);
+    }
 }

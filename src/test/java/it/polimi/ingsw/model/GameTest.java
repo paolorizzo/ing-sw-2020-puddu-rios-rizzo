@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.ControllerTest;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -259,5 +261,23 @@ public class GameTest {
                 assert(game.turnArchive.getLastTurnOf(model.getPlayers().get(id)).getActions().get(i).equals(actions.get(i)));
         }
 
+    }
+
+    /**
+     * tests that the fullEquals method works as expected
+     */
+    @Test
+    public void testFullEquals(){
+        Controller c1 = new Controller();
+        ControllerTest ct1 = new ControllerTest();
+        ct1.playSomeTurns(c1);
+        Game g1 = c1.getModel().game;
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        Game g2 = c2.getModel().game;
+
+        assert(! g1.fullEquals(g2));
+        ct2.playSomeTurns(c2);
+        assert(g1.fullEquals(g2));
     }
 }

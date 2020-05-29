@@ -271,4 +271,37 @@ public class Game {
     public boolean isFinish(){
         return finish;
     }
+
+    /**
+     * deeply compares two Game objects
+     * @param that the other Game
+     * @return true if their relevant fields are equal
+     */
+    public boolean fullEquals(Game that){
+        /*
+        Model model;
+        private int numPlayers;
+        private List<Integer> idCurrentPlayers;
+        private int pointerIdCurrentPlayers;
+        private Deck deck;
+        private List<Card> chosenCards;
+        private Turn currentTurn;
+        private ActionTree actionTreeCurrentPlayer;
+        private List<Action> possibleActions;
+        private boolean canEndTurn;
+        boolean finish;
+        public TurnArchive turnArchive;
+         */
+        boolean equality = true;
+        equality &= this.numPlayers == that.numPlayers;
+        equality &= this.idCurrentPlayers.equals(that.idCurrentPlayers);
+        equality &= this.pointerIdCurrentPlayers == that.pointerIdCurrentPlayers;
+        equality &= this.deck.equals(that.deck);
+        equality &= this.chosenCards.equals(that.chosenCards);
+        equality &= ( this.currentTurn == null && that.currentTurn == null ||
+                        this.currentTurn.equals(that.currentTurn)
+                    );
+        equality &= this.turnArchive.equals(that.turnArchive);
+        return equality;
+    }
 }
