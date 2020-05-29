@@ -55,4 +55,17 @@ public class SpaceTest {
         assert(space4.isPeripheralSpace());
     }
 
+    /**
+     * tests that the toString methods works as expected
+     */
+    @Test
+    public void checkToString(){
+        Space s = new Space(0, 0);
+        assertEquals("    ", s.toString());
+        Player p = new Player("pippo", Color.BLUE, 0);
+        Worker w = new Worker(Sex.FEMALE, p);
+        s.setWorkerOnIt(w);
+        assertEquals("P0-F", s.toString());
+    }
+
 }

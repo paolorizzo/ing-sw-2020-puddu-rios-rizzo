@@ -111,4 +111,17 @@ public class Space {
                 posY == space.posY;
     }
 
+    /**
+     * returns the worker string if there is one,
+     * or 4 spaces if there isn't
+     * @return the worker identifier if there is a worker, 4 empty spaces otherwise
+     */
+    @Override
+    public String toString(){
+        if(hasWorkerOnIt())
+            return getWorkerOnIt().toString();
+        else
+            return "    ";
+    }
+
 }

@@ -161,5 +161,56 @@ public class Board {
         f.setSpace(null);
     }
 
+    /**
+     * returns a string representing the positions of the workers
+     * @return a string representing the positions of the workers
+     */
+    public String workersRep(){
+        String s = "";
+        int side = 5;
+        int cell = 4;
+        int width = side*cell + side + 1;
+        int height = side*cell + side + 1;
+        for(Space[] row:spaces){
+            for(int i=0;i<width;i++)
+                s += "*";
+            s += "\n";
+            for(Space space:row){
+                s += "*";
+                s += space.toString();
+            }
+            s += "*\n";
+        }
+        for(int i=0;i<width;i++)
+            s += "*";
+        s += "\n";
+        return s;
+    }
 
+    /**
+     * returns a string representing the height of the buildings for every space
+     * @return a string representing the height of the buildings for every space
+     */
+    public String buildingsRep(){
+        String s = "";
+        int side = 5;
+        int cell = 4;
+        int width = side*cell + side + 1;
+        int height = side*cell + side + 1;
+        for(Space[] row:spaces){
+            for(int i=0;i<width;i++)
+                s += "*";
+            s += "\n";
+            for(Space space:row){
+                s += "*";
+                s += space.getLastPiece().ordinal();
+                s += "   ";
+            }
+            s += "*\n";
+        }
+        for(int i=0;i<width;i++)
+            s += "*";
+        s += "\n";
+        return s;
+    }
 }

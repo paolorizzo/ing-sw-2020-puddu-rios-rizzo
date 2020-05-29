@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.ControllerTest;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -160,6 +162,32 @@ public class BoardTest {
 
         Action a = new Action("P1-M", 1, 1);
         board.undoExecuteAction(a);
+    }
+
+    /**
+     * tests that the board can be converted to a representation of the worker positions
+     * without raising exceptions
+     */
+    @Test
+    public void testWorkersRep(){
+        Controller c = new Controller();
+        ControllerTest ct = new ControllerTest();
+        ct.playSomeTurns(c);
+        Board b = c.getModel().board;
+        System.out.println(b.workersRep());
+    }
+
+    /**
+     * tests that the board can be converted to representation of the building heights
+     * without exceptions
+     */
+    @Test
+    public void testBuildingsRep(){
+        Controller c = new Controller();
+        ControllerTest ct = new ControllerTest();
+        ct.playSomeTurns(c);
+        Board b = c.getModel().board;
+        System.out.println(b.buildingsRep());
     }
 
 }

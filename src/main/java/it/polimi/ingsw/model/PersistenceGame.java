@@ -20,6 +20,7 @@ public class PersistenceGame {
     int phase;
     List<Card> chosenCards;
     int numCardsChosen;
+    int currPlayer;
     int[] ids;
     String[] names;
     int[] numGods;
@@ -34,6 +35,7 @@ public class PersistenceGame {
         this.phase = 2;         //implement phase logic if persistence must be supported from setup phase instead of from turn phase
         this.chosenCards = game.getChosenCards();
         this.numCardsChosen = this.chosenCards.size();
+        this.currPlayer = game.getCurrentPlayerId();
         this.ids = new int[this.numPlayers];
         this.names = new String[this.numPlayers];
         this.numGods = new int[this.numPlayers];
@@ -110,6 +112,7 @@ public class PersistenceGame {
         s += "\nphase = " + this.phase;
         s += "\nchosenCards = " + this.chosenCards.toString();
         s += "\nnumCardsChosen = " + this.numCardsChosen;
+        s += "\ncurrPlayer = " + this.currPlayer;
         s += "\nids = " + Arrays.toString(this.ids);
         s += "\nnames = " + Arrays.toString(this.names);
         s += "\nnumGods = " + Arrays.toString(this.numGods);
