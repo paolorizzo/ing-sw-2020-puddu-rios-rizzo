@@ -51,7 +51,7 @@ public class PersistenceGame {
      */
     boolean save(String names){
         Gson gson = new Gson();
-        String pathToGameJson = "src/main/resources/persistence/game" + names + ".json";
+        String pathToGameJson = savePath(names);
         try{
             FileWriter writer = new FileWriter(pathToGameJson);
             gson.toJson(this, writer);
@@ -65,9 +65,14 @@ public class PersistenceGame {
         return true;
     }
 
+    /**
+     * reads a PersistenceGame file and loads it into a PersistenceGame object
+     * @param names the names of the players of the game, concatenated
+     * @return a PersistenceGame object as loaded from the file
+     */
     static PersistenceGame load(String names){
         Gson gson = new Gson();
-        String pathToGameJson = "src/main/resources/persistence/game" + names + ".json";
+        String pathToGameJson = savePath(names);
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToGameJson));
             PersistenceGame instance = gson.fromJson(reader, PersistenceGame.class);
@@ -109,6 +114,15 @@ public class PersistenceGame {
         s += "\nnames = " + Arrays.toString(this.names);
         s += "\nnumGods = " + Arrays.toString(this.numGods);
         return s;
+    }
+
+    /**
+     *
+     * @param names a string that concatenates the names of the players
+     * @return a string containing the path to the game json file
+     */
+    static String savePath(String names){
+        return "src/main/resources/persistence/game" + names + ".json";
     }
 }
 

@@ -47,7 +47,7 @@ public class ModelTest {
 
     /**
      * tests that it is possible to save the state of the game without exceptions
-     * TODO once the loading steps are implemented, test that it is possible to save and load the state
+     * and that the files are actually stored
      */
     @Test
     public void testSave(){
@@ -56,5 +56,8 @@ public class ModelTest {
         Model m = c.getModel();
         ct.playSomeTurns(c);
         m.save();
+        assert m.isSaved();
     }
+
+
 }

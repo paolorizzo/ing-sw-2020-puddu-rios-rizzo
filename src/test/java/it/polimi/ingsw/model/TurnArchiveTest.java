@@ -39,4 +39,13 @@ public class TurnArchiveTest {
         TurnArchive processed = TurnArchive.fromMap(original.toMap());
         assertEquals(original.toString(), processed.toString());
     }
+
+    /**
+     * tests that the path to the json persistence file is correctly generated
+     */
+    @Test
+    public void testSavePath(){
+        String names = "abcd";
+        assertEquals("src/main/resources/persistence/turns" + names + ".json", TurnArchive.savePath(names));
+    }
 }

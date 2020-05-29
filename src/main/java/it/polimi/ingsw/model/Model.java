@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observation.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -200,5 +201,18 @@ public class Model {
             saveName += "_" + name;
         }
         return saveName;
+    }
+
+    /**
+     * checks if there exist save files for the current players
+     * @return true if there exist save files for the current players
+     */
+    public boolean isSaved(){
+        String names = saveName();
+        String gamePath = PersistenceGame.savePath(names);
+        String turnsPath = TurnArchive.savePath(names);
+        File gameFile = new File(gamePath);
+        File turnsFile = new File(turnsPath);
+        return (gameFile.exists() && turnsFile.exists());
     }
 }

@@ -147,4 +147,13 @@ public class TurnArchive extends MapConvertible{
             s += t.toString();
         return s;
     }
+
+    /**
+     * returns the save path of a turnArchive json file, given the concatenated names of the players
+     * @param names the concatenated names of the players of a game
+     * @return the path to a json file that serializes the turns for a game with those players
+     */
+    static String savePath(String names){
+        return "src/main/resources/persistence/turns" + names + ".json";
+    }
 }

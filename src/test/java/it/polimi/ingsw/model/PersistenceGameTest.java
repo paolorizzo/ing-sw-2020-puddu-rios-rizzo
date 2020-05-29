@@ -67,4 +67,13 @@ public class PersistenceGameTest {
         PersistenceGame new_pg = PersistenceGame.load("");
         assertEquals(pg.toString(), new_pg.toString());
     }
+
+    /**
+     * tests that the path to the json persistence file is correctly generated
+     */
+    @Test
+    public void testSavePath(){
+        String names = "abcd";
+        assertEquals("src/main/resources/persistence/game" + names + ".json", PersistenceGame.savePath(names));
+    }
 }
