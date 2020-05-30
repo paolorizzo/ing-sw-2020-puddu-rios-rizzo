@@ -208,7 +208,8 @@ public enum ConnectionState {
     END{
         public void execute(ClientView view, Object input){
             //System.out.println("Connection phase has ended for client " + view.getId());
-            view.startSetupFSM();
+            //view.startSetupFSM();
+            view.startRestoreFSM();
         }
     };
 

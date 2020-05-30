@@ -20,6 +20,9 @@ public interface FeedObserver {
     public void updateAllPlayersConnected();
     public void updateName(int id, String name);
 
+    //restore phase updates
+    public void updateGameAvailable(boolean available);
+
     //setup phase updates
     public void updateDeck(Deck deck);
     public void updateCards(int id, List<Card> cards);

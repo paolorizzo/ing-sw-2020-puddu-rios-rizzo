@@ -61,8 +61,14 @@ public class VirtualView extends View
         connection.sendMessage("notifyName", id, name);
     }
 
+    //restore phase updates
+    @Override
+    public synchronized void updateGameAvailable(boolean available){
+        connection.sendMessage("notifyGameAvailable", available);
+    }
 
-    //setup phase updates@Override
+    //setup phase updates
+    @Override
     public synchronized void updateDeck(Deck deck){
         connection.sendMessage("notifyDeck", deck);
     }

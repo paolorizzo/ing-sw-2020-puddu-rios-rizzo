@@ -59,6 +59,17 @@ public class FeedObservable extends Observable<FeedObserver> {
         }
     }
 
+    //notifies related to the restore phase
+    /**
+     * notifies observers regarding the availability of a saved game for their name set
+     * @param available represents whether a game is available
+     */
+    public synchronized void notifyGameAvailable(boolean available){
+        for(FeedObserver obs:observers){
+            obs.updateGameAvailable(available);
+        }
+    }
+
     //notifies related to the setup phase
     public synchronized void notifyDeck(Deck deck) {
         for(FeedObserver obs:observers){

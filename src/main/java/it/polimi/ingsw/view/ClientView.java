@@ -17,6 +17,7 @@ public class ClientView extends View implements UserInterfaceObserver
 {
     //finite state machine states
     ConnectionState currentConnectionState;
+    RestoreState currentRestoreState;
     SetupState currentSetupState;
     GameState currentGameState;
     //updates will modify these objects
@@ -170,6 +171,15 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    //updates relating to the Restore Phase
+    @Override
+    public synchronized void updateGameAvailable(boolean available){
+        if(currentRestoreState == RestoreState.RECEIVE_GAME_AVAILABLE){
+            currentRestoreState.execute(available);
+        }
+    }
+
+    //Setup Phase Updates
     @Override
     public synchronized void updateDeck(Deck deck) {
 
@@ -245,6 +255,15 @@ public class ClientView extends View implements UserInterfaceObserver
     //an update
     private void startConnectionFSM(){
         currentConnectionState = ConnectionState.READY;
+    }
+
+    /**
+     * starts the game restore FSM
+     */
+    public void startRestoreFSM() {
+        currentRestoreState = RestoreState.START_RESTORE;
+        currentRestoreState.view = this;
+        currentRestoreState.execute(null);
     }
     public void startSetupFSM() {
         currentSetupState = SetupState.START_SETUP;

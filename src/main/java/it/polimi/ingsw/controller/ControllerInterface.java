@@ -15,6 +15,8 @@ public interface ControllerInterface {
     public void getNumPlayers();
     public void requestAllPlayersConnected();
     public void setName(int id, String name);
+    //restore phase
+    public void isGameAvailable();
     //setup phase
     public void requestDeck();
     public void publishCards(int id, List<Integer> numCards);

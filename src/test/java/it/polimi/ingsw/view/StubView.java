@@ -73,6 +73,10 @@ public class StubView extends View{
             this.name = name;
     }
 
+    //restore phase updates
+    @Override
+    public void updateGameAvailable(boolean available){}
+
     //setup phase updates
     @Override
     public void updateDeck(Deck deck){

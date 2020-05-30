@@ -147,6 +147,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         }
     }
 
+    //connection phase methods
     @Override
     public void generateId()
     {
@@ -188,6 +189,18 @@ public class Client extends Messenger implements ControllerInterface, Runnable
 
         sendMessage("setName", id, name);
     }
+
+    //Restore phase methods
+
+    /**
+     * forwards the method call to the controller through the socket
+     */
+    @Override
+    public void isGameAvailable(){
+        sendMessage("isGameAvailable");
+    }
+
+    //Setup phase methods
 
     @Override
     public void requestDeck()

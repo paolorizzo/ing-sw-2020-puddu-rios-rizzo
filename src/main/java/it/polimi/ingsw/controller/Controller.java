@@ -225,6 +225,17 @@ public class Controller implements ControllerInterface
         viewMap.remove(id);
     }
 
+    //Restore phase methods
+
+    /**
+     * answers a query regarding the availability of a saved game by forwarding the answer through the feed
+     */
+    @Override
+    public synchronized void isGameAvailable(){
+        System.out.println("Notifying availability: " + model.isSaved());
+        model.feed.notifyGameAvailable(model.isSaved());
+    }
+
     //setup phase methods
 
     /**
