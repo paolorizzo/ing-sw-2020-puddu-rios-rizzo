@@ -56,7 +56,7 @@ public class PowerStrategy {
         if(!curr.isRoot())
             throw new InvalidActionTreeGenerationException("Default move: before move there is always root");
 
-        if(!curr.isAppendedLayer()){
+        if(curr.isAppendedLayer()){
             curr.setAppendedLayer(false);
 
             List<Worker> workers = new ArrayList<Worker>();
