@@ -34,6 +34,7 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
     AskNumPlayersMenu askNumPlayersMenu;
     AskNameMenu askNameMenu;
+    AskRestoreMenu askRestoreMenu;
     PlayersMenu playersMenu;
     AskCardMenu askCardMenu;
     AskGodMenu askGodMenu;
@@ -98,6 +99,10 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         askNameMenu = new AskNameMenu();
         askNameMenu.addObserver(cw);
         groupRoot.getChildren().add(askNameMenu.getGroup());
+
+        askRestoreMenu = new AskRestoreMenu();
+        askRestoreMenu.addObserver(cw);
+        groupRoot.getChildren().add(askRestoreMenu.getGroup());
 
         playersMenu = new PlayersMenu();
         groupRoot.getChildren().add(playersMenu.getGroup());
@@ -336,7 +341,10 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         askNameMenu.show();
         System.out.println("Ask name");
     }
-
+    @Override
+    public void askRestore(){
+        askRestoreMenu.show();
+    }
 
     @Override
     public void askCard(Deck deck) {

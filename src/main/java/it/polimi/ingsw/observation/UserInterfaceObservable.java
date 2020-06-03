@@ -22,6 +22,11 @@ public class UserInterfaceObservable extends Observable<UserInterfaceObserver>{
             obs.updateReadName(name);
         }
     }
+    public synchronized void notifyReadRestore(boolean restore){
+        for(UserInterfaceObserver obs:observers){
+            obs.updateReadRestore(restore);
+        }
+    }
     public synchronized void notifyReadNumCard(int numCard){
         for(UserInterfaceObserver obs:observers){
             obs.updateReadNumCard(numCard);

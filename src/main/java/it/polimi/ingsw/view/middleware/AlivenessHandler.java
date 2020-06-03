@@ -16,7 +16,6 @@ public class AlivenessHandler
     private final int livenessRate = 6000;
     private final int invalidPongTreshold = 10000;
 
-
     public AlivenessHandler(Messenger messenger, View view)
     {
         this.messenger = messenger;

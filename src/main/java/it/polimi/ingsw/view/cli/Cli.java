@@ -53,7 +53,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
         notifyReadName(CliUtils.handleUsername());
     }
-
+    @Override
+    public void askRestore(){
+        //TODO to complete this method
+    }
     @Override
     public void askCard(Deck deck)
     {
@@ -174,7 +177,6 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public int getNumPlayersRegister()
     {
-
         return players.size();
     }
 }

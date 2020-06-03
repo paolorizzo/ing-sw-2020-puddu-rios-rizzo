@@ -9,10 +9,9 @@ import java.util.List;
 
 public interface UserInterface
 {
-
-
     void askNumPlayers();
     void askUsername();
+    void askRestore();
     void askCard(Deck deck);
     void askGod(List<Card> cards);
     void askSetupWorker(List<Action> possibleActions);

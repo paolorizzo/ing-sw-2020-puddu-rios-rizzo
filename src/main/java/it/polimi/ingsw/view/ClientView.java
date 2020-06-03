@@ -68,6 +68,10 @@ public class ClientView extends View implements UserInterfaceObserver
             currentConnectionState.execute(this, name);
     }
     @Override
+    public synchronized void updateReadRestore(boolean restore){
+
+    }
+    @Override
     public synchronized void updateReadNumCard(int numCard) {
         if(currentSetupState.equals(SetupState.READ_CARD))
             currentSetupState.execute(this, numCard);
