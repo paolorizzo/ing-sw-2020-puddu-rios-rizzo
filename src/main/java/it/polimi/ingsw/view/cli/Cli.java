@@ -88,14 +88,20 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         else
             notifyReadVoluntaryEndOfTurn();
     }
+
     @Override
-    public void winAnnounce(int id){
-        System.out.println(id+" You win");
+    public void winAnnounce(int id)
+    {
+
+        CliUtils.handleWin(model);
     }
+
     @Override
-    public void loseAnnounce(int id){
-        System.out.println(id+" You lose");
+    public void loseAnnounce(int id)
+    {
+        CliUtils.handleLose(model);
     }
+
     @Override
     public void removeWorkersOfPlayer(int id)
     {

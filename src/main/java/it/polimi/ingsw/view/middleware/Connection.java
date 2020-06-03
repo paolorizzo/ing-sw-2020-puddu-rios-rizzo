@@ -70,7 +70,7 @@ public class Connection extends Messenger implements Runnable
      * @param arg the object representing the eventual arguments to be passed.
      */
     @Override
-    public void sendMessage(String methodName, Object ...arg)
+    public synchronized void sendMessage(String methodName, Object ...arg)
     {
         try
         {
@@ -80,8 +80,8 @@ public class Connection extends Messenger implements Runnable
         {
             if(view !=null)
             {
-                alivenessHandler.registerDisconnection();
-                view.connectionLost();
+                alivenessHandler.registerMessageFailure();
+                //view.connectionLost();
             }
         }
     }

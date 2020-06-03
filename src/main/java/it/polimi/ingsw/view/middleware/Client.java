@@ -132,7 +132,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
      * @param methodName the name of the method to be called via reflection on the server.
      * @param arg the args of the target method.
      */
-    public void sendMessage(String methodName, Object ...arg)
+    public synchronized void sendMessage(String methodName, Object ...arg)
     {
         try{
             super.sendMessage(new ObjectOutputStream(socket.getOutputStream()), methodName, arg);
@@ -141,8 +141,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         {
             if(getClientView() !=null)
             {
-                alivenessHandler.registerDisconnection();
-                getClientView().connectionLost();
+                alivenessHandler.registerMessageFailure();
+                //getClientView().connectionLost();
             }
         }
     }

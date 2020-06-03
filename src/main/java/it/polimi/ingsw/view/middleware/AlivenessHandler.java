@@ -10,18 +10,20 @@ public class AlivenessHandler
     private final View view;
     private final Object liveLock;
     private boolean clientIsLive;
-    private boolean alive;
+    private boolean monitoring;
+    private int failures;
 
 
-    private final int livenessRate = 6000;
-    private final int invalidPongTreshold = 10000;
+    private final int livenessRate = 10000;
+
 
     public AlivenessHandler(Messenger messenger, View view)
     {
         this.messenger = messenger;
         this.view = view;
         this.liveLock = new Object();
-        this.alive = true;
+        this.monitoring = true;
+        this.failures = 0;
     }
 
     /**
@@ -31,21 +33,26 @@ public class AlivenessHandler
      */
     void pongHandler(Message message)
     {
-        //filter pongs upon timestamps
-        //System.out.println("received pong!");
-        if(message.hasArgs() && message.getArg(0) instanceof Timestamp)
+        synchronized(liveLock)
         {
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            Timestamp ts = (Timestamp) message.getArg(0);
+            clientIsLive = true;
+        }
+    }
 
-            if(now.getTime()-ts.getTime()<invalidPongTreshold)
+    void registerMessageFailure()
+    {
+        synchronized (liveLock)
+        {
+            if(monitoring)
             {
-                synchronized(liveLock)
+                System.err.println("Registering an aliveness failure.");
+                failures++;
+
+                if(failures == 3)
                 {
-                    clientIsLive = true;
+                    registerDisconnection();
                 }
             }
-
         }
     }
 
@@ -53,7 +60,7 @@ public class AlivenessHandler
     {
         new Thread(() -> {
 
-            while(alive)
+            while(monitoring)
             {
                 try
                 {
@@ -66,10 +73,11 @@ public class AlivenessHandler
 
                 synchronized (liveLock)
                 {
-                    if(!clientIsLive && alive)
+                    if((!clientIsLive) && (monitoring))
                     {
+                        System.err.println("The other side of the network is not responding.");
                         view.connectionLost();
-                        alive = false;
+                        monitoring = false;
                     }
                     else
                         clientIsLive = false;
@@ -80,15 +88,20 @@ public class AlivenessHandler
 
     void registerDisconnection()
     {
-        this.alive = false;
+        this.monitoring = false;
+        view.connectionLost();
     }
 
     protected void startPing() {
         new Thread(() -> {
-            while (alive) {
-                try {
-                    Thread.sleep(2500);
-                } catch (InterruptedException ex) {
+            while (monitoring)
+            {
+                try
+                {
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException ex)
+                {
                     Thread.currentThread().interrupt();
                 }
 

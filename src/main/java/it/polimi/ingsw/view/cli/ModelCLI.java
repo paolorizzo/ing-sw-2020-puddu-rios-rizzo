@@ -18,6 +18,10 @@ public class ModelCLI
 
     private boolean gameMode;
 
+    private boolean spectator;
+
+    private boolean myTurn;
+
     /**
      * A mask is a String matrix that stores workers' IDs in the cells corresponding to their position on the board.
      */
@@ -34,11 +38,32 @@ public class ModelCLI
         pieceBag = new HashMap<>();
         currentPlayerId = 0;
         gameMode = false;
-
+        spectator = false;
+        myTurn = false;
         pieceBag.put(1, 22);
         pieceBag.put(2, 18);
         pieceBag.put(3, 14);
         pieceBag.put(4, 18);
+    }
+
+    void isMyTurn()
+    {
+        myTurn = true;
+    }
+
+    void notMyTurn()
+    {
+        myTurn = false;
+    }
+
+    void setAsSpectator()
+    {
+        this.spectator = true;
+    }
+
+    boolean getSpectator()
+    {
+        return this.spectator;
     }
 
     boolean isGameOn()

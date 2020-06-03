@@ -70,13 +70,17 @@ public enum GameState {
         }
     },
     WIN_STATE{
-        public void execute(ClientView view, Object input) {
-            System.out.println("WIN");
+        public void execute(ClientView view, Object input)
+        {
+
+            //System.out.println("WIN");
         }
     },
     LOSE_STATE{
-        public void execute(ClientView view, Object input) {
-            System.out.println("LOSE");
+        public void execute(ClientView view, Object input)
+        {
+
+            //System.out.println("LOSE");
         }
     };
 

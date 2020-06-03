@@ -90,7 +90,7 @@ public abstract class Messenger
                 {
 
                     //System.out.println("Method name "+method.getName());
-                    System.out.print("Invoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
+                    //System.out.print("Invoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
                     method.invoke(target, methodArgs);
 
                 }

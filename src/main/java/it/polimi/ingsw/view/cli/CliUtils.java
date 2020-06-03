@@ -285,6 +285,34 @@ public class CliUtils
             showBoard(model);
     }
 
+    static void handleLose(ModelCLI model)
+    {
+        model.setAsSpectator();
+
+        CanvasCLI canvas = new CanvasCLI(0,0,53,3);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        RectangleCLI loseAnnounce = new RectangleCLI(20,3,11,1);
+        canvas.setTextColor(AnsiColors.ANSI_BLACK);
+        loseAnnounce.setPalette(AnsiColors.ANSI_BG_RED);
+        loseAnnounce.addText("YOU LOST! I'M SORRY.");
+        canvas.addOverlappingFigure(loseAnnounce);
+        canvas.printFigure();
+
+        showBoard(model);
+    }
+
+    static void handleWin(ModelCLI model)
+    {
+        CanvasCLI canvas = new CanvasCLI(0,0,53,3);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        RectangleCLI loseAnnounce = new RectangleCLI(20,3,11,1);
+        canvas.setTextColor(AnsiColors.ANSI_BLACK);
+        loseAnnounce.setPalette(AnsiColors.ANSI_BG_GREEN);
+        loseAnnounce.addText("YOU WON! CONGRATS");
+        canvas.addOverlappingFigure(loseAnnounce);
+        canvas.printFigure();
+        showBoard(model);
+    }
 
     //utils for handlers
     static private boolean isMoveAction(List<Action> possibleActions)
@@ -617,6 +645,16 @@ public class CliUtils
 
         //print the figure
         back_canvas.printFigure();
+
+        if(model.getSpectator())
+        {
+            System.out.println();
+            CanvasCLI spectatorMode = new CanvasCLI(0,0,53,1);
+            spectatorMode.setTextColor(AnsiColors.ANSI_BLACK);
+            spectatorMode.setPalette(AnsiColors.ANSI_BG_RED);
+            spectatorMode.addText("Since you've lost, you're now in spectator mode. Just relax and see how your ex opponents are doing!");
+            spectatorMode.printFigure();
+        }
     }
 
     static void showUsernameDialog()
@@ -695,6 +733,12 @@ public class CliUtils
     private static void showControls()
     {
         System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_BLACK+ "Use WASD to control the selection: W to go UP, S to go DOWN, A to go RIGHT, D to go LEFT");
+        System.out.println(AnsiColors.ANSI_RESET);
+    }
+
+    private static void showNotYourTurn()
+    {
+        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_BLACK+ "Please wait while the other players play");
         System.out.println(AnsiColors.ANSI_RESET);
     }
 
