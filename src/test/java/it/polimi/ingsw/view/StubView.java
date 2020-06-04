@@ -76,6 +76,8 @@ public class StubView extends View{
     //restore phase updates
     @Override
     public void updateGameAvailable(boolean available){}
+    @Override
+    public void updateRestore(boolean intentToRestore){}
 
     //setup phase updates
     @Override

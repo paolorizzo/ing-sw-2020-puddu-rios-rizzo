@@ -22,6 +22,7 @@ public interface FeedObserver {
 
     //restore phase updates
     public void updateGameAvailable(boolean available);
+    public void updateRestore(boolean intentToRestore);
 
     //setup phase updates
     public void updateDeck(Deck deck);

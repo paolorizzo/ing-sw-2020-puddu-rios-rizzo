@@ -200,6 +200,22 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         sendMessage("isGameAvailable");
     }
 
+    /**
+     * forwards the method call to the controller through the socket
+     */
+    @Override
+    public void restore(int id, boolean intentToRestore){
+        sendMessage("restore", id, intentToRestore);
+    }
+
+    /**
+     * forwards the method call to the controller through the socket
+     */
+    @Override
+    public void willRestore(){
+        sendMessage("willRestore");
+    }
+
     //Setup phase methods
 
     @Override

@@ -67,6 +67,11 @@ public class VirtualView extends View
         connection.sendMessage("notifyGameAvailable", available);
     }
 
+    @Override
+    public synchronized void updateRestore(boolean intentToRestore){
+        connection.sendMessage("notifyRestore", intentToRestore);
+    }
+
     //setup phase updates
     @Override
     public synchronized void updateDeck(Deck deck){

@@ -69,7 +69,8 @@ public class ClientView extends View implements UserInterfaceObserver
     }
     @Override
     public synchronized void updateReadRestore(boolean restore){
-
+        if(currentRestoreState.equals(RestoreState.READ_RESTORE))
+            currentRestoreState.execute(restore);
     }
     @Override
     public synchronized void updateReadNumCard(int numCard) {
@@ -176,10 +177,26 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //updates relating to the Restore Phase
+
+    /**
+     * checks whether the Restore fsm is in the right state to receive this update, and if so executes it
+     * @param available a boolean representing whether a saved game is available
+     */
     @Override
     public synchronized void updateGameAvailable(boolean available){
         if(currentRestoreState == RestoreState.RECEIVE_GAME_AVAILABLE){
             currentRestoreState.execute(available);
+        }
+    }
+
+    /**
+     * checks whether the Restore fsm is in the right state to receive this update, and if so executes it
+     * @param intentToRestore a boolean representing whether a saved game will be restored or not
+     */
+    @Override
+    public synchronized void updateRestore(boolean intentToRestore){
+        if(currentRestoreState == RestoreState.RECEIVE_RESTORE){
+            currentRestoreState.execute(intentToRestore);
         }
     }
 
@@ -234,9 +251,14 @@ public class ClientView extends View implements UserInterfaceObserver
         if(id == this.id){
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
                 currentConnectionState.execute(this, null);
-            }else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
+            }
+            else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
                 currentSetupState.execute(this, null);
-            }else{
+            }
+            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
+                currentRestoreState.execute(null);
+            }
+            else{
                 throw new IncorrectStateException("Received an okay for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
             }
         }
@@ -248,6 +270,9 @@ public class ClientView extends View implements UserInterfaceObserver
             getUi().showError(problem);
             if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
                 currentConnectionState.execute(this, problem);
+            }
+            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
+                currentRestoreState.execute(problem);
             }
             else{
                 throw new IncorrectStateException("Received a ko for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());

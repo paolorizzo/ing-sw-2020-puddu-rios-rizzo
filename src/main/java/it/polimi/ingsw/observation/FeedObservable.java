@@ -70,6 +70,16 @@ public class FeedObservable extends Observable<FeedObserver> {
         }
     }
 
+    /**
+     * notifies observer regarding whether a saved game will be restored or not
+     * @param intentToRestore a boolean representing the decision to restore the game or not
+     */
+    public synchronized void notifyRestore(boolean intentToRestore){
+        for(FeedObserver obs:observers){
+            obs.updateRestore(intentToRestore);
+        }
+    }
+
     //notifies related to the setup phase
     public synchronized void notifyDeck(Deck deck) {
         for(FeedObserver obs:observers){
