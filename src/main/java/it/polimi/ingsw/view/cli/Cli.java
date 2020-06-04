@@ -99,6 +99,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void loseAnnounce(int id)
     {
+
         CliUtils.handleLose(model);
     }
 

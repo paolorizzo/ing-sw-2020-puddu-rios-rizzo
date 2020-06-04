@@ -46,19 +46,12 @@ public class ModelCLI
         pieceBag.put(4, 18);
     }
 
-    void isMyTurn()
-    {
-        myTurn = true;
-    }
-
-    void notMyTurn()
-    {
-        myTurn = false;
-    }
-
     void setAsSpectator()
     {
-        this.spectator = true;
+        if(players.keySet().size() == 3)
+        {
+            this.spectator = true;
+        }
     }
 
     boolean getSpectator()

@@ -289,29 +289,28 @@ public class CliUtils
     {
         model.setAsSpectator();
 
-        CanvasCLI canvas = new CanvasCLI(0,0,53,3);
+        CanvasCLI canvas = new CanvasCLI(0,0,53,5);
         canvas.setPalette(AnsiColors.ANSI_RESET);
         RectangleCLI loseAnnounce = new RectangleCLI(20,3,11,1);
         canvas.setTextColor(AnsiColors.ANSI_BLACK);
         loseAnnounce.setPalette(AnsiColors.ANSI_BG_RED);
-        loseAnnounce.addText("YOU LOST! I'M SORRY.");
+        loseAnnounce.addText("       YOU LOST! I'M SORRY.");
         canvas.addOverlappingFigure(loseAnnounce);
         canvas.printFigure();
-
-        showBoard(model);
+        showBoard(model, null);
     }
 
     static void handleWin(ModelCLI model)
     {
-        CanvasCLI canvas = new CanvasCLI(0,0,53,3);
+        CanvasCLI canvas = new CanvasCLI(0,0,53,5);
         canvas.setPalette(AnsiColors.ANSI_RESET);
         RectangleCLI loseAnnounce = new RectangleCLI(20,3,11,1);
         canvas.setTextColor(AnsiColors.ANSI_BLACK);
         loseAnnounce.setPalette(AnsiColors.ANSI_BG_GREEN);
-        loseAnnounce.addText("YOU WON! CONGRATS");
+        loseAnnounce.addText("        YOU WON! CONGRATS");
         canvas.addOverlappingFigure(loseAnnounce);
         canvas.printFigure();
-        showBoard(model);
+        showBoard(model, null);
     }
 
     //utils for handlers
