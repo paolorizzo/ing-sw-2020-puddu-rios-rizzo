@@ -48,7 +48,7 @@ public class AlivenessHandler
                 System.err.println("Registering an aliveness failure.");
                 failures++;
 
-                if(failures == 3)
+                if(failures == 1)
                 {
                     registerDisconnection();
                 }
