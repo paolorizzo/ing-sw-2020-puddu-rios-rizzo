@@ -252,8 +252,9 @@ public class Controller implements ControllerInterface
         this.intentToRestore = intentToRestore;
         if(id == 0){
             if(intentToRestore){
-                //TODO implement restoration logic
-                System.out.println("I should not be restoring shit");
+                System.out.println("Restoring old game");
+                model.feed.notifyOk(id);
+                model.load();
             }
             else{
                 model.feed.notifyOk(id);

@@ -288,7 +288,7 @@ public class Model {
         System.out.println("Restoring game phase");
         for(Turn t:ta.turns){
             restoreTurn(t);
-            safeWait();
+            //safeWait();
         }
 
     }
@@ -308,6 +308,7 @@ public class Model {
                 game.getPossibleActions(t.playerId);
                 executeAction(t.playerId, a);
             }
+            safeWait();
         }
         if(! (t.actions.get(0) instanceof SetupAction))
             game.getPossibleActions(t.playerId);
@@ -337,7 +338,7 @@ public class Model {
      */
     private void safeWait(){
         try{
-            Thread.sleep(100);
+            Thread.sleep(400);
         }
         catch(InterruptedException e){
             e.printStackTrace();

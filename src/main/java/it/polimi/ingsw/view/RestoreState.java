@@ -27,7 +27,7 @@ public enum RestoreState {
                 }
             }
             else{       //ends the fsm if there is no game available
-                view.currentRestoreState = RestoreState.END_RESTORE;
+                view.currentRestoreState = RestoreState.SKIP_RESTORE;
                 view.currentRestoreState.execute(null);
             }
         }
@@ -41,22 +41,16 @@ public enum RestoreState {
     READ_RESTORE{
         public void execute(Object input){
             boolean restore = (boolean) input;
-            //TODO implement logic based on the answer
-            restore = false;
-            if(restore){
-                //implement
-            }
-            else{
-                view.currentRestoreState = RestoreState.PUBLISH_RESTORE;
-                view.currentRestoreState.execute(restore);
-            }
-
+            //restore = true;
+            System.out.println("Reading intent to restore: " + restore);
+            view.currentRestoreState = RestoreState.PUBLISH_RESTORE;
+            view.currentRestoreState.execute(restore);
         }
     },
     PUBLISH_RESTORE{
         public void execute(Object input){
             boolean intentToRestore = (boolean) input;
-            //System.out.println("Publishing intent to restore: " + intentToRestore);
+            System.out.println("Publishing intent to restore: " + intentToRestore);
 
             koState = RestoreState.ASK_RESTORE;
             okState = RestoreState.REQUEST_RESTORE;
@@ -98,11 +92,11 @@ public enum RestoreState {
             boolean restorationHappens = (boolean) input;
             if(restorationHappens){
                 System.out.println("The saved game will be restored");
-                System.out.println("I should not be here, restoration is not implemented yet");
+                view.currentRestoreState = RestoreState.RECEIVE_ALL;
             }
             else{
-                //System.out.println("The saved game won't be restored");
-                view.currentRestoreState = RestoreState.END_RESTORE;
+                System.out.println("The saved game won't be restored");
+                view.currentRestoreState = RestoreState.SKIP_RESTORE;
                 view.currentRestoreState.execute(null);
             }
         }
@@ -113,9 +107,14 @@ public enum RestoreState {
             view.getController().willRestore();
         }
     },
-    END_RESTORE{
+    RECEIVE_ALL{
         public void execute(Object input){
-            //System.out.println("Ending restore phase, starting setup phase");
+            //does nothing, this state is a passive listener
+        }
+    },
+    SKIP_RESTORE{
+        public void execute(Object input){
+            System.out.println("Ending restore phase, starting setup phase");
             view.startSetupFSM();
         }
     };
