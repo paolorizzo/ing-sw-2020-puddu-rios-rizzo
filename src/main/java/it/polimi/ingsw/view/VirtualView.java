@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.middleware.Connection;
 import it.polimi.ingsw.view.middleware.Message;
 
 import java.util.List;
+import java.util.Map;
 
 //TODO test
 public class VirtualView extends View
@@ -70,6 +71,11 @@ public class VirtualView extends View
     @Override
     public synchronized void updateRestore(boolean intentToRestore){
         connection.sendMessage("notifyRestore", intentToRestore);
+    }
+
+    @Override
+    public synchronized void updateRemap(Map<Integer, Integer> idMap){
+        connection.sendMessage("notifyRemap", idMap);
     }
 
     //setup phase updates

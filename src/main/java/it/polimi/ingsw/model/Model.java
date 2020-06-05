@@ -231,12 +231,32 @@ public class Model {
      */
     void restoreConnectionPhase(PersistenceGame pg){
         System.out.println("Restoring connection phase");
+        remapIds(pg);
         game.setNumPlayers(pg.numPlayers);
         int numPlayers = game.getNumPlayers();
         players.clear();
         for(int i=0;i<numPlayers;i++){
             addPlayer(new Player(pg.ids[i], pg.names[i]));
         }
+    }
+
+    void remapIds(PersistenceGame pg){
+        Map<Integer, Integer> idMap = new HashMap<>();
+        for(int i=0;i<game.getNumPlayers();i++){
+            Player currP = players.get(i);
+            String name = currP.getNickname();
+            int currId = currP.getId();
+            int oldId = -1;
+            for(int j=0;j<pg.numPlayers;j++){
+                if(pg.names[j].equals(name))
+                    oldId = pg.ids[j];
+            }
+            if(oldId == -1){
+                throw new IllegalStateException("A game is being restored but the saved game contains no info regarding player " + name);
+            }
+            idMap.put(currId, oldId);
+        }
+        feed.notifyRemap(idMap);
     }
 
     /**

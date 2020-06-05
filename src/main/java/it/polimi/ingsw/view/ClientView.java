@@ -10,6 +10,7 @@ import it.polimi.ingsw.view.cli.Cli;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 //TODO test basically everything in this class
@@ -198,6 +199,16 @@ public class ClientView extends View implements UserInterfaceObserver
         if(currentRestoreState == RestoreState.RECEIVE_RESTORE){
             currentRestoreState.execute(intentToRestore);
         }
+    }
+
+    /**
+     * remaps the id of the client
+     * @param idMap a map containing info regarding the new id
+     */
+    @Override
+    public synchronized void updateRemap(Map<Integer, Integer> idMap){
+        System.out.println("Remapping id from " + id + " to " + idMap.get(id));
+        this.id = idMap.get(id);
     }
 
     //Setup Phase Updates
