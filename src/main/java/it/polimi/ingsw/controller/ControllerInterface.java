@@ -17,6 +17,8 @@ public interface ControllerInterface {
     public void setName(int id, String name);
     //restore phase
     public void isGameAvailable();
+    public void restore(int id, boolean intentToRestore);
+    public void willRestore();
     //setup phase
     public void requestDeck();
     public void publishCards(int id, List<Integer> numCards);

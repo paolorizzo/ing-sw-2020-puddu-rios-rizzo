@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * the purpose of this class is to offer the same interface that VirtualView offers, to test
@@ -76,6 +77,10 @@ public class StubView extends View{
     //restore phase updates
     @Override
     public void updateGameAvailable(boolean available){}
+    @Override
+    public void updateRestore(boolean intentToRestore){}
+    @Override
+    public void updateRemap(Map<Integer, Integer> idMap){}
 
     //setup phase updates
     @Override

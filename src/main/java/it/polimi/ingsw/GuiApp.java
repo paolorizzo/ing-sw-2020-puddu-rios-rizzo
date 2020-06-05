@@ -1,21 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.Board;
 import it.polimi.ingsw.view.middleware.Client;
 import javafx.application.Application;
-import javafx.scene.Camera;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
-//import javafx.scene.paint.Color;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+//import javafx.scene.paint.Color;
 
 public class GuiApp extends Application {
     private static final int WIDTH = 1400;

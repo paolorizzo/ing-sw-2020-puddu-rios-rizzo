@@ -25,6 +25,8 @@ public class Controller implements ControllerInterface
     boolean accept;
     boolean acceptNumPlayers;
     int ackReceived;
+    boolean intentToRestore;
+    boolean intentToRestoreKnown;
 
     /**
      * constructs the Model
@@ -41,6 +43,9 @@ public class Controller implements ControllerInterface
         accept = true;              //only accepts a player through an addView if this is true
         acceptNumPlayers = false;   //accepts numPlayers only after connecting the first client, and only before it has been set
         ackReceived = -1;           //only accepts acks sequentially
+        //sets up restore phase variables
+        intentToRestore = false;
+        intentToRestoreKnown = false;
 
 
     }
@@ -234,6 +239,37 @@ public class Controller implements ControllerInterface
     public synchronized void isGameAvailable(){
         System.out.println("Notifying availability: " + model.isSaved());
         model.feed.notifyGameAvailable(model.isSaved());
+    }
+
+    /**
+     * entry point to start the process of restoring a saved game
+     * @param id the id of the requesting client. Must be 0 for the action to have an effect
+     * @param intentToRestore a boolean representing whether the caller wants to restore the saved game or not
+     */
+    @Override
+    public synchronized void restore(int id, boolean intentToRestore){
+        intentToRestoreKnown = true;
+        this.intentToRestore = intentToRestore;
+        if(id == 0){
+            if(intentToRestore){
+                //TODO implement restoration logic
+                System.out.println("I should not be restoring shit");
+            }
+            else{
+                model.feed.notifyOk(id);
+                model.feed.notifyRestore(intentToRestore);
+            }
+        }
+    }
+
+    /**
+     * answers the request to know whether a saved game will be restored, if it is known
+     */
+    @Override
+    public synchronized void willRestore(){
+        if(intentToRestoreKnown){
+            model.feed.notifyRestore(intentToRestore);
+        }
     }
 
     //setup phase methods

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
 
 import java.util.List;
+import java.util.Map;
 
 public class FeedObservable extends Observable<FeedObserver> {
 
@@ -67,6 +68,26 @@ public class FeedObservable extends Observable<FeedObserver> {
     public synchronized void notifyGameAvailable(boolean available){
         for(FeedObserver obs:observers){
             obs.updateGameAvailable(available);
+        }
+    }
+
+    /**
+     * notifies observer regarding whether a saved game will be restored or not
+     * @param intentToRestore a boolean representing the decision to restore the game or not
+     */
+    public synchronized void notifyRestore(boolean intentToRestore){
+        for(FeedObserver obs:observers){
+            obs.updateRestore(intentToRestore);
+        }
+    }
+
+    /**
+     * notifies to the observers the need to remap their ids
+     * @param idMap a map containing the info about the new ids for every old id
+     */
+    public synchronized void notifyRemap(Map<Integer, Integer> idMap){
+        for(FeedObserver obs:observers){
+            obs.updateRemap(idMap);
         }
     }
 

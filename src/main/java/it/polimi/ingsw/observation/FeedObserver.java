@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FeedObserver {
 
@@ -22,6 +23,8 @@ public interface FeedObserver {
 
     //restore phase updates
     public void updateGameAvailable(boolean available);
+    public void updateRestore(boolean intentToRestore);
+    public void updateRemap(Map<Integer, Integer> idMap);
 
     //setup phase updates
     public void updateDeck(Deck deck);
