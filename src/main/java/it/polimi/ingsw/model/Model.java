@@ -240,6 +240,10 @@ public class Model {
         }
     }
 
+    /**
+     * Communicates their old ids to the clients
+     * @param pg the PersistenceGame from which to get the info
+     */
     void remapIds(PersistenceGame pg){
         Map<Integer, Integer> idMap = new HashMap<>();
         for(int i=0;i<game.getNumPlayers();i++){
