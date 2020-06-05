@@ -86,7 +86,7 @@ public class ClientView extends View implements UserInterfaceObserver
 
     @Override
     public synchronized void updateReadAction(Action action) {
-        if(currentSetupState.equals(SetupState.READ_SETUP_WORKER))
+        if(currentSetupState!= null && currentSetupState.equals(SetupState.READ_SETUP_WORKER))
             currentSetupState.execute(this, action);
         if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION))
             currentGameState.execute(this, action);
@@ -111,15 +111,18 @@ public class ClientView extends View implements UserInterfaceObserver
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         getUi().setCurrentPlayer(id);
         //System.out.println("currplayer "+id);
-        if(id == getId() && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
+        //System.out.println("my id "+this.id);
+        if(id == getId() && currentSetupState!=null && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
             currentSetupState.execute(this, possibleActions);
         if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
+            //System.out.println("Entering actions receival");
             if(canEndOfTurn){
                 currentGameState = GameState.ASK_OPTIONAL_ACTION;
                 //System.out.println("Posso terminare il turno, invece di fare la mossa");
             }
             currentGameState.execute(this, possibleActions);
         }
+        //System.out.println("GameState: " + currentGameState);
 
     }
 
@@ -207,8 +210,23 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateRemap(Map<Integer, Integer> idMap){
-        System.out.println("Remapping id from " + id + " to " + idMap.get(id));
+        //System.out.println("Remapping id from " + id + " to " + idMap.get(id));
         this.id = idMap.get(id);
+    }
+
+    /**
+     * Resumes the game after a restore
+     */
+    @Override
+    public synchronized void updateResume(){
+        //System.out.println("Trying to resume the game");
+        if(currentRestoreState.equals(RestoreState.RECEIVE_ALL)){
+            currentRestoreState.execute(null);
+        }
+        else{
+            System.out.println(currentRestoreState.name());
+        }
+
     }
 
     //Setup Phase Updates

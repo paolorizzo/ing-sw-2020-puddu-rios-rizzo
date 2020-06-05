@@ -78,6 +78,11 @@ public class VirtualView extends View
         connection.sendMessage("notifyRemap", idMap);
     }
 
+    @Override
+    public synchronized void updateResume(){
+        connection.sendMessage("notifyResume");
+    }
+
     //setup phase updates
     @Override
     public synchronized void updateDeck(Deck deck){

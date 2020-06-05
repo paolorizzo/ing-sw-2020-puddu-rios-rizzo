@@ -42,7 +42,7 @@ public enum RestoreState {
         public void execute(Object input){
             boolean restore = (boolean) input;
             //restore = true;
-            System.out.println("Reading intent to restore: " + restore);
+            //System.out.println("Reading intent to restore: " + restore);
             view.currentRestoreState = RestoreState.PUBLISH_RESTORE;
             view.currentRestoreState.execute(restore);
         }
@@ -50,7 +50,7 @@ public enum RestoreState {
     PUBLISH_RESTORE{
         public void execute(Object input){
             boolean intentToRestore = (boolean) input;
-            System.out.println("Publishing intent to restore: " + intentToRestore);
+            //System.out.println("Publishing intent to restore: " + intentToRestore);
 
             koState = RestoreState.ASK_RESTORE;
             okState = RestoreState.REQUEST_RESTORE;
@@ -91,11 +91,11 @@ public enum RestoreState {
         public void execute(Object input){
             boolean restorationHappens = (boolean) input;
             if(restorationHappens){
-                System.out.println("The saved game will be restored");
+                //System.out.println("The saved game will be restored");
                 view.currentRestoreState = RestoreState.RECEIVE_ALL;
             }
             else{
-                System.out.println("The saved game won't be restored");
+                //System.out.println("The saved game won't be restored");
                 view.currentRestoreState = RestoreState.SKIP_RESTORE;
                 view.currentRestoreState.execute(null);
             }
@@ -109,13 +109,22 @@ public enum RestoreState {
     },
     RECEIVE_ALL{
         public void execute(Object input){
-            //does nothing, this state is a passive listener
+            // when the appropriate message is received, ends the restore phase
+            //System.out.println("Resuming the game");
+            view.currentRestoreState = RestoreState.END_RESTORE;
+            view.currentRestoreState.execute(null);
         }
     },
     SKIP_RESTORE{
         public void execute(Object input){
-            System.out.println("Ending restore phase, starting setup phase");
+            //System.out.println("Ending restore phase, starting setup phase");
             view.startSetupFSM();
+        }
+    },
+    END_RESTORE{
+        public void execute(Object input){
+            //System.out.println("Ending restore phase, resuming game phase");
+            view.startGameFSM();
         }
     };
 

@@ -254,6 +254,7 @@ public class Controller implements ControllerInterface
             if(intentToRestore){
                 System.out.println("Restoring old game");
                 model.feed.notifyOk(id);
+                model.feed.notifyRestore(intentToRestore);
                 model.load();
             }
             else{

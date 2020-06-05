@@ -223,6 +223,8 @@ public class Model {
         restoreSetupPhase(pg);
         restoreGamePhase(ta);
         game.turnArchive = ta;
+        feed.notifyResume();
+        System.out.println("Restore phase complete");
     }
 
     /**

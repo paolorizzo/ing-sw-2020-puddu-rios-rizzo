@@ -91,6 +91,15 @@ public class FeedObservable extends Observable<FeedObserver> {
         }
     }
 
+    /**
+     * notifies to the observers the restoration has terminated, and they can resume the game
+     */
+    public synchronized void notifyResume(){
+        for(FeedObserver obs:observers){
+            obs.updateResume();
+        }
+    }
+
     //notifies related to the setup phase
     public synchronized void notifyDeck(Deck deck) {
         for(FeedObserver obs:observers){

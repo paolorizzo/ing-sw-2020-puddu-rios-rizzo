@@ -26,6 +26,7 @@ public enum GameState {
     },
     RECEIVE_ACTIONS{
         public void execute(ClientView view, Object input) {
+            //System.out.println("RECEIVE_ACTIONS");
             List<Action> possibleActions = (List<Action>)input;
             view.currentGameState = ASK_ACTION;
             view.currentGameState.execute(view, possibleActions);
@@ -36,6 +37,7 @@ public enum GameState {
             //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
+            System.out.println(possibleActions);
             view.getUi().askAction(possibleActions, false);
         }
     },

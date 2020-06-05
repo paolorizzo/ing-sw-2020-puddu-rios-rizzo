@@ -91,6 +91,9 @@ public abstract class Messenger
 
                     //System.out.println("Method name "+method.getName());
                     //System.out.print("\nInvoking "+methodName+" on object of "+target.getClass() + " with arguments: ");
+                    for(Object o:methodArgs){
+                        //System.out.println(o);
+                    }
                     method.invoke(target, methodArgs);
 
                 }

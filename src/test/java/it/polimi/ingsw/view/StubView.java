@@ -81,6 +81,8 @@ public class StubView extends View{
     public void updateRestore(boolean intentToRestore){}
     @Override
     public void updateRemap(Map<Integer, Integer> idMap){}
+    @Override
+    public void updateResume(){}
 
     //setup phase updates
     @Override
