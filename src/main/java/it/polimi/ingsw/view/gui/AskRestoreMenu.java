@@ -33,7 +33,7 @@ public class AskRestoreMenu extends Menu {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                notifyReadRestore(false);
+                notifyReadRestore(true);
                 hide();
             }
         });
