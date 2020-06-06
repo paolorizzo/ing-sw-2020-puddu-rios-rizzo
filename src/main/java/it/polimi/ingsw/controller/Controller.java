@@ -27,6 +27,7 @@ public class Controller implements ControllerInterface
     int ackReceived;
     boolean intentToRestore;
     boolean intentToRestoreKnown;
+    Phase phase;
 
     /**
      * constructs the Model
@@ -39,6 +40,8 @@ public class Controller implements ControllerInterface
         viewMap = new HashMap<Integer, View>();
         nextId = -1;
 
+        //sets up general fsm variables
+        phase = Phase.NONE;
         //sets up the connection phase variables
         accept = true;              //only accepts a player through an addView if this is true
         acceptNumPlayers = false;   //accepts numPlayers only after connecting the first client, and only before it has been set
@@ -76,6 +79,8 @@ public class Controller implements ControllerInterface
     //TODO handle player limit
     public synchronized void addView(View view) throws InterruptedException {
         System.out.println("trying to add a view");
+        if(phase.equals(Phase.NONE))
+            phase = Phase.CONNECTION;
         while(!accept){
             this.wait();
         }
@@ -238,6 +243,8 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void isGameAvailable(){
         System.out.println("Notifying availability: " + model.isSaved());
+        if(phase.equals(Phase.CONNECTION))
+            phase = Phase.RESTORE;
         model.feed.notifyGameAvailable(model.isSaved());
     }
 
@@ -281,6 +288,8 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestDeck() {
+        if(phase.equals(Phase.CONNECTION) || phase.equals(Phase.RESTORE))
+            phase = Phase.SETUP;
         model.feed.notifyDeck(model.game.getDeck());
     }
 
@@ -374,6 +383,8 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestToSetupWorker(int id) throws InterruptedException {
+        if(phase.equals(Phase.SETUP))
+            phase = Phase.GAME;
         while(id != model.game.getCurrentPlayerId()){
             this.wait();
         }
@@ -470,7 +481,14 @@ public class Controller implements ControllerInterface
     @Override
     public void kill(){
         //TODO save the game state and shut down the server
-        //TODO should not be called from outside the server
+        //TODO should not be called from any client
+    }
+
+    @Override
+    public void handleDisconnection(){
+        if(phase.equals(Phase.GAME)){
+            model.save();
+        }
     }
 
 

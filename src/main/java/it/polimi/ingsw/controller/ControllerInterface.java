@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface ControllerInterface {
 
+    //general
+    public void handleDisconnection();
+    public void kill();
     //connection phase
     public void generateId();
     public void ackId(int id);
@@ -31,6 +34,5 @@ public interface ControllerInterface {
     public void publishAction(int id, Action action);
     public void publishVoluntaryEndOfTurn(int id);
     public void deleteId(int id);
-    public void kill();
 
 }

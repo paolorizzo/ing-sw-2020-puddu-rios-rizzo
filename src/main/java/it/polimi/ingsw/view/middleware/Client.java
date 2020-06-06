@@ -147,6 +147,17 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         }
     }
 
+    //general methods
+
+    /**
+     * this method does nothing on the client
+     * It is here only because it is useful on the controller,
+     * and is therefore present on the ControllerInterface, which this class implements
+     */
+    @Override
+    public void handleDisconnection(){}
+
+
     //connection phase methods
     @Override
     public void generateId()
