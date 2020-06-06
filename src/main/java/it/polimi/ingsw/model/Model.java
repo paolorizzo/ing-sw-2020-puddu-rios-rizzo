@@ -312,8 +312,12 @@ public class Model {
             }
             safeWait();
         }
-        if(! (t.actions.get(0) instanceof SetupAction))
+        if(! (t.actions.get(0) instanceof SetupAction)){
             game.getPossibleActions(t.playerId);
+            if(game.getCurrentPlayerId() == t.playerId){
+                game.nextTurn();
+            }
+        }
     }
 
     /**
