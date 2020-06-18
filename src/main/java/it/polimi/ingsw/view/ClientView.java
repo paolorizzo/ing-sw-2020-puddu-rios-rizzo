@@ -4,14 +4,10 @@ import it.polimi.ingsw.controller.ControllerInterface;
 import it.polimi.ingsw.exception.IncorrectStateException;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observation.UserInterfaceObserver;
-import it.polimi.ingsw.view.middleware.Client;
-import it.polimi.ingsw.view.cli.Cli;
-
+import it.polimi.ingsw.view.middleware.NetworkInterface;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 //TODO test basically everything in this class
 public class ClientView extends View implements UserInterfaceObserver
@@ -24,8 +20,15 @@ public class ClientView extends View implements UserInterfaceObserver
     //updates will modify these objects
     private int id;
     private UserInterface ui;
+    private NetworkInterface net;
 
     //private because ClientView is singleton. instance() should be called to get an object of this type
+    public ClientView(ControllerInterface controller, NetworkInterface net){
+        super(controller);
+        this.net = net;
+        id = -1;
+    }
+
     public ClientView(ControllerInterface controller){
         super(controller);
         id = -1;
@@ -33,31 +36,66 @@ public class ClientView extends View implements UserInterfaceObserver
 
     public void connectionLost()
     {
+
         System.out.println("The server is not reachable");
     }
 
-    public void setUi(UserInterface ui){
+    public void setUi(UserInterface ui)
+    {
+
         this.ui = ui;
     }
 
-    public UserInterface getUi(){
+    public UserInterface getUi()
+    {
+
         return ui;
     }
 
-    public int getId(){
+    public int getId()
+    {
+
         return id;
     }
 
-    public void setNumPlayers(int numPlayers){
+    public void getIp()
+    {
+
+        getUi().askIp();
+    }
+
+    public void getPort()
+    {
+
+        getUi().askPort();
+    }
+
+    public void setNumPlayers(int numPlayers)
+    {
+
         getUi().setNumPlayers(numPlayers);
     }
 
     //TODO should not be accepted if ID is already set, meaning it is still -1
-    public void setID(int id){
+    public void setID(int id)
+    {
+
         this.id = id;
     }
 
     //updates relative to UserInterface
+    @Override
+    public synchronized void updateReadIp(String ip)
+    {
+        net.setIp(ip);
+    }
+
+    @Override
+    public synchronized void updateReadPort(int port)
+    {
+        net.setPort(port);
+    }
+
     @Override
     public synchronized void updateReadNumPlayers(int numPlayers){
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))

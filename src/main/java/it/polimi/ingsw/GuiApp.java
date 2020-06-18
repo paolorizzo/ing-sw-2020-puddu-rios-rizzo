@@ -6,7 +6,6 @@ import it.polimi.ingsw.view.middleware.Client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-//import javafx.scene.paint.Color;
 
 public class GuiApp extends Application {
     private static final int WIDTH = 1400;
@@ -16,8 +15,8 @@ public class GuiApp extends Application {
     public void start(Stage stage){
 
 
-        Client client = new Client("127.0.0.1", 42069);
-        ClientView cw = new ClientView(client);
+        Client client = new Client();
+        ClientView cw = new ClientView(client, client);
 
         client.setClientView(cw);
 

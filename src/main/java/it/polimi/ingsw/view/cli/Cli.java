@@ -23,6 +23,18 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     //UI methods
     @Override
+    public void askIp()
+    {
+        notifyIp("127.0.0.1");
+    }
+
+    @Override
+    public void askPort()
+    {
+        notifyPort(42069);
+    }
+
+    @Override
     public void showLogo()
     {
 

@@ -10,9 +10,9 @@ public class CliApp {
     public static void main( String[] args )
     {
         Cli cli = new Cli();
-        Client client = new Client("127.0.0.1", 42069);
+        Client client = new Client();
 
-        ClientView cw = new ClientView(client);
+        ClientView cw = new ClientView(client, client);
 
         client.setClientView(cw);
         cw.setUi(cli);

@@ -10,15 +10,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Client extends Messenger implements ControllerInterface, Runnable
+public class Client extends Messenger implements ControllerInterface, Runnable, NetworkInterface
 {
     private Socket socket;
-    private final String ip;
-    private final int port;
+    private String ip = null;
+    private int port = 0;
 
     private final MessageSynchronizer synchronizer;
     private AlivenessHandler alivenessHandler;
@@ -29,6 +28,9 @@ public class Client extends Messenger implements ControllerInterface, Runnable
 
     private boolean alive;
 
+    private final Object netLock = new Object();
+    private boolean netPass = false;
+
     public Client(String ip, int port)
     {
         this.ip = ip;
@@ -36,6 +38,38 @@ public class Client extends Messenger implements ControllerInterface, Runnable
         virtualFeed = new FeedObservable();
         alive = true;
         this.synchronizer = new MessageSynchronizer(this);
+        this.netPass = true;
+    }
+
+    public Client()
+    {
+        virtualFeed = new FeedObservable();
+        alive = true;
+        this.synchronizer = new MessageSynchronizer(this);
+    }
+
+    @Override
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+
+        synchronized (netLock)
+        {
+            netPass = true;
+            netLock.notify();
+        }
+    }
+
+    @Override
+    public void setPort(int port)
+    {
+        this.port = port;
+
+        synchronized (netLock)
+        {
+            netPass = true;
+            netLock.notify();
+        }
     }
 
     public void setClientView(ClientView cw)
@@ -70,6 +104,45 @@ public class Client extends Messenger implements ControllerInterface, Runnable
      */
     public void run()
     {
+        synchronized(netLock)
+        {
+            if (ip == null)
+            {
+                cw.getIp();
+                try
+                {
+                    while (!netPass)
+                    {
+                        netLock.wait();
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("Problems with setting the ip");
+                }
+            }
+            netPass = false;
+        }
+
+        synchronized(netLock)
+        {
+            if (port == 0)
+            {
+                cw.getPort();
+                try
+                {
+                    while (!netPass)
+                    {
+                        netLock.wait();
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("Problems with setting the ip");
+                }
+            }
+        }
+
         boolean waitingForServer = true;
         while(waitingForServer)
         {
@@ -110,7 +183,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable
                 {
                     try
                     {
-                        System.out.print("Waiting for the server to start");
+                        System.out.print("Waiting for the server on address "+ip+" to start");
                         TimeUnit.MILLISECONDS.sleep(500);
                         System.out.print(" .");
                         TimeUnit.MILLISECONDS.sleep(500);

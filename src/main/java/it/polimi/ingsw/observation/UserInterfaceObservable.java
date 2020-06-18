@@ -12,6 +12,18 @@ public class UserInterfaceObservable extends Observable<UserInterfaceObserver>{
         super();
     }
 
+    public synchronized void notifyIp(String ip){
+        for(UserInterfaceObserver obs:observers){
+            obs.updateReadIp(ip);
+        }
+    }
+
+    public synchronized void notifyPort(int port){
+        for(UserInterfaceObserver obs:observers){
+            obs.updateReadPort(port);
+        }
+    }
+
     public synchronized void notifyReadNumPlayers(int numPlayers){
         for(UserInterfaceObserver obs:observers){
             obs.updateReadNumPlayers(numPlayers);
