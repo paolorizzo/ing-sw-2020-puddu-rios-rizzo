@@ -13,32 +13,32 @@ import java.util.Map;
 public interface FeedObserver {
 
     //general updates
-    public void updateOk(int id);
-    public void updateKo(int id, String problem);
-    public void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn);
+    void updateOk(int id);
+    void updateKo(int id, String problem);
+    void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn);
 
     //connection phase updates
-    public void updateStart();
-    public void updateID(int id);
-    public void updateNumPlayers(int numPlayers);
-    public void updateAllPlayersConnected();
-    public void updateName(int id, String name);
+    void updateStart();
+    void updateID(int id);
+    void updateNumPlayers(int numPlayers);
+    void updateAllPlayersConnected();
+    void updateName(int id, String name);
 
     //restore phase updates
-    public void updateGameAvailable(boolean available);
-    public void updateRestore(boolean intentToRestore);
-    public void updateRemap(Map<Integer, Integer> idMap);
-    public void updateResume();
+    void updateGameAvailable(boolean available);
+    void updateRestore(boolean intentToRestore);
+    void updateRemap(Map<Integer, Integer> idMap);
+    void updateResume();
 
     //setup phase updates
-    public void updateDeck(Deck deck);
-    public void updateCards(int id, List<Card> cards);
-    public void updateGod(int id, Card card);
+    void updateDeck(Deck deck);
+    void updateCards(int id, List<Card> cards);
+    void updateGod(int id, Card card);
 
     //turn phase updates
-    public void updateEndOfTurnPlayer(int id);
-    public void updateAction(int id, Action action);
-    public void updatePlayerWin(int id);
-    public void updatePlayerLose(int id);
+    void updateEndOfTurnPlayer(int id);
+    void updateAction(int id, Action action);
+    void updatePlayerWin(int id);
+    void updatePlayerLose(int id);
 
 }

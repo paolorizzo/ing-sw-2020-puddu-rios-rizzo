@@ -73,7 +73,7 @@ public class FeedObservable extends Observable<FeedObserver> {
      * notifies a client of what its id is
      * Every client connected so far gets this notification, but it is ignored if a
      * client already possesses an id
-     * @param id
+     * @param id the id given to the client
      */
     public synchronized void notifyID(int id){
         //System.out.println("notifyID with id: "+id);
@@ -191,7 +191,7 @@ public class FeedObservable extends Observable<FeedObserver> {
     /**
      * notifies a voluntary end of turn
      * This happens when a god power allows a player to make a third action, or to pass
-     * @param id
+     * @param id the id of the player that is ending their turn
      */
     public synchronized void notifyEndOfTurnPlayer(int id) {
         for(FeedObserver obs:observers){
