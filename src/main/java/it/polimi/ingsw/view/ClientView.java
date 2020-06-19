@@ -22,7 +22,7 @@ public class ClientView extends View implements UserInterfaceObserver
     private UserInterface ui;
     private NetworkInterface net;
 
-    //private because ClientView is singleton. instance() should be called to get an object of this type
+
     public ClientView(ControllerInterface controller, NetworkInterface net){
         super(controller);
         this.net = net;
@@ -84,44 +84,83 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //updates relative to UserInterface
+
+    /**
+     * sets the ip address that the user chose
+     * @param ip the chosen ip address
+     */
     @Override
     public synchronized void updateReadIp(String ip)
     {
         net.setIp(ip);
     }
 
+    /**
+     * sets the port that the user chose
+     * @param port the chosen port
+     */
     @Override
     public synchronized void updateReadPort(int port)
     {
         net.setPort(port);
     }
 
+    /**
+     * forwards to the Connection FSM the number of players that the client chose
+     * @param numPlayers the chosen number of players
+     */
     @Override
     public synchronized void updateReadNumPlayers(int numPlayers){
         if(currentConnectionState.equals(ConnectionState.READ_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
+
+    /**
+     * forwards to the connection FSM the name that the player chose
+     * @param name the chosen name
+     */
     @Override
     public synchronized void updateReadName(String name){
         if(currentConnectionState.equals(ConnectionState.READ_NAME))
             currentConnectionState.execute(this, name);
     }
+
+    /**
+     * forwards the choice regarding the restoration of a previous game to the Restore FSM
+     * @param restore the choice regarding the possible restoration
+     */
     @Override
     public synchronized void updateReadRestore(boolean restore){
         if(currentRestoreState.equals(RestoreState.READ_RESTORE))
             currentRestoreState.execute(restore);
     }
+
+    /**
+     * forwards to the setup FSM the info regarding the card chosen from the deck by the player
+     * @param numCard the number of the chosen card
+     */
     @Override
     public synchronized void updateReadNumCard(int numCard) {
         if(currentSetupState.equals(SetupState.READ_CARD))
             currentSetupState.execute(this, numCard);
     }
+
+    /**
+     * forwards to the Setup FSM the number of the card that the player picked from the possible cards
+     * @param numCard the chosen card
+     */
     @Override
     public synchronized void updateReadGod(int numCard) {
         if(currentSetupState.equals(SetupState.READ_GOD))
             currentSetupState.execute(this, numCard);
     }
 
+    /**
+     * forwards the action the player took to the correct FSM
+     * this is either the setup FSM if the action is a SetupAction,
+     * and the Game FSM otherwise
+     * @param action the chosen action
+     */
     @Override
     public synchronized void updateReadAction(Action action) {
         if(currentSetupState!= null && currentSetupState.equals(SetupState.READ_SETUP_WORKER))
@@ -130,6 +169,9 @@ public class ClientView extends View implements UserInterfaceObserver
             currentGameState.execute(this, action);
     }
 
+    /**
+     * forwards the decision to end the turn prematurely to the Game FSM
+     */
     @Override
     public synchronized void updateReadVoluntaryEndOfTurn() {
         if(currentGameState!= null && currentGameState.equals(GameState.READ_ACTION)){
@@ -137,14 +179,61 @@ public class ClientView extends View implements UserInterfaceObserver
             currentGameState.execute(this, null);
         }
     }
-    //updates relative to GameObserver
 
+    //general server updates
+
+    /**
+     * if the ok is for this client, forwards to the right FSM if it is expected
+     * or throws an exception if it was not expected
+     * @param id the id of the client that the ok is directed to
+     */
     @Override
-    public synchronized void updateNumPlayers(int numPlayers){
-        //System.out.println("received number of players: " + numPlayers);
-        if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
-            currentConnectionState.execute(this, numPlayers);
+    public synchronized void updateOk(int id) {
+        if(id == this.id){
+            if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
+                currentConnectionState.execute(this, null);
+            }
+            else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
+                currentSetupState.execute(this, null);
+            }
+            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
+                currentRestoreState.execute(null);
+            }
+            else{
+                throw new IncorrectStateException("Received an okay for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
+            }
+        }
     }
+
+    /**
+     * if the ko is directed to this client, forwards it to the FSM that is expecting it,
+     * or else throws an exception if no feedback was expected
+     * @param id the id of the client that the ko is directed to
+     * @param problem a description of the reason of the failure
+     */
+    @Override
+    public synchronized void updateKo(int id, String problem){
+        if(id == this.id){
+            getUi().showError(problem);
+            if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
+                currentConnectionState.execute(this, problem);
+            }
+            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
+                currentRestoreState.execute(problem);
+            }
+            else{
+                throw new IncorrectStateException("Received a ko for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
+            }
+        }
+    }
+
+    /**
+     * logs the info regarding whose turn it is.
+     * if it is this client's turn, selects the appropriate FSM and state to run
+     * @param id the id of the client whose turn it is
+     * @param possibleActions a list of possible actions for that client
+     * @param canEndOfTurn true if the client can decide to end their turn at this time
+     */
     @Override
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         getUi().setCurrentPlayer(id);
@@ -162,6 +251,15 @@ public class ClientView extends View implements UserInterfaceObserver
         }
         //System.out.println("GameState: " + currentGameState);
 
+    }
+
+    //connection phase updates
+
+    @Override
+    public synchronized void updateNumPlayers(int numPlayers){
+        //System.out.println("received number of players: " + numPlayers);
+        if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
+            currentConnectionState.execute(this, numPlayers);
     }
 
     @Override
@@ -313,39 +411,6 @@ public class ClientView extends View implements UserInterfaceObserver
         }
         getUi().removeWorkersOfPlayer(id);
     }
-    @Override
-    public synchronized void updateOk(int id) {
-        if(id == this.id){
-            if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
-                currentConnectionState.execute(this, null);
-            }
-            else if(currentSetupState!=null && currentSetupState.equals(SetupState.RECEIVE_CHECK)){
-                currentSetupState.execute(this, null);
-            }
-            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
-                currentRestoreState.execute(null);
-            }
-            else{
-                throw new IncorrectStateException("Received an okay for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
-            }
-        }
-    }
-
-    @Override
-    public synchronized void updateKo(int id, String problem){
-        if(id == this.id){
-            getUi().showError(problem);
-            if(currentConnectionState.equals(ConnectionState.RECEIVE_CHECK)){
-                currentConnectionState.execute(this, problem);
-            }
-            else if(currentRestoreState != null && currentRestoreState.equals(RestoreState.RECEIVE_CHECK)){
-                currentRestoreState.execute(problem);
-            }
-            else{
-                throw new IncorrectStateException("Received a ko for some communication, but was not waiting for it. I am in state " + currentConnectionState.name());
-            }
-        }
-    }
 
     //sets up the first state for the connection FSM and does NOT execute it, since it will be awakened by
     //an update
@@ -358,7 +423,7 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     public void startRestoreFSM() {
         currentRestoreState = RestoreState.START_RESTORE;
-        currentRestoreState.view = this;
+        RestoreState.view = this;
         currentRestoreState.execute(null);
     }
     public void startSetupFSM() {
