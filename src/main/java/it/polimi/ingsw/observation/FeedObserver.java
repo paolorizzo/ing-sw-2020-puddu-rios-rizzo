@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.Deck;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Observer interface for the Feed, which incapsulates the communication from a model to a view
+ */
 public interface FeedObserver {
 
     //general updates
