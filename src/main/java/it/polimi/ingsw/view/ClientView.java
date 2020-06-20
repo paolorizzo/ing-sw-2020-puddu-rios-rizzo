@@ -58,16 +58,9 @@ public class ClientView extends View implements UserInterfaceObserver
         return id;
     }
 
-    public void getIp()
+    public void askIpAndPort()
     {
-
-        getUi().askIp();
-    }
-
-    public void getPort()
-    {
-
-        getUi().askPort();
+        getUi().askIpAndPort();
     }
 
     public void setNumPlayers(int numPlayers)

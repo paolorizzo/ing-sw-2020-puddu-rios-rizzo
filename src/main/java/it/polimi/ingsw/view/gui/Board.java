@@ -34,8 +34,7 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
     AskNumPlayersMenu askNumPlayersMenu;
     AskNameMenu askNameMenu;
-    AskIpMenu askIpMenu;
-    AskPortMenu askPortMenu;
+    AskIpAndPortMenu askIpAndPortMenu;
     AskRestoreMenu askRestoreMenu;
     PlayersMenu playersMenu;
     AskCardMenu askCardMenu;
@@ -98,13 +97,9 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         askNumPlayersMenu.addObserver(cw);
         groupRoot.getChildren().add(askNumPlayersMenu.getGroup());
 
-        askIpMenu = new AskIpMenu();
-        askIpMenu.addObserver(cw);
-        groupRoot.getChildren().add(askIpMenu.getGroup());
-
-        askPortMenu = new AskPortMenu();
-        askPortMenu.addObserver(cw);
-        groupRoot.getChildren().add(askPortMenu.getGroup());
+        askIpAndPortMenu = new AskIpAndPortMenu();
+        askIpAndPortMenu.addObserver(cw);
+        groupRoot.getChildren().add(askIpAndPortMenu.getGroup());
 
         askNameMenu = new AskNameMenu();
         askNameMenu.addObserver(cw);
@@ -333,15 +328,8 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     }
 
     @Override
-    public void askIp()
-    {
-        askIpMenu.show();
-    }
-
-    @Override
-    public void askPort()
-    {
-        askPortMenu.show();
+    public void askIpAndPort() {
+        askIpAndPortMenu.show();
     }
 
     @Override

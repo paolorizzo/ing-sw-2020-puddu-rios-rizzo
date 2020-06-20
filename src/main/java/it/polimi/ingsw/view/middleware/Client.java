@@ -52,12 +52,6 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     public void setIp(String ip)
     {
         this.ip = ip;
-
-        synchronized (netLock)
-        {
-            netPass = true;
-            netLock.notify();
-        }
     }
 
     @Override
@@ -104,31 +98,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
      */
     public void run()
     {
-        synchronized(netLock)
-        {
-            if (ip == null)
-            {
-                cw.getIp();
-                try
-                {
-                    while (!netPass)
-                    {
-                        netLock.wait();
-                    }
-                }
-                catch (InterruptedException e)
-                {
-                    System.err.println("Problems with setting the ip");
-                }
-            }
-            netPass = false;
-        }
+
 
         synchronized(netLock)
         {
-            if (port == 0)
+            if (ip == null && port == 0)
             {
-                cw.getPort();
+                cw.askIpAndPort();
                 try
                 {
                     while (!netPass)

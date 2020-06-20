@@ -1,5 +1,4 @@
 package it.polimi.ingsw;
-
 import it.polimi.ingsw.view.middleware.Server;
 
 import java.io.IOException;

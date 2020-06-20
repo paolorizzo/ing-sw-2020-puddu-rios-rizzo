@@ -29,7 +29,7 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
     public void loopTest(int port){
 
         Server server = buildAndRunServer(port);
-        safeWaitFor(1);
+        safeWaitFor(2);
         Client client = buildAndRunClient(port);
 
 

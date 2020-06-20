@@ -34,6 +34,5 @@ public interface UserInterface
     void setCurrentPlayer(int id);
     void showError(String e);
 
-    void askIp();
-    void askPort();
+    void askIpAndPort();
 }

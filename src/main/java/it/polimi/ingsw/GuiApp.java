@@ -3,8 +3,11 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.Board;
 import it.polimi.ingsw.view.middleware.Client;
+import it.polimi.ingsw.view.middleware.Server;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class GuiApp extends Application {
@@ -41,4 +44,6 @@ public class GuiApp extends Application {
 
         launch(args);
     }
+
+
 }
