@@ -293,7 +293,6 @@ public class Controller implements ControllerInterface
             phase = Phase.SETUP;
         model.feed.notifyDeck(model.game.getDeck());
     }
-
     /**
      * checks that the request to publish the cards is legit, by checking:
      * that the chooser is the first player
