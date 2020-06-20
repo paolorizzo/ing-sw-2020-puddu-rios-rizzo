@@ -15,14 +15,14 @@ public class AskNameMenu extends Menu {
     final TextField textName;
     Label labelName;
     Rectangle enter;
-    public AskNameMenu() {
-        super();
+    public AskNameMenu(int widthResolution, int heightResolution) {
+        super(widthResolution, heightResolution);
         rect = new Rectangle(200, 140);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400/2-rect.getWidth()/2);
-        rect.setTranslateY(800/2-rect.getHeight()/2);
+        rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
+        rect.setTranslateY(heightResolution/2-rect.getHeight()/2);
 
         labelName = new Label("Insert your name: ");
         labelName.setTranslateX(rect.getTranslateX() + 30);

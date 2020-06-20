@@ -11,14 +11,15 @@ public class SelectTypeActionMenu extends Menu {
     Rectangle moveButton;
     Rectangle buildButton;
     Rectangle unselectButton;
-    public SelectTypeActionMenu(final ActionFSM actionFSM) {
-        super();
+    public SelectTypeActionMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM) {
+        super(widthResolution, heightResolution);
+
 
         rect = new Rectangle(200, 100);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400-rect.getWidth()-50);
+        rect.setTranslateX(widthResolution-rect.getWidth()-50);
         rect.setTranslateY(50);
 
         moveButton = new Rectangle(60, 30);

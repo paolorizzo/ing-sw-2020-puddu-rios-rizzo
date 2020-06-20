@@ -13,14 +13,14 @@ public class AskRestoreMenu extends Menu {
     Rectangle yesRect;
     Rectangle noRect;
 
-    public AskRestoreMenu() {
-        super();
+    public AskRestoreMenu(int widthResolution, int heightResolution) {
+        super(widthResolution, heightResolution);
         rect = new Rectangle(200, 100);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400 / 2 - rect.getWidth() / 2);
-        rect.setTranslateY(800 / 2 - rect.getHeight() / 2);
+        rect.setTranslateX(widthResolution / 2 - rect.getWidth() / 2);
+        rect.setTranslateY(heightResolution / 2 - rect.getHeight() / 2);
         rect.setTranslateZ(0);
 
         yesRect = new Rectangle(60, 60);

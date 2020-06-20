@@ -20,8 +20,8 @@ public class PlayersMenu extends Menu {
     private Text [] playerNames;
     private Label [] playerCardLabels;
     private Label currentPlayerLabel;
-    public PlayersMenu(){
-        super();
+    public PlayersMenu(int widthResolution, int heightResolution) {
+        super(widthResolution, heightResolution);
         offsetX = 20;
         offsetY = 20;
         currentPlayerLabel = new Label("");

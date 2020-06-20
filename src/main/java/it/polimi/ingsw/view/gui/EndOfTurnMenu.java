@@ -9,15 +9,15 @@ import javafx.scene.shape.Rectangle;
 public class EndOfTurnMenu extends Menu {
     Rectangle endOfTurn;
 
-    public EndOfTurnMenu(final ActionFSM actionFSM) {
-        super();
+    public EndOfTurnMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM) {
+        super(widthResolution, heightResolution);
 
         endOfTurn = new Rectangle(30, 30);
         endOfTurn.setFill(Color.RED);
         endOfTurn.setStroke(Color.BLACK);
         endOfTurn.setStrokeWidth(2);
-        endOfTurn.setTranslateX(1400 - 150 - endOfTurn.getWidth());
-        endOfTurn.setTranslateY(800 - 100 - endOfTurn.getHeight());
+        endOfTurn.setTranslateX(widthResolution - 150 - endOfTurn.getWidth());
+        endOfTurn.setTranslateY(heightResolution - 100 - endOfTurn.getHeight());
 
         endOfTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

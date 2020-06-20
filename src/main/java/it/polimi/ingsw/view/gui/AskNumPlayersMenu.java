@@ -13,14 +13,14 @@ public class AskNumPlayersMenu extends Menu {
     Rectangle twoPlayer;
     Rectangle treePlayer;
 
-    public AskNumPlayersMenu() {
-        super();
+    public AskNumPlayersMenu(int widthResolution, int heightResolution) {
+        super(widthResolution, heightResolution);
         rect = new Rectangle(200, 100);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400 / 2 - rect.getWidth() / 2);
-        rect.setTranslateY(800 / 2 - rect.getHeight() / 2);
+        rect.setTranslateX(widthResolution / 2 - rect.getWidth() / 2);
+        rect.setTranslateY(heightResolution / 2 - rect.getHeight() / 2);
         rect.setTranslateZ(0);
 
         twoPlayer = new Rectangle(60, 60);

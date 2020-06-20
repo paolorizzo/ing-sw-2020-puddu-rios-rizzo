@@ -13,14 +13,14 @@ public class AskIpAndPortMenu extends Menu
     final TextField ipText, portText;
     Label ipName, portName;
     Rectangle enter;
-    public AskIpAndPortMenu() {
-        super();
+    public AskIpAndPortMenu(int widthResolution, int heightResolution) {
+        super(widthResolution, heightResolution);
         rect = new Rectangle(280, 250);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400/2-rect.getWidth()/2);
-        rect.setTranslateY(800/2-rect.getHeight()/2);
+        rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
+        rect.setTranslateY(heightResolution/2-rect.getHeight()/2);
 
         ipName = new Label("Insert a valid IP address for the server: ");
         ipName.setTranslateX(rect.getTranslateX() + 30);

@@ -13,14 +13,14 @@ public class SelectPieceMenu extends Menu {
     Rectangle LEVEL2Button;
     Rectangle LEVEL3Button;
     Rectangle DOMEButton;
-    public SelectPieceMenu(final ActionFSM actionFSM) {
-        super();
+    public SelectPieceMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM) {
+        super(widthResolution, heightResolution);
 
         rect = new Rectangle(200, 200);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(1400-rect.getWidth()-50);
+        rect.setTranslateX(widthResolution-rect.getWidth()-50);
         rect.setTranslateY(200);
 
         LEVEL1Button = new Rectangle(50, 50);

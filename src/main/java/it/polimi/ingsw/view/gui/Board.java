@@ -45,8 +45,8 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     WinMenu winMenu;
     LoseMenu loseMenu;
 
-    private final int WIDTH = 1400;
-    private final int HEIGHT = 800;
+    private final int WIDTH = 1200;
+    private final int HEIGHT = 700;
     private int numPlayers;
 
     public Board(ClientView cw) {
@@ -90,52 +90,52 @@ public class Board extends UserInterfaceObservable implements UserInterface {
             }
         }
 
-        errorVisualizer = new ErrorVisualizer();
+        errorVisualizer = new ErrorVisualizer(WIDTH, HEIGHT);
         groupRoot.getChildren().add(errorVisualizer);
 
-        askNumPlayersMenu = new AskNumPlayersMenu();
+        askNumPlayersMenu = new AskNumPlayersMenu(WIDTH, HEIGHT);
         askNumPlayersMenu.addObserver(cw);
         groupRoot.getChildren().add(askNumPlayersMenu.getGroup());
 
-        askIpAndPortMenu = new AskIpAndPortMenu();
+        askIpAndPortMenu = new AskIpAndPortMenu(WIDTH, HEIGHT);
         askIpAndPortMenu.addObserver(cw);
         groupRoot.getChildren().add(askIpAndPortMenu.getGroup());
 
-        askNameMenu = new AskNameMenu();
+        askNameMenu = new AskNameMenu(WIDTH, HEIGHT);
         askNameMenu.addObserver(cw);
         groupRoot.getChildren().add(askNameMenu.getGroup());
 
-        askRestoreMenu = new AskRestoreMenu();
+        askRestoreMenu = new AskRestoreMenu(WIDTH, HEIGHT);
         askRestoreMenu.addObserver(cw);
         groupRoot.getChildren().add(askRestoreMenu.getGroup());
 
-        playersMenu = new PlayersMenu();
+        playersMenu = new PlayersMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(playersMenu.getGroup());
 
-        askCardMenu = new AskCardMenu();
+        askCardMenu = new AskCardMenu(WIDTH, HEIGHT);
         askCardMenu.addObserver(cw);
         groupRoot.getChildren().add(askCardMenu.getGroup());
 
-        askGodMenu = new AskGodMenu();
+        askGodMenu = new AskGodMenu(WIDTH, HEIGHT);
         askGodMenu.addObserver(cw);
         groupRoot.getChildren().add(askGodMenu.getGroup());
 
-        selectTypeActionMenu = new SelectTypeActionMenu(actionFSM);
+        selectTypeActionMenu = new SelectTypeActionMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(selectTypeActionMenu.getGroup());
 
-        selectPieceMenu = new SelectPieceMenu(actionFSM);
+        selectPieceMenu = new SelectPieceMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(selectPieceMenu.getGroup());
 
-        endOfTurnMenu = new EndOfTurnMenu(actionFSM);
+        endOfTurnMenu = new EndOfTurnMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(endOfTurnMenu.getGroup());
         //assigning menus
         actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
 
 
-        winMenu = new WinMenu();
+        winMenu = new WinMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(winMenu.getGroup());
 
-        loseMenu = new LoseMenu();
+        loseMenu = new LoseMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(loseMenu.getGroup());
 
         pieceBag = new PieceBag();

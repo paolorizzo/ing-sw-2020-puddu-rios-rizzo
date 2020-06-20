@@ -16,13 +16,16 @@ public class ErrorVisualizer extends Group {
     StackPane errorPane;
     Text errorText;
     Rectangle rect;
-    public ErrorVisualizer(){
+    int heightResolution, widthResolution;
+    public ErrorVisualizer(int widthResolution, int heightResolution){
+        this.widthResolution = widthResolution;
+        this.heightResolution = heightResolution;
         errorPane = new StackPane();
-        rect = new Rectangle(1400, 50);
+        rect = new Rectangle(widthResolution, 50);
         rect.setFill(Color.RED);
         rect.setVisible(false);
 
-        errorPane.setTranslateY(800-rect.getHeight());
+        errorPane.setTranslateY(heightResolution-rect.getHeight());
 
         errorText = new Text();
         errorText.setText("");
@@ -39,7 +42,7 @@ public class ErrorVisualizer extends Group {
     public void showError(String error){
         errorText.setText(error);
         errorText.setOpacity(1.0);
-        errorPane.setTranslateY(800-rect.getHeight());
+        errorPane.setTranslateY(heightResolution-rect.getHeight());
 
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(2000), errorText);
         fadeTransition.setFromValue(1.0);
