@@ -263,6 +263,7 @@ public class Controller implements ControllerInterface
                 model.feed.notifyOk(id);
                 model.feed.notifyRestore(intentToRestore);
                 model.load();
+                phase = Phase.GAME;
             }
             else{
                 model.feed.notifyOk(id);

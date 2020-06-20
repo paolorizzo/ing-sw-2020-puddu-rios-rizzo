@@ -78,6 +78,7 @@ public class PersistenceGame {
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToGameJson));
             PersistenceGame instance = gson.fromJson(reader, PersistenceGame.class);
+
             return instance;
         }
         catch(FileNotFoundException e){
