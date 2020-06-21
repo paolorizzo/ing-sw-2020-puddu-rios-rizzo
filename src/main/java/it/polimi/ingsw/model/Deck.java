@@ -2,9 +2,9 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import it.polimi.ingsw.model.power.*;
+import it.polimi.ingsw.view.cli.RectangleCLI;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +25,17 @@ public class Deck implements Serializable {
      */
     private void loadCards(){
         try{
-            File file = new File("./src/main/resources/cards.json");
-            StringBuilder stringCards = new StringBuilder((int)file.length());
-            Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
-                stringCards.append(scanner.nextLine() + System.lineSeparator());
+            StringBuilder stringCards = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(RectangleCLI.class.getResourceAsStream("/cards.json")));
+            try{
+                while (reader.ready()) {
+                    String line = reader.readLine();
+                    stringCards.append(line + System.lineSeparator());
+                }
+            }
+            catch(IOException e)
+            {
+                System.out.println("error in reading the file");
             }
 
             JsonObject jsonObject = (JsonObject) new JsonParser().parse(stringCards.toString());

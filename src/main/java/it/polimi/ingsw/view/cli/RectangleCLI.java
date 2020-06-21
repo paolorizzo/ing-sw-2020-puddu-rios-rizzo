@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.cli;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -319,18 +318,16 @@ public class RectangleCLI
     protected static char[][] obtainMask(String URI)
     {
         List<char[]> l = new ArrayList();
-        try
-        {
-            File file = new File(URI);
-            Scanner myReader = new Scanner(file);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                l.add(data.toCharArray());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(RectangleCLI.class.getResourceAsStream(URI)));
+        try{
+            while (reader.ready()) {
+                String line = reader.readLine();
+                l.add(line.toCharArray());
             }
         }
-        catch(FileNotFoundException e)
+        catch(IOException e)
         {
-            System.out.println("File not found!");
+            System.out.println("error in reading the file");
         }
 
         char[][] matr2 = new char[12][12];
