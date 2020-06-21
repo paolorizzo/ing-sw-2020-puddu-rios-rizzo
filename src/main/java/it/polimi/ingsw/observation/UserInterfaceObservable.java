@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Observable class for the interaction between the User Interfaces and the ClientView
+ */
 public class UserInterfaceObservable extends Observable<UserInterfaceObserver>{
 
     /**
