@@ -9,7 +9,12 @@ import it.polimi.ingsw.view.middleware.NetworkInterface;
 import java.util.List;
 import java.util.Map;
 
-//TODO test basically everything in this class
+/**
+ * A class that takes the role of View in the MVC pattern on the client
+ * On the client, the Client class takes the role of both Controller and model
+ * and communicates with the ClientView accordingly, with the exception
+ * of interactions that are outside of the MVC pattern, such as the setting of the user interface
+ */
 public class ClientView extends View implements UserInterfaceObserver
 {
     //finite state machine states
@@ -22,57 +27,87 @@ public class ClientView extends View implements UserInterfaceObserver
     private UserInterface ui;
     private NetworkInterface net;
 
-
+    /**
+     * constructs the ClientView, with info regarding its controller
+     * and its network interface
+     * @param controller the controller of this view, which in this case is the Client
+     * @param net the network interface
+     */
     public ClientView(ControllerInterface controller, NetworkInterface net){
         super(controller);
         this.net = net;
         id = -1;
     }
 
+    /**
+     * constructs the ClientView, with info about its controller,
+     * which in this case is the Client
+     * sets the id to a default value
+     * @param controller the controller of this View, which in this case is the Client
+     */
     public ClientView(ControllerInterface controller){
         super(controller);
         id = -1;
     }
 
+    /**
+     * notifies the loss of the connection on the terminal
+     */
     public void connectionLost()
     {
-
         System.out.println("The server is not reachable");
     }
 
+    /**
+     * setter for the ui
+     * @param ui the reference to the ui
+     */
     public void setUi(UserInterface ui)
     {
-
         this.ui = ui;
     }
 
+    /**
+     * getter for the ui that's being used
+     * @return the ui
+     */
     public UserInterface getUi()
     {
-
         return ui;
     }
 
+    /**
+     * getter for the id
+     * @return the id
+     */
     public int getId()
     {
-
         return id;
     }
 
+    /**
+     * asks the user to insert an id and a port through the ui
+     */
     public void askIpAndPort()
     {
         getUi().askIpAndPort();
     }
 
+    /**
+     * setter for the number of players
+     * @param numPlayers the value to be given to the number of players
+     */
     public void setNumPlayers(int numPlayers)
     {
-
         getUi().setNumPlayers(numPlayers);
     }
 
-    //TODO should not be accepted if ID is already set, meaning it is still -1
+    /**
+     * setter for the id
+     * @param id the value to be given to the id
+     */
     public void setID(int id)
     {
-
         this.id = id;
     }
 
@@ -248,30 +283,20 @@ public class ClientView extends View implements UserInterfaceObserver
 
     //connection phase updates
 
+    /**
+     * starts the Connection FSM
+     */
     @Override
-    public synchronized void updateNumPlayers(int numPlayers){
-        //System.out.println("received number of players: " + numPlayers);
-        if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
-            currentConnectionState.execute(this, numPlayers);
+    public synchronized void updateStart(){
+        //System.out.println("starting this client");
+        if(currentConnectionState.equals(ConnectionState.READY))
+            currentConnectionState.execute(this, null);
     }
 
-    @Override
-    public void updateEndOfTurnPlayer(int id){
-        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
-            //torno in attesa del mio turno
-            currentGameState = GameState.REQUEST_ACTIONS;
-            currentGameState.execute(this, null);
-        }
-    }
-
-    @Override
-    public synchronized void updateAction(int id, Action action){
-        getUi().executeAction(action);
-        //System.out.println("Execute action: "+action.toString());
-    }
-
-    //updates relative to PlayersObserver
-
+    /**
+     * forwards the id to the Connection FSM, if it was expecting it
+     * @param id the id given by the server
+     */
     @Override
     public synchronized void updateID(int id){
 
@@ -286,20 +311,32 @@ public class ClientView extends View implements UserInterfaceObserver
             currentConnectionState.execute(this, id);
     }
 
+    /**
+     * forwards the number of players of the game to the Connection FSM
+     * @param numPlayers the number of players of the game
+     */
+    @Override
+    public synchronized void updateNumPlayers(int numPlayers){
+        //System.out.println("received number of players: " + numPlayers);
+        if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
+            currentConnectionState.execute(this, numPlayers);
+    }
+
+    /**
+     * forwards to the COnnection FSM the information that all the expected players are connected
+     */
     @Override
     public synchronized void updateAllPlayersConnected(){
         if(currentConnectionState.equals(ConnectionState.RECEIVE_ALL_PLAYERS_CONNECTED))
             currentConnectionState.execute(this, null);
     }
 
-    @Override
-    public synchronized void updateStart(){
-        //System.out.println("starting this client");
-        if(currentConnectionState.equals(ConnectionState.READY))
-            currentConnectionState.execute(this, null);
-    }
-
-    //this method supposes that only valid names are received
+    /**
+     * forwards the information regarding the association between
+     * an id and a name to the user interface and the Connection FSM
+     * @param id the id of a player
+     * @param name the name corresponding to that player
+     */
     @Override
     public synchronized void updateName(int id, String name){
         getUi().registerPlayer(id, name);
@@ -359,6 +396,11 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //Setup Phase Updates
+
+    /**
+     * forwards the deck to the Setup FSM, if it was expecting it
+     * @param deck the deck coming from the server
+     */
     @Override
     public synchronized void updateDeck(Deck deck) {
 
@@ -368,7 +410,11 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
-
+    /**
+     * forwards to the Setup FSM the list of cards from which the client can choose theirs
+     * @param id the id of the player for whom this list is valid
+     * @param cards the cards from which the player can choose from
+     */
     @Override
     public synchronized void updateCards(int id, List<Card> cards) {
         getUi().setCurrentPlayer(id);
@@ -377,11 +423,50 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    /**
+     * registers the connection between an id and a card
+     * @param id the id of the player
+     * @param card the card the player chose
+     */
     @Override
     public synchronized void updateGod(int id, Card card){
         getUi().registerGod(id, card);
     }
 
+    // updates relative to the Game Phase
+
+    /**
+     * forwards the information regarding another player's end of turn
+     * to the Game FSM. If this results in it being this client's turn,
+     * this client starts to serve it
+     * @param id the id of the current player
+     */
+    @Override
+    public void updateEndOfTurnPlayer(int id){
+        if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
+            //torno in attesa del mio turno
+            currentGameState = GameState.REQUEST_ACTIONS;
+            currentGameState.execute(this, null);
+        }
+    }
+
+    /**
+     * executes the action on the user interface
+     * @param id the id of the player that performed the action
+     * @param action the action taken
+     */
+    @Override
+    public synchronized void updateAction(int id, Action action){
+        getUi().executeAction(action);
+        //System.out.println("Execute action: "+action.toString());
+    }
+
+    /**
+     * announces a win or a loss depending on whether the winning id
+     * matches the client id
+     * also puts the Game FSM in the proper state
+     * @param id the id of the winning client
+     */
     @Override
     public synchronized void updatePlayerWin(int id){
         if(id == getId()){
@@ -395,6 +480,13 @@ public class ClientView extends View implements UserInterfaceObserver
         }
         currentGameState.execute(this, null);
     }
+
+    /**
+     * notifies the loss if the losing player's id matches the client's id
+     * puts the losing client in the correct state,
+     * and removes the losing client's workers from the ui
+     * @param id the id of the losing player
+     */
     @Override
     public synchronized void updatePlayerLose(int id){
         if(id == getId()){
@@ -405,8 +497,12 @@ public class ClientView extends View implements UserInterfaceObserver
         getUi().removeWorkersOfPlayer(id);
     }
 
-    //sets up the first state for the connection FSM and does NOT execute it, since it will be awakened by
-    //an update
+    //methods used to start the client and its FSMs
+
+    /**
+     * primes the Connection FSM for execution
+     * It will actually be started by an update
+     */
     private void startConnectionFSM(){
         currentConnectionState = ConnectionState.READY;
     }
@@ -419,15 +515,26 @@ public class ClientView extends View implements UserInterfaceObserver
         RestoreState.view = this;
         currentRestoreState.execute(null);
     }
+
+    /**
+     * starts the Setup FSM
+     */
     public void startSetupFSM() {
         currentSetupState = SetupState.START_SETUP;
         currentSetupState.execute(this, null);
     }
+
+    /**
+     * starts the Game FSM
+     */
     public void startGameFSM() {
         currentGameState = GameState.START_GAME;
         currentGameState.execute(this, null);
     }
-    //start the first FSM
+
+    /**
+     * starts the ui and the Connection FSM
+     */
     public void start(){
         ui.showLogo();
         startConnectionFSM();
