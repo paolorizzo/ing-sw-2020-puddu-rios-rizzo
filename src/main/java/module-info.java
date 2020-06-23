@@ -1,8 +1,7 @@
-module ing.sw.puddu.rios.rizzo
+module it.polimi.ingsw
 {
-    requires javafx.fxml;
     requires javafx.controls;
     requires javafx.graphics;
     requires com.google.gson;
-    opens it.polimi.ingsw;
+    exports it.polimi.ingsw;
 }
