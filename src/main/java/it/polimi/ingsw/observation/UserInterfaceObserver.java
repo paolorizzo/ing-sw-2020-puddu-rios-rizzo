@@ -2,6 +2,9 @@ package it.polimi.ingsw.observation;
 
 import it.polimi.ingsw.model.Action;
 
+/**
+ * Observer interface for the communication from the User Interfaces to the View in the client
+ */
 public interface UserInterfaceObserver
 {
     void updateReadIp(String ip);

@@ -1,17 +1,12 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.exception.IncorrectStateException;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.view.cli.Cli;
-import it.polimi.ingsw.view.middleware.Connection;
-
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
-//TODO implement remaining states
-//TODO add ID_ACK state
 public enum ConnectionState {
     READY{
+        /**
+         * entry point for the Connection FSM, simply goes to the next state and executes it
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("starting the fsm");
             view.currentConnectionState = REQUEST_ID;
@@ -19,7 +14,11 @@ public enum ConnectionState {
         }
     },
     REQUEST_ID {
-        //publishes the request for an id
+        /**
+         * requests an id to the controller of the view and advances the state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("Richiedo ID");
             view.getController().generateId();
@@ -27,7 +26,11 @@ public enum ConnectionState {
         }
     },
     RECEIVE_ID {
-        //sets the id
+        /**
+         * memorizes the id and executes the next state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int id = (int) input;
             //System.out.println("My id is: " + id);
@@ -36,10 +39,14 @@ public enum ConnectionState {
             view.currentConnectionState.execute(view, null);
         }
     },
-    //decides the branch of the fsm to take based on the id
     ACK_ID {
-        //sends ack of the reception of the id to the controller
-        //this is used to synchronize the connection of the different clients
+        /**
+         * sends ack of the reception of the id to the controller
+         * this is used to synchronize the connection of the different clients
+         * depending on the id, decides the branch of the FSM to take
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int id = view.getId();
             view.getController().ackId(id);
@@ -218,10 +225,11 @@ public enum ConnectionState {
     private static Object koInput = null;
     private static Object okInput = null;
 
-    //default implementation of the body of the state, does nothing
-    //TODO change to abstract when all the states are implemented
-    public void execute(ClientView view, Object input){
-
-    }
+    /**
+     * default implementation of the method for the execution of a state
+     * @param view the view on which to act
+     * @param input the input for the execution of the state
+     */
+    public abstract void execute(ClientView view, Object input);
 
 }
