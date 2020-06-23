@@ -18,7 +18,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +44,17 @@ public class AskGodMenu extends Menu {
         cardLabels = new HashMap<>();
 
         try{
-            File file = new File("./src/main/resources/cards.json");
-            StringBuilder stringCards = new StringBuilder((int)file.length());
-            Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
-                stringCards.append(scanner.nextLine() + System.lineSeparator());
+            StringBuilder stringCards = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Deck.class.getResourceAsStream("/cards.json")));
+            try{
+                while (reader.ready()) {
+                    String line = reader.readLine();
+                    stringCards.append(line + System.lineSeparator());
+                }
+            }
+            catch(IOException e)
+            {
+                System.out.println("error in reading the file");
             }
 
             JsonObject jsonObject = (JsonObject) new JsonParser().parse(stringCards.toString());

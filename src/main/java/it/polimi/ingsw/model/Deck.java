@@ -26,7 +26,7 @@ public class Deck implements Serializable {
     private void loadCards(){
         try{
             StringBuilder stringCards = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(RectangleCLI.class.getResourceAsStream("/cards.json")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Deck.class.getResourceAsStream("/cards.json")));
             try{
                 while (reader.ready()) {
                     String line = reader.readLine();

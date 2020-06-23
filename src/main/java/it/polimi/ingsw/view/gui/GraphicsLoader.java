@@ -4,18 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.model.power.PowerStrategy;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Mesh;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.*;
 import java.util.*;
 
 public class GraphicsLoader {
@@ -56,12 +51,14 @@ public class GraphicsLoader {
     void loader() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
         try{
-            File file = new File("./src/main/resources/graphics.json");
-            StringBuilder stringGraphics = new StringBuilder((int)file.length());
-            Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
-                stringGraphics.append(scanner.nextLine() + System.lineSeparator());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(GraphicsLoader.class.getResourceAsStream("/graphics.json")));
+            StringBuilder stringGraphics = new StringBuilder();
+            while (reader.ready()) {
+                String line = reader.readLine();
+                stringGraphics.append(line.toCharArray());
             }
+
             JsonObject jsonObject = (JsonObject) new JsonParser().parse(stringGraphics.toString());
 
             JsonArray meshes = jsonObject.get("meshes").getAsJsonArray();
@@ -101,6 +98,7 @@ public class GraphicsLoader {
                     }
                 }));
             }
+
         }catch (Exception e){
             System.out.println("Error during the loading of graphic: "+e.getMessage());
         }
@@ -114,48 +112,46 @@ public class GraphicsLoader {
     }
 
     private void loaderMesh(String name, String URI){
-        TriangleMesh mesh = createMeshFromOBJ("./src/main/resources/"+URI);
+        TriangleMesh mesh = createMeshFromOBJ("/"+URI);
         synchronized (meshes){
             meshes.put(name, mesh);
         }
     }
-    private void loaderTexture(String name, String URI){
-        File file = new File("./src/main/resources/"+URI);
-        String path = file.getAbsolutePath();
+    private void loaderTexture(String name, String URI) {
+
         PhongMaterial texture = new PhongMaterial();
         try{
-            FileInputStream inputStream = new FileInputStream(path);
+            InputStream inputStream = GraphicsLoader.class.getResourceAsStream("/"+URI);
             Image i = new Image(inputStream);
             texture.setDiffuseMap(i);
         }catch(Exception e){
-            System.out.println("file "+path+" doesn't exists");
+            System.out.println("file texture /"+URI+"  doesn't exists");
         }
         synchronized (textures){
             textures.put(name, texture);
         }
     }
     private void loaderImage(String name, String URI){
-        File file = new File("./src/main/resources/"+URI);
-        String path = file.getAbsolutePath();
         try{
-            FileInputStream inputStream = new FileInputStream(path);
+            InputStream inputStream = GraphicsLoader.class.getResourceAsStream("/"+URI);
             Image image = new Image(inputStream);
             synchronized (images){
                 images.put(name, image);
             }
         }catch(Exception e){
-            System.out.println("file "+path+" doesn't exists");
+            System.out.println("file image /"+URI+" doesn't exists");
         }
 
     }
     TriangleMesh createMeshFromOBJ(String URI){
         TriangleMesh mesh = new TriangleMesh();
         try {
-            File myObj = new File(URI);
-            Scanner myReader = new Scanner(myObj);
+            BufferedReader myReader = new BufferedReader(new InputStreamReader(GraphicsLoader.class.getResourceAsStream(URI)));
+
             mesh.setVertexFormat(VertexFormat.POINT_TEXCOORD);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
+
+            while (myReader.ready()) {
+                String data = myReader.readLine();
                 Scanner line = new Scanner(data);
                 line.useLocale(Locale.US); // . invece di , in file .obj
                 if(data.charAt(0)=='v' && data.charAt(1)=='t') {
@@ -205,6 +201,8 @@ public class GraphicsLoader {
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred with "+URI+": can't create the mesh");
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return mesh;
