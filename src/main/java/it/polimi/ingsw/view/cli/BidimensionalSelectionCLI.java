@@ -45,7 +45,7 @@ public class BidimensionalSelectionCLI extends SelectionCLI
     @Override
     public void handleWASD(String input)
     {
-        switch(input)
+        switch(input.toLowerCase())
         {
             case "a":
                 if(x == 0 && xcircular)

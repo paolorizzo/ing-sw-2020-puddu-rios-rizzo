@@ -36,6 +36,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
 
     }
+
     @Override
     public void setCurrentPlayer(int id)
     {
@@ -43,6 +44,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         CliUtils.handleCurrentPlayer(id, model);
 
     }
+
     @Override
     public void showError(String e)
     {
@@ -66,10 +68,14 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
         notifyReadName(CliUtils.handleUsername());
     }
+
     @Override
-    public void askRestore(){
-        //TODO to complete this method
+    public void askRestore()
+    {
+
+        notifyReadRestore(CliUtils.handleRestore());
     }
+
     @Override
     public void askCard(Deck deck)
     {
@@ -197,6 +203,8 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public int getNumPlayersRegister()
     {
+
         return players.size();
+
     }
 }

@@ -39,6 +39,17 @@ public class CliUtils
     }
 
     //SETUP
+    static boolean handleRestore()
+    {
+        showRestore();
+        String choice = " ";
+        while(!(choice.toLowerCase().equals("y") || choice.toLowerCase().equals("n")))
+        {
+            choice = readString();
+        }
+        return choice.toLowerCase().equals("y");
+    }
+
     static String handleUsername()
     {
         showUsernameDialog();
@@ -803,6 +814,28 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    static void showRestore()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,10);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,16,2);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("   THERE IS A SAVED GAME WITH THESE USERNAMES         DO YOU WANT TO CONTINUE THAT? Y / N ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 18,4);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
 
     private static void showCard(String desc, String title, int userSelection)
     {
