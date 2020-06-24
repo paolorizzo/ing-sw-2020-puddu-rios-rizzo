@@ -399,6 +399,10 @@
 		{
 			"name": "dome_button_disabled",
 			"file": "gui/menu/domeButtonDisabled.png"
+		},
+		{
+			"name": "disconnected",
+			"file": "gui/menu/disconnected.png"
 		}
 	]
 }

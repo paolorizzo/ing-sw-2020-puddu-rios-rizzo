@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface UserInterface
 {
+    void askIpAndPort();
     void askNumPlayers();
     void askUsername();
     void askRestore();
@@ -37,7 +38,5 @@ public interface UserInterface
     void setCurrentPlayer(int id);
     void showError(String e);
 
-    void askIpAndPort();
-
-    void showDisconnection();
+    void showDisconnection(String message);
 }

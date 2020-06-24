@@ -46,9 +46,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     }
 
     @Override
-    public void showDisconnection()
+    public void showDisconnection(String message)
     {
-        System.out.println("One of the other players disconnected");
+        System.out.println(message);
     }
 
     @Override

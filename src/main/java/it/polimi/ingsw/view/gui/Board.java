@@ -44,6 +44,7 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     EndOfTurnMenu endOfTurnMenu;
     WinMenu winMenu;
     LoseMenu loseMenu;
+    DisconnectionMenu disconnectedMenu;
 
     private final int WIDTH = 1200;
     private final int HEIGHT = 700;
@@ -126,7 +127,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
         selectPieceMenu = new SelectPieceMenu(WIDTH, HEIGHT, actionFSM, pieceBag);
         groupRoot.getChildren().add(selectPieceMenu.getGroup());
-        selectPieceMenu.show();
 
         endOfTurnMenu = new EndOfTurnMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(endOfTurnMenu.getGroup());
@@ -139,7 +139,8 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         loseMenu = new LoseMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(loseMenu.getGroup());
 
-
+        disconnectedMenu = new DisconnectionMenu(WIDTH, HEIGHT);
+        groupRoot.getChildren().add(disconnectedMenu.getGroup());
     }
     public Scene getScene(){
         return scene;
@@ -327,11 +328,7 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
     }
 
-    @Override
-    public void showDisconnection()
-    {
-        //TODO implement this
-    }
+
 
     @Override
     public void askIpAndPort() {
@@ -410,6 +407,15 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         playersMenu.show();
         this.numPlayers = numPlayers;
     }
+
+
+    @Override
+    public void showDisconnection(String message)
+    {
+        disconnectedMenu.show(message);
+    }
+
+
     @Override
     public int getNumPlayers() {
         return numPlayers;
@@ -430,4 +436,5 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     public int getNumPlayersRegister() {
         return players.size();
     }
+
 }

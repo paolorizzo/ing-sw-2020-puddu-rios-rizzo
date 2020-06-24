@@ -413,7 +413,8 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateDisconnection()
     {
-        getUi().showDisconnection();
+        getUi().showDisconnection("Sorry, another player has disconnected from the game!");
+        //getUi().showDisconnection("Sorry, it is impossible to reach the server at this time!");
     }
 
     /**

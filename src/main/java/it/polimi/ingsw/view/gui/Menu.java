@@ -5,7 +5,7 @@ import javafx.scene.Group;
 
 public class Menu extends UserInterfaceObservable {
     protected Group group;
-    protected int widthResolution = 1200, heightResolution = 700;
+    protected int widthResolution, heightResolution;
     public Menu(int wr, int hr){
         widthResolution = wr;
         heightResolution = hr;
