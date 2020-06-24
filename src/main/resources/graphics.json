@@ -351,6 +351,54 @@
 		{
 			"name": "Zeus_podium",
 			"file": "gui/gods/podium/zeus_podium.png"
+		},
+		{
+			"name": "move_button",
+			"file": "gui/menu/move.png"
+		},
+		{
+			"name": "build_button",
+			"file": "gui/menu/build.png"
+		},
+		{
+			"name": "lv1_button",
+			"file": "gui/menu/lv1Button.png"
+		},
+		{
+			"name": "lv2_button",
+			"file": "gui/menu/lv2Button.png"
+		},
+		{
+			"name": "lv3_button",
+			"file": "gui/menu/lv3Button.png"
+		},
+		{
+			"name": "dome_button",
+			"file": "gui/menu/domeButton.png"
+		},
+		{
+			"name": "move_button_disabled",
+			"file": "gui/menu/moveDisabled.png"
+		},
+		{
+			"name": "build_button_disabled",
+			"file": "gui/menu/buildDisabled.png"
+		},
+		{
+			"name": "lv1_button_disabled",
+			"file": "gui/menu/lv1ButtonDisabled.png"
+		},
+		{
+			"name": "lv2_button_disabled",
+			"file": "gui/menu/lv2ButtonDisabled.png"
+		},
+		{
+			"name": "lv3_button_disabled",
+			"file": "gui/menu/lv3ButtonDisabled.png"
+		},
+		{
+			"name": "dome_button_disabled",
+			"file": "gui/menu/domeButtonDisabled.png"
 		}
 	]
 }

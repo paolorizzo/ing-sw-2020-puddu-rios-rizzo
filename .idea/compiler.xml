@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="CG04" />
         <module name="repo" />
         <module name="ing-sw-puddu-rios-rizzo" />
       </profile>

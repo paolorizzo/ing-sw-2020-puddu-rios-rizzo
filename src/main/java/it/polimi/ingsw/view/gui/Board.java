@@ -56,6 +56,7 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         this.addObserver(cw);
 
         players = new HashMap<>();
+        pieceBag = new PieceBag();
 
         groupRoot = new Group();
         group3d = new Group3D();
@@ -123,14 +124,14 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         selectTypeActionMenu = new SelectTypeActionMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(selectTypeActionMenu.getGroup());
 
-        selectPieceMenu = new SelectPieceMenu(WIDTH, HEIGHT, actionFSM);
+        selectPieceMenu = new SelectPieceMenu(WIDTH, HEIGHT, actionFSM, pieceBag);
         groupRoot.getChildren().add(selectPieceMenu.getGroup());
+        selectPieceMenu.show();
 
         endOfTurnMenu = new EndOfTurnMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(endOfTurnMenu.getGroup());
         //assigning menus
         actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
-
 
         winMenu = new WinMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(winMenu.getGroup());
@@ -138,7 +139,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         loseMenu = new LoseMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(loseMenu.getGroup());
 
-        pieceBag = new PieceBag();
 
     }
     public Scene getScene(){

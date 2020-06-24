@@ -14,7 +14,7 @@ public class PieceBag {
         countLevel[Piece.DOME.getLevel()] = 18;
     }
 
-    int getCount(Piece p)
+    public int getCount(Piece p)
     {
         return countLevel[p.getLevel()];
     }

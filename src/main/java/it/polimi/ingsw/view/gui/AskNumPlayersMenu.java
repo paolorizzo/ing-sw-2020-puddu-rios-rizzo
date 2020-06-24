@@ -19,8 +19,8 @@ public class AskNumPlayersMenu extends Menu {
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
-        rect.setTranslateX(widthResolution / 2 - rect.getWidth() / 2);
-        rect.setTranslateY(heightResolution / 2 - rect.getHeight() / 2);
+        rect.setTranslateX(widthResolution/2 - rect.getWidth() / 2);
+        rect.setTranslateY(heightResolution/2 - rect.getHeight() / 2);
         rect.setTranslateZ(0);
 
         twoPlayer = new Rectangle(60, 60);
@@ -30,7 +30,6 @@ public class AskNumPlayersMenu extends Menu {
         twoPlayer.setFill(Color.GREEN);
         twoPlayer.setStroke(Color.BLACK);
         twoPlayer.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
             @Override
             public void handle(MouseEvent mouseEvent) {
                 notifyReadNumPlayers(2);

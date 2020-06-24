@@ -103,7 +103,7 @@ public class ActionFSM{
                             }
                             if(foundPossibleAction){
                                 System.out.println("Selezionato "+worker_id);
-                                selectTypeActionMenu.show();
+                                selectTypeActionMenu.show(possibleActions, worker_id);
                                 return WAIT_SELECT_TYPE_ACTION;
                             }else{
                                 System.out.println("Nessun azione disponibile per "+worker_id);
@@ -120,7 +120,7 @@ public class ActionFSM{
             public ActionState execute(Object input) {
 
                 board.setAllToDefaultView();
-                selectTypeActionMenu.show();
+                selectTypeActionMenu.show(possibleActions, worker_id);
                 selectPieceMenu.hide();
                 resetPreview();
                 piece = null;
@@ -137,8 +137,8 @@ public class ActionFSM{
                             return WAIT_SELECT_TARGET_MOVE;
                         case "build":
                             System.out.println("build: rendo visibile il menu");
-                            selectPieceMenu.show();
-                            return WAIT_SELECT_PIECE;
+                            selectPieceMenu.show(possibleActions, worker_id);
+                        return WAIT_SELECT_PIECE;
                         case "unselect":
                             return WAIT_SELECT_WORKER;
 
@@ -151,7 +151,7 @@ public class ActionFSM{
         WAIT_SELECT_TARGET_MOVE {
             public ActionState execute(Object input) {
 
-                selectTypeActionMenu.show();
+                selectTypeActionMenu.show(possibleActions, worker_id);
                 selectPieceMenu.hide();
                 piece = null;
 
@@ -207,8 +207,8 @@ public class ActionFSM{
             public ActionState execute(Object input) {
 
                 board.setAllToDefaultView();
-                selectTypeActionMenu.show();
-                selectPieceMenu.show();
+                selectTypeActionMenu.show(possibleActions, worker_id);
+                selectPieceMenu.show(possibleActions, worker_id);
                 piece = null;
 
                 if(input instanceof Piece){
@@ -235,8 +235,8 @@ public class ActionFSM{
         WAIT_SELECT_TARGET_BUILD {
             public ActionState execute(Object input) {
 
-                selectTypeActionMenu.show();
-                selectPieceMenu.show();
+                selectTypeActionMenu.show(possibleActions, worker_id);
+                selectPieceMenu.show(possibleActions, worker_id);
 
                 if(input instanceof String){
                     switch((String)input) {

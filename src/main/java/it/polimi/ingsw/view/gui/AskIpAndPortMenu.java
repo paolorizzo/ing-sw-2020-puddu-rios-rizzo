@@ -60,8 +60,14 @@ public class AskIpAndPortMenu extends Menu
         enter.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 notifyIp(ipText.getText());
                 notifyPort(Integer.parseInt(portText.getText()));
+
+                /* DEFAULT
+                notifyIp("127.0.0.1");
+                notifyPort(42069);
+                */
                 hide();
             }
         });
