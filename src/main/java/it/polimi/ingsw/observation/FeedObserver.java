@@ -9,18 +9,59 @@ import java.util.Map;
 
 /**
  * Observer interface for the Feed, which incapsulates the communication from a model to a view
+ * There are 2 main classes that inherit from this one: ClientView and VirtualView
+ * ClientView exists on the client and actually contains the logic for the communications in the MVC pattern
+ * VirtualView exists on the server and only propagates notifies from the model through the connection
+ * with the client. It serves to let the serves ignore the fact that it is not talking to a functioning view
  */
 public interface FeedObserver {
 
     //general updates
+
+    /**
+     * handles a positive feedback
+     * @param id the id of the client that the ok is directed to
+     */
     void updateOk(int id);
+
+    /**
+     * handles a negative feedback
+     * @param id the id of the client that he ko is directed to
+     * @param problem the problem that caused the ko
+     */
     void updateKo(int id, String problem);
+
+    /**
+     * handles the notification about whose turn it is
+     * @param id the id of the player whose turn it is
+     * @param possibleActions the list of actions that that player can take
+     * @param canEndOfTurn boolean representing whether that player can end their turn at this time
+     */
     void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn);
 
     //connection phase updates
+
+    /**
+     * starts the view
+     */
     void updateStart();
+
+    /**
+     * handles the new id
+     * typically, a view will ignore the id if it already has one
+     * @param id the new id
+     */
     void updateID(int id);
+
+    /**
+     * handles the info about the number of players in the game
+     * @param numPlayers the numebr of players in the game
+     */
     void updateNumPlayers(int numPlayers);
+
+    /**
+     *
+     */
     void updateAllPlayersConnected();
     void updateName(int id, String name);
 
