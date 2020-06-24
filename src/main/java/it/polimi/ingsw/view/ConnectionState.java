@@ -1,5 +1,11 @@
 package it.polimi.ingsw.view;
 
+/**
+ * Finite State Machine on the client side for the Connection Phase,
+ * which goes from the actual connection to the Server,
+ * to the choice or receival of the number of players,
+ * to the choice of name for every player
+ */
 public enum ConnectionState {
     READY{
         /**
