@@ -410,6 +410,12 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    @Override
+    public synchronized void updateDisconnection()
+    {
+        getUi().showDisconnection();
+    }
+
     /**
      * forwards to the Setup FSM the list of cards from which the client can choose theirs
      * @param id the id of the player for whom this list is valid

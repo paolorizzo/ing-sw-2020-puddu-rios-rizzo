@@ -41,6 +41,12 @@ public class StubView extends View{
 
     }
 
+    @Override
+    public synchronized void updateDisconnection()
+    {
+
+    }
+
     public void printPossibleActions(){
         for(Action a:possibleActions)
             System.out.println(a.toString());

@@ -43,6 +43,21 @@ public class FeedObservable extends Observable<FeedObserver> {
         }
     }
 
+    public synchronized void notifyDisconnection()
+    {
+        for(FeedObserver obs:observers){
+            try
+            {
+                obs.updateDisconnection();
+            }
+            catch(Exception e)
+            {
+                System.out.println("Notifying all the players about the disconnection");
+            }
+
+        }
+    }
+
     /**
      * notifies everyone whose turn it is
      * @param id the id of the current player

@@ -146,4 +146,6 @@ public interface FeedObserver {
      */
     void updatePlayerLose(int id);
 
+    void updateDisconnection();
+
 }

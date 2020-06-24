@@ -328,6 +328,12 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     }
 
     @Override
+    public void showDisconnection()
+    {
+        //TODO implement this
+    }
+
+    @Override
     public void askIpAndPort() {
         askIpAndPortMenu.show();
     }

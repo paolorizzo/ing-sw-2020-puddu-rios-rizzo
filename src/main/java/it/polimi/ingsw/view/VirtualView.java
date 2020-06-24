@@ -96,6 +96,13 @@ public class VirtualView extends View
     @Override
     public synchronized void updateAllPlayersConnected(){ connection.sendMessage("notifyAllPlayersConnected"); }
 
+    @Override
+    public synchronized void updateDisconnection()
+    {
+
+        connection.sendMessage("notifyDisconnection");
+    }
+
     /**
      * forwards the update through the socket
      * @param id the id of the client

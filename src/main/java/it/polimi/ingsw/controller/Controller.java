@@ -486,6 +486,7 @@ public class Controller implements ControllerInterface
 
     @Override
     public void handleDisconnection(){
+        model.feed.notifyDisconnection();
         if(phase.equals(Phase.GAME)){
             model.save();
         }

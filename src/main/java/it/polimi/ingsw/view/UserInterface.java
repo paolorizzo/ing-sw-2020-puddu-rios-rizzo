@@ -38,4 +38,6 @@ public interface UserInterface
     void showError(String e);
 
     void askIpAndPort();
+
+    void showDisconnection();
 }

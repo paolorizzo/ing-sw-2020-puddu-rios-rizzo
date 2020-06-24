@@ -46,6 +46,12 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     }
 
     @Override
+    public void showDisconnection()
+    {
+        System.out.println("One of the other players disconnected");
+    }
+
+    @Override
     public void showError(String e)
     {
         if(e.contains("Waiting for the server"))
