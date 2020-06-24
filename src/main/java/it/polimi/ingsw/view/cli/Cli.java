@@ -25,8 +25,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void askIpAndPort()
     {
-        notifyIp("127.0.0.1");
-        notifyPort(42069);
+        String result = CliUtils.handleIpAndPortSelection();
+        notifyIp(result.split(" ")[0]);
+        notifyPort(Integer.parseInt(result.split(" ")[1]));
     }
 
     @Override
@@ -43,8 +44,13 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     }
     @Override
-    public void showError(String e){
-        //TODO to complete this method
+    public void showError(String e)
+    {
+        if(e.contains("Waiting for the server"))
+        {
+            CliUtils.handleWaitingForServer(model);
+
+        }
     }
 
     @Override

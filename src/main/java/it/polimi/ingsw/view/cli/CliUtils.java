@@ -9,6 +9,35 @@ import java.util.concurrent.TimeUnit;
 public class CliUtils
 {
     //handler methods
+    //CONNECTION
+
+    static String handleIpAndPortSelection()
+    {
+        showIpDialog();
+        String ip = readString();
+        showPortDialog();
+        String port = readString();
+        return ip+" "+port;
+    }
+
+    static void handleWaitingForServer(ModelCLI model)
+    {
+        if(!model.getAlreadyShownWaitingServer())
+        {
+            showWaitingForTheServer();
+            model.setAlreadyShownWaitingServer();
+        }
+    }
+
+    static void handleWaitingPlayers(ModelCLI model)
+    {
+        if(!model.getAlreadyShownWaitingPlayers())
+        {
+            showWaitingForOtherPlayers();
+            model.setAlreadyShownWaitingPlayers();
+        }
+    }
+
     //SETUP
     static String handleUsername()
     {
@@ -679,6 +708,101 @@ public class CliUtils
         //print the image
         canvas.printFigure();
     }
+
+    static void showIpDialog()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("    INSERT AN IP ADDRESS  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showPortDialog()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("      INSERT THE PORT  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showWaitingForTheServer()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("   WAITING FOR THE SERVER  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showWaitingForOtherPlayers()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText(" WAITING OTHER PLAYERS TO JOIN ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
 
     private static void showCard(String desc, String title, int userSelection)
     {

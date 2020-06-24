@@ -22,6 +22,10 @@ public class ModelCLI
 
     private boolean myTurn;
 
+    private boolean alreadyShownWaitingServer;
+
+    private boolean alreadyShownWaitingPlayers;
+
     /**
      * A mask is a String matrix that stores workers' IDs in the cells corresponding to their position on the board.
      */
@@ -75,6 +79,26 @@ public class ModelCLI
         {
             this.currentPlayerId = id;
         }
+    }
+
+    boolean getAlreadyShownWaitingServer()
+    {
+        return alreadyShownWaitingServer;
+    }
+
+    boolean getAlreadyShownWaitingPlayers()
+    {
+        return alreadyShownWaitingPlayers;
+    }
+
+    void setAlreadyShownWaitingServer()
+    {
+        alreadyShownWaitingServer = true;
+    }
+
+    void setAlreadyShownWaitingPlayers()
+    {
+        alreadyShownWaitingPlayers = true;
     }
 
     int getCurrentPlayerId()

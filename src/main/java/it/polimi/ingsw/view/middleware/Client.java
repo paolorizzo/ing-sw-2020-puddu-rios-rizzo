@@ -160,12 +160,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                     try
                     {
                         showUIError("Waiting for the server on "+ip+" / "+port+" to start");
-                        TimeUnit.MILLISECONDS.sleep(500);
-                        System.out.print(" .");
-                        TimeUnit.MILLISECONDS.sleep(500);
-                        System.out.print(".");
-                        TimeUnit.MILLISECONDS.sleep(500);
-                        System.out.print(".\n");
+                        TimeUnit.MILLISECONDS.sleep(1500);
                     }
                     catch(InterruptedException t)
                     {
