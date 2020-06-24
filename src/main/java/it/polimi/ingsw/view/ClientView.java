@@ -323,7 +323,7 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     /**
-     * forwards to the COnnection FSM the information that all the expected players are connected
+     * forwards to the Connection FSM the information that all the expected players are connected
      */
     @Override
     public synchronized void updateAllPlayersConnected(){

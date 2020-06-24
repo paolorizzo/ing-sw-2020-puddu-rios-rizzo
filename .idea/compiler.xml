@@ -9,6 +9,7 @@
         <module name="CG04" />
         <module name="repo" />
         <module name="ing-sw-puddu-rios-rizzo" />
+        <module name="ing-sw-2020-puddu-rios-rizzo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="9" />

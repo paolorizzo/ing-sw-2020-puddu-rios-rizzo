@@ -64,14 +64,24 @@ public enum ConnectionState {
             }
         }
     },
-    //TODO should actually read the input to know whether to display a "try again"
     ASK_NUM_PLAYERS{
+        /**
+         * calls on the UI to get the number of players for the game from user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             view.currentConnectionState = READ_NUM_PLAYERS;
             view.getUi().askNumPlayers();
         }
     },
     READ_NUM_PLAYERS{
+        /**
+         * checks the validity of the number of players, and either publishes it or
+         * goes to get it again
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int numPlayers = (int)input;
             //System.out.println("READ_NUM_PLAYERS "+numPlayers);
@@ -86,6 +96,13 @@ public enum ConnectionState {
         }
     },
     PUBLISH_NUM_PLAYERS{
+        /**
+         * sets the number of players on the local controller, which is the client
+         * the client will then forward it through the connection
+         * Sets up the receive_check state to receive the feedback for the communication
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int numPlayers = (int) input;
             //System.out.println("publishing number of players: "+numPlayers);
@@ -99,6 +116,13 @@ public enum ConnectionState {
         }
     },
     RECEIVE_CHECK{
+        /**
+         * depending on the input, goes to and executes a preset state.
+         * Before moving to this state, the states and inputs for
+         * success and failure should be defined
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             String problem = (String) input;
             boolean success = (problem == null);
@@ -127,6 +151,11 @@ public enum ConnectionState {
         }
     },
     REQUEST_NUM_PLAYERS{
+        /**
+         * requests the number of players from the local controller, which is the Client
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input)  {
             //todo launch waiting view
             view.getController().getNumPlayers();
@@ -134,6 +163,13 @@ public enum ConnectionState {
         }
     },
     RECEIVE_NUM_PLAYERS{
+        /**
+         * if the number of players excludes the possibility of the client
+         * being legal for the game, it starts the process of killing itself.
+         * Otherwise, the number of players is memorized and the connection continues
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("RECEIVE_NUM_PLAYERS state execute "+(int)input);
             int numPlayers = (int) input;
@@ -151,6 +187,11 @@ public enum ConnectionState {
         }
     },
     REQUEST_ALL_PLAYERS_CONNECTED{
+        /**
+         * requests whether or not all players are connected to the local controller
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("Attendo tutti i giocatori ...");
             view.getController().requestAllPlayersConnected();
@@ -158,6 +199,12 @@ public enum ConnectionState {
         }
     },
     RECEIVE_ALL_PLAYERS_CONNECTED{
+        /**
+         * having acknowledged that all players are connected,
+         * the ConnectionFSM continues to its next state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("Tutti i giocatori ora connessi.");
             view.currentConnectionState = ConnectionState.ASK_NAME;
@@ -165,12 +212,22 @@ public enum ConnectionState {
         }
     },
     ASK_NAME{
+        /**
+         * calls on the ui to get the name from user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             view.currentConnectionState = READ_NAME;
             view.getUi().askUsername();
         }
     },
     READ_NAME{
+        /**
+         * accepts the name and goes to the publishing state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             String name = (String)input;
             //System.out.println("READ_NAME "+name);
@@ -179,6 +236,13 @@ public enum ConnectionState {
         }
     },
     PUBLISH_NAME{
+        /**
+         * sets the name on the local controller
+         * the Client, being the local controller, sends it through the connection to
+         * the server
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             String name = (String) input;
             //System.out.println("publishing name: " + name);
@@ -192,11 +256,21 @@ public enum ConnectionState {
         }
     },
     WAIT_ALL_PLAYERS_NAME{
+        /**
+         * awaits the name of all the players
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("Wait all players name");
         }
     },
     PUBLISH_HARAKIRI{
+        /**
+         * publishes the fact that this client will kill itself
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("Communicating shutdown");
             view.getController().deleteId(view.getId());
@@ -205,14 +279,22 @@ public enum ConnectionState {
         }
     },
     HARAKIRI{
+        /**
+         * calls on the local controller to kill the client
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("Ho preso il covid-19");
             view.getController().kill();
         }
     },
-    //this state must leave the client dead in order to allow late messages to be received
-    //the next phase will begin with a specific notify from the controller
     END{
+        /**
+         * starts the next FSM, which is the Restore FSM
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("Connection phase has ended for client " + view.getId());
             //view.startSetupFSM();
