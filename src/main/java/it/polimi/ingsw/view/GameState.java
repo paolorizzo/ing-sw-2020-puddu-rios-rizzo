@@ -5,8 +5,16 @@ import it.polimi.ingsw.model.Action;
 
 import java.util.List;
 
+/**
+ * FSM for the main phase of game, the one in which workers move and build
+ */
 public enum GameState {
     START_GAME{
+        /**
+         * entry point for the Game FSM
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("START_GAME");
             view.currentGameState = REQUEST_ACTIONS;
@@ -14,6 +22,11 @@ public enum GameState {
         }
     },
     REQUEST_ACTIONS{
+        /**
+         * requests the list of possible actions from the local controller
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("REQUEST_ACTIONS");
             view.currentGameState = RECEIVE_ACTIONS;
@@ -25,6 +38,11 @@ public enum GameState {
         }
     },
     RECEIVE_ACTIONS{
+        /**
+         * passes the possible actions to the next state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("RECEIVE_ACTIONS");
             List<Action> possibleActions = (List<Action>)input;
@@ -33,6 +51,11 @@ public enum GameState {
         }
     },
     ASK_ACTION{
+        /**
+         * calls on the ui to get the chosen action from user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
@@ -42,6 +65,12 @@ public enum GameState {
         }
     },
     ASK_OPTIONAL_ACTION{
+        /**
+         * calls on the ui to get the chosen action from user input,
+         * in the case in which the action is optional
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
@@ -50,6 +79,11 @@ public enum GameState {
         }
     },
     READ_ACTION{
+        /**
+         * passes the chosen action to the next state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("READ_SETUP_WORKER");
             view.currentGameState = PUBLISH_ACTION;
@@ -57,6 +91,11 @@ public enum GameState {
         }
     },
     PUBLISH_ACTION{
+        /**
+         * publishes the chosen action to the local controller
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             Action action = (Action) input;
             view.currentGameState = REQUEST_ACTIONS;
@@ -65,6 +104,11 @@ public enum GameState {
         }
     },
     PUBLISH_VOLUNTARY_END_OF_TURN{
+        /**
+         * publishes the choice to end the turn prematurely to the local controller
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             view.currentGameState = REQUEST_ACTIONS;
             view.getController().publishVoluntaryEndOfTurn(view.getId());
@@ -72,6 +116,11 @@ public enum GameState {
         }
     },
     WIN_STATE{
+        /**
+         * endpoint of the FSM in case of a win
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input)
         {
 
@@ -79,6 +128,11 @@ public enum GameState {
         }
     },
     LOSE_STATE{
+        /**
+         * endpoint of the FSM in case of a loss
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input)
         {
 
@@ -86,10 +140,11 @@ public enum GameState {
         }
     };
 
-    //default implementation of the body of the state, does nothing
-    //TODO change to abstract when all the states are implemented
-    public void execute(ClientView view, Object input) {
-
-    }
+    /**
+     * default implementation of the method for the execution of a state
+     * @param view the view on which to act
+     * @param input the input for the execution of the state
+     */
+    public abstract void execute(ClientView view, Object input);
 }
 
