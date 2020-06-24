@@ -33,7 +33,7 @@ public interface UserInterfaceObserver
 
     /**
      * uses the intent of the player to restore a saved game or not
-     * @param restore
+     * @param restore the intent to restore
      */
     void updateReadRestore(boolean restore);
 
