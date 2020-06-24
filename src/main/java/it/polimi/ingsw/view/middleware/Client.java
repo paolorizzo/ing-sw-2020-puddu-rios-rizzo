@@ -159,7 +159,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                 {
                     try
                     {
-                        System.out.print("Waiting for the server on address "+ip+" to start");
+                        showUIError("Waiting for the server on "+ip+" / "+port+" to start");
                         TimeUnit.MILLISECONDS.sleep(500);
                         System.out.print(" .");
                         TimeUnit.MILLISECONDS.sleep(500);
@@ -197,6 +197,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     }
 
     //general methods
+
+    public void showUIError(String error)
+    {
+        getClientView().getUi().showError(error);
+    }
 
     /**
      * this method does nothing on the client
