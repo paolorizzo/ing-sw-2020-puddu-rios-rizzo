@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.SetupAction;
 import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.view.ClientView;
+import javafx.beans.binding.ObjectExpression;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,6 +31,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
 
     private final Object netLock = new Object();
     private boolean netPass = false;
+
+    private final Object playersLock = new Object();
+    private boolean notifyingWaitingForPlayers = false;
+
 
     public Client(String ip, int port)
     {
@@ -98,8 +103,6 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
      */
     public void run()
     {
-
-
         synchronized(netLock)
         {
             if (ip == null && port == 0)
@@ -120,6 +123,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         }
 
         boolean waitingForServer = true;
+
+
         while(waitingForServer)
         {
             try
@@ -129,6 +134,28 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                 synchronizer.run();
 
                 waitingForServer = false;
+
+                new Thread(() -> {
+
+                    while(true)
+                    {
+                        try
+                        {
+                            TimeUnit.MILLISECONDS.sleep(1500);
+                        }
+                        catch(InterruptedException t)
+                        {
+                            System.err.println(t.getMessage());
+                        }
+
+                        synchronized(playersLock)
+                        {
+                            if(notifyingWaitingForPlayers)
+                                showUIError("Waiting for the other players to join");
+                        }
+                    }
+
+                }).start();
 
                 //starts the clientView therefore initiating the message exchange
                 cw.start();
@@ -142,9 +169,17 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                     {
                         ByteIn = new ObjectInputStream(socket.getInputStream());
                         Message message = (Message) ByteIn.readObject();
+
                         if(message.getMethodName().equals("pong"))
                             alivenessHandler.pongHandler(message);
                         else
+                            if(message.getMethodName().equals("notifyAllPlayersConnected"))
+                            {
+                                synchronized(playersLock)
+                                {
+                                    notifyingWaitingForPlayers = false;
+                                }
+                            }
                             synchronizer.enqueueMessage(message);
                     }
                     catch (ClassNotFoundException e)
@@ -220,6 +255,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     {
 
         sendMessage("ackId", id);
+        if(id > 0)
+        {
+            synchronized(playersLock)
+            {
+                notifyingWaitingForPlayers = true;
+            }
+        }
     }
 
     @Override
@@ -227,6 +269,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     {
 
         sendMessage("setNumPlayers", cw.getId(), numPlayers);
+        if(id == 0)
+        {
+            synchronized(playersLock)
+            {
+                notifyingWaitingForPlayers = true;
+            }
+        }
     }
 
     @Override

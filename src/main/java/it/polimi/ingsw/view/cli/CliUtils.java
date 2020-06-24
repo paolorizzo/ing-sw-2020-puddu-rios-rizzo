@@ -798,12 +798,12 @@ public class CliUtils
         canvas.setTextColor(AnsiColors.ANSI_RED);
 
         //create text box
-        RectangleCLI textBox = new RectangleCLI(13,2,9,1);
+        RectangleCLI textBox = new RectangleCLI(12,2,11,1);
         textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
-        textBox.addText(" WAITING OTHER PLAYERS TO JOIN ");
+        textBox.addText("  WAITING OTHER PLAYERS TO JOIN  ");
 
         //create frame
-        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 11,3);
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 13,3);
         frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
 
         //overlap figures in the correct order

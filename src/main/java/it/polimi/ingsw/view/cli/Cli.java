@@ -53,6 +53,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
             CliUtils.handleWaitingForServer(model);
 
         }
+        else if(e.contains("Waiting for the other players"))
+        {
+            CliUtils.handleWaitingPlayers(model);
+        }
     }
 
     @Override
