@@ -5,8 +5,18 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FSM for the Setup Phase, which covers the choice of cards and the positioning of
+ * the workers on the board
+ */
 public enum SetupState {
     START_SETUP{
+        /**
+         * entry point to the Setup FSM, depending on the id either
+         * moves to get the deck, or to request a list of cards from which to pick
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("START_SETUP");
             if(view.getId() == 0){
@@ -18,6 +28,12 @@ public enum SetupState {
         }
     },
     REQUEST_DECK{
+        /**
+         * initializes enum-level variables and asks the local
+         * controller for the deck
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             //System.out.println("REQUEST_DECK");
             deck = null;
@@ -27,6 +43,11 @@ public enum SetupState {
         }
     },
     RECEIVE_DECK{
+        /**
+         * memorizes the deck and moves to ask the user to pick from the deck
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             deck = (Deck)input;
             //System.out.println("Deck ricevuto");
@@ -35,12 +56,25 @@ public enum SetupState {
         }
     },
     ASK_CARD{
+        /**
+         * calls on the ui to get the user to pick cards from the deck
+         * using user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             view.currentSetupState = READ_CARD;
             view.getUi().askCard(deck);
         }
     },
     READ_CARD{
+        /**
+         * checks the legality of the pick, and if legal adds the cards to the list
+         * of possible cards
+         * If all the necessary cards have been picked, publishes the list of card numbers
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int numCard = (int)input;
             try{
@@ -60,6 +94,12 @@ public enum SetupState {
         }
     },
     PUBLISH_CARDS{
+        /**
+         * publishes the card numbers to the local controller,
+         * and sets up the feedback check state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input){
             okState = REQUEST_CARDS;
             koState = REQUEST_DECK;
@@ -70,6 +110,13 @@ public enum SetupState {
         }
     },
     RECEIVE_CHECK{
+        /**
+         * depending on the input, goes to and executes a preset state.
+         * Before moving to this state, the states and inputs for
+         * success and failure should be defined
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             String problem = (String) input;
             boolean success = (problem == null);
@@ -100,6 +147,11 @@ public enum SetupState {
         }
     },
     REQUEST_CARDS{
+        /**
+         * requests the list of possible cards from the local controller
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("REQUEST_CARDS");
             try{
@@ -111,12 +163,22 @@ public enum SetupState {
         }
     },
     RECEIVE_CARDS{
+        /**
+         * moves to ask the user to choose their card
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             view.currentSetupState = ASK_GOD;
             view.currentSetupState.execute(view,input);
         }
     },
     ASK_GOD{
+        /**
+         * calls on the ui to get a card number from user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             view.currentSetupState = READ_GOD;
             List<Card> cards = (List<Card>) input;
@@ -124,6 +186,12 @@ public enum SetupState {
         }
     },
     READ_GOD{
+        /**
+         * sets the chosen card on the local controller
+         * and sets up the feedback check state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             int numCard = (int)input;
             view.currentSetupState = RECEIVE_CHECK;
@@ -135,6 +203,12 @@ public enum SetupState {
         }
     },
     REQUEST_SETUP_WORKER{
+        /**
+         * requests the list of legal setup action to the local controller
+         * if all workers have benn positioned, ends the setup phase
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("countOK "+countOk);
             if(countOk == 2){
@@ -152,6 +226,11 @@ public enum SetupState {
         }
     },
     ASK_SETUP_WORKER{
+        /**
+         * calls on the ui to get the setup action from user input
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("ASK_SETUP_WORKER");
             view.currentSetupState = READ_SETUP_WORKER;
@@ -160,6 +239,11 @@ public enum SetupState {
         }
     },
     READ_SETUP_WORKER{
+        /**
+         * moves to publish the chosen setup action
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("READ_SETUP_WORKER");
             view.currentSetupState = PUBLISH_SETUP_WORKER;
@@ -167,6 +251,12 @@ public enum SetupState {
         }
     },
     PUBLISH_SETUP_WORKER{
+        /**
+         * publishes the setup action to the local controller
+         * and sets up the feedback check state
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             SetupAction setupAction = (SetupAction) input;
             view.currentSetupState = RECEIVE_CHECK;
@@ -178,6 +268,11 @@ public enum SetupState {
         }
     },
     END_SETUP{
+        /**
+         * starts the next FSM, the Game FSM
+         * @param view the view on which to act
+         * @param input the input for the execution of the state
+         */
         public void execute(ClientView view, Object input) {
             //System.out.println("ok ho finito il mio setup");
             view.startGameFSM();
@@ -201,8 +296,11 @@ public enum SetupState {
     }
 
     //default implementation of the body of the state, does nothing
-    //TODO change to abstract when all the states are implemented
-    public void execute(ClientView view, Object input) {
 
-    }
+    /**
+     * default implementation of the method for the execution of a state
+     * @param view the view on which to act
+     * @param input the input for the execution of the state
+     */
+    public abstract void execute(ClientView view, Object input);
 }
