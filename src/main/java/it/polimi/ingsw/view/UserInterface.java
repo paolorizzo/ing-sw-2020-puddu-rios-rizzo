@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.Deck;
 
 import java.util.List;
 
+/**
+ * interface for the user interfaces, which are the cli and the gui
+ */
 public interface UserInterface
 {
     void askNumPlayers();
