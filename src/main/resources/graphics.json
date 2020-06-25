@@ -403,6 +403,10 @@
 		{
 			"name": "disconnected",
 			"file": "gui/menu/disconnected.png"
+		},
+		{
+			"name": "background_menu",
+			"file": "gui/menu/backgroundMenu.png"
 		}
 	]
 }

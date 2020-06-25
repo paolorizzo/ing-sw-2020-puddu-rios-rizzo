@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class AskNumPlayersMenu extends Menu {
@@ -16,7 +17,8 @@ public class AskNumPlayersMenu extends Menu {
     public AskNumPlayersMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(200, 100);
-        rect.setFill(Color.LIGHTGRAY);
+        ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
+        rect.setFill(patt);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
         rect.setTranslateX(widthResolution/2 - rect.getWidth() / 2);

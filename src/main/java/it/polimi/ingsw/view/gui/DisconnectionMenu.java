@@ -39,7 +39,6 @@ public class DisconnectionMenu extends Menu
         StackPane messagePane = new StackPane();
         messagePane.setTranslateX(rect.getTranslateX()+50);
         messagePane.setTranslateY(rect.getTranslateY()+30);
-
         Rectangle messageRect = new Rectangle(400, 50);
         messageRect.setVisible(false);
         messagePane.getChildren().add(messageRect);

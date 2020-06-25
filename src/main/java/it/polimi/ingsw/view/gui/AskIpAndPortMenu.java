@@ -4,7 +4,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class AskIpAndPortMenu extends Menu
@@ -15,8 +17,11 @@ public class AskIpAndPortMenu extends Menu
     Rectangle enter;
     public AskIpAndPortMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
+
         rect = new Rectangle(280, 250);
         rect.setFill(Color.LIGHTGRAY);
+        ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
+        rect.setFill(patt);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
         rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
