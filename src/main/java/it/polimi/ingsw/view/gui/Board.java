@@ -140,7 +140,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
         disconnectedMenu = new DisconnectionMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(disconnectedMenu.getGroup());
 
-
         //assigning menus
         actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
     }

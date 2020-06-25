@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -21,7 +22,9 @@ public class DisconnectionMenu extends Menu
     public DisconnectionMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(500, 270);
-        rect.setFill(Color.LIGHTGRAY);
+
+        ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
+        rect.setFill(patt);
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
         rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
