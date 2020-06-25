@@ -28,6 +28,10 @@ public class SelectPieceMenu extends Menu {
     Text lv2Count;
     Text lv3Count;
     Text domeCount;
+    Text lv1Name;
+    Text lv2Name;
+    Text lv3Name;
+    Text domeName;
     public SelectPieceMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM, PieceBag pieceBag) {
         super(widthResolution, heightResolution);
         this.pieceBag = pieceBag;
@@ -78,6 +82,31 @@ public class SelectPieceMenu extends Menu {
                 actionFSM.execute(Piece.LEVEL1);
             }
         });
+
+
+        StackPane lv1NamePane = new StackPane();
+        lv1NamePane.setTranslateX(rect.getTranslateX() + 20);
+        lv1NamePane.setTranslateY(rect.getTranslateY() + 20);
+
+        Rectangle lv1NameRect = new Rectangle(70, 30);
+        lv1NameRect.setVisible(false);
+        lv1NamePane.getChildren().add(lv1NameRect);
+
+        lv1Name = new Text();
+        lv1Name.setText("Lv1");
+        lv1Name.setFont(new Font("Forte", 30));
+        lv1Name.setFill(Color.GOLD);
+        lv1Name.setStroke(Color.BLACK);
+        lv1Name.setStrokeWidth(1);
+        lv1Name.setTextAlignment(TextAlignment.CENTER);
+        lv1Name.setTranslateY(0);
+        lv1NamePane.getChildren().add(lv1Name);
+        lv1NamePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                actionFSM.execute(Piece.LEVEL1);
+            }
+        });
         //LEVEL2
         Image lv2Image = GraphicsLoader.instance().getImage("lv2_button");
         ImageView lv2ImageView = new ImageView(lv2Image);
@@ -117,6 +146,31 @@ public class SelectPieceMenu extends Menu {
                 actionFSM.execute(Piece.LEVEL2);
             }
         });
+
+        StackPane lv2NamePane = new StackPane();
+        lv2NamePane.setTranslateX(rect.getTranslateX() + 20+70+20);
+        lv2NamePane.setTranslateY(rect.getTranslateY() + 20);
+
+        Rectangle lv2NameRect = new Rectangle(70, 30);
+        lv2NameRect.setVisible(false);
+        lv2NamePane.getChildren().add(lv2NameRect);
+
+        lv2Name = new Text();
+        lv2Name.setText("Lv2");
+        lv2Name.setFont(new Font("Forte", 30));
+        lv2Name.setFill(Color.GOLD);
+        lv2Name.setStroke(Color.BLACK);
+        lv2Name.setStrokeWidth(1);
+        lv2Name.setTextAlignment(TextAlignment.CENTER);
+        lv2Name.setTranslateY(0);
+        lv2NamePane.getChildren().add(lv2Name);
+        lv2NamePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                actionFSM.execute(Piece.LEVEL2);
+            }
+        });
+
         //LEVEL3
         Image lv3Image = GraphicsLoader.instance().getImage("lv3_button");
         ImageView lv3ImageView = new ImageView(lv3Image);
@@ -151,6 +205,30 @@ public class SelectPieceMenu extends Menu {
         lv3Count.setTranslateY(0);
         lv3Pane.getChildren().add(lv3Count);
         lv3Pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                actionFSM.execute(Piece.LEVEL3);
+            }
+        });
+
+        StackPane lv3NamePane = new StackPane();
+        lv3NamePane.setTranslateX(rect.getTranslateX() + 20);
+        lv3NamePane.setTranslateY(rect.getTranslateY() +20+70+20);
+
+        Rectangle lv3NameRect = new Rectangle(70, 30);
+        lv3NameRect.setVisible(false);
+        lv3NamePane.getChildren().add(lv3NameRect);
+
+        lv3Name = new Text();
+        lv3Name.setText("Lv3");
+        lv3Name.setFont(new Font("Forte", 30));
+        lv3Name.setFill(Color.GOLD);
+        lv3Name.setStroke(Color.BLACK);
+        lv3Name.setStrokeWidth(1);
+        lv3Name.setTextAlignment(TextAlignment.CENTER);
+        lv3Name.setTranslateY(0);
+        lv3NamePane.getChildren().add(lv3Name);
+        lv3NamePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 actionFSM.execute(Piece.LEVEL3);
@@ -196,6 +274,30 @@ public class SelectPieceMenu extends Menu {
             }
         });
 
+        StackPane domeNamePane = new StackPane();
+        domeNamePane.setTranslateX(rect.getTranslateX() + 20+70+20);
+        domeNamePane.setTranslateY(rect.getTranslateY() +20+70+20);
+
+        Rectangle domeNameRect = new Rectangle(70, 30);
+        domeNameRect.setVisible(false);
+        domeNamePane.getChildren().add(domeNameRect);
+
+        domeName = new Text();
+        domeName.setText("Dome");
+        domeName.setFont(new Font("Forte", 30));
+        domeName.setFill(Color.GOLD);
+        domeName.setStroke(Color.BLACK);
+        domeName.setStrokeWidth(1);
+        domeName.setTextAlignment(TextAlignment.CENTER);
+        domeName.setTranslateY(0);
+        domeNamePane.getChildren().add(domeName);
+        domeNamePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                actionFSM.execute(Piece.DOME);
+            }
+        });
+
         group.getChildren().add(rect);
         group.getChildren().add(LEVEL1Button);
         group.getChildren().add(LEVEL2Button);
@@ -205,6 +307,11 @@ public class SelectPieceMenu extends Menu {
         group.getChildren().add(lv2Pane);
         group.getChildren().add(lv3Pane);
         group.getChildren().add(domePane);
+        group.getChildren().add(lv1NamePane);
+        group.getChildren().add(lv2NamePane);
+        group.getChildren().add(lv3NamePane);
+        group.getChildren().add(domeNamePane);
+
     }
 
     public void show(List<Action> possibleActions, String worker_id){
@@ -224,9 +331,11 @@ public class SelectPieceMenu extends Menu {
         lv1Count.setText(""+pieceBag.getCount(Piece.LEVEL1));
         if(lv1) {
             lv1Count.setFill(Color.ROYALBLUE);
+            lv1Name.setFill(Color.GOLD);
             lv1Image = GraphicsLoader.instance().getImage("lv1_button");
         }else {
             lv1Count.setFill(Color.LIGHTGRAY);
+            lv1Name.setFill(Color.LIGHTGRAY);
             lv1Image = GraphicsLoader.instance().getImage("lv1_button_disabled");
         }
         ImageView lv1ImageView = new ImageView(lv1Image);
@@ -238,9 +347,11 @@ public class SelectPieceMenu extends Menu {
         lv2Count.setText(""+pieceBag.getCount(Piece.LEVEL2));
         if(lv2) {
             lv2Count.setFill(Color.ROYALBLUE);
+            lv2Name.setFill(Color.GOLD);
             lv2Image = GraphicsLoader.instance().getImage("lv2_button");
         }else {
             lv2Count.setFill(Color.LIGHTGRAY);
+            lv2Name.setFill(Color.LIGHTGRAY);
             lv2Image = GraphicsLoader.instance().getImage("lv2_button_disabled");
         }
         ImageView lv2ImageView = new ImageView(lv2Image);
@@ -252,9 +363,11 @@ public class SelectPieceMenu extends Menu {
         lv3Count.setText(""+pieceBag.getCount(Piece.LEVEL3));
         if(lv3) {
             lv3Count.setFill(Color.ROYALBLUE);
+            lv3Name.setFill(Color.GOLD);
             lv3Image = GraphicsLoader.instance().getImage("lv3_button");
         }else {
             lv3Count.setFill(Color.LIGHTGRAY);
+            lv3Name.setFill(Color.LIGHTGRAY);
             lv3Image = GraphicsLoader.instance().getImage("lv3_button_disabled");
         }
         ImageView lv3ImageView = new ImageView(lv3Image);
@@ -266,9 +379,11 @@ public class SelectPieceMenu extends Menu {
         domeCount.setText(""+pieceBag.getCount(Piece.DOME));
         if(dome) {
             domeCount.setFill(Color.ROYALBLUE);
+            domeName.setFill(Color.GOLD);
             domeImage = GraphicsLoader.instance().getImage("dome_button");
         }else {
             domeCount.setFill(Color.LIGHTGRAY);
+            domeName.setFill(Color.LIGHTGRAY);
             domeImage = GraphicsLoader.instance().getImage("dome_button_disabled");
         }
         ImageView domeImageView = new ImageView(domeImage);

@@ -130,8 +130,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
         endOfTurnMenu = new EndOfTurnMenu(WIDTH, HEIGHT, actionFSM);
         groupRoot.getChildren().add(endOfTurnMenu.getGroup());
-        //assigning menus
-        actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
 
         winMenu = new WinMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(winMenu.getGroup());
@@ -141,6 +139,10 @@ public class Board extends UserInterfaceObservable implements UserInterface {
 
         disconnectedMenu = new DisconnectionMenu(WIDTH, HEIGHT);
         groupRoot.getChildren().add(disconnectedMenu.getGroup());
+
+
+        //assigning menus
+        actionFSM.setMenus(selectTypeActionMenu, selectPieceMenu, endOfTurnMenu);
     }
     public Scene getScene(){
         return scene;
