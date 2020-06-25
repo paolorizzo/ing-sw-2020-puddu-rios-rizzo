@@ -42,31 +42,9 @@ public class IntegrationCommunicationTest extends MvcIntegrationTest {
     public void loopLoopTest(){
         super.executor = Executors.newFixedThreadPool(256);
         int num = 5;
-        for (int i=0; i<num;i++){
-            loopTest(port-i);
-        }
-    }
-
-    /*
-    @Test
-    public void loopTest2(){
-
-        int port = 40000;
-        Server server = buildAndRunServer(port);
-        Client client = buildAndRunClient(port);
-        ClientView cw = client.getClientView();
-        try{
-            TimeUnit.SECONDS.sleep(1);
-        }
-        catch(InterruptedException e)
+        for (int i=0; i<num;i++)
         {
-            System.err.println(e.getMessage());
+            loopTest(port-(10*i));
         }
-        assertEquals(0, cw.getID());
     }
-
-     */
-
-
-
 }

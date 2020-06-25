@@ -51,11 +51,12 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     /**
-     * notifies the loss of the connection on the terminal
+     * notifies the loss of the connection to the client view
      */
     public void connectionLost()
     {
-        System.out.println("The server is not reachable");
+        //TODO inform the client whether the game has been saved
+        getUi().showDisconnection("Sorry, it is impossible to reach the server at this time!");
     }
 
     /**
@@ -410,11 +411,14 @@ public class ClientView extends View implements UserInterfaceObserver
         }
     }
 
+    /**
+     * Inform the user interface that another player has disconnected from the server.
+     */
     @Override
     public synchronized void updateDisconnection()
     {
+        //TODO inform the client whether the game has been saved or not
         getUi().showDisconnection("Sorry, another player has disconnected from the game!");
-        //getUi().showDisconnection("Sorry, it is impossible to reach the server at this time!");
     }
 
     /**

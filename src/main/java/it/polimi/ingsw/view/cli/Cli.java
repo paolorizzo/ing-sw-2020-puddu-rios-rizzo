@@ -48,6 +48,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void showDisconnection(String message)
     {
+        //TODO implement this
         System.out.println(message);
     }
 
