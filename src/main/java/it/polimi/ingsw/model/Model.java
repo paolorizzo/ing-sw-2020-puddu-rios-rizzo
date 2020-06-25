@@ -321,6 +321,21 @@ public class Model {
     }
 
     /**
+     * returns true if all the workers have been placed
+     * @return true if all the workers have been placed
+     */
+    public boolean allWorkersPlaced(){
+        boolean placed = true;
+        for(int i=0;i<game.getNumPlayers();i++){
+            Player p = players.get(i);
+            Worker f =p.getWorker(Sex.FEMALE);
+            Worker m =p.getWorker(Sex.MALE);
+            placed &= (f.getSpace() != null && m.getSpace() != null);
+        }
+        return placed;
+    }
+
+    /**
      * deep comparison that sets off comparisons of all the objects that should be restored
      * after loading a previous game
      * @param that the other Model
