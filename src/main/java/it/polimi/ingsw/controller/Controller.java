@@ -383,8 +383,6 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestToSetupWorker(int id) throws InterruptedException {
-        if(phase.equals(Phase.SETUP))
-            phase = Phase.GAME;
         while(id != model.game.getCurrentPlayerId()){
             this.wait();
         }
@@ -412,6 +410,8 @@ public class Controller implements ControllerInterface
             model.feed.notifyKo(id, "Worker placement unacceptable: either out of turn of not possible");
             return;
         }
+        if(phase.equals(Phase.SETUP))
+            phase = Phase.GAME;
         System.out.println("Piazzo worker");
         model.executeSetupAction(id, setupAction);
         model.feed.notifyOk(id);
