@@ -8,6 +8,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class AskIpAndPortMenu extends Menu
 {
@@ -18,7 +21,7 @@ public class AskIpAndPortMenu extends Menu
     public AskIpAndPortMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
 
-        rect = new Rectangle(280, 250);
+        rect = new Rectangle(360, 300);
         rect.setFill(Color.LIGHTGRAY);
         ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
         rect.setFill(patt);
@@ -27,34 +30,59 @@ public class AskIpAndPortMenu extends Menu
         rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
         rect.setTranslateY(heightResolution/2-rect.getHeight()/2);
 
+
+        StackPane titlePane = new StackPane();
+        titlePane.setTranslateX(rect.getTranslateX() + 10);
+        titlePane.setTranslateY(rect.getTranslateY() + 25);
+        titlePane.setMaxWidth(rect.getWidth()-20);
+        titlePane.setMinWidth(rect.getWidth()-20);
+        titlePane.setMaxHeight(30);
+        titlePane.setMinHeight(30);
+
+        Text title = new Text();
+        title.setText("CONNECT TO SERVER");
+        title.setFont(new Font("Forte", 30));
+        title.setFill(Color.GOLD);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(1);
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setTranslateY(0);
+        titlePane.getChildren().add(title);
+
         ipName = new Label("Insert a valid IP address for the server: ");
-        ipName.setTranslateX(rect.getTranslateX() + 30);
-        ipName.setTranslateY(rect.getTranslateY() + 20);
-        ipName.setMaxWidth(240);
+        ipName.setFont(new Font("Forte", 16));
+        ipName.setTranslateX(rect.getTranslateX() + 40);
+        ipName.setTranslateY(titlePane.getTranslateY() + titlePane.getHeight()+ 55);
+        ipName.setMaxWidth(320);
+        ipName.setMinWidth(320);
+        ipName.setTextAlignment(TextAlignment.CENTER);
         ipName.setMaxHeight(30);
 
         ipText = new TextField();
-        ipText.setMaxWidth(220);
+        ipText.setMaxWidth(260);
+        ipText.setMinWidth(260);
         ipText.setMaxHeight(30);
-        ipText.setMinWidth(220);
-        ipText.setTranslateX(rect.getTranslateX() + 30);
+        ipText.setTranslateX(rect.getTranslateX() + 50);
         ipText.setTranslateY(ipName.getTranslateY() + ipName.getMaxHeight() + 5);
 
         portName = new Label("Insert a valid port address for the server: ");
-        portName.setTranslateX(rect.getTranslateX() + 30);
+        portName.setFont(new Font("Forte", 16));
+        portName.setTranslateX(rect.getTranslateX() + 40);
         portName.setTranslateY(ipText.getTranslateY() + ipText.getMaxHeight() + 15);
-        portName.setMaxWidth(240);
+        portName.setTextAlignment(TextAlignment.CENTER);
+        portName.setMaxWidth(320);
+        portName.setMinWidth(320);
         portName.setMaxHeight(30);
 
         portText = new TextField();
-        portText.setMaxWidth(220);
+        portText.setMaxWidth(260);
+        portText.setMinWidth(260);
         portText.setMaxHeight(30);
-        portText.setMinWidth(220);
-        portText.setTranslateX(rect.getTranslateX() + 30);
+        portText.setTranslateX(rect.getTranslateX() + 50);
         portText.setTranslateY(portName.getTranslateY() + portName.getMaxHeight() + 5);
 
 
-        enter = new Rectangle(60, 30 );
+        enter = new Rectangle(100, 30 );
         enter.setTranslateX(rect.getTranslateX() + rect.getWidth()/2 - enter.getWidth()/2);
         enter.setTranslateY(portText.getTranslateY() + portText.getMaxHeight() + 15);
         enter.setTranslateZ(0);
@@ -62,26 +90,50 @@ public class AskIpAndPortMenu extends Menu
         enter.setStroke(Color.BLACK);
 
 
-        enter.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        StackPane enterPane = new StackPane();
+        enterPane.setTranslateX(enter.getTranslateX());
+        enterPane.setTranslateY(enter.getTranslateY());
+        enterPane.setMaxWidth(enter.getWidth());
+        enterPane.setMinWidth(enter.getWidth());
+        enterPane.setMaxHeight(enter.getHeight());
+        enterPane.setMinHeight(enter.getHeight());
+
+        Text enterText = new Text();
+        enterText.setText("ENTER");
+        enterText.setFont(new Font("Forte", 22));
+        enterText.setFill(Color.WHITE);
+        enterText.setStroke(Color.BLACK);
+        enterText.setStrokeWidth(1);
+        enterText.setTextAlignment(TextAlignment.CENTER);
+        enterText.setTranslateY(0);
+        enterPane.getChildren().add(enterText);
+
+        enterPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
-                notifyIp(ipText.getText());
-                notifyPort(Integer.parseInt(portText.getText()));
 
-                /* DEFAULT
-                notifyIp("127.0.0.1");
-                notifyPort(42069);
-                */
+                if(ipText.getText().length() == 0){
+                    notifyIp("127.0.0.1");
+                    notifyPort(42069);
+                }else{
+
+                    notifyIp(ipText.getText());
+                    notifyPort(Integer.parseInt(portText.getText()));
+                }
                 hide();
             }
         });
 
         group.getChildren().add(rect);
+        group.getChildren().add(titlePane);
         group.getChildren().add(ipText);
         group.getChildren().add(portText);
         group.getChildren().add(ipName);
         group.getChildren().add(portName);
         group.getChildren().add(enter);
+        group.getChildren().add(enterPane);
+
     }
 }

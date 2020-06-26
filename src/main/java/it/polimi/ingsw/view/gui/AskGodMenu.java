@@ -15,9 +15,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,7 +37,7 @@ public class AskGodMenu extends Menu {
     HashMap<Integer, Label> cardLabels;
     public AskGodMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
-        rect = new Rectangle(460, 240);
+        rect = new Rectangle(460, 290);
         ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
         rect.setFill(patt);
         rect.setStroke(Color.BLACK);
@@ -43,6 +47,27 @@ public class AskGodMenu extends Menu {
         rect.setTranslateZ(0);
 
         group.getChildren().add(rect);
+
+        StackPane titlePane = new StackPane();
+        titlePane.setTranslateX(rect.getTranslateX() + 10);
+        titlePane.setTranslateY(rect.getTranslateY() + 25);
+        titlePane.setMaxWidth(rect.getWidth()-20);
+        titlePane.setMinWidth(rect.getWidth()-20);
+        titlePane.setMaxHeight(30);
+        titlePane.setMinHeight(30);
+
+        Text title = new Text();
+        title.setText("CHOOSE YOUR GOD");
+        title.setFont(new Font("Forte", 30));
+        title.setFill(Color.GOLD);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(1);
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setTranslateY(0);
+        titlePane.getChildren().add(title);
+
+        group.getChildren().add(titlePane);
+
         cardLabels = new HashMap<>();
 
         try{
@@ -81,29 +106,61 @@ public class AskGodMenu extends Menu {
                 });
                 cardLabels.get(num).setVisible(false);
                 group.getChildren().add(cardLabels.get(num));
-                final Rectangle rectDesc = new Rectangle(200,130);
-                rectDesc.setFill(Color.LIGHTGRAY);
+
+                final Rectangle rectDesc = new Rectangle(250,200);
+                rectDesc.setFill(patt);
                 rectDesc.setStroke(Color.BLACK);
                 rectDesc.setStrokeWidth(2);
                 rectDesc.setVisible(false);
-                final Label cardDesc = new Label(name+"\n"+desc);
+
+                StackPane namePane = new StackPane();
+                namePane.setTranslateX(rect.getTranslateX() + 10);
+                namePane.setTranslateY(rect.getTranslateY() + 10);
+
+                Rectangle nameRect = new Rectangle(230, 30);
+                nameRect.setVisible(false);
+                namePane.getChildren().add(nameRect);
+
+                Text nameText = new Text();
+                nameText.setText(name);
+                nameText.setFont(new Font("Forte", 25));
+                nameText.setFill(Color.GOLD);
+                nameText.setStroke(Color.BLACK);
+                nameText.setStrokeWidth(1);
+                nameText.setVisible(false);
+                namePane.getChildren().add(nameText);
+
+
+                final Label cardDesc = new Label(desc);
+                cardDesc.setFont(new Font("Forte", 16));
                 cardDesc.setWrapText(true);
-                cardDesc.setMaxHeight(110);
-                cardDesc.setMaxWidth(180);
+                cardDesc.setMaxHeight(145);
+                cardDesc.setMaxWidth(230);
                 cardDesc.setVisible(false);
-                rectDesc.toFront();
-                cardDesc.toFront();
+
                 cardLabels.get(num).setOnMouseMoved(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         rectDesc.setTranslateX(cardLabels.get(num).getTranslateX()+cardLabels.get(num).getWidth()-10);
                         rectDesc.setTranslateY(cardLabels.get(num).getTranslateY()+cardLabels.get(num).getHeight()/3);
+
+                        namePane.setTranslateX(rectDesc.getTranslateX() + 10);
+                        namePane.setTranslateY(rectDesc.getTranslateY() + 10);
+
+                        nameText.setTextAlignment(TextAlignment.CENTER);
+                        nameText.setTranslateY(0);
+
                         cardDesc.setTranslateX(rectDesc.getTranslateX()+10);
-                        cardDesc.setTranslateY(rectDesc.getTranslateY()+10);
+                        cardDesc.setTranslateY(rectDesc.getTranslateY()+45);
+
                         cardDesc.setVisible(true);
                         rectDesc.setVisible(true);
+                        nameText.setVisible(true);
+
                         rectDesc.toFront();
                         cardDesc.toFront();
+                        namePane.toFront();
+                        nameText.toFront();
                     }
                 });
                 cardLabels.get(num).setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -111,10 +168,12 @@ public class AskGodMenu extends Menu {
                     public void handle(MouseEvent mouseEvent) {
                         cardDesc.setVisible(false);
                         rectDesc.setVisible(false);
+                        nameText.setVisible(false);
                     }
                 });
                 group.getChildren().add(rectDesc);
                 group.getChildren().add(cardDesc);
+                group.getChildren().add(namePane);
 
             }
         }catch (Exception e){
@@ -123,7 +182,7 @@ public class AskGodMenu extends Menu {
     }
     public void setCards(List<Card> cards){
         double offsetX = 10;
-        int offsetY = 30;
+        int offsetY = 80;
         for(Card card: cards){
             offsetX += (rect.getWidth()-20-cardLabels.get(card.getNum()).getWidth()*cards.size())/((2+cards.size()-1));
             cardLabels.get(card.getNum()).setVisible(true);

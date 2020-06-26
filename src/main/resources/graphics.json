@@ -407,6 +407,14 @@
 		{
 			"name": "background_menu",
 			"file": "gui/menu/backgroundMenu.png"
+		},
+		{
+			"name": "two_players",
+			"file": "gui/menu/twoPlayers.png"
+		},
+		{
+			"name": "three_players",
+			"file": "gui/menu/threePlayers.png"
 		}
 	]
 }

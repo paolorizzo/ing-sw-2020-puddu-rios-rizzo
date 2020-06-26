@@ -2,12 +2,15 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Player;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -63,8 +66,77 @@ public class PlayersMenu extends Menu {
             @Override
             public void run() {
                 playerCardLabels[id].setGraphic(imageView);
+                final Rectangle rectDesc = new Rectangle(250,200);
+                rectDesc.setFill(new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false));
+                rectDesc.setStroke(Color.BLACK);
+                rectDesc.setStrokeWidth(2);
+                rectDesc.setVisible(false);
+
+                StackPane namePane = new StackPane();
+                namePane.setTranslateX(rectDesc.getTranslateX() + 10);
+                namePane.setTranslateY(rectDesc.getTranslateY() + 10);
+
+                Rectangle nameRect = new Rectangle(230, 30);
+                nameRect.setVisible(false);
+                namePane.getChildren().add(nameRect);
+
+                Text nameText = new Text();
+                nameText.setText(player.getCard().getName());
+                nameText.setFont(new Font("Forte", 25));
+                nameText.setFill(Color.GOLD);
+                nameText.setStroke(Color.BLACK);
+                nameText.setStrokeWidth(1);
+                nameText.setVisible(false);
+                namePane.getChildren().add(nameText);
+
+
+                final Label cardDesc = new Label(player.getCard().getDescription());
+                cardDesc.setFont(new Font("Forte", 16));
+                cardDesc.setWrapText(true);
+                cardDesc.setMaxHeight(145);
+                cardDesc.setMaxWidth(230);
+                cardDesc.setVisible(false);
+
+                playerCardLabels[id].setOnMouseMoved(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        rectDesc.setTranslateX(playerCardLabels[id].getTranslateX()+playerCardLabels[id].getWidth()-10);
+                        rectDesc.setTranslateY(playerCardLabels[id].getTranslateY()+playerCardLabels[id].getHeight()/3);
+
+                        namePane.setTranslateX(rectDesc.getTranslateX() + 10);
+                        namePane.setTranslateY(rectDesc.getTranslateY() + 10);
+
+                        nameText.setTextAlignment(TextAlignment.CENTER);
+                        nameText.setTranslateY(0);
+
+                        cardDesc.setTranslateX(rectDesc.getTranslateX()+10);
+                        cardDesc.setTranslateY(rectDesc.getTranslateY()+45);
+
+                        cardDesc.setVisible(true);
+                        rectDesc.setVisible(true);
+                        nameText.setVisible(true);
+
+                        rectDesc.toFront();
+                        cardDesc.toFront();
+                        namePane.toFront();
+                        nameText.toFront();
+                    }
+                });
+                playerCardLabels[id].setOnMouseExited(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        cardDesc.setVisible(false);
+                        rectDesc.setVisible(false);
+                        nameText.setVisible(false);
+                    }
+                });
+                group.getChildren().add(rectDesc);
+                group.getChildren().add(cardDesc);
+                group.getChildren().add(namePane);
             }
         });
+
+
 
     }
     public void setNumPlayers(final int numPlayers){
