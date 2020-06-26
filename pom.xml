@@ -45,6 +45,26 @@
     </dependency>
 
     <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>11.0.2</version>
+      <classifier>win</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>11.0.2</version>
+      <classifier>linux</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>11.0.2</version>
+      <classifier>mac</classifier>
+    </dependency>
+
+
+    <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-assembly-plugin</artifactId>
       <version>3.3.0</version>
@@ -107,7 +127,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>it.polimi.ingsw.GuiApp</mainClass>
+              <mainClass>it.polimi.ingsw.ClientLauncher</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
