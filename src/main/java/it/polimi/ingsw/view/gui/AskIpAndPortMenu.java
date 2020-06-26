@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -88,8 +89,6 @@ public class AskIpAndPortMenu extends Menu
         enter.setTranslateZ(0);
         enter.setFill(Color.BLUE);
         enter.setStroke(Color.BLACK);
-
-
 
         StackPane enterPane = new StackPane();
         enterPane.setTranslateX(enter.getTranslateX());
