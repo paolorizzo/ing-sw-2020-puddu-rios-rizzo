@@ -4,6 +4,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+/**
+ * A tree of Actions. This data structure is core to the model package,
+ * and allows a simple representation of the actions that are allowed for a player.
+ * This is especially useful to implement the god powers, since every special behaviour
+ * can be broken down to a modification of a player's ActionTree
+ */
 public class ActionTree {
     private boolean win;
     private boolean lose;
