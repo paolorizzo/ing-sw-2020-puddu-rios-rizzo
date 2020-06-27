@@ -11,7 +11,7 @@ public class BuildAction extends Action{
     private Piece piece;
 
     /**
-     * contructs a complete BuildAction
+     * constructs a complete BuildAction
      * @param workerID a string that univocally represents a worker
      * @param targetX the x coordinate on the board of the space on which the building is erected
      * @param targetY the y coordinate on the board of the space on which the building is erected
@@ -91,6 +91,14 @@ public class BuildAction extends Action{
         BuildAction that = (BuildAction) o;
         return piece == that.piece;
     }
+
+    /**
+     * checks if this action is performed by the given worker, and uses
+     * the given piece
+     * @param workerID the id of the worker object of the query
+     * @param piece the piece to use for the query
+     * @return true if this action matches the arguments of the call
+     */
     public boolean matches(String workerID, Piece piece){
         if(!this.workerID.equals(workerID))
             return false;
@@ -98,6 +106,17 @@ public class BuildAction extends Action{
             return false;
         return true;
     }
+
+    /**
+     * Checks if this action is performed by the given worker, is
+     * contextual to the given piece, and has as its actual target
+     * the space identified by the arguments targetX and targetY
+     * @param workerID workerID the id of the worker object of the query
+     * @param targetX the x coordinate of the target space
+     * @param targetY the y coordinate of the target space
+     * @param piece the piece to use for the query
+     * @return true if this action matches the arguments
+     */
     public boolean matches(String workerID, int targetX, int targetY, Piece piece){
         if(!this.workerID.equals(workerID))
             return false;
