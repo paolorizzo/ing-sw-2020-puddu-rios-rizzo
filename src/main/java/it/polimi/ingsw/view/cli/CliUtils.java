@@ -38,6 +38,16 @@ public class CliUtils
         }
     }
 
+    static void handlePlayerDisconnection()
+    {
+        showPlayerDisconnected();
+    }
+
+    static void handleServerDisconnection()
+    {
+        showServerDisconnected();
+    }
+
     //SETUP
     static boolean handleRestore()
     {
@@ -804,6 +814,55 @@ public class CliUtils
 
         //create frame
         RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 13,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showServerDisconnected()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,36);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(12,15,11,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("  THE SERVER IS NOT REACHABLE  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 13,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showPlayerDisconnected()
+    {
+        System.out.println("\n\n\n\n\n");
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,36);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(12,15,13,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("  SORRY! ANOTHER PLAYER QUIT THE GAME  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 15,3);
         frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
 
         //overlap figures in the correct order

@@ -35,6 +35,8 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     private final Object playersLock = new Object();
     private boolean notifyingWaitingForPlayers = false;
 
+    boolean reading;
+
 
     public Client(String ip, int port)
     {
@@ -42,6 +44,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.port = port;
         virtualFeed = new FeedObservable();
         alive = true;
+        this.reading = true;
         this.synchronizer = new MessageSynchronizer(this);
         this.netPass = true;
     }
@@ -50,6 +53,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
     {
         virtualFeed = new FeedObservable();
         alive = true;
+        this.reading = true;
         this.synchronizer = new MessageSynchronizer(this);
     }
 
@@ -76,6 +80,13 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.cw = cw;
         addObserver(cw);
         this.alivenessHandler = new AlivenessHandler(this, cw);
+    }
+
+    @Override
+    public void closeConnection()
+    {
+        alivenessHandler.stopMonitoringLiveness();
+
     }
 
     public ClientView getClientView()
@@ -163,7 +174,7 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                 alivenessHandler.startMonitoringLiveness();
                 ObjectInputStream ByteIn;
 
-                while(true)
+                while(reading)
                 {
                     try
                     {
@@ -179,6 +190,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
                                 {
                                     notifyingWaitingForPlayers = false;
                                 }
+                            }
+                            if(message.getMethodName().equals("notifyDisconnection"))
+                            {
+                                reading = false;
                             }
                             synchronizer.enqueueMessage(message);
                     }

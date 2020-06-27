@@ -48,8 +48,14 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void showDisconnection(String message)
     {
-        //TODO implement this
-        System.out.println(message);
+        if(message.contains("impossible"))
+        {
+            CliUtils.handleServerDisconnection();
+        }
+        else if(message.contains("player"))
+        {
+            CliUtils.handlePlayerDisconnection();
+        }
     }
 
     @Override
@@ -58,7 +64,6 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         if(e.contains("Waiting for the server"))
         {
             CliUtils.handleWaitingForServer(model);
-
         }
         else if(e.contains("Waiting for the other players"))
         {

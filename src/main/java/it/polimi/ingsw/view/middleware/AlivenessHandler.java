@@ -45,7 +45,7 @@ public class AlivenessHandler
         {
             if(monitoring)
             {
-                System.err.println("Registering an aliveness failure.");
+                //System.err.println("Registering an aliveness failure.");
                 failures++;
 
                 if(failures == 1)
@@ -75,7 +75,7 @@ public class AlivenessHandler
                 {
                     if((!clientIsLive) && (monitoring))
                     {
-                        System.err.println("The other side of the network is not responding.");
+                        //System.err.println("The other side of the network is not responding.");
                         view.connectionLost();
                         monitoring = false;
                     }
@@ -92,6 +92,11 @@ public class AlivenessHandler
         view.connectionLost();
     }
 
+    void stopMonitoringLiveness()
+    {
+        this.monitoring = false;
+    }
+
     protected void startPing() {
         new Thread(() -> {
             while (monitoring)
@@ -105,7 +110,6 @@ public class AlivenessHandler
                     Thread.currentThread().interrupt();
                 }
 
-                //System.out.println("Sending pong to "+this);
                 messenger.sendMessage("pong", new Timestamp(System.currentTimeMillis()));
             }
         }).start();

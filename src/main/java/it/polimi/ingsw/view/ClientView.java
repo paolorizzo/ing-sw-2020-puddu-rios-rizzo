@@ -56,6 +56,7 @@ public class ClientView extends View implements UserInterfaceObserver
     public void connectionLost()
     {
         //TODO inform the client whether the game has been saved
+        net.closeConnection();
         getUi().showDisconnection("Sorry, it is impossible to reach the server at this time!");
     }
 
@@ -418,6 +419,7 @@ public class ClientView extends View implements UserInterfaceObserver
     public synchronized void updateDisconnection()
     {
         //TODO inform the client whether the game has been saved or not
+        net.closeConnection();
         getUi().showDisconnection("Sorry, another player has disconnected from the game!");
     }
 
