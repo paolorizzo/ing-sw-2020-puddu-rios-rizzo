@@ -8,15 +8,30 @@ public class Board {
     private Space[][] spaces;
     private PieceBag pieceBag;
     private HashMap<String, Worker> workers;
+
+    /**
+     * Constructs an empty board
+     */
     public Board(){
         spaces = generateSpaces();
         workers = new HashMap<>();
         pieceBag = new PieceBag();
     }
+
+    /**
+     * creates the workers for a given player
+     * @param p the player for whom to create the workers
+     */
     public void createPlayerWorkers(Player p){
         workers.put(p.getWorker(Sex.MALE).toString(), p.getWorker(Sex.MALE));
         workers.put(p.getWorker(Sex.FEMALE).toString(), p.getWorker(Sex.FEMALE));
     }
+
+    /**
+     * populates the field spaces with a correctly build collection
+     * of Space object, representing an empty board
+     * @return a collection of Space objects which represents an empty board
+     */
     private Space[][] generateSpaces(){
         Space[][] spaces = new Space[5][5];
         for(int i=0;i<5;i++){
@@ -48,12 +63,26 @@ public class Board {
         return spaces;
     }
 
+    /**
+     * returns the collection of Space objects that make up the board
+     * @return the collection of Space objects that make up the board
+     */
     public Space[][] getSpaces(){
         return spaces;
     }
 
+    /**
+     * returns the piece bag, which contains info about how many pieces remain
+     * for each type
+     * @return the piece bag
+     */
     public PieceBag getPieceBag() { return pieceBag;}
 
+    /**
+     * reads an action and calculates the next state of the board
+     * based on it
+     * @param action the given action taken by some player
+     */
     public void executeAction(Action action){
         if(action instanceof SetupAction)
             this.executeAction((SetupAction)action);
@@ -67,6 +96,11 @@ public class Board {
             throw new IllegalArgumentException("Can't execute a normal action!");
     }
 
+    /**
+     * reads a setup action and calculates the next state of the board
+     * based on it
+     * @param action the given setup action taken by some player
+     */
     public void executeAction(SetupAction action){
         Worker worker = workers.get(action.getWorkerID());
         //aggiungo worker
@@ -74,6 +108,12 @@ public class Board {
         //setto space
         worker.setSpace(spaces[action.getTargetX()][action.getTargetY()]);
     }
+
+    /**
+     * reads a move action and calculates the next state of the board
+     * based on it
+     * @param action the given move action taken by some player
+     */
     public void executeAction(MoveAction action){
         //salvo worker
         Worker worker = spaces[((MoveAction) action).getStartX()][((MoveAction) action).getStartY()].getWorkerOnIt();
@@ -84,6 +124,12 @@ public class Board {
         //setto space
         worker.setSpace(spaces[action.getTargetX()][action.getTargetY()]);
     }
+
+    /**
+     * reads a move and force action and calculates the next state of the board
+     * based on it
+     * @param action the given move and force action taken by some player
+     */
     public void executeAction(MoveAndForceAction action){
         //salvo workers
         Worker worker = spaces[((MoveAction)action).getStartX()][((MoveAction)action).getStartY()].getWorkerOnIt();
@@ -98,10 +144,22 @@ public class Board {
         worker.setSpace(spaces[action.getTargetX()][action.getTargetY()]);
         forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedTargetX()][((MoveAndForceAction) action).getForcedTargetY()]);
     }
+
+    /**
+     * reads a build action and calculates the next state of the board
+     * based on it
+     * @param action the given build action taken by some player
+     */
     public void executeAction(BuildAction action){
         pieceBag.pickPiece(((BuildAction) action).getPiece());
         spaces[action.getTargetX()][action.getTargetY()].addPiece(((BuildAction) action).getPiece());
     }
+
+    /**
+     * reads an action and calculates the inverse of the effect it would
+     * have on the board
+     * @param action the given action
+     */
     public void undoExecuteAction(Action action){
         if(action instanceof SetupAction)
             this.undoExecuteAction((SetupAction)action);
@@ -114,6 +172,12 @@ public class Board {
         else
             throw new IllegalArgumentException("Can't undo a normal action!");
     }
+
+    /**
+     * reads a setup action and calculates the inverse of the effect it would
+     * have on the board
+     * @param action the given setup action
+     */
     public void undoExecuteAction(SetupAction action){
         Worker worker = workers.get(action.getWorkerID());
         //aggiungo worker
@@ -121,6 +185,12 @@ public class Board {
         //setto space
         worker.setSpace(null);
     }
+
+    /**
+     * reads a move action and calculates the inverse of the effect it would
+     * have on the board
+     * @param action the given move action
+     */
     public void undoExecuteAction(MoveAction action){
         //salvo worker
         Worker worker = spaces[action.getTargetX()][action.getTargetY()].getWorkerOnIt();
@@ -131,6 +201,12 @@ public class Board {
         //setto space
         worker.setSpace(spaces[((MoveAction)action).getStartX()][((MoveAction)action).getStartY()]);
     }
+
+    /**
+     * reads a move and force action and calculates the inverse of the effect it would
+     * have on the board
+     * @param action the given move and force action
+     */
     public void undoExecuteAction(MoveAndForceAction action){
         //salvo workers
         Worker worker = spaces[((MoveAction)action).getTargetX()][((MoveAction)action).getTargetY()].getWorkerOnIt();
@@ -145,11 +221,21 @@ public class Board {
         worker.setSpace(spaces[action.getStartX()][action.getStartY()]);
         forcedWorker.setSpace(spaces[((MoveAndForceAction) action).getForcedStartX()][((MoveAndForceAction) action).getForcedStartY()]);
     }
+
+    /**
+     * reads a build action and calculates the inverse of the effect it would
+     * have on the board
+     * @param action the given build action
+     */
     public void undoExecuteAction(BuildAction action){
         pieceBag.undoPickPiece(((BuildAction) action).getPiece());
         spaces[action.getTargetX()][action.getTargetY()].removeLastPiece();
     }
 
+    /**
+     * removes the workers of a given player from the board
+     * @param p the given player
+     */
     public void removeWorkersPlayer(Player p){
         Worker m = p.getWorker(Sex.MALE);
         Worker f = p.getWorker(Sex.FEMALE);
@@ -214,6 +300,13 @@ public class Board {
         return s;
     }
 
+    /**
+     * compares this board with another one, by propagating
+     * the comparison through the collections that make up Board
+     * @param that the other board
+     * @return true if the two boards and their internal objects
+     * are identical
+     */
     public boolean fullEquals(Board that){
         boolean equality = true;
         equality &= this.pieceBag.equals(that.pieceBag);

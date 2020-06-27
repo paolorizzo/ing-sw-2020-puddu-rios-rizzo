@@ -38,7 +38,7 @@ public class ActionTree {
      * @param win flag representing whether this is a winning action
      * @param lose flag representing whether this is a losing action
      * @param endOfTurn flag representing whether a turn can be ended on this action
-     * @param appendedLayer flag representing whether this node can have children
+     * @param appendedLayer flag representing whether this node can have children at this time
      */
     public ActionTree(Action action, boolean win, boolean lose, boolean endOfTurn, boolean appendedLayer){
         this.root = false;
@@ -107,16 +107,16 @@ public class ActionTree {
     }
 
     /**
-     * returns true if this node can have children
-     * @return true if this node can have children
+     * returns true if this node can have children at this time
+     * @return true if this node can have children at this time
      */
     public boolean isAppendedLayer() {
         return appendedLayer;
     }
 
     /**
-     * sets whether this node can have children
-     * @param appendLayer flag representing whether this node can have children
+     * sets whether this node can have children at this time
+     * @param appendLayer flag representing whether this node can have children at this time
      */
     public void setAppendedLayer(boolean appendLayer) {
         this.appendedLayer = appendLayer;
