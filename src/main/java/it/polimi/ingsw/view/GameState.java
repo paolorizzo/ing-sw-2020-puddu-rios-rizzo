@@ -60,7 +60,7 @@ public enum GameState {
             //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
-            System.out.println(possibleActions);
+            //System.out.println(possibleActions);
             view.getUi().askAction(possibleActions, false);
         }
     },
