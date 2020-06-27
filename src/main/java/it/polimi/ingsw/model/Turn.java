@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//Turn currently implements no logic to check whether the actions that make it up have any coherence
-//this task is deferred to the controller, which should check for coherence when taking user input.
-//This check is supposed to happen in the VALIDATE_SELECT and VALIDATE_ACTION states of its FSM
-
 /**
  * aggregates multiple actions that belong to the same player, representing the more complex idea of turn
  */
@@ -44,8 +40,6 @@ public class Turn extends MapConvertible{
         actions.add(firstAction);
     }
 
-    //adds action and checks that no more than 3 actions are added
-    //does not accept null arguments
     /**
      * adds an action to the turn, if it passes basic non-semantic checks
      * @param action the action to add to the turn
