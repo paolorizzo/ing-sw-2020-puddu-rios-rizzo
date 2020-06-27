@@ -5,9 +5,10 @@ import it.polimi.ingsw.observation.*;
 import java.io.File;
 import java.util.*;
 
-//TODO create singleton superclass
-//TODO test whole class
-//TODO refactor into 3 models, one for every feed
+/**
+ * Master class of the model package, exposes most methods
+ * and is the head of the reference structure of the model package
+ */
 public class Model {
     public static Model instance;
 
