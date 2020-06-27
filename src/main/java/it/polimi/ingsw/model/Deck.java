@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Represents the deck of all possible cards in the game.
+ * Evolves with the game, removing cards as they are picked
+ * by the players
+ */
 public class Deck implements Serializable {
     HashMap<Integer, Card> cardsInDeck;
 
