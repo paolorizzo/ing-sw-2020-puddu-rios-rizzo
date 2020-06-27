@@ -134,9 +134,24 @@ public class Action extends MapConvertible implements Serializable {
         return this.toString().equals(that.toString());
     }
 
+    /**
+     * checks if this action is performed by the given worker
+     * @param workerID the id of the worker object of the query
+     * @return true if this action is performed by the given worker
+     */
     public boolean matches(String workerID){
         return this.workerID.equals(workerID);
     }
+
+    /**
+     * checks if this action is performed by the given worker, and has the given
+     * target X and Y as its actual target
+     * @param workerID the id of the worker object of the query
+     * @param targetX the x coordinate of the target space
+     * @param targetY the y coordinate of the target space
+     * @return true if the action is performed by the given worker and
+     * has the given target as its actual target
+     */
     public boolean matches(String workerID, int targetX, int targetY){
         if(!this.workerID.equals(workerID))
             return false;
@@ -146,9 +161,32 @@ public class Action extends MapConvertible implements Serializable {
             return false;
         return true;
     }
+
+    /**
+     * Checks if this action is performed by the given worker and is
+     * contextual to the given piece
+     * Always returns false for this class, but can have different return values
+     * for its subclasses
+     * @param workerID the id of the worker object of the query
+     * @param piece the piece to use for the query
+     * @return true if this action matches the arguments of the call
+     */
     public boolean matches(String workerID, Piece piece){
         return false;
     }
+
+    /**
+     * Checks if this action is performed by the given worker, is
+     * contextual to the given piece, and has as its actual target
+     * the space identified by the arguments targetX and targetY
+     * Always returns false for this class, but can have different return values
+     * for its subclasses
+     * @param workerID workerID the id of the worker object of the query
+     * @param targetX the x coordinate of the target space
+     * @param targetY the y coordinate of the target space
+     * @param piece the piece to use for the query
+     * @return true if this action matches the arguments
+     */
     public boolean matches(String workerID, int targetX, int targetY, Piece piece){
         return false;
     }
