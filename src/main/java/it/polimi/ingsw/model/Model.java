@@ -17,6 +17,9 @@ public class Model {
     public FeedObservable feed;
     public Board board;
 
+    /**
+     * constructs an empty model
+     */
     public Model(){
         board = new Board();
         players = new HashMap<>();
@@ -26,11 +29,19 @@ public class Model {
 
     //general methods
 
+    /**
+     * returns the feed used for communication towards the views
+     * @return the feed
+     */
     FeedObservable getFeed(){
         return feed;
     }
 
     //TODO non esporre verso controller
+    /**
+     * returns the map of ids to players
+     * @return the map of ids to players
+     */
     public HashMap<Integer, Player> getPlayers(){
         return players;
         /*
@@ -44,6 +55,12 @@ public class Model {
     }
 
     //TODO non esporre verso controller
+
+    /**
+     * returns the player for a given id
+     * @param id the given id
+     * @return the player corresponding to the given id
+     */
     public Player getPlayer(int id){
         /*
         return players.get(id).lightClone();
@@ -52,15 +69,22 @@ public class Model {
         return players.get(id);
     }
 
+    /**
+     * sets the number of players on the game, and notifies the views of it
+     * @param numPlayers the chosen number of players
+     */
     public void setNumPlayers(int numPlayers){
         game.setNumPlayers(numPlayers);
         feed.notifyNumPlayers(numPlayers);
     }
 
-    //relies on the controller to only add valid players
-    //adds the player in its right place in the ArrayList
-    //publishes the notify for all known names so that the last client can know every other client
-    //that has already posted their name, possibly even before the last one joined
+    /**
+     * relies on the controller to only add valid players
+     * adds the player in its right place in the ArrayList
+     * publishes the notify for all known names so that the last client can know every other client
+     * that has already posted their name, possibly even before the last one joined
+     * @param player
+     */
     public void addPlayer(Player player){
         int id = player.getId();
         players.put(id, player);
@@ -69,7 +93,11 @@ public class Model {
         feed.notifyName(player.getId(), player.getNickname());
     }
 
-    //returns true if someone already claimed the nickname
+    /**
+     * returns true if someone already claimed the nickname
+     * @param name the name that is being checked
+     * @return true if someone already claimed the nickname
+     */
     public boolean nicknamePresent(String name){
         boolean alreadyPresent = false;
         for(Player p: players.values()) {
@@ -83,6 +111,12 @@ public class Model {
     //if the get fails because it is impossible to get a player with that id
     //it catches the relative exception and returns false because
     //the fact that it is impossible to get it means that it is not present
+
+    /**
+     * returns true if there is already a player with that id
+     * @param id the id that is the object of the query
+     * @return true if there is already a player with that id
+     */
     public boolean playerPresent(int id){
         return players.get(id) != null;
     }
@@ -102,14 +136,26 @@ public class Model {
         feed.notifyGod(id, card);
     }
 
+    /**
+     * returns the number of players
+     * @return the number of players
+     */
     public int getNumPlayers(){
         return game.getNumPlayers();
     }
 
+    /**
+     * returns true if the number of players has been set
+     * @return true if the number of players has been set
+     */
     public boolean numPlayersIsSet(){
         return game.numPlayersIsSet();
     }
 
+    /**
+     * add an observer to the feed
+     * @param obs the observer to be added
+     */
     public void addObserver(FeedObserver obs){
         feed.addObserver(obs);
         feed.notifyStart();
@@ -137,6 +183,7 @@ public class Model {
     }
 
     /**
+     * returns true if a worker for the given id and sex has been placed
      * @param id of the player that owns the worker
      * @param s sex of the worker
      * @return true if worker of player id of sex s has been placed
@@ -146,7 +193,7 @@ public class Model {
     }
 
     /**
-     *
+     * returns position of the requested worker on the given axis
      * @param id of the player that owns the worker
      * @param s sex of the worker
      * @param axis on which to get the position
@@ -162,6 +209,11 @@ public class Model {
         return players.get(id).getWorker(s).getSpace().getPosY();
     }
 
+    /**
+     * executes the action on the board and saves it in the current turn
+     * @param id
+     * @param action
+     */
     public void executeAction(int id, Action action) {
         board.executeAction(action);
         game.addAction(action);

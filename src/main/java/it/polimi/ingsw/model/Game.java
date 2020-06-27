@@ -29,6 +29,10 @@ public class Game {
 
     public TurnArchive turnArchive;
 
+    /**
+     * constructs an empty Game
+     * @param model the model that the game is contextual to
+     */
     public Game(Model model){
         this.model = model;
         numPlayers = -1;
@@ -42,15 +46,28 @@ public class Game {
         finish = false;
     }
 
+    /**
+     * constructs an empty game with a given number of players
+     * @param model the model that the game is contextual to
+     * @param numPlayers the number of players
+     */
     public Game(Model model, int numPlayers){
         this(model);
         setNumPlayers(numPlayers);
     }
 
+    /**
+     * returns true if the number of players has been set
+     * @return true if the number of players has been set
+     */
     public boolean numPlayersIsSet(){
         return numPlayers != -1;
     }
 
+    /**
+     * sets the number of players and initializes the rotation of turns
+     * @param numPlayers the number of players
+     */
     public void setNumPlayers(int numPlayers) {
         //System.out.println("Setting a game for " + numPlayers + " players");
         this.numPlayers = numPlayers;
@@ -58,10 +75,18 @@ public class Game {
         model.game.initializePlayerSuccession();
     }
 
+    /**
+     * returns true if the succession of player has been initialized
+     * @return true if the succession of player has been initialized
+     */
     public boolean playerSuccessionUninitialized(){
         return idCurrentPlayers == null;
     }
 
+    /**
+     * initializes the rotation of players, starting by
+     * player 1 (ids start at 0)
+     */
     public void initializePlayerSuccession(){
         idCurrentPlayers = new ArrayList<>();
         for(int i=0;i<numPlayers;i++){
@@ -70,10 +95,17 @@ public class Game {
         pointerIdCurrentPlayers = 1;
     }
 
+    /**
+     * returns the number of players
+     * @return the number of players
+     */
     public int getNumPlayers() {
         return numPlayers;
     }
 
+    /**
+     * advances the turn
+     */
     public void nextTurn(){
         System.out.println("advancing turn");
         if(currentTurn != null)
@@ -84,19 +116,34 @@ public class Game {
         possibleActions = null;
     }
 
+    /**
+     * returns the id of the current player
+     * @return the id of the current player
+     */
     public int getCurrentPlayerId(){
         return idCurrentPlayers.get(pointerIdCurrentPlayers);
     }
 
-
+    /**
+     * returns the deck of cards
+     * @return the deck of cards
+     */
     public Deck getDeck(){
         return deck;
     }
 
+    /**
+     * returns true if the set of cards has already been picked from the deck
+     * @return true if the set of cards has already been picked from the deck
+     */
     public boolean cardsAlreadyChosen() {
         return chosenCards != null;
     }
 
+    /**
+     * picks a set of cards from the deck, and sets them as chosen
+     * @param numCards the list of numbers of the chosen cards
+     */
     public void setChosenCards(List<Integer> numCards) {
         this.chosenCards = new ArrayList<>();
         for(Integer num: numCards) {
@@ -104,10 +151,23 @@ public class Game {
         }
     }
 
+    /**
+     * returns the cards that have been chosen for the game,
+     * but not yet picked for a player
+     * @return the cards that have been chosen for the game,
+     * but not yet picked for a player
+     */
     public List<Card> getChosenCards() {
         return chosenCards;
     }
 
+    /**
+     * returns the card corresponding to the given number,
+     * if it has been chosen from the deck
+     * @param numCard the number of the card
+     * @return the card corresponding to the given number,
+     * if it has been chosen from the deck
+     */
     public Card getChosenCard(int numCard){
         for(Card card: chosenCards)
             if(card.getNum() == numCard)
@@ -115,10 +175,20 @@ public class Game {
         return null;
     }
 
+    /**
+     * removes a card from the set of chosen cards
+     * @param card the card to be removed
+     */
     public void removeChosenCard(Card card) {
         chosenCards.remove(card);
     }
 
+    /**
+     * checks whether a card can be picked from the set
+     * of possible cards
+     * @param numCard the number of the given card
+     * @return true if the card can be chosen by a player
+     */
     public boolean isCardPickable(int numCard) {
         if(!cardsAlreadyChosen())
             return false;
@@ -127,6 +197,12 @@ public class Game {
         return true;
     }
 
+    /**
+     * returns the list of possible setup actions for a given player,
+     * if it is their turn
+     * @param id the id of the player related to the query
+     * @return the list of possible setup actions for a given player
+     */
     public List<Action> getPossibleSetupActions(int id){
         if(id != getCurrentPlayerId())
             return null;
@@ -150,15 +226,13 @@ public class Game {
             System.out.println("\t" + a.toString());
         }
     }
-    //return the possible actions for an id.
-    //views always ask for possible actions to do
-    //if an id asks possible actions and he lost, win or finish the actions for this turn
-    //this method set all for the next id
+
     /**
      * MAY ADVANCE THE TURN
      * always called when a view asks for its possible actions
      * if this is the first time the actions are being asked in the current turn, constructs the turn and generates the full actionTree
-     * //TODO complete the javadoc for this method
+     * returns the possible actions for an id
+     * Views must always ask for possible actions before publishing their chosen action
      * @param id for which to calculate the possible actions
      * @return the actions that are currently possible for the given id
      */
@@ -225,6 +299,12 @@ public class Game {
         }
         return possibleActions;
     }
+
+    /**
+     * Checks whether an action is possible at this time
+     * @param action the action to check
+     * @return true if the given action is possible at this time
+     */
     public boolean possibleActionsContains(Action action) {
         if(possibleActions == null)
             return false;
@@ -234,6 +314,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * Generates the action tree for the given player
+     * @param id the id of the given player
+     * @return the tree of possible actions
+     */
     private ActionTree generateActionTree(int id){
         ActionTree actionTree = model.players.get(id).generateActionTree(model.board);
         for(int opponent: idCurrentPlayers){
@@ -243,12 +328,18 @@ public class Game {
         return actionTree;
     }
 
-
-
+    /**
+     * adds a setup action to the current turn
+     * @param action the action to add to the turn
+     */
     public void addSetupAction(Action action){
         currentTurn.add(action);
     }
 
+    /**
+     * adds a general action to the current turn
+     * @param action the action to be added
+     */
     public void addAction(Action action){
         currentTurn.add(action);
         ActionTree nextChild = null;
@@ -260,14 +351,26 @@ public class Game {
         canEndTurn |= actionTreeCurrentPlayer.isEndOfTurn();
 
     }
+
+    /**
+     * Adds the current turn to the turn archive
+     */
     public void addTurnInArchive(){
         turnArchive.addTurn(currentTurn);
     }
 
+    /**
+     * checks whether it is possible to end the current turn at this time
+     * @return true if it is possible to end the current turn at this time
+     */
     public boolean isEndOfTurnPossible() {
         return canEndTurn;
     }
 
+    /**
+     * returns true if the game is finished
+     * @return true if the game is finished
+     */
     public boolean isFinish(){
         return finish;
     }
