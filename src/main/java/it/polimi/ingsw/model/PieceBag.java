@@ -5,6 +5,10 @@ import java.util.Arrays;
 public class PieceBag {
     int countLevel[] = new int[5];
 
+    /**
+     * constructs a piece bag with the right number of pieces
+     * to start the game
+     */
     public PieceBag()
     {
         countLevel[Piece.LEVEL0.getLevel()] = 0;
@@ -14,16 +18,30 @@ public class PieceBag {
         countLevel[Piece.DOME.getLevel()] = 18;
     }
 
+    /**
+     * gets the count of remaining pieces of a given type
+     * @param p the given type of piece
+     * @return the count of remaining pieces of the given type
+     */
     public int getCount(Piece p)
     {
         return countLevel[p.getLevel()];
     }
 
+    /**
+     * checks whether there are remaining pieces of a given type
+     * @param p the given type of piece
+     * @return true if there remains at least one piece of the given type
+     */
     public boolean hasPiece(Piece p)
     {
         return getCount(p) > 0;
     }
 
+    /**
+     * picks a piece of the given type from the bag
+     * @param p the given type of piece
+     */
     public void pickPiece(Piece p)
     {
         if(getCount(p) == 0)
@@ -32,6 +50,10 @@ public class PieceBag {
             countLevel[p.getLevel()]--;
     }
 
+    /**
+     * puts a piece of the given type back into the bag
+     * @param p the type of piece
+     */
     public void undoPickPiece(Piece p)
     {
         countLevel[p.getLevel()]++;
