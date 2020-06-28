@@ -9,6 +9,9 @@ import java.io.IOException;
 public class CliApp {
     public static void main( String[] args )
     {
+        run();
+    }
+    public static void run(){
         Cli cli = new Cli();
         Client client = new Client();
 

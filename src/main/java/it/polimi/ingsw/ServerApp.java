@@ -7,10 +7,13 @@ public class ServerApp
 {
     public static void main( String[] args )
     {
+        run(42069);
+    }
+    public static void run(int port){
         Server server;
         try
         {
-            server = new Server(42069);
+            server = new Server(port);
             server.run();
         }
         catch (IOException e)
@@ -18,4 +21,5 @@ public class ServerApp
             System.err.println("Impossible to start the server!\n" + e.getMessage());
         }
     }
+
 }

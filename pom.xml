@@ -127,7 +127,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>it.polimi.ingsw.ClientLauncher</mainClass>
+              <mainClass>it.polimi.ingsw.Launcher</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
