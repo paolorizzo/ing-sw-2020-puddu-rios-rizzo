@@ -5,28 +5,54 @@ public class Worker {
     private int playerId;
     private Space space;
 
+    /**
+     * Constructs a worker, given its sex and the player it belongs to
+     * @param sex the sex of the worker
+     * @param player the player that the worker belongs to
+     */
     public Worker(Sex sex, Player player) {
         this.sex = sex;
         this.playerId = player.getId();
         this.space = null;
     }
 
+    /**
+     * returns the sex of the worker
+     * @return the sex of the worker
+     */
     public Sex getSex() {
         return sex;
     }
 
+    /**
+     * returns the player that the worker belongs to
+     * @return the player that the worker belongs to
+     */
     public int getPlayer() {
         return playerId;
     }
 
+    /**
+     * returns the space that the worker is on
+     * @return the space that the worker is on
+     */
     public Space getSpace() {
         return space;
     }
 
+    /**
+     * sets the worker on a given space
+     * @param space the space on which to set the worker
+     */
     void setSpace(Space space) {
         this.space = space;
     }
 
+    /**
+     * returns a string representing the worker,
+     * composed of the id of its player and the sex of the worker
+     * @return a string representing the worker
+     */
     @Override
     public String toString(){
         return "P"+playerId+"-"+sex.name().charAt(0);
