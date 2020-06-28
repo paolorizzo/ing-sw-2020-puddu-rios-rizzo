@@ -53,11 +53,13 @@ public class CliUtils
 
     static void handlePlayerDisconnection()
     {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
         showPlayerDisconnected();
     }
 
     static void handleServerDisconnection()
     {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
         showServerDisconnected();
     }
 
@@ -125,7 +127,7 @@ public class CliUtils
 
         while(chosenAction < 0)
         {
-            chosenSpace = selectionOnBoard(model, "Now! Choose where to put your worker", 0,0);
+            chosenSpace = selectionOnBoard(model, "Now! Choose where to put your worker. Use A and D to switch!", 0,0);
             chosenAction = getActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions);
         }
 
@@ -231,7 +233,7 @@ public class CliUtils
             else
             {
                 BidimensionalSelectionCLI selection = new BidimensionalSelectionCLI(getWorkersPositionFromId(model.getWorkers(), selectedWorker).getPosX(),4,true,getWorkersPositionFromId(model.getWorkers(), selectedWorker).getPosY(), 4, true);
-                System.out.println("\n\n\n");
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
                 showBoard(model, selection);
                 if(handleChooseBetweenMoveAndBuild()==0)
                     selectedAction = handleMoveAction(model, possibleActions, selectedWorker);
@@ -283,7 +285,7 @@ public class CliUtils
     {
         String input;
         int choice = 0;
-        PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_CYAN);
+        PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_CYAN);
 
 
         boolean spin = true;
@@ -315,7 +317,7 @@ public class CliUtils
     {
         String input;
         boolean choice = false;
-        PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_CYAN);
+        PrintCLI printer = new PrintCLI(AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_CYAN);
 
 
         boolean spin = true;
@@ -575,7 +577,7 @@ public class CliUtils
     //show methods
     static void showBoard(ModelCLI model)
     {
-        System.out.println("\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         showBoard(model, null);
     }
 
@@ -594,7 +596,7 @@ public class CliUtils
         playerLable.setPalette(AnsiColors.ANSI_BG_CYAN);
         back_canvas.addOverlappingFigure(playerLable);
         RectangleCLI innerLable  = playerLable.createInRelativeFrame(1,1,14,22);
-        innerLable.setPalette(AnsiColors.ANSI_BG_BLACK);
+        innerLable.setPalette(AnsiColors.ANSI_BG_WHITE);
         back_canvas.addOverlappingFigure(innerLable);
 
         //create the (empty) piecebag label
@@ -602,7 +604,7 @@ public class CliUtils
         buildLabel.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
         back_canvas.addOverlappingFigure(buildLabel);
         RectangleCLI innerBuildLabel  = buildLabel.createInRelativeFrame(1,1,14,9);
-        innerBuildLabel.setPalette(AnsiColors.ANSI_BG_BLACK);
+        innerBuildLabel.setPalette(AnsiColors.ANSI_BG_WHITE);
         back_canvas.addOverlappingFigure(innerBuildLabel);
 
         //populate the players label
@@ -636,7 +638,7 @@ public class CliUtils
             activePlayer.setPalette( model.getCurrentPlayerId() == currentPlayer.getId()? AnsiColors.ANSI_BRIGHT_BG_GREEN : AnsiColors.ANSI_BG_RED);
 
             RectangleCLI godDescription = activePlayer.createInRelativeFrame(0,1,12, 5);
-            godDescription.setPalette(AnsiColors.ANSI_BG_WHITE);
+            godDescription.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
             godDescription.addText(currentPlayer.getCard().getDescription());
 
             label.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN);
@@ -918,7 +920,7 @@ public class CliUtils
         //create Canvas
         CanvasCLI canvas = new CanvasCLI();
         canvas.setPalette(AnsiColors.ANSI_RESET);
-        canvas.setTextColor(AnsiColors.ANSI_BLACK);
+        canvas.setTextColor(AnsiColors.ANSI_WHITE);
 
         //create card
         RectangleCLI card = new RectangleCLI(10,4,16,27);
@@ -935,7 +937,7 @@ public class CliUtils
 
         //create name box
         RectangleCLI name = textBox.createInRelativeFrame(0,-2,12,1);
-        name.setPalette(AnsiColors.ANSI_BG_WHITE);
+        name.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
         name.addText(title);
 
         //create selection box
@@ -964,13 +966,14 @@ public class CliUtils
 
     private static void showControls()
     {
-        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_BLACK+ "Use WASD to control the selection: W to go UP, S to go DOWN, A to go RIGHT, D to go LEFT");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_WHITE+ "Use WASD to control the selection: W to go UP, S to go DOWN, A to go RIGHT, D to go LEFT");
         System.out.println(AnsiColors.ANSI_RESET);
     }
 
     private static void showNotYourTurn()
     {
-        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_BLACK+ "Please wait while the other players play");
+        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_WHITE+ "Please wait while the other players play");
         System.out.println(AnsiColors.ANSI_RESET);
     }
 
