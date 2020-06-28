@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Represents a worker. Each player has 2, and they
+ * can move on the board
+ */
 public class Worker {
     private Sex sex;
     private int playerId;
