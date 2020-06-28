@@ -379,11 +379,16 @@ public class Model {
      */
     public boolean allWorkersPlaced(){
         boolean placed = true;
-        for(int i=0;i<game.getNumPlayers();i++){
-            Player p = players.get(i);
-            Worker f =p.getWorker(Sex.FEMALE);
-            Worker m =p.getWorker(Sex.MALE);
-            placed &= (f.getSpace() != null && m.getSpace() != null);
+        try{
+            for(int i=0;i<game.getNumPlayers();i++){
+                Player p = players.get(i);
+                Worker f =p.getWorker(Sex.FEMALE);
+                Worker m =p.getWorker(Sex.MALE);
+                placed &= (f.getSpace() != null && m.getSpace() != null);
+            }
+        }
+        catch(NullPointerException npe){
+            placed = false;
         }
         return placed;
     }

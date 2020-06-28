@@ -487,12 +487,9 @@ public class Controller implements ControllerInterface
     @Override
     public void handleDisconnection(){
         model.feed.notifyDisconnection();
-        /*
         if(model.allWorkersPlaced()){
             model.save();
         }
-
-         */
     }
 
 
