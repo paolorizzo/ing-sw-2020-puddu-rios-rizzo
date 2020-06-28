@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents each tile on the board
+ * Can be built upon with Pieces, and can have a Worker on
+ */
 public class Space {
 
     private int posX, posY;
