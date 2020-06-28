@@ -13,10 +13,23 @@ public class CliUtils
 
     static String handleIpAndPortSelection()
     {
-        showIpDialog();
-        String ip = readString();
-        showPortDialog();
-        String port = readString();
+        String ip = "";
+        String port = "";
+        String ipv4_regex = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
+
+
+        while(!ip.matches(ipv4_regex))
+        {
+            showIpDialog();
+            ip = readString();
+        }
+
+        while(port.length() == 0 || !port.chars().allMatch( Character::isDigit ) || Integer.parseInt(port)<1024 || Integer.parseInt(port) > 65535)
+        {
+            showPortDialog();
+            port = readString();
+        }
+
         return ip+" "+port;
     }
 
