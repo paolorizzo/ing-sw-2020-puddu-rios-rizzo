@@ -93,6 +93,7 @@ public class CliUtils
             System.out.println();
             showCard(cards.get(cardSelection.getX()).getDescription(), cards.get(cardSelection.getX()).getName().toUpperCase(), actionSelection.getX());
             input = readString();
+            input = input.toLowerCase();
 
             if(input.equals(""))
             {
@@ -147,7 +148,7 @@ public class CliUtils
 
             input = readString();
 
-            switch(input)
+            switch(input.toLowerCase())
             {
                 case("2"):
                     spin = false;
@@ -184,8 +185,6 @@ public class CliUtils
             chosenSpace = selectionOnBoard(model, "Now! Make your move:", workerInitialPosition.getPosX(), workerInitialPosition.getPosY());
             chosenAction = getActionNumber(chosenSpace.getPosX(),chosenSpace.getPosY(), possibleActions, workerId);
         }
-
-        //System.err.println("Sending move" + chosenAction+": X:"+ chosenSpace.getPosX() + " Y:"+chosenSpace.getPosY()+"  "+workerId);
 
         return chosenAction;
     }
@@ -265,6 +264,7 @@ public class CliUtils
             showBoard(model, boardSelection);
 
             input = readString();
+            input = input.toLowerCase();
 
             if(input.equals(""))
             {
@@ -292,6 +292,7 @@ public class CliUtils
             printer.print("INSERT M TO MOVE OR B TO BUILD: ");
             System.out.print(AnsiColors.ANSI_RESET);
             input = readString();
+            input = input.toLowerCase();
 
             switch(input)
             {
@@ -323,6 +324,7 @@ public class CliUtils
             printer.print("WOULD YOU LIKE TO END YOUR TURN HERE? Y/N ");
             System.out.print(AnsiColors.ANSI_RESET);
             input = readString();
+            input = input.toLowerCase();
 
             switch(input)
             {
@@ -501,6 +503,7 @@ public class CliUtils
 
             showBoard(model, selection);
             input = readString();
+            input = input.toLowerCase();
 
             if(input.equals(""))
             {
@@ -527,12 +530,13 @@ public class CliUtils
         {
             printer.lineBreak();
             showControls();
-            printer.print("Now! Make your build:");
+            printer.print("Now! Make your build. Press the number of the level requested and then Enter!");
             printer.resetAndBreak();
             printer.lineBreak();
 
             showBoard(model, selection);
             input = readString();
+            input = input.toLowerCase();
 
             switch(input)
             {
