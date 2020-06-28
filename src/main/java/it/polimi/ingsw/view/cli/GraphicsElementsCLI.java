@@ -20,15 +20,15 @@ class GraphicsElementsCLI
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK);
                 break;
             case 2:
-                figure.setMask("/level2.txt");
+                figure.setMask("/cli/textures/level2.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             case 3:
-                figure.setMask("/level3.txt");
+                figure.setMask("/cli/textures/level3.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             case 4:
-                figure.setMask("/level3.txt");
+                figure.setMask("/cli/textures/level3.txt");
                 figure.setPalette(AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_WHITE);
                 break;
             default:
@@ -47,35 +47,35 @@ class GraphicsElementsCLI
         switch(title)
         {
             case "PROMETHEUS":
-                pic.setMask("/prometheus.txt");
+                pic.setMask("/cli/textures/prometheus.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_BLACK);
                 break;
             case "ATLAS":
-                pic.setMask("/atlas.txt");
+                pic.setMask("/cli/textures/atlas.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_GREEN, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE);
                 break;
             case "ATHENA":
-                pic.setMask("/athena.txt");
+                pic.setMask("/cli/textures/athena.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_RESET);
                 break;
             case "DEMETER":
-                pic.setMask("/demeter.txt");
+                pic.setMask("/cli/textures/demeter.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_YELLOW);
                 break;
             case "MINOTAUR":
-                pic.setMask("/minotaur.txt");
+                pic.setMask("/cli/textures/minotaur.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_RESET);
                 break;
             case "ZEUS":
-                pic.setMask("/zeus.txt");
+                pic.setMask("/cli/textures/zeus.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BG_WHITE);
                 break;
             case "HEPHAESTUS":
-                pic.setMask("/efesto.txt");
+                pic.setMask("/cli/textures/efesto.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_WHITE);
                 break;
             case "APOLLO":
-                pic.setMask("/pan.txt");
+                pic.setMask("/cli/textures/pan.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_CYAN, AnsiColors.ANSI_BG_PURPLE, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_PURPLE, AnsiColors.ANSI_BG_BLUE);
                 break;
             default:
@@ -94,12 +94,12 @@ class GraphicsElementsCLI
     {
         if(right)
         {
-            arrow.setMask("/arrow.txt");
+            arrow.setMask("/cli/textures/arrow.txt");
             arrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 2? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
         }
         else
         {
-            arrow.setMask("/arrow2.txt");
+            arrow.setMask("/cli/textures/arrow2.txt");
             arrow.setPalette(AnsiColors.ANSI_RESET, userSelection == 0? AnsiColors.ANSI_BG_RED : AnsiColors.ANSI_BG_WHITE);
         }
     }
@@ -110,7 +110,7 @@ class GraphicsElementsCLI
      */
     public static void drawCard(RectangleCLI card)
     {
-        card.setMask("/card.txt");
+        card.setMask("/cli/textures/card.txt");
         card.setPalette(AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_YELLOW);
     }
 
@@ -124,12 +124,12 @@ class GraphicsElementsCLI
     {
         if(num==2)
         {
-            figure.setMask("/two.txt");
+            figure.setMask("/cli/textures/two.txt");
             figure.setPalette(selection == 2? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
         }
         else if(num == 3)
         {
-            figure.setMask("/three.txt");
+            figure.setMask("/cli/textures/three.txt");
             figure.setPalette(selection == 3? AnsiColors.ANSI_BG_BLUE : AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK);
         }
     }
@@ -141,7 +141,7 @@ class GraphicsElementsCLI
      */
     public static void drawWorker(RectangleCLI worker, char player)
     {
-        worker.setMask("/worker.txt");
+        worker.setMask("/cli/textures/worker.txt");
 
         switch(player)
         {
