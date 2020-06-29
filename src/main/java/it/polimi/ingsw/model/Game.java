@@ -258,6 +258,7 @@ public class Game {
             possibleActions = null;
             finish = true;
             model.feed.notifyPlayerWin(id);
+            model.deleteFiles();
             return null;
         }else if(actionTreeCurrentPlayer.isLose()){
             System.out.println(id+" LOSE");
