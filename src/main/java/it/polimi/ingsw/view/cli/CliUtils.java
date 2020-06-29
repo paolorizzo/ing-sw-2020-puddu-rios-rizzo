@@ -82,6 +82,11 @@ public class CliUtils
         return readString();
     }
 
+    static void handleNameError()
+    {
+        showNameErrorDialog();
+    }
+
     static int handleCardSelection(List<Card> cards)
     {
         String input;
@@ -833,6 +838,30 @@ public class CliUtils
 
         //create frame
         RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 13,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showNameErrorDialog()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(10,2,15,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("  LENGHT MUST BE BETWEEN 1 AND 8 CHARACTERS  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 17,3);
         frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
 
         //overlap figures in the correct order

@@ -61,6 +61,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     @Override
     public void showError(String e)
     {
+        if(e.equals("Length must be between 1 and 8 characters!"))
+        {
+            CliUtils.handleNameError();
+        }
+
         if(e.contains("Waiting for the server"))
         {
             CliUtils.handleWaitingForServer(model);
