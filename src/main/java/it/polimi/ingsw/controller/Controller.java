@@ -477,7 +477,6 @@ public class Controller implements ControllerInterface
         this.notifyAll();
     }
 
-
     @Override
     public void kill(){
         //TODO save the game state and shut down the server
@@ -488,7 +487,10 @@ public class Controller implements ControllerInterface
     public void handleDisconnection(){
         model.feed.notifyDisconnection();
         if(model.allWorkersPlaced()){
-            model.save();
+            if(model.game.isFinish())
+                model.deleteFiles();
+            else
+                model.save();
         }
     }
 

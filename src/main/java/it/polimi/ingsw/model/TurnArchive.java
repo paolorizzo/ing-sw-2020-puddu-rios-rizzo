@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +89,17 @@ public class TurnArchive extends MapConvertible{
     }
 
     /**
+     * deletes the persistence file for the given set of names
+     * @param names the set of names
+     */
+    static void delete(String names){
+        String path = savePath(names);
+        File file = new File(path);
+        if(file.exists())
+            file.delete();
+    }
+
+    /**
      * converts the turn archive to a map
      * @return a map representing the turn archive
      */
@@ -170,4 +178,5 @@ public class TurnArchive extends MapConvertible{
         //return "src/main/resources/persistence/turns" + names + ".json";
         return "./persistence/turns" + names + ".json";
     }
+
 }

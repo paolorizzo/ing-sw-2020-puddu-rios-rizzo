@@ -285,6 +285,15 @@ public class Model {
     }
 
     /**
+     * deletes persistence files for this game
+     */
+    public void deleteFiles(){
+        String names = saveName();
+        TurnArchive.delete(names);
+        PersistenceGame.delete(names);
+    }
+
+    /**
      * restores all the things that have happened in the connection phase of the saved game
      * @param pg the PersistenceGame from which to restore
      */

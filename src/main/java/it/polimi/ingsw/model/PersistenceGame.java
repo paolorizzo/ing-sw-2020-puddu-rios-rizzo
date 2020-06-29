@@ -3,10 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,6 +82,17 @@ public class PersistenceGame {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * deletes the persistence file for the given set of names
+     * @param names the set of names
+     */
+    static void delete(String names){
+        String path = savePath(names);
+        File file = new File(path);
+        if(file.exists())
+            file.delete();
     }
 
     /**
