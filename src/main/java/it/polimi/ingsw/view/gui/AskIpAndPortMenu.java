@@ -114,14 +114,16 @@ public class AskIpAndPortMenu extends Menu
 
 
                 if(ipText.getText().length() == 0){
+
+                    hide();
                     notifyIp("127.0.0.1");
-                    notifyPort(42069);
+                    notifyPort("42069");
                 }else{
 
+                    hide();
                     notifyIp(ipText.getText());
-                    notifyPort(Integer.parseInt(portText.getText()));
+                    notifyPort(portText.getText());
                 }
-                hide();
             }
         });
 

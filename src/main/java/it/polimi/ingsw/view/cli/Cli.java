@@ -27,7 +27,7 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     {
         String result = CliUtils.handleIpAndPortSelection();
         notifyIp(result.split(" ")[0]);
-        notifyPort(Integer.parseInt(result.split(" ")[1]));
+        notifyPort(result.split(" ")[1]);
     }
 
     @Override

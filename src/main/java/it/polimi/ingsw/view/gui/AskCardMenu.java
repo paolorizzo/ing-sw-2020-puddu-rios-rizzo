@@ -6,12 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
-import it.polimi.ingsw.model.power.PowerStrategy;
-import it.polimi.ingsw.view.ClientView;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,13 +20,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class AskCardMenu extends Menu {
     Rectangle rect;
@@ -96,13 +89,11 @@ public class AskCardMenu extends Menu {
                 imageView.setFitHeight(180);
                 imageView.setFitWidth(120);
                 cardLabels.get(num).setGraphic(imageView);
-                cardLabels.get(num).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        hide();
-                        notifyReadNumCard(num);
-                    }
-                });
+                cardLabels.get(num).setMaxHeight(180);
+                cardLabels.get(num).setMinHeight(180);
+                cardLabels.get(num).setMaxWidth(120);
+                cardLabels.get(num).setMinWidth(120);
+
                 group.getChildren().add(cardLabels.get(num));
                 final Rectangle rectDesc = new Rectangle(250,200);
                 rectDesc.setFill(patt);
@@ -168,6 +159,7 @@ public class AskCardMenu extends Menu {
                         nameText.setVisible(false);
                     }
                 });
+
                 group.getChildren().add(rectDesc);
                 group.getChildren().add(cardDesc);
                 group.getChildren().add(namePane);
@@ -186,6 +178,15 @@ public class AskCardMenu extends Menu {
             cardLabels.get(card.getNum()).setVisible(true);
             cardLabels.get(card.getNum()).setTranslateX(rect.getTranslateX() + offsetX);
             cardLabels.get(card.getNum()).setTranslateY(rect.getTranslateY() + offsetY);
+            final int num = card.getNum();
+            cardLabels.get(num).setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    hide();
+                    notifyReadNumCard(num);
+                }
+            });
+
             offsetX +=140;
             countcard++;
             if(countcard%5 == 0){

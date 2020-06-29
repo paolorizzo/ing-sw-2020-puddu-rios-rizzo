@@ -56,7 +56,14 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.reading = true;
         this.synchronizer = new MessageSynchronizer(this);
     }
-
+    @Override
+    public String getIp(){
+        return ip;
+    }
+    @Override
+    public int getPort(){
+        return port;
+    }
     @Override
     public void setIp(String ip)
     {

@@ -17,7 +17,7 @@ public interface UserInterfaceObserver
      * uses the port that the user chose
      * @param port the chosen port
      */
-    void updateReadPort(int port);
+    void updateReadPort(String port);
 
     /**
      * uses the number of players chosen by the user

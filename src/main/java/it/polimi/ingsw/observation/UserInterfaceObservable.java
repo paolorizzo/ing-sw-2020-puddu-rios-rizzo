@@ -32,7 +32,7 @@ public class UserInterfaceObservable extends Observable<UserInterfaceObserver>{
      * notifies observers regarding the port chosen by the user
      * @param port the chosen port
      */
-    public synchronized void notifyPort(int port){
+    public synchronized void notifyPort(String port){
         for(UserInterfaceObserver obs:observers){
             obs.updateReadPort(port);
         }

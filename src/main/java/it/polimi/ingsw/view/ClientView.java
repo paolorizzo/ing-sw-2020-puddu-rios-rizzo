@@ -114,7 +114,6 @@ public class ClientView extends View implements UserInterfaceObserver
     }
 
     //updates relative to UserInterface
-
     /**
      * sets the ip address that the user chose
      * @param ip the chosen ip address
@@ -122,6 +121,12 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateReadIp(String ip)
     {
+        String ipv4_regex = "(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
+        if(!ip.matches(ipv4_regex)){
+            getUi().showError("Wrong IP format!");
+            getUi().askIpAndPort();
+            return;
+        }
         net.setIp(ip);
     }
 
@@ -130,9 +135,16 @@ public class ClientView extends View implements UserInterfaceObserver
      * @param port the chosen port
      */
     @Override
-    public synchronized void updateReadPort(int port)
+    public synchronized void updateReadPort(String port)
     {
-        net.setPort(port);
+        if(port.length() == 0 || !port.chars().allMatch( Character::isDigit ) || Integer.parseInt(port)<1024 || Integer.parseInt(port) > 65535){
+            getUi().showError("Wrong port format!");
+            getUi().askIpAndPort();
+            return;
+        }
+
+        if(net.getIp() != null)
+            net.setPort(Integer.parseInt(port));
     }
 
     /**
