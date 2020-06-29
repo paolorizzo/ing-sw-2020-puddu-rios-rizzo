@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/osx,java,eclipse,intellij,maven
 # Edit at https://www.gitignore.io/?templates=osx,java,eclipse,intellij,maven
 
+# Persistence games
+persistence/
+
 ### Eclipse ###
 .metadata
 bin/
