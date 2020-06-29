@@ -163,6 +163,11 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateReadName(String name){
+        if(name == null || name.length()<1 || name.length()>8){
+            getUi().showError("Length must be between 1 and 8 characters!");
+            getUi().askUsername();
+            return;
+        }
         if(currentConnectionState.equals(ConnectionState.READ_NAME))
             currentConnectionState.execute(this, name);
     }

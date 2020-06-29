@@ -73,8 +73,8 @@ public class AskNameMenu extends Menu {
         enterPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                notifyReadName(textName.getText());
                 hide();
+                notifyReadName(textName.getText());
             }
         });
 
