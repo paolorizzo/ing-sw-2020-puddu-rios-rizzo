@@ -126,7 +126,8 @@ public class PersistenceGame {
      * @return a string containing the path to the game json file
      */
     static String savePath(String names){
-        return "src/main/resources/persistence/game" + names + ".json";
+        //return "src/main/resources/persistence/game" + names + ".json";
+        return "./persistence/game" + names + ".json";
     }
 }
 

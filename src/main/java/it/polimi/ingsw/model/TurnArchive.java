@@ -55,7 +55,7 @@ public class TurnArchive extends MapConvertible{
      */
     boolean save(String names){
         Gson gson = new Gson();
-        String pathToTurnsJson = "src/main/resources/persistence/turns" + names + ".json";
+        String pathToTurnsJson = savePath(names);
         try{
             FileWriter writer = new FileWriter(pathToTurnsJson);
             Map<String, Object> turnArchiveMap = this.toMap();
@@ -77,7 +77,7 @@ public class TurnArchive extends MapConvertible{
      */
     static TurnArchive load(String names){
         Gson gson = new Gson();
-        String pathToTurnsJson = "src/main/resources/persistence/turns" + names + ".json";
+        String pathToTurnsJson = savePath(names);
         try{
             JsonReader reader = new JsonReader(new FileReader(pathToTurnsJson));
             Type mapType = new TypeToken<HashMap<String, Object>>(){}.getType();
@@ -167,6 +167,7 @@ public class TurnArchive extends MapConvertible{
      * @return the path to a json file that serializes the turns for a game with those players
      */
     static String savePath(String names){
-        return "src/main/resources/persistence/turns" + names + ".json";
+        //return "src/main/resources/persistence/turns" + names + ".json";
+        return "./persistence/turns" + names + ".json";
     }
 }

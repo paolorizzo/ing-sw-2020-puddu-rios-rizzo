@@ -258,9 +258,13 @@ public class Model {
      * @return true if there exist save files for the current players
      */
     public boolean isSaved(){
+        String persistencePath = "./persistence";
         String names = saveName();
         String gamePath = PersistenceGame.savePath(names);
         String turnsPath = TurnArchive.savePath(names);
+        File persistenceDirectory = new File(persistencePath);
+        if (!persistenceDirectory.exists())
+            persistenceDirectory.mkdir();
         File gameFile = new File(gamePath);
         File turnsFile = new File(turnsPath);
         return (gameFile.exists() && turnsFile.exists());
