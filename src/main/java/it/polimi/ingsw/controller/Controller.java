@@ -6,7 +6,12 @@ import it.polimi.ingsw.view.View;
 
 import java.util.*;
 
-//TODO test everything
+/**
+ * Implements the controller in the MVC pattern
+ * Validates the actions that the views want to take,
+ * and operates them on the model, which will in turn notify the changes
+ * back to the views
+ */
 public class Controller implements ControllerInterface
 {
     private List<View> views;
@@ -76,7 +81,6 @@ public class Controller implements ControllerInterface
      * starts the client associated with the view
      * @param view that is being added
      */
-    //TODO handle player limit
     public synchronized void addView(View view) throws InterruptedException {
         System.out.println("trying to add a view");
         if(phase.equals(Phase.NONE))
@@ -193,7 +197,6 @@ public class Controller implements ControllerInterface
      * @param id of the client that is requesting the name
      * @param name that is being requested
      */
-    //TODO should also check that if id==2 and numPlayers==2 the name is not accepted
     @Override
     public synchronized void setName(int id, String name) {
         if(0 <= id && id <= 2){
@@ -477,12 +480,20 @@ public class Controller implements ControllerInterface
         this.notifyAll();
     }
 
+    /**
+     * does nothing. It is here because it has an actual use on Client,
+     * which must implement the the same interface as this class
+     */
     @Override
     public void kill(){
-        //TODO save the game state and shut down the server
-        //TODO should not be called from any client
+        //nothing
     }
 
+    /**
+     * takes care of the disconnection of either the server or
+     * a client, by deleting the files associated with the game
+     * if the game is finished
+     */
     @Override
     public void handleDisconnection(){
         model.feed.notifyDisconnection();
