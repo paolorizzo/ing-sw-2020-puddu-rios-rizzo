@@ -108,8 +108,11 @@ public class Game {
      */
     public void nextTurn(){
         System.out.println("advancing turn");
-        if(currentTurn != null)
+        if(currentTurn != null){
             turnArchive.addTurn(currentTurn);
+            if(model.allWorkersPlaced())
+                model.save();
+        }
         pointerIdCurrentPlayers = (pointerIdCurrentPlayers+1)%idCurrentPlayers.size();
         currentTurn = null;
         actionTreeCurrentPlayer = null;
@@ -280,6 +283,7 @@ public class Game {
             if(idCurrentPlayers.size() == 1){
                 //last player win
                 finish = true;
+                model.deleteFiles();
                 model.feed.notifyPlayerWin(idCurrentPlayers.get(0));
                 System.out.println(idCurrentPlayers.get(0)+" WIN");
             }

@@ -489,8 +489,8 @@ public class Controller implements ControllerInterface
         if(model.allWorkersPlaced()){
             if(model.game.isFinish())
                 model.deleteFiles();
-            else
-                model.save();
+            //else
+                //model.save();
         }
     }
 
