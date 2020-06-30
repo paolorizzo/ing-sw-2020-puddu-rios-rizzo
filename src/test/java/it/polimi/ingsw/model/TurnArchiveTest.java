@@ -45,8 +45,8 @@ public class TurnArchiveTest {
      */
     @Test
     public void testSavePath(){
-        String names = "abcd";
-        assertEquals("src/main/resources/persistence/turns" + names + ".json", TurnArchive.savePath(names));
+        String names = "_abcd";
+        assertEquals("./persistence/turns" + names + ".json", TurnArchive.savePath(names));
     }
 
     /**
