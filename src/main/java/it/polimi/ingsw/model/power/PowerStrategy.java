@@ -46,7 +46,7 @@ public class PowerStrategy {
      * This method is private to avoid to be called by subclasses and so to avoid problem of recursion by static binding.
      * It adds a child to the root of tree for every move that each worker can do.
      * The children created have the flag of appended layer true for allowing the next layers to append on its.
-     * If worker go from a level 2 to a level 3, so the default win condition, the child of this move will have the flag of win true.
+     * If worker goes from a level 2 to a level 3, so the default win condition, the child of this move will have the flag of win true.
      * If there are no action to do starting from the root, this will have the flag of lose true.
      * @param curr the current action tree
      * @param player the player requesting the action tree
@@ -147,9 +147,9 @@ public class PowerStrategy {
     }
 
     /**
-     * This is method is invoke to prune the action tree generate by the other player that actually play the turn to erase the action
-     * that this power negate.
-     * In default the power doesn't negate action. This method is override in subclasses power that have power in the opponent turn.
+     * This is method is invoked to prune the action tree generate by the other player that actually is playing the turn to erase the action
+     * that this power can negate.
+     * In default the power doesn't negate action. This method is override in subclasses power that have power in the opponent's turn.
      * @param board the current game board
      * @param myself that player that use the power
      * @param other the opponent player that play the actual turn

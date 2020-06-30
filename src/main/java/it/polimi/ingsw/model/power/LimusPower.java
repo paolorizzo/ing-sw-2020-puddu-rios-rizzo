@@ -6,10 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LimusPower extends PowerStrategy {
+    /**
+     * This method invokes the method prune to erase all build actions near of the worker of this player.
+     * @param board the current game board
+     * @param myself that player that use the power
+     * @param other the opponent player that play the actual turn
+     * @param myLastTurn the last turn played by myself player
+     * @param otherActionTree the action tree generate by opponent player
+     */
     public void pruneOtherActionTree(Board board, Player myself, Player other, Turn myLastTurn, ActionTree otherActionTree){
         prune(otherActionTree, board, myself);
     }
 
+    /**
+     * This method erases from the tree all build actions with target spaces adjacent to Limus's worker.
+     * @param curr the action tree of other player to prune
+     * @param board the current board of the game
+     * @param limus the player with the god Limus
+     */
     public void prune(ActionTree curr, Board board, Player limus){
         List<ActionTree> childrenToRemove = new ArrayList<>();
         for(ActionTree child: curr.getChildren()){
