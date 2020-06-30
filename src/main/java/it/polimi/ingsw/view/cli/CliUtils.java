@@ -35,32 +35,34 @@ public class CliUtils
 
     static void handleWaitingForServer(ModelCLI model)
     {
-        if(!model.getAlreadyShownWaitingServer())
+        if(model.isWaiting())
         {
             showWaitingForTheServer();
-            model.setAlreadyShownWaitingServer();
+            model.notWaiting();
         }
     }
 
     static void handleWaitingPlayers(ModelCLI model)
     {
-        if(!model.getAlreadyShownWaitingPlayers())
+        if(model.isWaiting())
         {
             showWaitingForOtherPlayers();
-            model.setAlreadyShownWaitingPlayers();
+            model.notWaiting();
         }
     }
 
-    static void handlePlayerDisconnection()
+    static void handlePlayerDisconnection(ModelCLI model)
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
         showPlayerDisconnected();
+        model.notWaiting();
     }
 
-    static void handleServerDisconnection()
+    static void handleServerDisconnection(ModelCLI model)
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
         showServerDisconnected();
+        model.notWaiting();
     }
 
     //SETUP
@@ -85,6 +87,12 @@ public class CliUtils
     static void handleNameError()
     {
         showNameErrorDialog();
+    }
+
+    static void handleExcluded(ModelCLI model)
+    {
+        showExcludedDialog();
+        model.notWaiting();
     }
 
     static int handleCardSelection(List<Card> cards)
@@ -862,6 +870,30 @@ public class CliUtils
 
         //create frame
         RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 17,3);
+        frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
+
+        //overlap figures in the correct order
+        canvas.addOverlappingFigure(frame);
+        canvas.addOverlappingFigure(textBox);
+
+        //print the image
+        canvas.printFigure();
+    }
+
+    static void showExcludedDialog()
+    {
+        //create Canvas
+        CanvasCLI canvas = new CanvasCLI(0,0,36,5);
+        canvas.setPalette(AnsiColors.ANSI_RESET);
+        canvas.setTextColor(AnsiColors.ANSI_RED);
+
+        //create text box
+        RectangleCLI textBox = new RectangleCLI(11,2,13,1);
+        textBox.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLACK);
+        textBox.addText("  SORRY! YOU WERE EXCLUDED BY THE GAME  ");
+
+        //create frame
+        RectangleCLI frame = textBox.createInRelativeFrame(-1,-1, 15,3);
         frame.setPalette(AnsiColors.ANSI_BRIGHT_BG_RED);
 
         //overlap figures in the correct order

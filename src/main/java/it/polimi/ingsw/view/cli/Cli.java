@@ -50,11 +50,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     {
         if(message.contains("impossible"))
         {
-            CliUtils.handleServerDisconnection();
+            CliUtils.handleServerDisconnection(model);
         }
         else if(message.contains("player"))
         {
-            CliUtils.handlePlayerDisconnection();
+            CliUtils.handlePlayerDisconnection(model);
         }
     }
 
@@ -64,6 +64,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         if(e.equals("Length must be between 1 and 8 characters!"))
         {
             CliUtils.handleNameError();
+        }
+
+        if(e.equals("You were excluded by the game."))
+        {
+            CliUtils.handleExcluded(model);
         }
 
         if(e.contains("Waiting for the server"))

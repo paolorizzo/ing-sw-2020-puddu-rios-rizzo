@@ -292,6 +292,7 @@ public enum ConnectionState {
          */
         public void execute(ClientView view, Object input) {
             //System.out.println("Ho preso il covid-19");
+            view.getUi().showError("You were excluded by the game.");
             view.getController().kill();
         }
     },

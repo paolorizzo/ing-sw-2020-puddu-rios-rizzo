@@ -22,9 +22,7 @@ public class ModelCLI
 
     private boolean myTurn;
 
-    private boolean alreadyShownWaitingServer;
-
-    private boolean alreadyShownWaitingPlayers;
+    private boolean waiting;
 
     /**
      * A mask is a String matrix that stores workers' IDs in the cells corresponding to their position on the board.
@@ -44,6 +42,7 @@ public class ModelCLI
         gameMode = false;
         spectator = false;
         myTurn = false;
+        waiting = true;
         pieceBag.put(1, 22);
         pieceBag.put(2, 18);
         pieceBag.put(3, 14);
@@ -81,25 +80,17 @@ public class ModelCLI
         }
     }
 
-    boolean getAlreadyShownWaitingServer()
+    boolean isWaiting()
     {
-        return alreadyShownWaitingServer;
+        return waiting;
     }
 
-    boolean getAlreadyShownWaitingPlayers()
+
+    void notWaiting()
     {
-        return alreadyShownWaitingPlayers;
+        waiting = false;
     }
 
-    void setAlreadyShownWaitingServer()
-    {
-        alreadyShownWaitingServer = true;
-    }
-
-    void setAlreadyShownWaitingPlayers()
-    {
-        alreadyShownWaitingPlayers = true;
-    }
 
     int getCurrentPlayerId()
     {
