@@ -6,12 +6,25 @@ import it.polimi.ingsw.view.middleware.Client;
 
 import java.io.IOException;
 
-public class CliApp {
+/**
+ * The launcher for the command line user interface.
+ */
+public class CliApp
+{
+    /**
+     * Runs the CLI.
+     * @param args command line arguments for the main method.
+     */
     public static void main( String[] args )
     {
         run();
     }
-    public static void run(){
+
+    /**
+     * Creates a client node with a CLI-based user interface.
+     */
+    public static void run()
+    {
         Cli cli = new Cli();
         Client client = new Client();
 
