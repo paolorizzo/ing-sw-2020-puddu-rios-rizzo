@@ -52,16 +52,18 @@ The generated JAR ships all 3 applications, that can be accessed as follows:
 
 ### Server
 Remember to specify the port number. 
+It is recommended to run this as Administrator, to avoid permissions problems when writing log files for persistence. 
 ```
 java -jar CG04-1.0-SNAPSHOT-jar-with-dependencies.jar -server 12345
 ```
 ### CLI
-The WSL terminal is recommended for a proper use. 
+The WSL terminal in full screen mode is recommended for a proper use. 
 ```
 java -jar CG04-1.0-SNAPSHOT-jar-with-dependencies.jar -cli
 ```
 ### GUI
 Takes no arguments. 
+If run in a non-Windows OS, it's recomended to install the "FORTE" font, available in the /deliveries folder.  
 ```
 java -jar CG04-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
