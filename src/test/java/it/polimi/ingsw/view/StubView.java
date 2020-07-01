@@ -22,6 +22,8 @@ public class StubView extends View{
     public List<Card> chosenCards;
     public Card god;
     public List<Action> possibleActions;
+    public boolean gameSaved;
+    public boolean restore;
 
     public StubView(){
         super();
@@ -33,6 +35,8 @@ public class StubView extends View{
         chosenCards = null;
         god = null;
         possibleActions = null;
+        gameSaved = false;
+        restore = false;
     }
 
     @Override
@@ -82,9 +86,13 @@ public class StubView extends View{
 
     //restore phase updates
     @Override
-    public void updateGameAvailable(boolean available){}
+    public void updateGameAvailable(boolean available){
+        gameSaved = available;
+    }
     @Override
-    public void updateRestore(boolean intentToRestore){}
+    public void updateRestore(boolean intentToRestore){
+        this.restore = intentToRestore;
+    }
     @Override
     public void updateRemap(Map<Integer, Integer> idMap){}
     @Override

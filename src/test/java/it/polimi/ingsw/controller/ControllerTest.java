@@ -685,7 +685,7 @@ public class ControllerTest extends MvcIntegrationTest {
     }
 
     /**
-     * TODO test this after implementing the method on the controller
+     * does nothing
      */
     @Test
     public void testKill(){
@@ -693,6 +693,54 @@ public class ControllerTest extends MvcIntegrationTest {
         c.kill();
         assert(true);
     }
+
+    /**
+     * tests that if there is a disconnection and the game hasn't
+     * ended, the game is not deleted
+     */
+    @Test
+    public void testDisconnection(){
+        Controller c = new Controller();
+        playSomeTurns(c);
+        c.getModel().isSaved();
+        c.getModel().save();
+        assert c.getModel().isSaved();
+        c.handleDisconnection();
+        assert c.getModel().isSaved();
+    }
+
+    /**
+     * tests that the information about the availability
+     * about a saved game is correctly communicated to the views
+     */
+    @Test
+    public void testIsGameAvailable(){
+        Controller c = new Controller();
+        playSomeTurns(c);
+        assert !getStubView(c, 0).gameSaved;
+        c.getModel().isSaved();
+        c.getModel().save();
+        c.isGameAvailable();
+        assert getStubView(c, 0).gameSaved;
+    }
+
+    /**
+     * tests that if a restore happens, the views are notified
+     */
+    @Test
+    public void testRestore(){
+        Controller c1 = new Controller();
+        playSomeTurns(c1);
+        c1.getModel().isSaved();
+        c1.getModel().save();
+        Controller c2 = new Controller();
+        connectionPhase2(c2);
+        c2.restore(0, true);
+        c2.willRestore();
+        assert(getStubView(c2, 1).restore == true);
+
+    }
+
 
 
 
