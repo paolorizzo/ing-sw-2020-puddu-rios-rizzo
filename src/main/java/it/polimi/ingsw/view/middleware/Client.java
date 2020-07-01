@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.SetupAction;
 import it.polimi.ingsw.observation.*;
 import it.polimi.ingsw.view.ClientView;
-import javafx.beans.binding.ObjectExpression;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,30 +13,30 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The client node in the client-server network architecture of the game.
+ */
 public class Client extends Messenger implements ControllerInterface, Runnable, NetworkInterface
 {
     private Socket socket;
     private String ip = null;
     private int port = 0;
-
     private final MessageSynchronizer synchronizer;
     private AlivenessHandler alivenessHandler;
-
     private ClientView cw;
-
     private final FeedObservable virtualFeed;
-
     private boolean alive;
-
     private final Object netLock = new Object();
     private boolean netPass = false;
-
     private final Object playersLock = new Object();
     private boolean notifyingWaitingForPlayers = false;
+    private boolean reading;
 
-    boolean reading;
-
-
+    /**
+     * Constructs an instance of a client node in the network.
+     * @param ip the IPv4 address of the server to connect to.
+     * @param port the port of the server to connect to.
+     */
     public Client(String ip, int port)
     {
         this.ip = ip;
@@ -49,6 +48,9 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.netPass = true;
     }
 
+    /**
+     * Constructs an instance of a client node in the network.
+     */
     public Client()
     {
         virtualFeed = new FeedObservable();
@@ -56,25 +58,48 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.reading = true;
         this.synchronizer = new MessageSynchronizer(this);
     }
+
+    /**
+     * Retrieves the IPv4 address of the connected server.
+     * @return the IP address as String.
+     */
     @Override
-    public String getIp(){
+    public String getIp()
+    {
+
         return ip;
     }
+
+    /**
+     * Retrieves the port number of the connected server.
+     * @return the port number.
+     */
     @Override
-    public int getPort(){
+    public int getPort()
+    {
+
         return port;
     }
+
+    /**
+     * Sets the IPv4 address of the server.
+     * @param ip the string storing the ip address.
+     */
     @Override
     public void setIp(String ip)
     {
+
         this.ip = ip;
     }
 
+    /**
+     * Sets the port number od the server.
+     * @param port the number of the port.
+     */
     @Override
     public void setPort(int port)
     {
         this.port = port;
-
         synchronized (netLock)
         {
             netPass = true;
@@ -82,6 +107,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         }
     }
 
+    /**
+     * Associates a client view to the client.
+     * @param cw the reference to the ClientView instance.
+     */
     public void setClientView(ClientView cw)
     {
         this.cw = cw;
@@ -89,26 +118,41 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         this.alivenessHandler = new AlivenessHandler(this, cw);
     }
 
+    /**
+     * Starts the closing connection procedure.
+     */
     @Override
     public void closeConnection()
     {
-        alivenessHandler.stopMonitoringLiveness();
 
+        alivenessHandler.stopMonitoringLiveness();
     }
 
+    /**
+     * Retrieves the client view instance associated to the client.
+     * @return the ClientView reference.
+     */
     public ClientView getClientView()
     {
 
         return cw;
     }
 
+    /**
+     * Adds a view as observer, taking the place of the model in the client's side MVC architecture.
+     * @param view the view as FeedObserver.
+     */
     public void addObserver(FeedObserver view)
     {
 
         virtualFeed.addObserver(view);
     }
 
-    //always returns the client itself
+    /**
+     * Always returns the reference to the client itself.
+     * @param methodName the triggered method name.
+     * @return the client itself.
+     */
     protected Object getObservable(String methodName)
     {
 
@@ -243,28 +287,31 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
             if(getClientView() !=null)
             {
                 alivenessHandler.registerMessageFailure();
-                //getClientView().connectionLost();
             }
         }
     }
 
-    //general methods
-
+    /**
+     * High level interface to display an error on the user interface.
+     * @param error the text to display.
+     */
     public void showUIError(String error)
     {
+
         getClientView().getUi().showError(error);
     }
 
     /**
-     * this method does nothing on the client
+     * This method does nothing on the client.
      * It is here only because it is useful on the controller,
      * and is therefore present on the ControllerInterface, which this class implements
      */
     @Override
     public void handleDisconnection(){}
 
-
-    //connection phase methods
+    /**
+     * Asks for the generation of a new identification number (id), mandatory to communicate on the network.
+     */
     @Override
     public void generateId()
     {
@@ -272,6 +319,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("generateId");
     }
 
+    /**
+     * Acknowledge the reception of the id.
+     * @param id the client's id.
+     */
     @Override
     public void ackId(int id)
     {
@@ -286,10 +337,14 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         }
     }
 
+    /**
+     * Communicates the requested number of players for the upcming game.
+     * @param id the client's id.
+     * @param numPlayers the requested number of players.
+     */
     @Override
     public void setNumPlayers(int id, int numPlayers)
     {
-
         sendMessage("setNumPlayers", cw.getId(), numPlayers);
         if(id == 0)
         {
@@ -300,6 +355,9 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         }
     }
 
+    /**
+     * Asks for the number of players set for the game.
+     */
     @Override
     public void getNumPlayers()
     {
@@ -307,6 +365,9 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("getNumPlayers");
     }
 
+    /**
+     * Asks if all players are connected.
+     */
     @Override
     public  void requestAllPlayersConnected()
     {
@@ -314,6 +375,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("requestAllPlayersConnected");
     }
 
+    /**
+     * Communicates a name proposal to the model.
+     * @param id the client's id.
+     * @param name the proposed name.
+     */
     @Override
     public void setName(int id, String name)
     {
@@ -321,34 +387,37 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("setName", id, name);
     }
 
-    //Restore phase methods
-
     /**
-     * forwards the method call to the controller through the socket
+     * Forwards the method call to the controller through the socket.
      */
     @Override
-    public void isGameAvailable(){
+    public void isGameAvailable()
+    {
+
         sendMessage("isGameAvailable");
     }
 
     /**
-     * forwards the method call to the controller through the socket
+     * Forwards the method call to the controller through the socket.
      */
     @Override
-    public void restore(int id, boolean intentToRestore){
+    public void restore(int id, boolean intentToRestore)
+    {
+
         sendMessage("restore", id, intentToRestore);
     }
 
     /**
-     * forwards the method call to the controller through the socket
+     * Forwards the method call to the controller through the socket.
      */
     @Override
     public void willRestore(){
         sendMessage("willRestore");
     }
 
-    //Setup phase methods
-
+    /**
+     * Asks the model for the cards deck.
+     */
     @Override
     public void requestDeck()
     {
@@ -356,6 +425,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("requestDeck");
     }
 
+    /**
+     * Communicated a list of selected cards.
+     * @param id the client's id.
+     * @param numCards a list of cards' identification numbers.
+     */
     @Override
     public void publishCards(int id, List<Integer> numCards)
     {
@@ -363,6 +437,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("publishCards", id, numCards);
     }
 
+    /**
+     * Asks the model for the set of cards to choose between.
+     * @param id the client's id.
+     */
     @Override
     public void requestCards(int id)
     {
@@ -370,6 +448,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("requestCards", id);
     }
 
+    /**
+     * Communicates the selected card.
+     * @param id the client's id.
+     * @param numCard the card identification number.
+     */
     @Override
     public void setCard(int id, int numCard)
     {
@@ -377,6 +460,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("setCard", id, numCard);
     }
 
+    /**
+     * Communicates to the model the intention of setting up a worker.
+     * @param id the client's id.
+     */
     @Override
     public void requestToSetupWorker(int id)
     {
@@ -384,6 +471,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("requestToSetupWorker", id);
     }
 
+    /**
+     * Informs the model about the setup of a worker.
+     * @param id the client's id.
+     * @param setupAction the setup action object.
+     */
     @Override
     public void setupWorker(int id, SetupAction setupAction)
     {
@@ -391,6 +483,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("setupWorker", id, setupAction);
     }
 
+    /**
+     * Asks the model for the possible actions.
+     * @param id the client's id.
+     */
     @Override
     public void requestActions(int id)
     {
@@ -398,6 +494,11 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("requestActions", id);
     }
 
+    /**
+     * Informs the model about the chosen action.
+     * @param id the client's id.
+     * @param action the action object to send.
+     */
     @Override
     public void publishAction(int id, Action action)
     {
@@ -405,6 +506,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("publishAction", id, action);
     }
 
+    /**
+     * Informs the model about the player's will to end his turn.
+     * @param id the client's id.
+     */
     @Override
     public void publishVoluntaryEndOfTurn(int id)
     {
@@ -412,6 +517,9 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         sendMessage("publishVoluntaryEndOfTurn", id);
     }
 
+    /**
+     * Legacy method that used to stop the client.
+     */
     @Override
     public void kill()
     {
@@ -419,6 +527,10 @@ public class Client extends Messenger implements ControllerInterface, Runnable, 
         alive = false;
     }
 
+    /**
+     * Asks the model to delete the client's id and therefore to end every communication with it.
+     * @param id the client's id.
+     */
     @Override
     public void deleteId(int id)
     {

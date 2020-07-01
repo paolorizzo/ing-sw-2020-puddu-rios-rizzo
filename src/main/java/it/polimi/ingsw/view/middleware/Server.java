@@ -10,23 +10,27 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The main node in the client-server architecture of the middleware.
+ */
 public class Server implements Runnable
 {
     private static int PORT;
     private final ServerSocket serverSocket;
     private Controller controller;
-
     private final List<View> views = new ArrayList<View>();
     private final List<Connection> cons = new ArrayList<Connection>();
-
     private boolean idSet = false;
     private final Object idSetLock = new Object();
-
     private boolean nextClientIsReady = false;
     private final Object clientReadyLock = new Object();
-
     private int nextClientIn = 0;
 
+    /**
+     * Constructs an instance of the server.
+     * @param port the port on which the server will be listening.
+     * @throws IOException in case of errors in creating the server socket.
+     */
     public Server(int port) throws IOException
     {
         PORT = port;

@@ -4,11 +4,10 @@ import it.polimi.ingsw.view.View;
 
 import java.net.Socket;
 import java.io.*;
-import java.net.SocketException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Handles communication between a client and the server on the server's side.
+ */
 public class Connection extends Messenger implements Runnable
 {
     private final Socket socket;
@@ -17,24 +16,17 @@ public class Connection extends Messenger implements Runnable
     private final MessageSynchronizer synchronizer;
     private AlivenessHandler alivenessHandler;
 
-    private final Object liveLock;
-    private boolean clientIsLive;
-
-    private final int livenessRate = 5000;
-    private final int invalidPongTreshold = 10000;
-
-    private final Object messageSynchronizer;
-    private final List<Message> messageQueue;
-
+    /**
+     * Constructs an instance of a Connection object, that handles communication between a client and the server,
+     * on the servers's side.
+     * @param socket the connection socket.
+     * @param server a reference to the server.
+     */
     public Connection(Socket socket, Server server)
     {
         this.socket = socket;
         this.server = server;
         this.view = null;
-        this.liveLock = new Object();
-        this.clientIsLive = false;
-        this.messageSynchronizer = new Object();
-        this.messageQueue = new ArrayList<>();
         this.synchronizer = new MessageSynchronizer(this);
     }
 
@@ -81,12 +73,10 @@ public class Connection extends Messenger implements Runnable
             if(view !=null)
             {
                 alivenessHandler.registerMessageFailure();
-                //view.connectionLost();
             }
         }
     }
 
-    //TODO handle the client disconnecting
     /**
      * Runs in a separate thread on the server's side, handling incoming communications from the client to the server.
      * Creates and runs the thread checking periodically the client's aliveness and the one that actually executes the calls on
@@ -105,8 +95,10 @@ public class Connection extends Messenger implements Runnable
             {
                 ByteIn = new ObjectInputStream(socket.getInputStream());
                 Message currentMessage = (Message) ByteIn.readObject();
+
                 if(currentMessage.getMethodName().equals("ackId"))
                     server.registerIdAck();
+
                 if(currentMessage.getMethodName().equals("pong"))
                     alivenessHandler.pongHandler(currentMessage);
                 else

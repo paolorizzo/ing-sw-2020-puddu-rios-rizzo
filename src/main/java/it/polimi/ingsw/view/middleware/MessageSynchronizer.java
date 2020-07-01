@@ -3,12 +3,19 @@ package it.polimi.ingsw.view.middleware;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the queue of messages to be executed on a node of the architecture.
+ */
 public class MessageSynchronizer
 {
     private final Object messageSynchronizer;
     private final List<Message> messageQueue;
     private final Messenger messenger;
 
+    /**
+     * Constructs the synchronizer.
+     * @param messenger the Messenger instance used by the agent.
+     */
     public MessageSynchronizer(Messenger messenger)
     {
         this.messenger = messenger;
@@ -29,6 +36,9 @@ public class MessageSynchronizer
         }
     }
 
+    /**
+     * Runs the main thread handling the enqueued messages.
+     */
     public void run()
     {
         new Thread(() -> {
