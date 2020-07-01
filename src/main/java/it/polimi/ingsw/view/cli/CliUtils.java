@@ -8,9 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 public class CliUtils
 {
-    //handler methods
-    //CONNECTION
-
+    /**
+     * Handles the user input for the IP address and the port.
+     * @return the IP and the port as concatenated strings.
+     */
     static String handleIpAndPortSelection()
     {
         String ip = "";
@@ -33,6 +34,37 @@ public class CliUtils
         return ip+" "+port;
     }
 
+    /**
+     * Handles errors that must be shown to the player.
+     * @param model the model instance.
+     * @param error the error message.
+     */
+    static void handleShowError(ModelCLI model, String error)
+    {
+        if(error.equals("Length must be between 1 and 8 characters!"))
+        {
+            CliUtils.handleNameError();
+        }
+
+        if(error.equals("You were excluded by the game."))
+        {
+            CliUtils.handleExcluded(model);
+        }
+
+        if(error.contains("Waiting for the server"))
+        {
+            CliUtils.handleWaitingForServer(model);
+        }
+        else if(error.contains("Waiting for the other players"))
+        {
+            CliUtils.handleWaitingPlayers(model);
+        }
+    }
+
+    /**
+     * Handles the waiting for the server connection.
+     * @param model the model instance.
+     */
     static void handleWaitingForServer(ModelCLI model)
     {
         if(model.isWaiting())
@@ -42,6 +74,10 @@ public class CliUtils
         }
     }
 
+    /**
+     * Handles the waiting for other players to join the game.
+     * @param model the model instance.
+     */
     static void handleWaitingPlayers(ModelCLI model)
     {
         if(model.isWaiting())
@@ -51,6 +87,10 @@ public class CliUtils
         }
     }
 
+    /**
+     * Handles the notification of disconnection of another player.
+     * @param model the model instance.
+     */
     static void handlePlayerDisconnection(ModelCLI model)
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -58,6 +98,10 @@ public class CliUtils
         model.notWaiting();
     }
 
+    /**
+     * Handles the server disconnection notification.
+     * @param model the model instance.
+     */
     static void handleServerDisconnection(ModelCLI model)
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -65,7 +109,10 @@ public class CliUtils
         model.notWaiting();
     }
 
-    //SETUP
+    /**
+     * Handles the proposal of restore of the game.
+     * @return the boolean flag being true if the player wants to restore.
+     */
     static boolean handleRestore()
     {
         showRestore();
@@ -77,6 +124,10 @@ public class CliUtils
         return choice.toLowerCase().equals("y");
     }
 
+    /**
+     * Handles the request of username input to the player.
+     * @return the proposed username as String.
+     */
     static String handleUsername()
     {
         showUsernameDialog();
@@ -84,18 +135,30 @@ public class CliUtils
         return readString();
     }
 
+    /**
+     * Handles the notification of incorrect username input.
+     */
     static void handleNameError()
     {
 
         showNameErrorDialog();
     }
 
+    /**
+     * Handles the notification of exlcusion from the upcoming game.
+     * @param model the model instance.
+     */
     static void handleExcluded(ModelCLI model)
     {
         showExcludedDialog();
         model.notWaiting();
     }
 
+    /**
+     * Handles the selection of a card from a set.
+     * @param cards the list of cards.
+     * @return the identification number of the chosen card.
+     */
     static int handleCardSelection(List<Card> cards)
     {
         String input;
@@ -133,6 +196,12 @@ public class CliUtils
         return cardSelection.getX();
     }
 
+    /**
+     * Handles the setup of a worker on the board.
+     * @param model the model instance.
+     * @param possibleActions the list of possible setup actions.
+     * @return the index of the chosen setup action.
+     */
     static int handleSetupWorker(ModelCLI model, List<Action> possibleActions)
     {
         Space chosenSpace;
@@ -148,6 +217,10 @@ public class CliUtils
         return chosenAction;
     }
 
+    /**
+     * Handles the selection of the number of players for the game.
+     * @return the number of player (2 or 3 are the only accepted values).
+     */
     static int handleNumPlayerSelection()
     {
         int numPlayers = 2;
@@ -189,7 +262,13 @@ public class CliUtils
         return numPlayers;
     }
 
-    //GAME
+    /**
+     * Handles a move action.
+     * @param model the model instance.
+     * @param possibleActions the list of possible move actions.
+     * @param workerId the worker to perform the action.
+     * @return the index of the chosen action.
+     */
     static int handleMoveAction(ModelCLI model, List<Action> possibleActions, String workerId)
     {
         Space chosenSpace = null;
@@ -205,6 +284,13 @@ public class CliUtils
         return chosenAction;
     }
 
+    /**
+     * Handles a build action.
+     * @param model the model instance.
+     * @param possibleActions the list of possible build actions.
+     * @param workerId the worker to perform the action.
+     * @return the index of the chosen action.
+     */
     static int handleBuildAction(ModelCLI model, List<Action> possibleActions, String workerId)
     {
         SpaceCLI chosenSpace;
@@ -220,6 +306,13 @@ public class CliUtils
         return chosenAction;
     }
 
+    /**
+     * Handles a generic action, delegating the actual operation to the specific method.
+     * @param model the model instance.
+     * @param possibleActions the index of the chosen action.
+     * @param canEndOfTurn the flag indicating the possibility to end the turn within this action.
+     * @return the index of the chosen action.
+     */
     static int handleAction(ModelCLI model, List<Action> possibleActions, boolean canEndOfTurn)
     {
         if(canEndOfTurn && handleWouldYouLikeToEndYourTurn())
@@ -258,6 +351,12 @@ public class CliUtils
         return selectedAction;
     }
 
+    /**
+     * Handles the selection of the active worker for the turn.
+     * @param model the model instance.
+     * @param idPlayer the player's id.
+     * @return the id of the selected worker.
+     */
     static String handleWorkerSelection(ModelCLI model, int idPlayer)
     {
         String input;
@@ -295,6 +394,10 @@ public class CliUtils
         return model.getWorkers()[boardSelection.getX()][boardSelection.getY()];
     }
 
+    /**
+     * Handles the choice between moving and building, that can happen with specific powers.
+     * @return 1 if the input chooses to build, 0 if he chooses to move.
+     */
     static int handleChooseBetweenMoveAndBuild()
     {
         String input;
@@ -327,6 +430,10 @@ public class CliUtils
         return choice;
     }
 
+    /**
+     * Handles the proposal to end the turn with this action.
+     * @return the boolean flag being true if the player wants to end the turn.
+     */
     static boolean handleWouldYouLikeToEndYourTurn()
     {
         String input;
@@ -358,6 +465,11 @@ public class CliUtils
         return choice;
     }
 
+    /**
+     * Handles the update about the currently active player.
+     * @param id the active player's id.
+     * @param model the model instance.
+     */
     static void handleCurrentPlayer(int id, ModelCLI model)
     {
         model.setCurrentPlayerId(id);
@@ -366,6 +478,10 @@ public class CliUtils
             showBoard(model);
     }
 
+    /**
+     * Handles the update informing the player that he just lost the game.
+     * @param model the model instance.
+     */
     static void handleLose(ModelCLI model)
     {
         model.setAsSpectator();
@@ -381,6 +497,10 @@ public class CliUtils
         showBoard(model, null);
     }
 
+    /**
+     * Handles the update informing the player that he just won the game.
+     * @param model the model instance.
+     */
     static void handleWin(ModelCLI model)
     {
         CanvasCLI canvas = new CanvasCLI(0,0,53,5);
@@ -394,7 +514,11 @@ public class CliUtils
         showBoard(model, null);
     }
 
-    //utils for handlers
+    /**
+     * Checks if the upcoming action is a move action.
+     * @param possibleActions the list of possible actions.
+     * @return the boolean flag being true if the upcoming action is a move action.
+     */
     static private boolean isMoveAction(List<Action> possibleActions)
     {
         for(Action a:possibleActions)
@@ -405,6 +529,11 @@ public class CliUtils
         return true;
     }
 
+    /**
+     * Checks if the upcoming action is a build action.
+     * @param possibleActions the list of possible actions.
+     * @return the boolean flag being true if the upcoming action is a build action.
+     */
     static private boolean isBuildAction(List<Action> possibleActions)
     {
         for(Action a:possibleActions)
@@ -415,6 +544,11 @@ public class CliUtils
         return true;
     }
 
+    /**
+     * Checks if the worker has been already selected for the turn.
+     * @param possibleActions the list of possible actions.
+     * @return the boolean flag being true if the worker has been selected.
+     */
     static private boolean isWorkerSelected(List<Action> possibleActions)
     {
         String firstId = possibleActions.get(0).getWorkerID();
@@ -426,6 +560,12 @@ public class CliUtils
         return true;
     }
 
+    /**
+     * Gets the workers' positions for a specific player.
+     * @param workersMask the representation of the workers' positions as a matrix storing the ids.
+     * @param idPlayer the player's id.
+     * @return the list of spaces containing the workers of the player.
+     */
     static private List<Space> getWorkersPositions(String[][] workersMask, int idPlayer)
     {
         List<Space> spaces = new ArrayList<Space>();
@@ -442,6 +582,12 @@ public class CliUtils
         return spaces;
     }
 
+    /**
+     * Gets a specific worker's position based on its id.
+     * @param workersMask the representation of the workers' positions as a matrix storing the ids.
+     * @param id the worker's id.
+     * @return the space containing the worker.
+     */
     static private Space getWorkersPositionFromId(String[][] workersMask, String id)
     {
         Space position = new Space(0,0);
@@ -456,6 +602,13 @@ public class CliUtils
         return position;
     }
 
+    /**
+     * Finds a specific action in the list of possible ones, based only on the coordinates.
+     * @param x the x coordinate of the action.
+     * @param y the y coordinate of the action.
+     * @param actions the list of possible actions.
+     * @return the index of the requested action in the list.
+     */
     static int getActionNumber(int x, int y, List<Action> actions)
     {
         for(int i = 0; i<actions.size(); i++)
@@ -470,6 +623,14 @@ public class CliUtils
         return -1;
     }
 
+    /**
+     * Finds a specific action in the list of possible ones, based only on the coordinates and the worker's id.
+     * @param x the x coordinate of the action.
+     * @param y the y coordinate of the action.
+     * @param possibleActions the list of possible actions.
+     * @param workerId the worker's id.
+     * @return the index of the requested action in the list.
+     */
     static int getActionNumber(int x, int y, List<Action> possibleActions, String workerId)
     {
         for(int i = 0; i<possibleActions.size(); i++)
@@ -485,6 +646,15 @@ public class CliUtils
         return -1;
     }
 
+    /**
+     * Finds a specific action in the list of possible ones, based only on the coordinates, the worker's id and the building level.
+     * @param x the x coordinate of the action.
+     * @param y the y coordinate of the action.
+     * @param possibleActions the list of possible actions.
+     * @param workerId the worker's id.
+     * @param level the building level.
+     * @return the index of the requested action in the list.
+     */
     static int getActionNumber(int x, int y, List<Action> possibleActions, String workerId, int level)
     {
         for(int i = 0; i<possibleActions.size(); i++)
@@ -501,6 +671,14 @@ public class CliUtils
         return -1;
     }
 
+    /**
+     * Handles a WASD selection on the game board, with an header message.
+     * @param model the model instance.
+     * @param message the header message to display above the board.
+     * @param startX the starting horizontal index.
+     * @param startY the starting vertical index.
+     * @return the selected space.
+     */
     static private Space selectionOnBoard(ModelCLI model, String message, int startX, int startY)
     {
         String input;
@@ -534,6 +712,13 @@ public class CliUtils
         return chosenSpace;
     }
 
+    /**
+     * Handles a WASD selection of a space to build on.
+     * @param model the model instance.
+     * @param startX the starting horizontal index.
+     * @param startY the starting vertical index.
+     * @return the selected space.
+     */
     static private SpaceCLI selectAndBuildOnBoard(ModelCLI model, int startX, int startY)
     {
         String input;
@@ -576,8 +761,10 @@ public class CliUtils
         return chosenSpace;
     }
 
-
-    //input-output methods
+    /**
+     * Reads a String from the user input.
+     * @return the input String.
+     */
     public static String readString()
     {
         Scanner stdin = new Scanner(System.in);
@@ -587,15 +774,21 @@ public class CliUtils
 
     }
 
-
-    //show methods
+    /**
+     * Shows the game board based on the data stored in the model.
+     * @param model the model instance.
+     */
     static void showBoard(ModelCLI model)
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         showBoard(model, null);
     }
 
-    //TODO: clean this
+    /**
+     * Shows the game board with a selected space.
+     * @param model the model instance.
+     * @param selection the SelectionCLI object handling the selection.
+     */
     static private void showBoard(ModelCLI model, BidimensionalSelectionCLI selection)
     {
         String[][] workersMask = model.getWorkers();
@@ -739,6 +932,9 @@ public class CliUtils
         }
     }
 
+    /**
+     * Shows the asking for username dialog.
+     */
     static void showUsernameDialog()
     {
         //create Canvas
@@ -763,6 +959,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the asking for IP address dialog.
+     */
     static void showIpDialog()
     {
         //create Canvas
@@ -786,6 +985,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the asking for port number dialog.
+     */
     static void showPortDialog()
     {
         //create Canvas
@@ -809,6 +1011,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the waiting for the server dialog.
+     */
     static void showWaitingForTheServer()
     {
         //create Canvas
@@ -833,6 +1038,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Show the waiting for other players dialog.
+     */
     static void showWaitingForOtherPlayers()
     {
         //create Canvas
@@ -857,6 +1065,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the incorrect username error dialog.
+     */
     static void showNameErrorDialog()
     {
         //create Canvas
@@ -881,6 +1092,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the dialog informing the player that he has been excluded from the upcoming game.
+     */
     static void showExcludedDialog()
     {
         //create Canvas
@@ -905,6 +1119,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the dialog informing the player that the server is no more reachable.
+     */
     static void showServerDisconnected()
     {
         //create Canvas
@@ -929,6 +1146,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the dialog informing the player that another player has disconnected.
+     */
     static void showPlayerDisconnected()
     {
         System.out.println("\n\n\n\n\n");
@@ -954,6 +1174,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the dialog asking the player if he wants tor restore the game.
+     */
     static void showRestore()
     {
         //create Canvas
@@ -977,6 +1200,12 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows a card in the context of the card selection phase.
+     * @param desc the description of the card.
+     * @param title the name of the god represented on the card.
+     * @param userSelection the Selection object handling the WASD selection.
+     */
     private static void showCard(String desc, String title, int userSelection)
     {
         //create Canvas
@@ -1026,6 +1255,9 @@ public class CliUtils
         canvas.printFigure();
     }
 
+    /**
+     * Shows the information header about WASD controls.
+     */
     private static void showControls()
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -1033,12 +1265,10 @@ public class CliUtils
         System.out.println(AnsiColors.ANSI_RESET);
     }
 
-    private static void showNotYourTurn()
-    {
-        System.out.print(AnsiColors.ANSI_BLUE + AnsiColors.ANSI_BG_WHITE+ "Please wait while the other players play");
-        System.out.println(AnsiColors.ANSI_RESET);
-    }
-
+    /**
+     * Shows the menu to select the number of players for the game.
+     * @param num the currently selected number of players in the menu.
+     */
     public static void showNumPlayersDialog(int num)
     {
         //create Canvas
@@ -1071,8 +1301,11 @@ public class CliUtils
         canvas.printFigure();
     }
 
-
-    //graphics
+    /**
+     * Slides down of the specified number of rows at the specified rate.
+     * @param rows the number of rows.
+     * @param rateInMilliseconds the rate expressed in milliseconds.
+     */
     static void slideDown(int rows, int rateInMilliseconds)
     {
         for(int i = 0; i<rows; i++)

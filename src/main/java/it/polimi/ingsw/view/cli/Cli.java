@@ -7,19 +7,27 @@ import it.polimi.ingsw.view.UserInterface;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The user interface class for command line.
+ */
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
     private HashMap<Integer, Player> players;
     private int numPlayers;
     private final ModelCLI model;
 
+    /**
+     * Creates an empty CLI object.
+     */
     public Cli()
     {
         players = new HashMap<>();
         model = new ModelCLI();
     }
 
-    //UI methods
+    /**
+     * Asks for the IP address and port number of the desired game server.
+     */
     @Override
     public void askIpAndPort()
     {
@@ -28,6 +36,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyPort(result.split(" ")[1]);
     }
 
+    /**
+     * Legacy method supposed to trigger the display of the game's logo.
+     */
     @Override
     public void showLogo()
     {
@@ -35,6 +46,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     }
 
+    /**
+     * Informs the user interface about the currently active player.
+     * @param id the player's id.
+     */
     @Override
     public void setCurrentPlayer(int id)
     {
@@ -43,6 +58,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
 
     }
 
+    /**
+     * Informs the user about an occurred disconnection.
+     * @param message a String containing details about the cause of the disconnection.
+     */
     @Override
     public void showDisconnection(String message)
     {
@@ -56,29 +75,20 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         }
     }
 
+    /**
+     * Displays an error message.
+     * @param e the error text.
+     */
     @Override
     public void showError(String e)
     {
-        if(e.equals("Length must be between 1 and 8 characters!"))
-        {
-            CliUtils.handleNameError();
-        }
 
-        if(e.equals("You were excluded by the game."))
-        {
-            CliUtils.handleExcluded(model);
-        }
-
-        if(e.contains("Waiting for the server"))
-        {
-            CliUtils.handleWaitingForServer(model);
-        }
-        else if(e.contains("Waiting for the other players"))
-        {
-            CliUtils.handleWaitingPlayers(model);
-        }
+        CliUtils.handleShowError(model,e);
     }
 
+    /**
+     * Asks for the desired number of players.
+     */
     @Override
     public void askNumPlayers()
     {
@@ -86,6 +96,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadNumPlayers(CliUtils.handleNumPlayerSelection());
     }
 
+    /**
+     * Asks for the desired username.
+     */
     @Override
     public void askUsername()
     {
@@ -93,6 +106,9 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadName(CliUtils.handleUsername());
     }
 
+    /**
+     * Asks if the user wants to restore the stored game.
+     */
     @Override
     public void askRestore()
     {
@@ -100,6 +116,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadRestore(CliUtils.handleRestore());
     }
 
+    /**
+     * Asks the user to select a card from the deck.
+     * @param deck the collection of cards.
+     */
     @Override
     public void askCard(Deck deck)
     {
@@ -107,6 +127,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadNumCard(deck.getCards().get(CliUtils.handleCardSelection(deck.getCards())).getNum());
     }
 
+    /**
+     * Asks the user to select a god for the game.
+     * @param cards the set of available cards.
+     */
     @Override
     public void askGod(List<Card> cards)
     {
@@ -114,6 +138,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         model.setGameMode();
     }
 
+    /**
+     * Asks the user to set up a worker on the board.
+     * @param possibleActions the possible setup choices list.
+     */
     @Override
     public void askSetupWorker(List<Action> possibleActions)
     {
@@ -121,6 +149,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         notifyReadAction(possibleActions.get(CliUtils.handleSetupWorker(model, possibleActions)));
     }
 
+    /**
+     * Asks the user to perform an action.
+     * @param possibleActions the possible actions list.
+     * @param canEndOfTurn a boolean flag indicating the possibility to end the current turn within the current action.
+     */
     @Override
     public void askAction(List<Action> possibleActions, boolean canEndOfTurn)
     {
@@ -132,6 +165,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
             notifyReadVoluntaryEndOfTurn();
     }
 
+    /**
+     * Displays the win dialog.
+     * @param id the winner's id.
+     */
     @Override
     public void winAnnounce(int id)
     {
@@ -139,6 +176,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         CliUtils.handleWin(model);
     }
 
+    /**
+     * Displays the lose dialog.
+     * @param id the loser's id.
+     */
     @Override
     public void loseAnnounce(int id)
     {
@@ -146,6 +187,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         CliUtils.handleLose(model);
     }
 
+    /**
+     * Removes all the active workers of a player from the board.
+     * @param id the player's id.
+     */
     @Override
     public void removeWorkersOfPlayer(int id)
     {
@@ -153,7 +198,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         model.removeWorkersOfPlayer(id);
     }
 
-    //gets and sets
+    /**
+     * Sets the number of players in the user interface model representation.
+     * @param numPlayers the number of players.
+     */
     @Override
     public void setNumPlayers(int numPlayers)
     {
@@ -161,6 +209,10 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         this.numPlayers = numPlayers;
     }
 
+    /**
+     * Retrieves the current number of active players in the game.
+     * @return the number of active players.
+     */
     @Override
     public int getNumPlayers()
     {
@@ -168,6 +220,11 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         return numPlayers;
     }
 
+    /**
+     * Adds a new player to the game.
+     * @param id the players's id.
+     * @param name the player's username.
+     */
     @Override
     public void registerPlayer(int id, String name)
     {
@@ -175,14 +232,23 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         players.put(id, new Player(id, name));
     }
 
+    /**
+     * Registers the card chosen by another player.
+     * @param id the player's id.
+     * @param card the chosen power card.
+     */
     @Override
     public void registerGod(int id, Card card)
     {
 
         players.get(id).setCard(card);
-        model.addPlayer(id, players.get(id));
+        model.addPlayer(players.get(id));
     }
 
+    /**
+     * Updates the user interface following an action.
+     * @param action the action object.
+     */
     @Override
     public synchronized void executeAction(Action action)
     {
@@ -198,18 +264,30 @@ public class Cli extends UserInterfaceObservable implements UserInterface
             throw new IllegalArgumentException("Can't execute a normal action!");
     }
 
+    /**
+     * Specific handler for instances of SetupAction.
+     * @param action the action object.
+     */
     public void executeAction(SetupAction action)
     {
         model.updateMaskOnMove(action);
         CliUtils.showBoard(model);
     }
 
+    /**
+     * Specific handler for instances of MoveAction.
+     * @param action the action object.
+     */
     public void executeAction(MoveAction action)
     {
         model.updateMaskOnMove(action);
         CliUtils.showBoard(model);
     }
 
+    /**
+     * Specific handler for instances of MoveAndForceAction.
+     * @param action the action object.
+     */
     public void executeAction(MoveAndForceAction action)
     {
         MoveAction forcedAction = new MoveAction(action.getForcedWorkerId(), action.getForcedTargetX(), action.getForcedTargetY(), action.getDirection(), action.getForcedStartX(), action.getForcedStartY());
@@ -218,12 +296,20 @@ public class Cli extends UserInterfaceObservable implements UserInterface
         CliUtils.showBoard(model);
     }
 
+    /**
+     * Specific handler for instances of BuildAction.
+     * @param action the action object.
+     */
     public void executeAction(BuildAction action)
     {
         model.updateBoardOnBuild(action);
         CliUtils.showBoard(model);
     }
 
+    /**
+     * Retrieves the current number of active players in the game.
+     * @return the number of active players.
+     */
     @Override
     public int getNumPlayersRegister()
     {

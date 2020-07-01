@@ -19,6 +19,9 @@ public class ModelCLI
     private HashMap<Integer, Player> players;
     private HashMap<Integer, Integer> pieceBag;
 
+    /**
+     * Constructs the ModelCLI object.
+     */
     public ModelCLI()
     {
         board = generateEmptyBoard();
@@ -36,6 +39,9 @@ public class ModelCLI
         pieceBag.put(4, 18);
     }
 
+    /**
+     * Sets this player as spectator of the game.
+     */
     void setAsSpectator()
     {
         if(players.keySet().size() == 3)
@@ -44,24 +50,39 @@ public class ModelCLI
         }
     }
 
+    /**
+     * Checks if the player is a spectator of the game or an active player.
+     * @return the boolean flag being true if the player is a spectator.
+     */
     boolean getSpectator()
     {
 
         return this.spectator;
     }
 
+    /**
+     * Checks if the game has started.
+     * @return the boolean flag being true if the game has started.
+     */
     boolean isGameOn()
     {
 
         return gameMode;
     }
 
+    /**
+     * Specifies that the game has started.
+     */
     void setGameMode()
     {
 
         this.gameMode = true;
     }
 
+    /**
+     * Sets the specified player as currently active.
+     * @param id the player's id.
+     */
     void setCurrentPlayerId(int id)
     {
         if(players.keySet().contains(id))
@@ -70,54 +91,91 @@ public class ModelCLI
         }
     }
 
+    /**
+     * Checks if the model is expecting inputs.
+     * @return the boolean flag being true if the model is not expecting input.
+     */
     boolean isWaiting()
     {
 
         return waiting;
     }
 
+    /**
+     * Specifies that the model is not expecting inputs.
+     */
     void notWaiting()
     {
 
         waiting = false;
     }
 
+    /**
+     * Gets the currently active player's id.
+     * @return the id number.
+     */
     int getCurrentPlayerId()
     {
 
         return currentPlayerId;
     }
 
+    /**
+     * Gets the number of pieces remaining for a specific building level.
+     * @param level the building level.
+     * @return the number of pieces left.
+     */
     int getPiecesLeft(int level)
     {
 
         return pieceBag.get(level);
     }
 
-    void addPlayer(int id, Player player)
+    /**
+     * Adds a player to the current model representation.
+     * @param player the player object.
+     */
+    void addPlayer(Player player)
     {
 
-        players.put(id, player);
+        players.put(player.getId(), player);
     }
 
+    /**
+     * Gets the data about a specific player.
+     * @param id the player's id.
+     * @return the Player object.
+     */
     Player getPlayer(int id)
     {
 
         return players.get(id);
     }
 
+    /**
+     * Gets the number of active players.
+     * @return the number of active players.
+     */
     int getNumPlayers()
     {
 
         return players.size();
     }
 
+    /**
+     * Gets the current board state in the form of a matrix.
+     * @return the integer matrix, with every cell storing the building level.
+     */
     public int[][] getBoard()
     {
 
         return board;
     }
 
+    /**
+     * Gets the current workers' positions in the form of a mask on the board.
+     * @return a String matrix, with every cell storing the worker's id if present, nothing elsewhere.
+     */
     public String[][] getWorkers()
     {
 
@@ -125,7 +183,7 @@ public class ModelCLI
     }
 
     /**
-     * Create an iterator of the board matrix.
+     * Creates an iterator of the board matrix.
      * @return the iterator.
      */
     Iterator<Integer> getBoardIterator()
@@ -143,6 +201,10 @@ public class ModelCLI
         return numbers.iterator();
     }
 
+    /**
+     * Creates an iterator for the collection of players.
+     * @return the iterator.
+     */
     Iterator<Player> getPlayersIterator()
     {
         Collection<Player> players_list = players.values();
@@ -150,7 +212,7 @@ public class ModelCLI
     }
 
     /**
-     * Create and initialize the representation of an empty 5x5 game board.
+     * Creates and initializes the representation of an empty 5x5 game board.
      * @return the board matrix.
      */
     static int[][] generateEmptyBoard()
@@ -169,7 +231,7 @@ public class ModelCLI
     }
 
     /**
-     * Create and initialize the representation of an empty 5x5 workers mask.
+     * Creates and initializes the representation of an empty 5x5 workers mask.
      * @return the mask matrix.
      */
     static String[][] generateEmptyWorkersMask()
@@ -217,7 +279,7 @@ public class ModelCLI
     }
 
     /**
-     * Remove the workers of a chosen player from the workers' mask.
+     * Removes the workers of a chosen player from the workers' mask.
      * @param id the ID of the player whose workers have to be removed from the local representation.
      */
     void removeWorkersOfPlayer(int id)

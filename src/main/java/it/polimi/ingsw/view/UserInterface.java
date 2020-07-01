@@ -70,7 +70,7 @@ public interface UserInterface
     void setNumPlayers(int numPlayers);
 
     /**
-     * Adds a new player's information.
+     * Adds a new player to the game.
      * @param id the players's id.
      * @param name the player's username.
      */

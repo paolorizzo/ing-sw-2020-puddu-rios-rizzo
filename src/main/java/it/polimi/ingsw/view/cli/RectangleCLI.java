@@ -65,8 +65,6 @@ public class RectangleCLI
         return new RectangleCLI(x+originX, y+originY, sideX, sideY);
     }
 
-
-    //modifiers
     /**
      * Adds a new figure as overlapping, meaning that it will be printed on the top of this.
      * Multiple overlapping figures are allowed, but every new figure is added as top layer.
@@ -178,7 +176,7 @@ public class RectangleCLI
      * Recursively compute the top layer's background color in a certain position.
      * @param x the x coordinate, considered in the canvas frame.
      * @param y the y coordinate, considered in the canvas frame.
-     * @return the color string.
+     * @return the ANSI color string.
      */
     String getTopLayerColor(int x, int y)
     {
@@ -199,7 +197,7 @@ public class RectangleCLI
      * Gets the background color of a determinate point of this.
      * @param x the x coordinate, considered in the canvas frame.
      * @param y the y coordinate, considered in the canvas frame.
-     * @return the color string.
+     * @return the ANSI color string.
      */
     String getColor(int x, int y)
     {
@@ -219,7 +217,7 @@ public class RectangleCLI
      * @param palette a set of color strings.
      * @param x the x coordinate, considered in the local frame.
      * @param y the y coordinate, considered in the local frame.
-     * @return the color string.
+     * @return the ANSI color string.
      */
     protected static String getBG(char[][] mask, String[] palette, int x, int y)
     {
