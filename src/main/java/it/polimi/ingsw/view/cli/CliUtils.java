@@ -484,8 +484,6 @@ public class CliUtils
      */
     static void handleLose(ModelCLI model)
     {
-        model.setAsSpectator();
-
         CanvasCLI canvas = new CanvasCLI(0,0,53,5);
         canvas.setPalette(AnsiColors.ANSI_RESET);
         RectangleCLI loseAnnounce = new RectangleCLI(20,3,11,1);
@@ -495,6 +493,7 @@ public class CliUtils
         canvas.addOverlappingFigure(loseAnnounce);
         canvas.printFigure();
         showBoard(model, null);
+        model.setAsSpectator();
     }
 
     /**
