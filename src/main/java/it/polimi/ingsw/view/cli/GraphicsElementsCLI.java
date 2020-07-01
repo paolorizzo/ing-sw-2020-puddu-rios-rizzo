@@ -159,6 +159,11 @@ class GraphicsElementsCLI
         }
     }
 
+    /**
+     * Sets up graphics for the build pieces counter.
+     * @param bar the RectangleCLI instance representing the bar.
+     * @param num the number of remaining pieces.
+     */
     public static void drawBuildCounter(RectangleCLI bar, int num)
     {
         String s = "|";

@@ -7,10 +7,7 @@ public class SelectionCLI
 {
     protected int x;
     protected int xmax;
-    /**
-     * If true, the selection will restart from the first position when reaching the limit. 
-     */
-    protected boolean xcircular; // 0-1-2-3-0-1-2-3
+    protected boolean xcircular;
 
     public SelectionCLI()
     {
@@ -28,26 +25,31 @@ public class SelectionCLI
 
     public void setX(int x)
     {
+
         this.x = x;
     }
 
     public void setXmax(int xmax)
     {
+
         this.xmax = xmax;
     }
 
     public void setXcircular(boolean xcircular)
     {
+
         this.xcircular = xcircular;
     }
 
     public int getX()
     {
+
         return this.x;
     }
 
     public void addX()
     {
+
         handleWASD("d");
     }
 
@@ -86,5 +88,4 @@ public class SelectionCLI
                 break;
         }
     }
-
 }

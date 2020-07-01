@@ -2,8 +2,6 @@ package it.polimi.ingsw.view.cli;
 
 public class CanvasCLI extends RectangleCLI
 {
-    //constructors
-
     private String textColor;
 
     public CanvasCLI(int OriginX, int OriginY, int sideX, int sideY)
@@ -19,8 +17,6 @@ public class CanvasCLI extends RectangleCLI
         textColor = AnsiColors.ANSI_BLUE;
     }
 
-
-    //rendering
     private void printUnit(PrintCLI printer, int x, int y)
     {
         printer.setBg(getTopLayerColor(x,y));
@@ -45,6 +41,7 @@ public class CanvasCLI extends RectangleCLI
 
     public void setTextColor(String textColor)
     {
+
         this.textColor = textColor;
     }
 }

@@ -25,20 +25,22 @@ public class SpaceCLI
 
     public int getX()
     {
+
         return this.x;
     }
 
     public int getY()
     {
+
         return this.y;
     }
 
     public int getLevel()
     {
+
         return this.level;
     }
 
-    //TODO check if acceptable level
     /**
      * Sets texture and colors to a RectangleCLI instance representing a building.
      * @param figure the figure to be decorated.

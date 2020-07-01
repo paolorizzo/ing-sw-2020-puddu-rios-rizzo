@@ -7,12 +7,10 @@ import it.polimi.ingsw.view.UserInterface;
 import java.util.HashMap;
 import java.util.List;
 
-//TODO check not null where indicated
 public class Cli extends UserInterfaceObservable implements UserInterface
 {
     private HashMap<Integer, Player> players;
     private int numPlayers;
-
     private final ModelCLI model;
 
     public Cli()

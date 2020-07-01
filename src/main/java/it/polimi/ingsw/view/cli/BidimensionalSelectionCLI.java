@@ -24,21 +24,25 @@ public class BidimensionalSelectionCLI extends SelectionCLI
 
     public void setY(int y)
     {
+
         this.y = y;
     }
 
     public void setYmax(int ymax)
     {
+
         this.ymax = ymax;
     }
 
     public void setYcircular(boolean ycircular)
     {
+
         this.ycircular = ycircular;
     }
 
     public int getY()
     {
+
         return y;
     }
 

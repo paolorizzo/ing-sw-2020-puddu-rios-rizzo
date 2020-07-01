@@ -9,26 +9,13 @@ import java.util.*;
  */
 public class ModelCLI
 {
-    /**
-     * An integer matrix storing the highest building in every space of the board.
-     */
     int[][] board;
-
     private int currentPlayerId;
-
     private boolean gameMode;
-
     private boolean spectator;
-
     private boolean myTurn;
-
     private boolean waiting;
-
-    /**
-     * A mask is a String matrix that stores workers' IDs in the cells corresponding to their position on the board.
-     */
     String [][] workers;
-
     private HashMap<Integer, Player> players;
     private HashMap<Integer, Integer> pieceBag;
 
@@ -59,16 +46,19 @@ public class ModelCLI
 
     boolean getSpectator()
     {
+
         return this.spectator;
     }
 
     boolean isGameOn()
     {
+
         return gameMode;
     }
 
     void setGameMode()
     {
+
         this.gameMode = true;
     }
 
@@ -82,38 +72,43 @@ public class ModelCLI
 
     boolean isWaiting()
     {
+
         return waiting;
     }
 
-
     void notWaiting()
     {
+
         waiting = false;
     }
 
-
     int getCurrentPlayerId()
     {
+
         return currentPlayerId;
     }
 
     int getPiecesLeft(int level)
     {
+
         return pieceBag.get(level);
     }
 
     void addPlayer(int id, Player player)
     {
+
         players.put(id, player);
     }
 
     Player getPlayer(int id)
     {
+
         return players.get(id);
     }
 
     int getNumPlayers()
     {
+
         return players.size();
     }
 
@@ -192,7 +187,6 @@ public class ModelCLI
         return board;
     }
 
-    //TODO: MoveAction instead of Action
     /**
      * Updates the local workers' mask after a move.
      * @param action the instance of MoveAction just performed.

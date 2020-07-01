@@ -35,8 +35,6 @@ public class PrintCLI
         this.defaultContent = defaultContent;
     }
 
-
-    //modifiers
     public void setBg(String bg)
     {
 
@@ -55,8 +53,6 @@ public class PrintCLI
         this.defaultContent = defaultContent;
     }
 
-
-    //functions
     public void resetAndBreak()
     {
 

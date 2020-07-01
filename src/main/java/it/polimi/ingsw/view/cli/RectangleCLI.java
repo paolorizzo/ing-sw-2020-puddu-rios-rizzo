@@ -12,13 +12,18 @@ public class RectangleCLI
     protected final int originY;
     protected final int sideX;
     protected final int sideY;
-
     protected char[][] mask;
     protected String[] palette;
     protected Iterator<String> chunks;
     protected List<RectangleCLI> figures;
 
-    //constructors
+    /**
+     * Constructs the RectangleCLI instance.
+     * @param originX the upper left corner x coordinate.
+     * @param originY the upper left corner y coordinate.
+     * @param sideX the horizontal length of the rectangle.
+     * @param sideY the vertical length of the rectangle.
+     */
     public RectangleCLI(int originX, int originY, int sideX, int sideY)
     {
         this.originX = originX;
@@ -31,6 +36,9 @@ public class RectangleCLI
         this.chunks = null;
     }
 
+    /**
+     * Basic constructor for a RectangleCLI.
+     */
     public RectangleCLI()
     {
         this.originX = 0;
@@ -80,7 +88,6 @@ public class RectangleCLI
         this.chunks = Arrays.asList(getChunks(s)).iterator();
     }
 
-    //TODO test if they're actually color strings.
     /**
      * Sets a set of colors to be mapped on the texture.
      * @param colors a set of color strings.
@@ -102,8 +109,6 @@ public class RectangleCLI
         this.mask = obtainMask(URI);
     }
 
-
-    //observers
     /**
      * Checks if a pair of coordinates belongs to this rectangle's area, considered in the canvas frame.
      * @param x the x coordinate, considered in the canvas frame.
@@ -208,7 +213,6 @@ public class RectangleCLI
         }
     }
 
-    //TODO handle requests out of the area
     /**
      * Actually computes the background color in a certain position, mapping the palette on the texture mask.
      * @param mask a matrix of chars representing the color in every point of the figure.
@@ -222,9 +226,6 @@ public class RectangleCLI
         return palette[Character.getNumericValue(mask[y][x])];
     }
 
-
-    //utils
-    //TODO rewrite in a less horrible way
     /**
      * Splits a single string in an array of multiple strings of length 3.
      * This is needed to correctly display the text on the picture, as the basic printable unit is composed of  chars.
@@ -277,7 +278,6 @@ public class RectangleCLI
         return chunks;
     }
 
-    //TODO create palette class
     /**
      * Initialize the palette field with a white background color.
      * @return the newly created palette.
@@ -308,8 +308,6 @@ public class RectangleCLI
         return defMask;
     }
 
-    //TODO check the validity of URI
-    //TODO create mask class
     /**
      * Extract the mask from the text file storing it.
      * @param URI the location of the file.
