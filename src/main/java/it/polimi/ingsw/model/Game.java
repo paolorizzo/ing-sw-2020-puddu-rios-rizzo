@@ -105,7 +105,6 @@ public class Game {
      * advances the turn
      */
     public void nextTurn(){
-        System.out.println("advancing turn");
         if(currentTurn != null){
             turnArchive.addTurn(currentTurn);
             if(model.allWorkersPlaced())
@@ -287,7 +286,6 @@ public class Game {
             //endOfTurns;
             nextTurn();
             model.feed.notifyEndOfTurnPlayer(id);
-            System.out.println("Next player id: "+idCurrentPlayers.get(pointerIdCurrentPlayers));
             return null;
         }
         return possibleActions;

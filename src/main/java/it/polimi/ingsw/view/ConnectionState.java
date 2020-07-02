@@ -156,7 +156,6 @@ public enum ConnectionState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input)  {
-            //todo launch waiting view
             view.getController().getNumPlayers();
             view.currentConnectionState = RECEIVE_NUM_PLAYERS;
         }

@@ -16,7 +16,6 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input) {
-            //System.out.println("START_GAME");
             view.currentGameState = REQUEST_ACTIONS;
             view.currentGameState.execute(view, null);
         }
@@ -28,7 +27,6 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input){
-            //System.out.println("REQUEST_ACTIONS");
             view.currentGameState = RECEIVE_ACTIONS;
             try{
                 view.getController().requestActions(view.getId());
@@ -44,7 +42,6 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input) {
-            //System.out.println("RECEIVE_ACTIONS");
             List<Action> possibleActions = (List<Action>)input;
             view.currentGameState = ASK_ACTION;
             view.currentGameState.execute(view, possibleActions);
@@ -57,10 +54,8 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input) {
-            //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
-            //System.out.println(possibleActions);
             view.getUi().askAction(possibleActions, false);
         }
     },
@@ -72,7 +67,6 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input) {
-            //System.out.println("ASK_ACTION");
             view.currentGameState = READ_ACTION;
             List<Action> possibleActions = (List<Action>)input;
             view.getUi().askAction(possibleActions, true);
@@ -85,7 +79,6 @@ public enum GameState {
          * @param input the input for the execution of the state
          */
         public void execute(ClientView view, Object input) {
-            //System.out.println("READ_SETUP_WORKER");
             view.currentGameState = PUBLISH_ACTION;
             view.currentGameState.execute(view, input);
         }

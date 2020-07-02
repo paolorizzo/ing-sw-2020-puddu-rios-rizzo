@@ -82,7 +82,6 @@ public class Controller implements ControllerInterface
      * @param view that is being added
      */
     public synchronized void addView(View view) throws InterruptedException {
-        System.out.println("trying to add a view");
         if(phase.equals(Phase.NONE))
             phase = Phase.CONNECTION;
         while(!accept){
@@ -106,7 +105,6 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void generateId(){
-        System.out.println("generating id " + nextId);
         model.feed.notifyID(nextId);
     }
 
@@ -120,7 +118,6 @@ public class Controller implements ControllerInterface
     public synchronized void ackId(int id)
     {
         if(ackReceived == id-1){
-            System.out.println("received ack for id " + id);
             accept = true;
             if(id == 0)
                 acceptNumPlayers = true;
@@ -211,11 +208,11 @@ public class Controller implements ControllerInterface
             else{
 
                 if(model.nicknamePresent(name)){
-                    System.out.println("name not accepted because already present");
+                    System.out.println("Name"+name+" not accepted because already present");
                     model.feed.notifyKo(id, "this name is already taken");
                 }
                 else{
-                    System.out.println("name " + name + " accepted for player " + id);
+                    System.out.println("Name " + name + " accepted for player " + id);
                     model.feed.notifyOk(id);
                     model.addPlayer(new Player(id, name));
                 }
@@ -231,7 +228,7 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void deleteId(int id){
-        System.out.println("client " + id + " died");
+        System.out.println("Client " + id + " died");
         View toBeRemoved = viewMap.get(id);
         model.removeObserver(toBeRemoved);
         views.remove(toBeRemoved);
@@ -245,7 +242,7 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void isGameAvailable(){
-        System.out.println("Notifying availability: " + model.isSaved());
+        System.out.println("Saved game exists: " + model.isSaved());
         if(phase.equals(Phase.CONNECTION))
             phase = Phase.RESTORE;
         model.feed.notifyGameAvailable(model.isSaved());
@@ -346,8 +343,7 @@ public class Controller implements ControllerInterface
      */
     @Override
     public synchronized void requestCards(int id) throws InterruptedException {
-        while(id != model.game.getCurrentPlayerId() || !model.game.cardsAlreadyChosen()) { // || chosenCards.size() == 0
-            System.out.println(id+" mi fermo");
+        while(id != model.game.getCurrentPlayerId() || !model.game.cardsAlreadyChosen()) {
             this.wait();
         }
         model.feed.notifyCards(id, model.game.getChosenCards());
@@ -389,7 +385,6 @@ public class Controller implements ControllerInterface
         while(id != model.game.getCurrentPlayerId()){
             this.wait();
         }
-        System.out.println("Richiedo piazzare worker");
         List<Action> possibleActions = model.game.getPossibleSetupActions(id);
         if(possibleActions != null)
             model.feed.notifyCurrentPlayer(id, possibleActions, false);
@@ -407,15 +402,11 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void setupWorker(int id, SetupAction setupAction){
         if(id != model.game.getCurrentPlayerId() || !model.game.possibleActionsContains(setupAction)){
-            System.out.println("Unacceptable action: " + setupAction.toString());
-            System.out.println("player " + model.game.getCurrentPlayerId() + "'s turn");
-            //model.game.printPossibleSetupActions();
             model.feed.notifyKo(id, "Worker placement unacceptable: either out of turn of not possible");
             return;
         }
         if(phase.equals(Phase.SETUP))
             phase = Phase.GAME;
-        System.out.println("Piazzo worker");
         model.executeSetupAction(id, setupAction);
         model.feed.notifyOk(id);
 
@@ -436,10 +427,8 @@ public class Controller implements ControllerInterface
     public synchronized void requestActions(int id) throws InterruptedException {
 
         while(id != model.game.getCurrentPlayerId()) {
-            System.out.println(id+" mi fermo");
             this.wait();
         }
-        System.out.println("Richiedo azioni");
         List<Action> possibleActions = model.game.getPossibleActions(id);
         if(possibleActions != null)
             model.feed.notifyCurrentPlayer(id, possibleActions, model.game.isEndOfTurnPossible());
@@ -459,7 +448,6 @@ public class Controller implements ControllerInterface
         if(id != model.game.getCurrentPlayerId()) {
             return;
         }
-        System.out.println("pubblico azione "+action);
         if(model.game.possibleActionsContains(action)){
             //ok
             model.executeAction(id, action);
@@ -500,8 +488,6 @@ public class Controller implements ControllerInterface
         if(model.allWorkersPlaced()){
             if(model.game.isFinish())
                 model.deleteFiles();
-            //else
-                //model.save();
         }
     }
 

@@ -56,7 +56,7 @@ public class TurnArchive extends MapConvertible{
         try{
             FileWriter writer = new FileWriter(pathToTurnsJson);
             Map<String, Object> turnArchiveMap = this.toMap();
-            System.out.println(turnArchiveMap.toString());
+            //System.out.println(turnArchiveMap.toString());
             gson.toJson(turnArchiveMap, writer);
             writer.flush();
             writer.close();

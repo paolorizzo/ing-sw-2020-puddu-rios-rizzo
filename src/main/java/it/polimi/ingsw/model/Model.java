@@ -38,7 +38,6 @@ public class Model {
         return feed;
     }
 
-    //TODO non esporre verso controller
     /**
      * returns the map of ids to players
      * @return the map of ids to players
@@ -54,8 +53,6 @@ public class Model {
 
          */
     }
-
-    //TODO non esporre verso controller
 
     /**
      * returns the player for a given id
@@ -229,7 +226,7 @@ public class Model {
         PersistenceGame pg = new PersistenceGame(game);
         TurnArchive ta = game.turnArchive;
         String saveName = saveName();
-        System.out.println("saving game persistence files with name suffix:");
+        System.out.println("Saving game persistence files with name suffix:");
         System.out.println("\t" + saveName);
         pg.save(saveName);
         ta.save(saveName);

@@ -103,11 +103,11 @@ public class ActionTest
      * @param original the original action to be converted to map and back
      */
     public void checkConversion(Action original){
-        System.out.println(original.toString());
+        //System.out.println(original.toString());
         Map map = original.toMap();
-        System.out.println(map.toString());
+        //System.out.println(map.toString());
         Action processed = Action.fromMap(map);
-        System.out.println(processed.toString());
+        //System.out.println(processed.toString());
         assertEquals(original, processed);
     }
 

@@ -91,10 +91,4 @@ public class IntegrationConnectionPhaseTest extends MvcIntegrationTest {
         //we don't know which thread will run first, so both cases are possible
         assert((cws[0].getId()==0 && cws[1].getId()==1) || (cws[0].getId()==1 && cws[1].getId()==0));
     }
-
-    //TODO once the number of players is handled, we have to test the excluding process
-    public void checkExcludedPlayers()
-    {
-
-    }
 }
