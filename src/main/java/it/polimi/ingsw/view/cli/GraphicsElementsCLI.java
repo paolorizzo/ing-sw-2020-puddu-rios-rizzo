@@ -58,8 +58,8 @@ class GraphicsElementsCLI
                 pic.setMask("/cli/textures/athena.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_RESET);
                 break;
-            case "DEMETER":
-                pic.setMask("/cli/textures/demeter.txt");
+            case "ARTEMIS":
+                pic.setMask("/cli/textures/artemis.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_BLUE, AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BG_YELLOW);
                 break;
             case "MINOTAUR":
@@ -75,8 +75,24 @@ class GraphicsElementsCLI
                 pic.setPalette(AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_RESET, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_BLACK);
                 break;
             case "APOLLO":
-                pic.setMask("/cli/textures/pan.txt");
+                pic.setMask("/cli/textures/apollo.txt");
                 pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_CYAN, AnsiColors.ANSI_BG_PURPLE, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BG_GREEN, AnsiColors.ANSI_BRIGHT_BG_PURPLE, AnsiColors.ANSI_BG_BLUE);
+                break;
+            case "HYPNUS":
+                pic.setMask("/cli/textures/hypnus.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLUE, AnsiColors.ANSI_BG_PURPLE, AnsiColors.ANSI_BG_BLACK);
+                break;
+            case "DEMETER":
+                pic.setMask("/cli/textures/demeter.txt");
+                pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_GREEN);
+                break;
+            case "PAN":
+                pic.setMask("/cli/textures/pan.txt");
+                pic.setPalette(AnsiColors.ANSI_BRIGHT_BG_CYAN, AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_BLACK);
+                break;
+            case "LIMUS":
+                pic.setMask("/cli/textures/limus.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED);
                 break;
             default:
                 pic.setPalette(AnsiColors.ANSI_BG_BLUE);
