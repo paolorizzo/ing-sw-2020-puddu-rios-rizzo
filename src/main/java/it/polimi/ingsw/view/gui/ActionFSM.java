@@ -1,16 +1,16 @@
 package it.polimi.ingsw.view.gui;
 
-
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.observation.UserInterfaceObserver;
-import javafx.application.Platform;
 
 import java.util.List;
 
 /**
- * The FSM for the interact of user to select the action on board
+ * The FSM for the interaction with the user to select the action on board
  */
 public class ActionFSM{
+    /**
+     * The enumeration of states of an action to display on the GUI.
+     */
     private enum ActionState{
         WAIT_INITIALIZE {
             /**
