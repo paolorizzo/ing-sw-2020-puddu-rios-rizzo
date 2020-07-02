@@ -63,7 +63,7 @@ java -jar CG04-1.0-SNAPSHOT-jar-with-dependencies.jar -cli
 ```
 ### GUI
 Takes no arguments. 
-If run in a non-Windows OS, it's recomended to install the "FORTE" font, available in the /deliveries folder.  
+If run in a non-Windows OS, it's recomended to install the "FORTE" font, available in the /deliverables folder.  
 ```
 java -jar CG04-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
