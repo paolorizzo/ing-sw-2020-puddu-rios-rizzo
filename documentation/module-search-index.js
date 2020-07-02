@@ -1,1 +1,0 @@
-moduleSearchIndex = [{"l":"ing.sw.puddu.rios.rizzo"}]
