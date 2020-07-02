@@ -37,25 +37,13 @@ public class Cli extends UserInterfaceObservable implements UserInterface
     }
 
     /**
-     * Legacy method supposed to trigger the display of the game's logo.
-     */
-    @Override
-    public void showLogo()
-    {
-
-
-    }
-
-    /**
      * Informs the user interface about the currently active player.
      * @param id the player's id.
      */
     @Override
     public void setCurrentPlayer(int id)
     {
-
         CliUtils.handleCurrentPlayer(id, model);
-
     }
 
     /**

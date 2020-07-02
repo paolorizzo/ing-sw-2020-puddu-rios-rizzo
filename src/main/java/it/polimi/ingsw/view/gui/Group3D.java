@@ -8,7 +8,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Rotate;
 
-public class Group3D extends javafx.scene.Group {
+/**
+ * It is an extends of javafx Group that makes the 3D group ratable and zoomable
+ */
+public class Group3D extends Group {
 
     private double anchorX, anchorY;
     private double anchorAngleX = 0;
@@ -20,7 +23,11 @@ public class Group3D extends javafx.scene.Group {
     public Group3D(){
         initMouseControl(this);
     }
-    //scroll and look around
+
+    /**
+     * It sets the commands to make this group ratable and zoomable
+     * @param group
+     */
     private void initMouseControl(final Group group){
         Rotate xRotate;
         Rotate yRotate;

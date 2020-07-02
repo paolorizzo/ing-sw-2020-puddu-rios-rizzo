@@ -10,6 +10,9 @@ import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * It is the collection of building in the 3D
+ */
 public class Tower extends Group{
     List<Building> buildings;
     Worker worker;
@@ -17,6 +20,12 @@ public class Tower extends Group{
     Point3D top;
     int row, col;
 
+    /**
+     * It initializes a level 0, sets no worker on it and saves row, col and base point
+     * @param row row on the board
+     * @param col col on the board
+     * @param base the base position in the 3D plane
+     */
     public Tower(int row, int col, Point3D base){
         this.row = row;
         this.col = col;
@@ -28,22 +37,41 @@ public class Tower extends Group{
         addBuilding(new Building(Piece.LEVEL0));
     }
 
+    /**
+     *
+     * @return the base point of tower
+     */
     public Point3D getBase() {
         return base;
     }
 
+    /**
+     *
+     * @return the top point of tower
+     */
     public Point3D getTop() {
         return top;
     }
 
+    /**
+     *
+     * @return the column
+     */
     public int getCol() {
         return col;
     }
 
+    /**
+     *
+     * @return the row
+     */
     public int getRow() {
         return row;
     }
 
+    /**
+     * It sets the default texture in all buildings and in an hypothetical worker
+     */
     public void setToDefaultView(){
         for(Building building: buildings){
            building.setToDefaultView();
@@ -51,6 +79,9 @@ public class Tower extends Group{
         if(worker != null)
             worker.setToDefaultView();
     }
+    /**
+     * It sets the enable texture in all buildings and in an hypothetical worker
+     */
     public void setToEnableView(){
         for(Building building: buildings){
             building.setToEnableView();
@@ -58,6 +89,9 @@ public class Tower extends Group{
         if(worker != null)
             worker.setToEnableView();
     }
+    /**
+     * It sets the preview texture in all buildings and in an hypothetical worker
+     */
     public void setToPreview(){
         for(Building building: buildings){
             building.setToPreview();
@@ -65,6 +99,9 @@ public class Tower extends Group{
         if(worker != null)
             worker.setToPreview();
     }
+    /**
+     * It sets the disabled texture in all buildings and in an hypothetical worker
+     */
     public void setToDisableView(){
         for(Building building: buildings){
             building.setToDisableView();
@@ -72,6 +109,11 @@ public class Tower extends Group{
         if(worker != null)
             worker.setToDisableView();
     }
+
+    /**
+     * It adds a building to the tower on the previews top point and next it recalculate the new top point
+     * @param b the new building to add to the tower
+     */
     public void addBuilding(final Building b){
         buildings.add(b);
         b.setPosition(top);
@@ -90,10 +132,17 @@ public class Tower extends Group{
         );
     }
 
+    /**
+     * It returns the top piece on the tower
+     * @return the last piece added to the tower
+     */
     public Building getLastBuilding() {
         return buildings.get(buildings.size()-1);
     }
 
+    /**
+     * It erases the top building in the tower and recalculates the new top point
+     */
     public void removeLastBuilding(){
         final Building b = buildings.get(buildings.size()-1);
         top = new Point3D(top.getX(), top.getY()-b.getLayoutBounds().getMinY(), top.getZ());
@@ -110,6 +159,11 @@ public class Tower extends Group{
             }
         );
     }
+
+    /**
+     * It sets a new worker on the top of the tower
+     * @param w the worker to place on it
+     */
     public void setWorker(final Worker w){
 
         worker = w;
@@ -126,14 +180,28 @@ public class Tower extends Group{
         );
 
     }
+
+    /**
+     * It returns true is the attribute worker is not null
+     * @return true is the attribute worker is not null
+     */
     public boolean hasWorker() {
         if(worker == null)
             return false;
         return true;
     }
+
+    /**
+     * It returns the worker on the tower. The value can be null.
+     * @return the worker on it
+     */
     public Worker getWorker(){
         return worker;
     }
+
+    /**
+     * It erases the worker on the tower
+     */
     public void removeWorker(){
         worker.setVisible(false);
         final Worker w = worker;
@@ -148,6 +216,11 @@ public class Tower extends Group{
         worker = null;
 
     }
+
+    /**
+     * It sets a mouse event on the towers. It invokes the execute of action FSM with the string of Tower T<row><col>
+     * @param actionFSM
+     */
     public void setOnMouseClicked(final ActionFSM actionFSM){
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -156,6 +229,10 @@ public class Tower extends Group{
             }
         });
     }
+    /**
+     * It sets a mouse event on the towers. It invokes the execute of action FSM with the string of Tower P<row><col>
+     * @param actionFSM
+     */
     public void setOnMouseEntered(final ActionFSM actionFSM){
         this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -164,6 +241,10 @@ public class Tower extends Group{
             }
         });
     }
+    /**
+     * It sets a mouse event on the towers. It invokes the execute of action FSM with the string of Tower E<row><col>
+     * @param actionFSM
+     */
     public void setOnMouseExited(final ActionFSM actionFSM){
         this.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override

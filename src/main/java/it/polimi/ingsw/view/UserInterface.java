@@ -114,11 +114,6 @@ public interface UserInterface
     int getNumPlayers();
 
     /**
-     * Legacy method supposed to trigger the display of the game's logo.
-     */
-    void showLogo();
-
-    /**
      * Informs the user interface about the currently active player.
      * @param id the player's id.
      */

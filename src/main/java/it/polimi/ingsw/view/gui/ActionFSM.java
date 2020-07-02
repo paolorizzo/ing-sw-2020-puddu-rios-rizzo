@@ -7,9 +7,17 @@ import javafx.application.Platform;
 
 import java.util.List;
 
+/**
+ * The FSM for the interact of user to select the action on board
+ */
 public class ActionFSM{
     private enum ActionState{
         WAIT_INITIALIZE {
+            /**
+             * It initializes all menus to hide and reset the variables to null
+             * @param input a object
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input){
                 if(board != null){
                     board.setAllToDefaultView();
@@ -25,6 +33,12 @@ public class ActionFSM{
             }
         },
         WAIT_TARGET_SETUP_WORKER {
+            /**
+             * It handles the different views of board when there is a worker's setup, showing the preview of move and
+             * notifying the select.
+             * @param input a object, if it is String T<x><y> for select, P<x><y> for preview, E<x><y> for end the preview
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
                 board.setAllToDefaultView();
                 selectTypeActionMenu.hide();
@@ -57,7 +71,6 @@ public class ActionFSM{
                             for (Action action : possibleActions) {
                                 if (action instanceof SetupAction && ((SetupAction)action).matches(previewTargetX, previewTargetY)) {
                                     setPreview(action);
-                                    System.out.println("PREVIEW "+action);
                                     break;
                                 }
                             }
@@ -73,6 +86,11 @@ public class ActionFSM{
             }
         },
         WAIT_SELECT_WORKER {
+            /**
+             * It handles the select of worker
+             * @param input a object, if it is String T<x><y> is a select of a space where can be a worker of player
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
                 board.setAllToDefaultView();
                 selectTypeActionMenu.hide();
@@ -82,7 +100,6 @@ public class ActionFSM{
                 piece = null;
 
                 if(canEndOfTurn){
-                    System.out.println("mostro end of turn");
                     endOfTurnMenu.show();
                 }else{
                     endOfTurnMenu.hide();
@@ -102,11 +119,9 @@ public class ActionFSM{
                                 }
                             }
                             if(foundPossibleAction){
-                                System.out.println("Selezionato "+worker_id);
                                 selectTypeActionMenu.show(possibleActions, worker_id);
                                 return WAIT_SELECT_TYPE_ACTION;
                             }else{
-                                System.out.println("Nessun azione disponibile per "+worker_id);
                                 return WAIT_SELECT_WORKER;
                             }
                         }
@@ -117,6 +132,11 @@ public class ActionFSM{
             }
         },
         WAIT_SELECT_TYPE_ACTION {
+            /**
+             * It handles the different action that can be the player after the select of worker
+             * @param input a object, if it is String can be "move", "build", "unselected"
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
 
                 board.setAllToDefaultView();
@@ -128,7 +148,6 @@ public class ActionFSM{
                 if(input instanceof String){
                     switch((String)input) {
                         case "move":
-                            System.out.println("move: rendo verdi le possibili mosse");
                             for(Action action: possibleActions){
                                 if(action.matches(worker_id) && action instanceof MoveAction){
                                     board.getTower(action.getTargetX(), action.getTargetY()).setToEnableView();
@@ -136,7 +155,6 @@ public class ActionFSM{
                             }
                             return WAIT_SELECT_TARGET_MOVE;
                         case "build":
-                            System.out.println("build: rendo visibile il menu");
                             selectPieceMenu.show(possibleActions, worker_id);
                         return WAIT_SELECT_PIECE;
                         case "unselect":
@@ -149,6 +167,11 @@ public class ActionFSM{
             }
         },
         WAIT_SELECT_TARGET_MOVE {
+            /**
+             * It handles the target of a move with the preview, and notifying the choose
+             * @param input a object, if it is String T<x><y> for select, P<x><y> for preview, E<x><y> for end the preview
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
 
                 selectTypeActionMenu.show(possibleActions, worker_id);
@@ -204,6 +227,11 @@ public class ActionFSM{
             }
         },
         WAIT_SELECT_PIECE {
+            /**
+             * It handles the select of piece to build
+             * @param input a object, if it is a Piece the piece selected
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
 
                 board.setAllToDefaultView();
@@ -213,7 +241,6 @@ public class ActionFSM{
 
                 if(input instanceof Piece){
                     piece = (Piece)input;
-                    System.out.println("pezzo selezionato: "+piece);
                     for(Action action: possibleActions){
                         if(action.matches(worker_id, piece)){
                             board.getTower(action.getTargetX(), action.getTargetY()).setToEnableView();
@@ -233,6 +260,11 @@ public class ActionFSM{
             }
         },
         WAIT_SELECT_TARGET_BUILD {
+            /**
+             * It handles the target of a build with the preview, and notifying the choose
+             * @param input a object, if it is String T<x><y> for select, P<x><y> for preview, E<x><y> for end the preview
+             * @return the new state of fsm
+             */
             public ActionState execute(Object input) {
 
                 selectTypeActionMenu.show(possibleActions, worker_id);
@@ -296,9 +328,22 @@ public class ActionFSM{
         static Action previewAction;
         static Piece piece;
 
+        /**
+         * Default implementation of the method for the execution of a state
+         * @param input the input for the execution of the state
+         * @return the new state of fsm
+         */
         public ActionState execute(Object input) {
             return this.execute(input);
         }
+
+        /**
+         * It sets the variables and the initial state of fsm
+         * @param b actually board of the game
+         * @param actions the new possible actions
+         * @param flagEndOfTurn true if is possible end the turn early
+         * @return
+         */
         public ActionState init(Board b, List<Action> actions, boolean flagEndOfTurn){
             possibleActions = actions;
             canEndOfTurn = flagEndOfTurn;
@@ -308,6 +353,11 @@ public class ActionFSM{
             else
                 return ActionState.WAIT_SELECT_WORKER;
         }
+
+        /**
+         * It sets the preview on board of the action and save the action to future restore of default board.
+         * @param action the action you want to preview
+         */
         public void setPreview(Action action){
             if(previewOn)
                 resetPreview();
@@ -315,6 +365,10 @@ public class ActionFSM{
             board.previewAction(previewAction);
             previewOn =  true;
         }
+
+        /**
+         * It resets the board to normal state undoing the preview action saved before
+         */
         public void resetPreview(){
             if(!previewOn)
                 return;
@@ -323,6 +377,11 @@ public class ActionFSM{
             previewOn = false;
             previewAction = null;
         }
+
+        /**
+         * It notifies the voluntary end of turn
+         * @return the new state of fsm
+         */
         public ActionState voluntaryEndOfTurn(){
             board.notifyReadVoluntaryEndOfTurn();
             return ActionState.WAIT_INITIALIZE.execute(null);
@@ -337,20 +396,43 @@ public class ActionFSM{
 
     ActionState state;
 
+    /**
+     * It initializes the state to WAIT_INITIALIZE
+     */
     public ActionFSM(){
         state = ActionState.WAIT_INITIALIZE;
     }
 
+    /**
+     * It sets the menus used in fsm to interact to user
+     * @param sta the menu to select the type of action
+     * @param spm the menu to select the piece for build
+     * @param eot the menu to select a voluntary end of turn
+     */
     public void setMenus(SelectTypeActionMenu sta, SelectPieceMenu spm, EndOfTurnMenu eot){
         state.setMenus(sta, spm, eot);
     }
+
+    /**
+     * Interface of the method for the execution of a state
+     * @param input the input for the execution of the state
+     */
     public void execute(Object input){
         state = state.execute(input);
     }
 
+    /**
+     * Interface of the method init for the ActionState
+     * @param board actually board of the game
+     * @param actions the new possible actions
+     * @param canEndOfTurn true if is possible end the turn early
+     */
     public void setPossibleActions(Board board, List<Action> actions, boolean canEndOfTurn){
         state = state.init(board, actions, canEndOfTurn);
     }
+    /**
+     * Interface of the method voluntaryEndOfTurn for ActionState
+     */
     public void voluntaryEndOfTurn(){
         state = state.voluntaryEndOfTurn();
     }

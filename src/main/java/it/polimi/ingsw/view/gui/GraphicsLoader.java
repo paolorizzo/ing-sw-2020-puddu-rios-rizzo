@@ -13,6 +13,9 @@ import javafx.scene.shape.VertexFormat;
 import java.io.*;
 import java.util.*;
 
+/**
+ * It is a Loader of all graphics elements of GUI. It is used to read and store only one time the graphics from resources.
+ */
 public class GraphicsLoader {
     private static GraphicsLoader instance = null;
 
@@ -20,6 +23,9 @@ public class GraphicsLoader {
     HashMap<String, PhongMaterial> textures;
     HashMap<String, Image> images;
 
+    /**
+     * Initialized all the HashMap and call the loader
+     */
     private GraphicsLoader() {
         meshes = new HashMap<>();
         textures = new HashMap<>();
@@ -30,24 +36,46 @@ public class GraphicsLoader {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Pattern singleton
+     * @return always the same instance
+     */
     public static GraphicsLoader instance() {
         if(instance == null)
             instance = new GraphicsLoader();
         return instance;
     }
 
-    public Mesh getMesh(String type) {
-        return meshes.get(type);
+    /**
+     * It returns the mesh request
+     * @param name the name of mesh saved in the HashMap
+     * @return the TriangularMesh request
+     */
+    public Mesh getMesh(String name) {
+        return meshes.get(name);
     }
-
-    public PhongMaterial getTexture(String type) {
-        return textures.get(type);
+    /**
+     * It returns the texture texture
+     * @param name the name of texture saved in the HashMap
+     * @return the PhongMaterial request
+     */
+    public PhongMaterial getTexture(String name) {
+        return textures.get(name);
     }
-
+    /**
+     * It returns the image request
+     * @param name the name of image saved in the HashMap
+     * @return the Image request
+     */
     public Image getImage(String name) {
         return images.get(name);
     }
 
+    /**
+     * It initializes and starts threads for every graphic elements read in graphics.json
+     * @throws InterruptedException if a thread is interrupted
+     */
     void loader() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
         try{
@@ -111,12 +139,22 @@ public class GraphicsLoader {
         }
     }
 
+    /**
+     * It loads and puts in the hashmap the mesh
+     * @param name the name of mesh
+     * @param URI the URI in the resources
+     */
     private void loaderMesh(String name, String URI){
         TriangleMesh mesh = createMeshFromOBJ("/"+URI);
         synchronized (meshes){
             meshes.put(name, mesh);
         }
     }
+    /**
+     * It loads and puts in the hashmap the texture
+     * @param name the name of texture
+     * @param URI the URI in the resources
+     */
     private void loaderTexture(String name, String URI) {
 
         PhongMaterial texture = new PhongMaterial();
@@ -131,6 +169,11 @@ public class GraphicsLoader {
             textures.put(name, texture);
         }
     }
+    /**
+     * It loads and puts in the hashmap the image
+     * @param name the name of image
+     * @param URI the URI in the resources
+     */
     private void loaderImage(String name, String URI){
         try{
             InputStream inputStream = GraphicsLoader.class.getResourceAsStream("/"+URI);
@@ -143,6 +186,13 @@ public class GraphicsLoader {
         }
 
     }
+
+    /**
+     * It is a custom loader of OBJ files. It reads the points, the normal vectors of the face and the coordinates of
+     * textures of an OBJ and creates a TringularMesh
+     * @param URI the URI in the resources
+     * @return the TriangularMesh of the given OBJ files
+     */
     TriangleMesh createMeshFromOBJ(String URI){
         TriangleMesh mesh = new TriangleMesh();
         try {
@@ -172,7 +222,6 @@ public class GraphicsLoader {
                     float p2 = line.nextFloat();
                     float p3 = line.nextFloat();
                     mesh.getPoints().addAll(p1, p2, p3);
-                    //mesh.getTexCoords().addAll(0f, 0f);
                 }else if(data.charAt(0) == 'f'){
                     if(mesh.getVertexFormat().equals(VertexFormat.POINT_TEXCOORD)) {
                         mesh.getTexCoords().addAll(0f, 0f);

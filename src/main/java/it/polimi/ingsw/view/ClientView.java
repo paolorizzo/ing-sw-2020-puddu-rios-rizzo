@@ -566,7 +566,6 @@ public class ClientView extends View implements UserInterfaceObserver
      * starts the ui and the Connection FSM
      */
     public void start(){
-        ui.showLogo();
         startConnectionFSM();
     }
 
