@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Represents the actual game board of the game.
+ */
 public class Board {
     private Space[][] spaces;
     private PieceBag pieceBag;

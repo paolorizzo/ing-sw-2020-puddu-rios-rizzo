@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A set of utils available to the CLI user interface to update the internal model representation and visualize the game.
+ */
 public class CliUtils
 {
     /**
