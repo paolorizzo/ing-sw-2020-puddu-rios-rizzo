@@ -94,6 +94,14 @@ class GraphicsElementsCLI
                 pic.setMask("/cli/textures/limus.txt");
                 pic.setPalette(AnsiColors.ANSI_BG_WHITE, AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED);
                 break;
+            case "HERA":
+                pic.setMask("/cli/textures/hera.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BRIGHT_BG_YELLOW, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_RED);
+            break;
+            case "HESTIA":
+                pic.setMask("/cli/textures/hestia.txt");
+                pic.setPalette(AnsiColors.ANSI_BG_BLACK, AnsiColors.ANSI_BG_RED, AnsiColors.ANSI_BRIGHT_BG_RED, AnsiColors.ANSI_BG_YELLOW, AnsiColors.ANSI_BRIGHT_BG_YELLOW);
+            break;
             default:
                 pic.setPalette(AnsiColors.ANSI_BG_BLUE);
                 break;
