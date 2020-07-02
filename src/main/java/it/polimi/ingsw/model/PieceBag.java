@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model;
 
-import java.util.Arrays;
-
+/**
+ * Represents the collection of finite pieces available to build.
+ */
 public class PieceBag {
     int countLevel[] = new int[5];
 

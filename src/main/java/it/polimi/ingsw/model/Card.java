@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.power.PowerStrategy;
 
 import java.io.Serializable;
 
+/**
+ * Represents an actual card of the game, associated with a specific god power.
+ */
 public class Card implements Serializable
 {
     private String name;
