@@ -2,7 +2,9 @@ package it.polimi.ingsw.model.power;
 
 import it.polimi.ingsw.model.*;
 
-
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Hera
+ */
 public class HeraPower extends PowerStrategy{
     /**
      * This method invokes the method prune to erase all wins on the peripheral spaces.

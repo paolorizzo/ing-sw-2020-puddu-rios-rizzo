@@ -5,7 +5,9 @@ import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Apollo
+ */
 public class ApolloPower extends PowerStrategy {
     /**
      * It uses an overrider move layer instead of default to generate the action tree

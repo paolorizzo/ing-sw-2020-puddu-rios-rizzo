@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Prometheus
+ */
 public class PrometheusPower extends PowerStrategy {
     /**
      * It uses an overrider build and move layer instead of default to generate the action tree.

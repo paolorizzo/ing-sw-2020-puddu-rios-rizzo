@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Limus
+ */
 public class LimusPower extends PowerStrategy {
     /**
      * This method invokes the method prune to erase all build actions near of the worker of this player.

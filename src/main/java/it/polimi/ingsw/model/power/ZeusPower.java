@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Zeus
+ */
 public class ZeusPower extends PowerStrategy {
     /**
      * It uses an overrider build layer instead of default to generate the action tree

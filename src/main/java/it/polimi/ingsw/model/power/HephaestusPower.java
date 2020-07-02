@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Hephaestus
+ */
 public class HephaestusPower extends PowerStrategy {
     /**
      * It uses two build layers, where the second one is an overrider build layer instead of default to generate the action tree

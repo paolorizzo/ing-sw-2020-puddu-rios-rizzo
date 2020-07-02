@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Default class for generate ActionTree and to prune others ActionTrees
+ */
 public class PowerStrategy {
     /**
      * Default method to generate an action tree from the board using the player.

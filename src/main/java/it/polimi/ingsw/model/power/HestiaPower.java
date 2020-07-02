@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Generate ActionTree and prune others ActionTrees for god Hestia
+ */
 public class HestiaPower extends PowerStrategy {
 
     /**
