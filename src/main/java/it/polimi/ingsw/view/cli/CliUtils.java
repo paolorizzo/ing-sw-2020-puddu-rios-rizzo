@@ -370,7 +370,7 @@ public class CliUtils
         {
             printer.lineBreak();
             showControls();
-            printer.print("Now! Select your worker for this turn:");
+            printer.print("Now! Select your worker for this turn. Press A/D to switch between them.");
             printer.resetAndBreak();
             printer.lineBreak();
 
