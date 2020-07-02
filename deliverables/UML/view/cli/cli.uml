@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.view.cli</OriginalElement>
+  <nodes>
+    <node x="670.8125" y="1058.0">it.polimi.ingsw.view.cli.CanvasCLI</node>
+    <node x="438.2524739583332" y="602.0">it.polimi.ingsw.view.cli.SelectionCLI</node>
+    <node x="687.4524739583333" y="0.0">it.polimi.ingsw.view.cli.AnsiColors</node>
+    <node x="120.25" y="1047.0">it.polimi.ingsw.view.cli.SpaceCLI</node>
+    <node x="971.6458333333333" y="2614.0">it.polimi.ingsw.view.cli.Cli</node>
+    <node x="1011.7524739583332" y="860.0">it.polimi.ingsw.view.cli.ModelCLI</node>
+    <node x="0.0" y="602.0">it.polimi.ingsw.view.cli.GraphicsElementsCLI</node>
+    <node x="778.7524739583332" y="580.0">it.polimi.ingsw.view.cli.PrintCLI</node>
+    <node x="410.8455729166667" y="1454.0">it.polimi.ingsw.view.cli.CliUtils</node>
+    <node x="250.3085937500001" y="102.0">it.polimi.ingsw.view.cli.RectangleCLI</node>
+    <node x="401.8125" y="1014.0">it.polimi.ingsw.view.cli.BidimensionalSelectionCLI</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.ModelCLI">
+      <point x="158.66666666666674" y="-555.0" />
+      <point x="739.5122395833334" y="1434.0" />
+      <point x="1055.0858072916665" y="1434.0" />
+      <point x="-86.66666666666674" y="247.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.CanvasCLI">
+      <point x="68.0" y="-555.0" />
+      <point x="648.8455729166667" y="1394.0" />
+      <point x="827.5625" y="1394.0" />
+      <point x="52.25" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.BidimensionalSelectionCLI" target="it.polimi.ingsw.view.cli.SelectionCLI">
+      <point x="62.0" y="-93.0" />
+      <point x="587.8125" y="840.0" />
+      <point x="556.3774739583332" y="840.0" />
+      <point x="23.625" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.RectangleCLI">
+      <point x="-90.66666666666663" y="-555.0" />
+      <point x="490.17890625000007" y="1404.0" />
+      <point x="357.75" y="1404.0" />
+      <point x="357.75" y="550.0" />
+      <point x="382.8085937500001" y="550.0" />
+      <point x="-26.5" y="214.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.SelectionCLI">
+      <point x="22.66666666666663" y="-555.0" />
+      <point x="603.5122395833333" y="1374.0" />
+      <point x="660.3125" y="1374.0" />
+      <point x="660.3125" y="840.0" />
+      <point x="603.6274739583332" y="840.0" />
+      <point x="70.875" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.GraphicsElementsCLI" target="it.polimi.ingsw.view.cli.AnsiColors">
+      <point x="-70.0" y="-93.0" />
+      <point x="70.0" y="72.0" />
+      <point x="700.2524739583332" y="72.0" />
+      <point x="-51.19999999999999" y="26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.PrintCLI">
+      <point x="90.66666666666663" y="-555.0" />
+      <point x="671.5122395833333" y="1404.0" />
+      <point x="925.2855468749999" y="1404.0" />
+      <point x="925.2855468749999" y="840.0" />
+      <point x="911.2524739583332" y="840.0" />
+      <point x="26.50000000000003" y="115.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.GraphicsElementsCLI" target="it.polimi.ingsw.view.cli.RectangleCLI">
+      <point x="70.0" y="-93.0" />
+      <point x="210.0" y="560.0" />
+      <point x="276.8085937500001" y="560.0" />
+      <point x="-132.5" y="214.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.BidimensionalSelectionCLI">
+      <point x="-22.66666666666663" y="-555.0" />
+      <point x="558.1789062500001" y="1374.0" />
+      <point x="463.8125" y="1374.0" />
+      <point x="-62.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.SpaceCLI" target="it.polimi.ingsw.view.cli.RectangleCLI">
+      <point x="56.75" y="-60.0" />
+      <point x="290.5" y="560.0" />
+      <point x="329.8085937500001" y="560.0" />
+      <point x="-79.5" y="214.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.Cli" target="it.polimi.ingsw.view.cli.CliUtils">
+      <point x="-91.33333333333326" y="-280.0" />
+      <point x="1017.3125" y="2589.0" />
+      <point x="580.8455729166667" y="2589.0" />
+      <point x="0.0" y="555.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.SpaceCLI" target="it.polimi.ingsw.view.cli.GraphicsElementsCLI">
+      <point x="-56.75" y="-60.0" />
+      <point x="177.0" y="840.0" />
+      <point x="210.0" y="840.0" />
+      <point x="70.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CanvasCLI" target="it.polimi.ingsw.view.cli.AnsiColors">
+      <point x="0.0" y="-49.0" />
+      <point x="775.3125" y="840.0" />
+      <point x="751.4524739583333" y="840.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.PrintCLI" target="it.polimi.ingsw.view.cli.AnsiColors">
+      <point x="0.0" y="-115.0" />
+      <point x="884.7524739583332" y="82.0" />
+      <point x="777.0524739583332" y="82.0" />
+      <point x="25.600000000000023" y="26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CanvasCLI" target="it.polimi.ingsw.view.cli.RectangleCLI">
+      <point x="-41.80000000000001" y="-49.0" />
+      <point x="733.5124999999999" y="840.0" />
+      <point x="719.1019531249999" y="840.0" />
+      <point x="719.1019531249999" y="550.0" />
+      <point x="541.8085937500001" y="550.0" />
+      <point x="132.5" y="214.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CanvasCLI" target="it.polimi.ingsw.view.cli.PrintCLI">
+      <point x="83.60000000000002" y="-49.0" />
+      <point x="-26.5" y="115.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.Cli" target="it.polimi.ingsw.view.cli.ModelCLI">
+      <point x="91.33333333333331" y="-280.0" />
+      <point x="1199.9791666666665" y="2589.0" />
+      <point x="1177.99609375" y="2589.0" />
+      <point x="1177.99609375" y="1434.0" />
+      <point x="1228.419140625" y="1434.0" />
+      <point x="86.66666666666674" y="247.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.RectangleCLI" target="it.polimi.ingsw.view.cli.AnsiColors">
+      <point x="0.0" y="-214.0" />
+      <point x="409.3085937500001" y="82.0" />
+      <point x="725.8524739583332" y="82.0" />
+      <point x="-25.599999999999994" y="26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.SpaceCLI">
+      <point x="-113.33333333333331" y="-555.0" />
+      <point x="467.51223958333344" y="1414.0" />
+      <point x="290.5" y="1414.0" />
+      <point x="56.75" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.AnsiColors">
+      <point x="136.0" y="-555.0" />
+      <point x="716.8455729166667" y="1424.0" />
+      <point x="1001.2524739583332" y="1424.0" />
+      <point x="1001.2524739583332" y="72.0" />
+      <point x="802.6524739583332" y="72.0" />
+      <point x="51.19999999999999" y="26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli.CliUtils" target="it.polimi.ingsw.view.cli.GraphicsElementsCLI">
+      <point x="-158.66666666666669" y="-555.0" />
+      <point x="422.17890625000007" y="1434.0" />
+      <point x="70.0" y="1434.0" />
+      <point x="-70.0" y="93.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7000000000000001" x="695.5" y="282.71428571428567" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.view.cli.RectangleCLI</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

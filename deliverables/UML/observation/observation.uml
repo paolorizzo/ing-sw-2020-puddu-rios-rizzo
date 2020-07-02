@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.observation</OriginalElement>
+  <nodes>
+    <node x="365.95833333333326" y="187.0">it.polimi.ingsw.observation.Observable</node>
+    <node x="129.12499999999994" y="522.0">it.polimi.ingsw.observation.FeedObservable</node>
+    <node x="0.0" y="0.0">it.polimi.ingsw.observation.FeedObserver</node>
+    <node x="471.12499999999994" y="643.0">it.polimi.ingsw.observation.UserInterfaceObservable</node>
+    <node x="574.5" y="121.0">it.polimi.ingsw.observation.UserInterfaceObserver</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.observation.UserInterfaceObservable" target="it.polimi.ingsw.observation.UserInterfaceObserver">
+      <point x="82.66666666666669" y="-115.0" />
+      <point x="677.7916666666666" y="497.0" />
+      <point x="702.5" y="497.0" />
+      <point x="0.0" y="115.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.observation.UserInterfaceObservable" target="it.polimi.ingsw.observation.Observable">
+      <point x="-82.66666666666669" y="-115.0" />
+      <point x="512.4583333333333" y="497.0" />
+      <point x="477.20833333333326" y="497.0" />
+      <point x="22.25" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.observation.FeedObservable" target="it.polimi.ingsw.observation.FeedObserver">
+      <point x="-107.33333333333331" y="-236.0" />
+      <point x="182.79166666666663" y="497.0" />
+      <point x="164.5" y="497.0" />
+      <point x="0.0" y="236.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.observation.FeedObservable" target="it.polimi.ingsw.observation.Observable">
+      <point x="107.33333333333337" y="-236.0" />
+      <point x="397.4583333333333" y="497.0" />
+      <point x="432.70833333333326" y="497.0" />
+      <point x="-22.25" y="49.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="206.0" y="131.5" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.observation.UserInterfaceObservable</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

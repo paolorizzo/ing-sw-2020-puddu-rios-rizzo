@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.controller</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">it.polimi.ingsw.controller.ControllerInterface</node>
+    <node x="0.0" y="544.0">it.polimi.ingsw.controller.Controller</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.controller.Controller" target="it.polimi.ingsw.controller.ControllerInterface">
+      <point x="0.0" y="-302.0" />
+      <point x="0.0" y="247.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="114.5" y="316.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

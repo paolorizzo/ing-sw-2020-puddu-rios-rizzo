@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.view</OriginalElement>
+  <nodes>
+    <node x="327.0509579870728" y="1794.0">it.polimi.ingsw.view.middleware</node>
+    <node x="747.9259579870728" y="780.0">it.polimi.ingsw.view.ClientView</node>
+    <node x="0.0" y="1000.0">it.polimi.ingsw.view.VirtualView</node>
+    <node x="955.9259579870728" y="345.0">it.polimi.ingsw.view.GameState</node>
+    <node x="1138.0571214219758" y="1794.0">it.polimi.ingsw.view.gui</node>
+    <node x="190.92595798707282" y="345.0">it.polimi.ingsw.view.View</node>
+    <node x="679.9259579870728" y="334.0">it.polimi.ingsw.view.SetupState</node>
+    <node x="462.9259579870728" y="345.0">it.polimi.ingsw.view.RestoreState</node>
+    <node x="1197.9259579870727" y="158.0">it.polimi.ingsw.view.UserInterface</node>
+    <node x="1292.4259579870727" y="1221.0">it.polimi.ingsw.view.cli</node>
+    <node x="759.0529547553092" y="0.0">it.polimi.ingsw.view.ConnectionState</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.view.middleware" target="it.polimi.ingsw.view.View">
+      <point x="8.799999999999955" y="-26.0" />
+      <point x="423.8509579870728" y="1774.0" />
+      <point x="420.5509579870728" y="1774.0" />
+      <point x="420.5509579870728" y="740.0" />
+      <point x="352.9259579870728" y="740.0" />
+      <point x="36.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.middleware">
+      <point x="-27.41666666666663" y="467.0" />
+      <point x="885.0092913204062" y="1764.0" />
+      <point x="476.65095798707284" y="1764.0" />
+      <point x="61.60000000000002" y="-26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli" target="it.polimi.ingsw.view.cli">
+      <point x="0.0" y="26.0" />
+      <point x="1352.4259579870727" y="1303.0" />
+      <point x="1262.4259579870727" y="1303.0" />
+      <point x="1262.4259579870727" y="1247.0" />
+      <point x="-60.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware" target="it.polimi.ingsw.view.ClientView">
+      <point x="44.0" y="-26.0" />
+      <point x="459.0509579870728" y="1754.0" />
+      <point x="830.1759579870728" y="1754.0" />
+      <point x="-82.25" y="467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.gui" target="it.polimi.ingsw.view.UserInterface">
+      <point x="40.0" y="-26.0" />
+      <point x="1238.0571214219758" y="1774.0" />
+      <point x="1422.9259579870727" y="1774.0" />
+      <point x="1422.9259579870727" y="760.0" />
+      <point x="1419.3009579870727" y="760.0" />
+      <point x="94.875" y="236.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.gui" target="it.polimi.ingsw.view.gui">
+      <point x="-45.0" y="26.0" />
+      <point x="1153.0571214219758" y="1866.0" />
+      <point x="1118.0571214219758" y="1866.0" />
+      <point x="1118.0571214219758" y="1839.5" />
+      <point x="-60.0" y="19.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.SetupState">
+      <point x="-51.947368421052715" y="-467.0" />
+      <point x="860.4785895660201" y="670.0" />
+      <point x="763.1759579870728" y="670.0" />
+      <point x="-27.75" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.GameState" target="it.polimi.ingsw.view.ClientView">
+      <point x="83.25" y="49.0" />
+      <point x="1150.1759579870727" y="740.0" />
+      <point x="1033.6364843028623" y="740.0" />
+      <point x="121.21052631578948" y="-467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.GameState">
+      <point x="69.26315789473688" y="-467.0" />
+      <point x="981.6891158818097" y="760.0" />
+      <point x="983.6759579870728" y="760.0" />
+      <point x="-83.25" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.View">
+      <point x="-155.84210526315803" y="-467.0" />
+      <point x="756.5838527239148" y="730.0" />
+      <point x="388.9259579870728" y="730.0" />
+      <point x="72.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.VirtualView" target="it.polimi.ingsw.view.View">
+      <point x="82.25" y="-247.0" />
+      <point x="246.75" y="760.0" />
+      <point x="244.92595798707282" y="760.0" />
+      <point x="-72.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.gui" target="it.polimi.ingsw.view.ClientView">
+      <point x="0.0" y="-26.0" />
+      <point x="1198.0571214219758" y="1764.0" />
+      <point x="1049.5092913204062" y="1764.0" />
+      <point x="137.08333333333337" y="467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.RestoreState">
+      <point x="-103.89473684210543" y="-467.0" />
+      <point x="808.5312211449674" y="700.0" />
+      <point x="561.4259579870728" y="700.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.RestoreState" target="it.polimi.ingsw.view.ClientView">
+      <point x="65.66666666666674" y="49.0" />
+      <point x="627.0926246537396" y="690.0" />
+      <point x="825.8470106186517" y="690.0" />
+      <point x="-86.57894736842115" y="-467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.ConnectionState">
+      <point x="34.631578947368325" y="-467.0" />
+      <point x="947.0575369344411" y="750.0" />
+      <point x="934.4259579870728" y="750.0" />
+      <point x="934.4259579870728" y="118.0" />
+      <point x="914.4529547553092" y="118.0" />
+      <point x="44.400000000000034" y="49.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ClientView" target="it.polimi.ingsw.view.UserInterface">
+      <point x="138.52631578947364" y="-467.0" />
+      <point x="1050.9522737765465" y="750.0" />
+      <point x="1229.5509579870727" y="750.0" />
+      <point x="-94.875" y="236.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.VirtualView" target="it.polimi.ingsw.view.middleware">
+      <point x="109.66666666666674" y="247.0" />
+      <point x="274.16666666666674" y="1754.0" />
+      <point x="371.0509579870728" y="1754.0" />
+      <point x="-44.0" y="-26.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.SetupState" target="it.polimi.ingsw.view.ClientView">
+      <point x="83.25" y="60.0" />
+      <point x="874.1759579870728" y="650.0" />
+      <point x="895.1101685133885" y="650.0" />
+      <point x="-17.315789473684276" y="-467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.ConnectionState" target="it.polimi.ingsw.view.ClientView">
+      <point x="-44.39999999999998" y="49.0" />
+      <point x="825.6529547553091" y="138.0" />
+      <point x="912.4259579870728" y="138.0" />
+      <point x="0.0" y="-467.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.cli" target="it.polimi.ingsw.view.UserInterface">
+      <point x="0.0" y="-26.0" />
+      <point x="1352.4259579870727" y="760.0" />
+      <point x="1356.0509579870727" y="760.0" />
+      <point x="31.625" y="236.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware" target="it.polimi.ingsw.view.middleware">
+      <point x="-66.0" y="26.0" />
+      <point x="349.0509579870728" y="1866.0" />
+      <point x="307.0509579870728" y="1866.0" />
+      <point x="307.0509579870728" y="1839.5" />
+      <point x="-88.0" y="19.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware" target="it.polimi.ingsw.view.VirtualView">
+      <point x="-79.19999999999993" y="-26.0" />
+      <point x="335.8509579870729" y="1774.0" />
+      <point x="54.83333333333337" y="1774.0" />
+      <point x="-109.66666666666669" y="247.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.SetupState" target="it.polimi.ingsw.view.ConnectionState">
+      <point x="0.0" y="-60.0" />
+      <point x="790.9259579870728" y="138.0" />
+      <point x="781.2529547553091" y="138.0" />
+      <point x="-88.8" y="49.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="301.0" y="322.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

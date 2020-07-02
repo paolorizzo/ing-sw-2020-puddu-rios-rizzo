@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.view.middleware</OriginalElement>
+  <nodes>
+    <node x="266.0625" y="246.0">it.polimi.ingsw.view.middleware.Messenger</node>
+    <node x="265.5625" y="0.0">it.polimi.ingsw.view.middleware.Message</node>
+    <node x="21.5" y="525.0">it.polimi.ingsw.view.middleware.NetworkInterface</node>
+    <node x="217.49999999999997" y="558.0">it.polimi.ingsw.view.middleware.MessageSynchronizer</node>
+    <node x="129.48897058823536" y="778.0">it.polimi.ingsw.view.middleware.Client</node>
+    <node x="611.1010154061626" y="1086.0">it.polimi.ingsw.view.middleware.Connection</node>
+    <node x="463.9791666666667" y="514.0">it.polimi.ingsw.view.middleware.AlivenessHandler</node>
+    <node x="693.9791666666667" y="536.0">it.polimi.ingsw.view.middleware.Server</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.view.middleware.Client" target="it.polimi.ingsw.view.middleware.AlivenessHandler">
+      <point x="104.14285714285711" y="-379.0" />
+      <point x="355.13182773109247" y="758.0" />
+      <point x="542.7291666666667" y="758.0" />
+      <point x="-26.25" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Connection" target="it.polimi.ingsw.view.middleware.Messenger">
+      <point x="88.125" y="-71.0" />
+      <point x="816.7260154061626" y="748.0" />
+      <point x="888.4791666666667" y="748.0" />
+      <point x="888.4791666666667" y="484.0" />
+      <point x="610.7291666666665" y="484.0" />
+      <point x="156.66666666666657" y="104.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.MessageSynchronizer" target="it.polimi.ingsw.view.middleware.Message">
+      <point x="-83.625" y="-38.0" />
+      <point x="245.37499999999997" y="484.0" />
+      <point x="214.58018207282916" y="484.0" />
+      <point x="214.58018207282916" y="216.0" />
+      <point x="306.0625" y="216.0" />
+      <point x="-54.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Connection" target="it.polimi.ingsw.view.middleware.Server">
+      <point x="-9.791666666666643" y="-71.0" />
+      <point x="718.8093487394959" y="698.0" />
+      <point x="739.9791666666667" y="698.0" />
+      <point x="-46.0" y="60.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Messenger" target="it.polimi.ingsw.view.middleware.Message">
+      <point x="-94.0" y="-104.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Client" target="it.polimi.ingsw.view.middleware.NetworkInterface">
+      <point x="-34.71428571428572" y="-379.0" />
+      <point x="216.27468487394964" y="738.0" />
+      <point x="109.5" y="738.0" />
+      <point x="0.0" y="71.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.AlivenessHandler" target="it.polimi.ingsw.view.middleware.Message">
+      <point x="69.99999999999994" y="-82.0" />
+      <point x="638.9791666666666" y="494.0" />
+      <point x="652.5625" y="494.0" />
+      <point x="652.5625" y="216.0" />
+      <point x="414.0625" y="216.0" />
+      <point x="54.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Client" target="it.polimi.ingsw.view.middleware.MessageSynchronizer">
+      <point x="34.714285714285666" y="-379.0" />
+      <point x="285.703256302521" y="758.0" />
+      <point x="301.125" y="758.0" />
+      <point x="-27.875" y="38.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Connection" target="it.polimi.ingsw.view.middleware.Message">
+      <point x="107.70833333333331" y="-71.0" />
+      <point x="836.3093487394958" y="758.0" />
+      <point x="899.4791666666667" y="758.0" />
+      <point x="899.4791666666667" y="206.0" />
+      <point x="441.0625" y="206.0" />
+      <point x="81.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Connection" target="it.polimi.ingsw.view.middleware.AlivenessHandler">
+      <point x="-48.958333333333314" y="-71.0" />
+      <point x="679.6426820728293" y="708.0" />
+      <point x="647.7291666666667" y="708.0" />
+      <point x="78.75" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Server" target="it.polimi.ingsw.view.middleware.Connection">
+      <point x="46.0" y="60.0" />
+      <point x="831.9791666666667" y="728.0" />
+      <point x="777.5593487394959" y="728.0" />
+      <point x="48.95833333333337" y="-71.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Client" target="it.polimi.ingsw.view.middleware.Message">
+      <point x="-104.14285714285717" y="-379.0" />
+      <point x="146.8461134453782" y="758.0" />
+      <point x="0.0" y="758.0" />
+      <point x="0.0" y="206.0" />
+      <point x="279.0625" y="206.0" />
+      <point x="-81.0" y="93.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.AlivenessHandler" target="it.polimi.ingsw.view.middleware.Messenger">
+      <point x="-70.00000000000006" y="-82.0" />
+      <point x="498.97916666666663" y="494.0" />
+      <point x="485.39583333333326" y="494.0" />
+      <point x="31.333333333333314" y="104.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Connection" target="it.polimi.ingsw.view.middleware.MessageSynchronizer">
+      <point x="-88.12499999999994" y="-71.0" />
+      <point x="640.4760154061626" y="728.0" />
+      <point x="412.625" y="728.0" />
+      <point x="83.625" y="38.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.MessageSynchronizer" target="it.polimi.ingsw.view.middleware.Messenger">
+      <point x="83.625" y="-38.0" />
+      <point x="412.625" y="494.0" />
+      <point x="422.72916666666663" y="494.0" />
+      <point x="-31.33333333333337" y="104.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.view.middleware.Client" target="it.polimi.ingsw.view.middleware.Messenger">
+      <point x="-69.42857142857144" y="-379.0" />
+      <point x="181.56039915966392" y="748.0" />
+      <point x="11.0" y="748.0" />
+      <point x="11.0" y="494.0" />
+      <point x="297.3958333333333" y="494.0" />
+      <point x="-156.66666666666666" y="104.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="213.0" y="174.0" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.view.middleware.Connection</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

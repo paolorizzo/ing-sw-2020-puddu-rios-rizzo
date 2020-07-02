@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.model.power</OriginalElement>
+  <nodes>
+    <node x="0.0" y="275.0">it.polimi.ingsw.model.power.ZeusPower</node>
+    <node x="1523.0000000000002" y="275.0">it.polimi.ingsw.model.power.AtlasPower</node>
+    <node x="313.0" y="275.0">it.polimi.ingsw.model.power.HeraPower</node>
+    <node x="1836.0000000000002" y="275.0">it.polimi.ingsw.model.power.HephaestusPower</node>
+    <node x="734.0000000000002" y="264.0">it.polimi.ingsw.model.power.ApolloPower</node>
+    <node x="3723.0" y="264.0">it.polimi.ingsw.model.power.MinotaurPower</node>
+    <node x="4091.0" y="275.0">it.polimi.ingsw.model.power.LimusPower</node>
+    <node x="2254.5" y="0.0">it.polimi.ingsw.model.power.PowerStrategy</node>
+    <node x="1102.0000000000002" y="275.0">it.polimi.ingsw.model.power.HypnusPower</node>
+    <node x="3410.0" y="275.0">it.polimi.ingsw.model.power.HestiaPower</node>
+    <node x="3094.0" y="264.0">it.polimi.ingsw.model.power.PrometheusPower</node>
+    <node x="4512.0" y="275.0">it.polimi.ingsw.model.power.AthenaPower</node>
+    <node x="2781.0" y="275.0">it.polimi.ingsw.model.power.DemeterPower</node>
+    <node x="2149.0" y="275.0">it.polimi.ingsw.model.power.PanPower</node>
+    <node x="2465.0" y="275.0">it.polimi.ingsw.model.power.ArtemisPower</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.model.power.HestiaPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="3556.5" y="214.0" />
+      <point x="2555.25" y="214.0" />
+      <point x="100.25" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.HeraPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="513.5" y="194.0" />
+      <point x="2297.4642857142862" y="194.0" />
+      <point x="-157.53571428571422" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.HephaestusPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="-2.2737367544323206E-13" y="-38.0" />
+      <point x="1982.5" y="234.0" />
+      <point x="2412.0357142857147" y="234.0" />
+      <point x="-42.96428571428578" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.ApolloPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-49.0" />
+      <point x="908.0000000000002" y="204.0" />
+      <point x="2326.107142857143" y="204.0" />
+      <point x="-128.89285714285734" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.AtlasPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="1669.5000000000002" y="224.0" />
+      <point x="2383.392857142858" y="224.0" />
+      <point x="-71.60714285714266" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.PrometheusPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-49.0" />
+      <point x="3242.0" y="224.0" />
+      <point x="2526.607142857143" y="224.0" />
+      <point x="71.60714285714312" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.AthenaPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="4712.5" y="184.0" />
+      <point x="2641.1785714285716" y="184.0" />
+      <point x="186.17857142857156" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.HypnusPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="1302.5000000000002" y="214.0" />
+      <point x="2354.75" y="214.0" />
+      <point x="-100.25" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.PanPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="2297.0" y="244.0" />
+      <point x="2440.6785714285716" y="244.0" />
+      <point x="-14.321428571428442" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.MinotaurPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-49.0" />
+      <point x="3897.0" y="204.0" />
+      <point x="2583.892857142858" y="204.0" />
+      <point x="128.89285714285734" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.DemeterPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="2927.5" y="234.0" />
+      <point x="2497.9642857142862" y="234.0" />
+      <point x="42.96428571428578" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.ArtemisPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="2613.0" y="244.0" />
+      <point x="2469.3214285714284" y="244.0" />
+      <point x="14.321428571428442" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.ZeusPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="146.5" y="184.0" />
+      <point x="2268.8214285714284" y="184.0" />
+      <point x="-186.17857142857156" y="82.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.model.power.LimusPower" target="it.polimi.ingsw.model.power.PowerStrategy">
+      <point x="0.0" y="-38.0" />
+      <point x="4291.5" y="194.0" />
+      <point x="2612.5357142857147" y="194.0" />
+      <point x="157.53571428571422" y="82.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.43938253012048195" x="1318.0" y="226.5" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.model.power.ArtemisPower</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
