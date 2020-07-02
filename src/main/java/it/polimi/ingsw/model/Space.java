@@ -166,20 +166,20 @@ public class Space {
     public boolean isPeripheralSpace(){
         return posX == 0 || posX == 4 || posY == 0 || posY == 4;
     }
-
+    /*
     /**
      * clones and returns another space, identical
      * except with regards to the adjacent space
      * @return a copy of this space, identical except
      * without its adjacent spaces
-     */
+
     protected Space lightClone(){
         Space space = new Space(posX, posY);
         for(Piece piece: pieces)
             space.addPiece(piece);
         return space;
     }
-
+    /
     /**
      * compares another object to this space
      * @param o the other object

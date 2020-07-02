@@ -16,6 +16,7 @@ public class GameTest {
         Game game = new Game(model);
         assert(game.getNumPlayers() == -1);
         assert(!game.numPlayersIsSet());
+        assert(game.playerSuccessionUninitialized());
 
         Game game2 = new Game(model,3);
         assert(game2.getNumPlayers() == 3);

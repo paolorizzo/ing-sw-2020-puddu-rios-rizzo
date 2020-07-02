@@ -217,16 +217,6 @@ public class Game {
         return possibleActions;
     }
 
-    /**
-     * prints the list of possible actions
-     */
-    public void printPossibleSetupActions(){
-        System.out.println("possible actions:");
-        List<Action> possibleActions = this.possibleActions;
-        for (Action a:possibleActions){
-            System.out.println("\t" + a.toString());
-        }
-    }
 
     /**
      * MAY ADVANCE THE TURN

@@ -61,14 +61,14 @@ public class Worker {
     public String toString(){
         return "P"+playerId+"-"+sex.name().charAt(0);
     }
-
+    /*
     protected Worker lightClone(Player copyPlayer){
         Worker copy = new Worker(sex, copyPlayer);
         if(space != null)
             copy.setSpace(space.lightClone());
         return copy;
     }
-
+    */
     /**
      * compares all the fields of the workers and returns true if they all match
      * @param o the other worker

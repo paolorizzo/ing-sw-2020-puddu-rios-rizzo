@@ -74,4 +74,22 @@ public class PersistenceGameTest {
         String names = "_abcd";
         assertEquals("./persistence/game" + names + ".json", PersistenceGame.savePath(names));
     }
+
+    /**
+     * test equals game
+     */
+    @Test
+    public void testEquals(){
+        Controller c = new Controller();
+        ControllerTest ct = new ControllerTest();
+        ct.fullSetupPhase(c, 3);
+        PersistenceGame pg = new PersistenceGame(c.getModel().game);
+
+        Controller c2 = new Controller();
+        ControllerTest ct2 = new ControllerTest();
+        ct2.fullSetupPhase(c2, 3);
+        PersistenceGame pg2 = new PersistenceGame(c2.getModel().game);
+
+        assert(pg.equals(pg2));
+    }
 }

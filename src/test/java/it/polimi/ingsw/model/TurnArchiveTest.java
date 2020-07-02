@@ -64,4 +64,5 @@ public class TurnArchiveTest {
         TurnArchive ta2 = c2.getModel().game.turnArchive;
         assertEquals(ta1, ta2);
     }
+
 }

@@ -192,13 +192,13 @@ public class Player
         }
         return equality;
     }
-
+    /*
     /**
      * clones this player, producing a copy identical to this one
      * except for some of the references of the fields
      * @return a copy of this player, identical except for some references
      * inside the objects that the player object references
-     */
+
     protected Player lightClone(){
         Player copy = new Player(nickname, color, playerNum);
         if(card != null)
@@ -210,5 +210,5 @@ public class Player
             copy.workers[1] = this.workers[1].lightClone(copy);
         return copy;
     }
-
+    */
 }
