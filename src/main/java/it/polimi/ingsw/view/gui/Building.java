@@ -8,7 +8,7 @@ import javafx.scene.shape.MeshView;
  * A single 3D piece of GUI
  */
 public class Building extends MeshView {
-    Piece piece;
+    private Piece piece;
 
     /**
      * It loads the right mesh of the given piece.

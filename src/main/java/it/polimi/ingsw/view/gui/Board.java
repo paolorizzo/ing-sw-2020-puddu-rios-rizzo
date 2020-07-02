@@ -3,13 +3,10 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observation.UserInterfaceObservable;
-import it.polimi.ingsw.observation.UserInterfaceObserver;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.UserInterface;
-import it.polimi.ingsw.view.cli.CliUtils;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 
@@ -22,33 +19,33 @@ import it.polimi.ingsw.model.Color;
  * The main class of GUI. It contains the scene 3D for the game graphics and a sub scene for the 2D menus
  */
 public class Board extends UserInterfaceObservable implements UserInterface {
-    Group groupRoot, group3d;
-    Scene scene;
+    private Group groupRoot, group3d;
+    private Scene scene;
 
     private Tower [][] towers = new Tower[5][5];
     private HashMap<Integer, Player> players;
 
-    PieceBag pieceBag;
+    private PieceBag pieceBag;
 
-    ClientView clientView;
+    private ClientView clientView;
 
-    ActionFSM actionFSM;
+    private ActionFSM actionFSM;
 
-    ErrorVisualizer errorVisualizer;
+    private ErrorVisualizer errorVisualizer;
 
-    AskNumPlayersMenu askNumPlayersMenu;
-    AskNameMenu askNameMenu;
-    AskIpAndPortMenu askIpAndPortMenu;
-    AskRestoreMenu askRestoreMenu;
-    PlayersMenu playersMenu;
-    AskCardMenu askCardMenu;
-    AskGodMenu askGodMenu;
-    SelectTypeActionMenu selectTypeActionMenu;
-    SelectPieceMenu selectPieceMenu;
-    EndOfTurnMenu endOfTurnMenu;
-    WinMenu winMenu;
-    LoseMenu loseMenu;
-    DisconnectionMenu disconnectedMenu;
+    private AskNumPlayersMenu askNumPlayersMenu;
+    private AskNameMenu askNameMenu;
+    private AskIpAndPortMenu askIpAndPortMenu;
+    private AskRestoreMenu askRestoreMenu;
+    private PlayersMenu playersMenu;
+    private AskCardMenu askCardMenu;
+    private AskGodMenu askGodMenu;
+    private SelectTypeActionMenu selectTypeActionMenu;
+    private SelectPieceMenu selectPieceMenu;
+    private EndOfTurnMenu endOfTurnMenu;
+    private WinMenu winMenu;
+    private LoseMenu loseMenu;
+    private DisconnectionMenu disconnectedMenu;
 
     private final int WIDTH = 1200;
     private final int HEIGHT = 700;
@@ -479,7 +476,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     @Override
     public void askNumPlayers() {
         askNumPlayersMenu.show();
-        System.out.println("Ask num player");
     }
     /**
      * Asks for the desired username showing the menu.
@@ -487,7 +483,6 @@ public class Board extends UserInterfaceObservable implements UserInterface {
     @Override
     public void askUsername() {
         askNameMenu.show();
-        System.out.println("Ask name");
     }
     /**
      * Asks if the user wants to restore the stored game showing the menu.

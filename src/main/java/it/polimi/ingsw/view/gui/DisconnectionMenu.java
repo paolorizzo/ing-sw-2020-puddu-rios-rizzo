@@ -1,12 +1,8 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.model.Piece;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -15,10 +11,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to show the disconnection
+ */
 public class DisconnectionMenu extends Menu
 {
-    Rectangle rect;
-    Text message;
+    private Rectangle rect;
+    private Text message;
+
+    /**
+     * It creates and sets the menu graphics to do a voluntary end of turn
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public DisconnectionMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(500, 270);
@@ -62,6 +67,10 @@ public class DisconnectionMenu extends Menu
         group.getChildren().add(messagePane);
     }
 
+    /**
+     * It sets the message and shows the menu
+     * @param message a message for the reason of the disconnection
+     */
     public void show(String message){
         this.message.setText(message);
         super.show();

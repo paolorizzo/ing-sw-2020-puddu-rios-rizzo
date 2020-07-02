@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
-
-import it.polimi.ingsw.view.ClientView;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -15,29 +12,34 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to ask and read the name of the player
+ */
 public class AskNameMenu extends Menu {
-    Rectangle rect;
-    final TextField textName;
-    Label labelName;
-    Rectangle enter;
+    private Rectangle rect;
+
+    /**
+     * It creates and sets the menu graphics to choose the own god
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskNameMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(250, 160);
-        ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
-        rect.setFill(patt);
+        rect.setFill(new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
         rect.setTranslateX(widthResolution/2-rect.getWidth()/2);
         rect.setTranslateY(heightResolution/2-rect.getHeight()/2);
 
-        labelName = new Label("Insert your name: ");
+        Label labelName = new Label("Insert your name: ");
         labelName.setFont(new Font("Forte", 22));
         labelName.setTranslateX(rect.getTranslateX() + 30);
         labelName.setTranslateY(rect.getTranslateY() + 20);
         labelName.setMaxWidth(190);
         labelName.setMaxHeight(30);
 
-        textName = new TextField();
+        final TextField textName = new TextField();
         textName.setMaxWidth(190);
         textName.setMinWidth(190);
         textName.setMaxHeight(30);
@@ -45,7 +47,7 @@ public class AskNameMenu extends Menu {
         textName.setTranslateY(rect.getTranslateY() + labelName.getMaxHeight()+30);
 
 
-        enter = new Rectangle(100, 30 );
+        Rectangle enter = new Rectangle(100, 30 );
         enter.setTranslateX(rect.getTranslateX() + rect.getWidth()/2 - enter.getWidth()/2);
         enter.setTranslateY(labelName.getTranslateY() + labelName.getMaxHeight() + 50);
         enter.setTranslateZ(0);

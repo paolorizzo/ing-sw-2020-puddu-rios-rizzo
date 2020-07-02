@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.model.Player;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,13 +15,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-
+/**
+ * Menu to show the names and gods of players in game and reports who is the current player
+ */
 public class PlayersMenu extends Menu {
     private int offsetX, offsetY;
 
     private Text [] playerNames;
     private Label [] playerCardLabels;
     private Label currentPlayerLabel;
+
+    /**
+     * It starts to create graphics for showing the player of the game
+     * @param widthResolution
+     * @param heightResolution
+     */
     public PlayersMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         offsetX = 20;
@@ -36,6 +43,11 @@ public class PlayersMenu extends Menu {
         currentPlayerLabel.setVisible(false);
         group.getChildren().add(currentPlayerLabel);
     }
+
+    /**
+     * It sets the name and color of new player in the menu
+     * @param player the new player joined
+     * */
     public void addNamePlayer(Player player){
         String name = player.getNickname();
         int id = player.getId();
@@ -54,6 +66,11 @@ public class PlayersMenu extends Menu {
         }
 
     }
+
+    /**
+     *  It sets the god in the menu on the right player
+     * @param player the player that has chosen the god
+     */
     public void addGodPlayer(Player player){
         String nameGod = player.getCard().getName();
         final int id = player.getId();
@@ -136,9 +153,12 @@ public class PlayersMenu extends Menu {
             }
         });
 
-
-
     }
+
+    /**
+     * It creates as many tiles as there are players
+     * @param numPlayers the number of player in game
+     */
     public void setNumPlayers(final int numPlayers){
         Platform.runLater(new Runnable() {
             @Override
@@ -183,6 +203,10 @@ public class PlayersMenu extends Menu {
         });
     }
 
+    /**
+     * It sets the current player in the menu
+     * @param id the id of current player
+     */
     public void setCurrentPlayer(int id){
         Platform.runLater(new Runnable() {
             @Override

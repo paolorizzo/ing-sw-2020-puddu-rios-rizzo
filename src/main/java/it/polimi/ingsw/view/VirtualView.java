@@ -37,7 +37,6 @@ public class VirtualView extends View
      */
     public synchronized void connectionLost()
     {
-        System.out.println("Connection lost " + this);
         getController().handleDisconnection();
     }
 

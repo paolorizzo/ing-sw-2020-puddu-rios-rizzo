@@ -284,20 +284,14 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateCurrentPlayer(int id, List<Action> possibleActions, boolean canEndOfTurn) {
         getUi().setCurrentPlayer(id);
-        //System.out.println("currplayer "+id);
-        //System.out.println("my id "+this.id);
         if(id == getId() && currentSetupState!=null && currentSetupState.equals(SetupState.ASK_SETUP_WORKER))
             currentSetupState.execute(this, possibleActions);
         if(id == getId() && currentGameState!=null && currentGameState.equals(GameState.RECEIVE_ACTIONS)){
-            //System.out.println("Entering actions receival");
             if(canEndOfTurn){
                 currentGameState = GameState.ASK_OPTIONAL_ACTION;
-                //System.out.println("Posso terminare il turno, invece di fare la mossa");
             }
             currentGameState.execute(this, possibleActions);
         }
-        //System.out.println("GameState: " + currentGameState);
-
     }
 
     //connection phase updates
@@ -307,7 +301,6 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateStart(){
-        //System.out.println("starting this client");
         if(currentConnectionState.equals(ConnectionState.READY))
             currentConnectionState.execute(this, null);
     }
@@ -319,13 +312,6 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateID(int id){
 
-        /*
-        if(this.id != -1)
-            System.out.println("ClientView.updateID with id "+id+", but was already "+this.id);
-        else
-            System.out.println("ClientView.updateID with new id "+id);
-
-         */
         if(currentConnectionState.equals(ConnectionState.RECEIVE_ID))
             currentConnectionState.execute(this, id);
     }
@@ -336,7 +322,6 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateNumPlayers(int numPlayers){
-        //System.out.println("received number of players: " + numPlayers);
         if(currentConnectionState.equals(ConnectionState.RECEIVE_NUM_PLAYERS))
             currentConnectionState.execute(this, numPlayers);
     }
@@ -395,7 +380,6 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateRemap(Map<Integer, Integer> idMap){
-        //System.out.println("Remapping id from " + id + " to " + idMap.get(id));
         this.id = idMap.get(id);
     }
 
@@ -404,12 +388,8 @@ public class ClientView extends View implements UserInterfaceObserver
      */
     @Override
     public synchronized void updateResume(){
-        //System.out.println("Trying to resume the game");
         if(currentRestoreState.equals(RestoreState.RECEIVE_ALL)){
             currentRestoreState.execute(null);
-        }
-        else{
-            System.out.println(currentRestoreState.name());
         }
 
     }
@@ -488,7 +468,6 @@ public class ClientView extends View implements UserInterfaceObserver
     @Override
     public synchronized void updateAction(int id, Action action){
         getUi().executeAction(action);
-        //System.out.println("Execute action: "+action.toString());
     }
 
     /**

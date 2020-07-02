@@ -69,9 +69,7 @@ public class Game {
      * @param numPlayers the number of players
      */
     public void setNumPlayers(int numPlayers) {
-        //System.out.println("Setting a game for " + numPlayers + " players");
         this.numPlayers = numPlayers;
-        //TODO move this somewhere more appropriate
         model.game.initializePlayerSuccession();
     }
 

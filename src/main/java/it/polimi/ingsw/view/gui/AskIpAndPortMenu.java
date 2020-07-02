@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,12 +12,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to read server's IP and port
+ */
 public class AskIpAndPortMenu extends Menu
 {
-    Rectangle rect;
-    final TextField ipText, portText;
-    Label ipName, portName;
-    Rectangle enter;
+    private Rectangle rect;
+    /**
+     * It creates and sets the menu graphics to choose the own god
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskIpAndPortMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
 
@@ -50,7 +54,7 @@ public class AskIpAndPortMenu extends Menu
         title.setTranslateY(0);
         titlePane.getChildren().add(title);
 
-        ipName = new Label("Insert a valid IP address for the server: ");
+        Label ipName = new Label("Insert a valid IP address for the server: ");
         ipName.setFont(new Font("Forte", 16));
         ipName.setTranslateX(rect.getTranslateX() + 40);
         ipName.setTranslateY(titlePane.getTranslateY() + titlePane.getHeight()+ 55);
@@ -59,14 +63,14 @@ public class AskIpAndPortMenu extends Menu
         ipName.setTextAlignment(TextAlignment.CENTER);
         ipName.setMaxHeight(30);
 
-        ipText = new TextField();
+        final TextField ipText = new TextField();
         ipText.setMaxWidth(260);
         ipText.setMinWidth(260);
         ipText.setMaxHeight(30);
         ipText.setTranslateX(rect.getTranslateX() + 50);
         ipText.setTranslateY(ipName.getTranslateY() + ipName.getMaxHeight() + 5);
 
-        portName = new Label("Insert a valid port address for the server: ");
+        Label portName = new Label("Insert a valid port address for the server: ");
         portName.setFont(new Font("Forte", 16));
         portName.setTranslateX(rect.getTranslateX() + 40);
         portName.setTranslateY(ipText.getTranslateY() + ipText.getMaxHeight() + 15);
@@ -75,7 +79,7 @@ public class AskIpAndPortMenu extends Menu
         portName.setMinWidth(320);
         portName.setMaxHeight(30);
 
-        portText = new TextField();
+        final TextField portText = new TextField();
         portText.setMaxWidth(260);
         portText.setMinWidth(260);
         portText.setMaxHeight(30);
@@ -83,7 +87,7 @@ public class AskIpAndPortMenu extends Menu
         portText.setTranslateY(portName.getTranslateY() + portName.getMaxHeight() + 5);
 
 
-        enter = new Rectangle(100, 30 );
+        Rectangle enter = new Rectangle(100, 30 );
         enter.setTranslateX(rect.getTranslateX() + rect.getWidth()/2 - enter.getWidth()/2);
         enter.setTranslateY(portText.getTranslateY() + portText.getMaxHeight() + 15);
         enter.setTranslateZ(0);

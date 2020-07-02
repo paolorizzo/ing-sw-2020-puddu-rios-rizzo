@@ -14,11 +14,11 @@ import java.util.List;
  * It is the collection of building in the 3D
  */
 public class Tower extends Group{
-    List<Building> buildings;
-    Worker worker;
-    Point3D base;
-    Point3D top;
-    int row, col;
+    private List<Building> buildings;
+    private Worker worker;
+    private Point3D base;
+    private Point3D top;
+    private int row, col;
 
     /**
      * It initializes a level 0, sets no worker on it and saves row, col and base point

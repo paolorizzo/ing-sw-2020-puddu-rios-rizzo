@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.BuildAction;
 import it.polimi.ingsw.model.MoveAction;
 import javafx.event.EventHandler;
-import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,11 +13,21 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import java.util.List;
 
+/**
+ * Menu to chose the type of action
+ */
 public class SelectTypeActionMenu extends Menu {
-    Rectangle rect;
-    Label moveButton;
-    Label buildButton;
-    Rectangle unselectButton;
+    private Rectangle rect;
+    private Label moveButton;
+    private Label buildButton;
+    private Rectangle unselectButton;
+
+    /**
+     * It creates and sets the menu graphics to chose the type of action (move or build)
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     * @param actionFSM the action FSM of the turn
+     */
     public SelectTypeActionMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM) {
         super(widthResolution, heightResolution);
 
@@ -79,6 +88,11 @@ public class SelectTypeActionMenu extends Menu {
         group.getChildren().add(unselectButton);
 
     }
+    /**
+     * It shows the menu and set the color of button based on the existing or not of the action
+     * @param possibleActions the list of possible actions
+     * @param worker_id the id of current worked selected for the action
+     */
     public void show(List<Action> possibleActions, String worker_id){
         boolean move = false;
         boolean build = false;

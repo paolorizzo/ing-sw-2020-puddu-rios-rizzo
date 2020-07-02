@@ -190,11 +190,8 @@ public class ActionFSM{
                                 case 'T':
                                     int targetX = ((String) input).charAt(1) - '0';
                                     int targetY = ((String) input).charAt(2) - '0';
-                                    System.out.println("move to :" + targetX + " " + targetY);
-                                    //boolean moveAndForce = board.getTower(targetX, targetY).hasWorker();
                                     for (Action action : possibleActions) {
                                         if (action.matches(worker_id, targetX, targetY) && action instanceof MoveAction) {
-                                            System.out.println("Ecco la mia azione " + action);
                                             resetPreview();
                                             board.notifyReadAction(action);
                                             return WAIT_INITIALIZE.execute("");
@@ -210,7 +207,6 @@ public class ActionFSM{
                                     for (Action action : possibleActions) {
                                         if (action.matches(worker_id, previewTargetX, previewTargetY) && action instanceof MoveAction) {
                                             setPreview(action);
-                                            System.out.println("PREVIEW "+action);
                                             break;
                                         }
                                     }
@@ -284,7 +280,6 @@ public class ActionFSM{
 
                                     for (Action action : possibleActions) {
                                         if (action.matches(worker_id, targetX, targetY, piece)) {
-                                            System.out.println("Ecco la mia azione " + action);
                                             resetPreview();
                                             board.notifyReadAction(action);
                                             return WAIT_INITIALIZE.execute("");

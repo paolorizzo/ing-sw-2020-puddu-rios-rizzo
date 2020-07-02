@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.model.Piece;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -11,9 +9,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to voluntary end the turn
+ */
 public class EndOfTurnMenu extends Menu {
-    Rectangle endOfTurn;
+    private Rectangle endOfTurn;
 
+    /**
+     * It creates and sets the menu graphics to do a voluntary end of turn
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     * @param actionFSM the action FSM of the turn
+     */
     public EndOfTurnMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM) {
         super(widthResolution, heightResolution);
 
@@ -32,8 +39,6 @@ public class EndOfTurnMenu extends Menu {
         endOfTurnPane.setMinHeight(endOfTurn.getHeight());
         endOfTurnPane.setMaxWidth(endOfTurn.getWidth());
         endOfTurnPane.setMinWidth(endOfTurn.getWidth());
-
-
 
         Text endOfTurnText = new Text();
         endOfTurnText.setText("END TURN");

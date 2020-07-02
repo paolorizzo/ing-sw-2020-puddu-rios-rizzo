@@ -6,12 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Deck;
-import it.polimi.ingsw.model.power.*;
-import it.polimi.ingsw.view.ClientView;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,17 +20,22 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
+/**
+ * Menu to choose the own god
+ */
 public class AskGodMenu extends Menu {
-    Rectangle rect;
-    HashMap<Integer, Label> cardLabels;
+    private Rectangle rect;
+    private HashMap<Integer, Label> cardLabels;
+    /**
+     * It creates and sets the menu graphics to choose the own god
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskGodMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(460, 290);
@@ -180,6 +181,11 @@ public class AskGodMenu extends Menu {
             System.out.println("Error during the loading of deck: "+e.getMessage());
         }
     }
+
+    /**
+     * It places and shows the remained cards
+     * @param cards a list of remained cards
+     */
     public void setCards(List<Card> cards){
         double offsetX = 10;
         int offsetY = 80;

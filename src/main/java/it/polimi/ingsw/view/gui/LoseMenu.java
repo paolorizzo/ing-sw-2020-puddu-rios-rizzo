@@ -10,10 +10,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
+/**
+ * Menu of lose
+ */
 public class LoseMenu extends Menu {
-    ImageView godView;
+    private ImageView godView;
 
+    /**
+     * It creates and sets the menu graphics to show a lose
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public LoseMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         Rectangle rect = new Rectangle(500, 300);
@@ -80,6 +87,10 @@ public class LoseMenu extends Menu {
 
     }
 
+    /**
+     * It sets the graphic of own god when lose
+     * @param card the card of god that lose
+     */
     public void setGodView(Card card){
         Image god = GraphicsLoader.instance().getImage(card.getName()+"_podium");
         godView.setImage(god);

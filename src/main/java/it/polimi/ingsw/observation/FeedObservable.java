@@ -78,7 +78,6 @@ public class FeedObservable extends Observable<FeedObserver> {
      * clients
      */
     public synchronized void notifyStart(){
-        //System.out.println("starting client");
         for(FeedObserver obs:observers){
             obs.updateStart();
         }
@@ -91,7 +90,6 @@ public class FeedObservable extends Observable<FeedObserver> {
      * @param id the id given to the client
      */
     public synchronized void notifyID(int id){
-        //System.out.println("notifyID with id: "+id);
         for(FeedObserver obs:observers){
             obs.updateID(id);
         }

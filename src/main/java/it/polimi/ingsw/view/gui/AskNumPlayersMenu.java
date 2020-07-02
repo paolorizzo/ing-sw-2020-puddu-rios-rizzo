@@ -1,10 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
-
-import it.polimi.ingsw.model.Piece;
-import it.polimi.ingsw.view.ClientView;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,9 +13,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to ask and get the number of player of the game
+ */
 public class AskNumPlayersMenu extends Menu {
-    Rectangle rect;
-
+    private Rectangle rect;
+    /**
+     * It creates and sets the menu graphics to choose the own god
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskNumPlayersMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(390, 240);

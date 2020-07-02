@@ -26,7 +26,7 @@ public class Group3D extends Group {
 
     /**
      * It sets the commands to make this group ratable and zoomable
-     * @param group
+     * @param group the group to be rendered 3d
      */
     private void initMouseControl(final Group group){
         Rotate xRotate;

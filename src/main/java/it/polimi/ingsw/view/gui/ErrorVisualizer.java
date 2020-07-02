@@ -12,20 +12,30 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
+/**
+ * It is an error visualizer with an animated string that tends to disappear
+ */
 public class ErrorVisualizer extends Group {
-    StackPane errorPane;
-    Text errorText;
-    Rectangle rect;
-    int heightResolution, widthResolution;
+
+    private Rectangle rect;
+    private Text errorText;
+    private StackPane errorPane;
+    private int heightResolution, widthResolution;
+
+    /**
+     * It creates and sets the graphics to show the errors
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public ErrorVisualizer(int widthResolution, int heightResolution){
         this.widthResolution = widthResolution;
         this.heightResolution = heightResolution;
         errorPane = new StackPane();
-        rect = new Rectangle(widthResolution, 50);
+        rect = new Rectangle(this.widthResolution, 50);
         rect.setFill(Color.RED);
         rect.setVisible(false);
 
-        errorPane.setTranslateY(heightResolution-rect.getHeight());
+        errorPane.setTranslateY(this.heightResolution-rect.getHeight());
 
         errorText = new Text();
         errorText.setText("");
@@ -39,6 +49,11 @@ public class ErrorVisualizer extends Group {
         errorPane.getChildren().add(errorText);
         this.getChildren().add(errorPane);
     }
+
+    /**
+     * It sets the error's string and starts to animated it
+     * @param error the message of error reported
+     */
     public void showError(String error){
         errorText.setText(error);
         errorText.setOpacity(1.0);

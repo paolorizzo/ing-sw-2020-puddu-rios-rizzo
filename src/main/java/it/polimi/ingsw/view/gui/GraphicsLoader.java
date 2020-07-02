@@ -19,9 +19,9 @@ import java.util.*;
 public class GraphicsLoader {
     private static GraphicsLoader instance = null;
 
-    HashMap<String, TriangleMesh> meshes;
-    HashMap<String, PhongMaterial> textures;
-    HashMap<String, Image> images;
+    private HashMap<String, TriangleMesh> meshes;
+    private HashMap<String, PhongMaterial> textures;
+    private HashMap<String, Image> images;
 
     /**
      * Initialized all the HashMap and call the loader

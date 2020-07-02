@@ -25,9 +25,18 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Menu to choose all cards for the game
+ */
 public class AskCardMenu extends Menu {
-    Rectangle rect;
-    HashMap<Integer, Label> cardLabels;
+    private Rectangle rect;
+    private HashMap<Integer, Label> cardLabels;
+
+    /**
+     * It creates and sets the menu graphics to choose all the cards for the game
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskCardMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(740, 690);
@@ -170,6 +179,11 @@ public class AskCardMenu extends Menu {
         }
 
     }
+
+    /**
+     * It sets visible all the cards contained in the deck
+     * @param deck the deck of remained cards
+     */
     public void setDeck(Deck deck){
         int offsetX = 30, offsetY = 80;
         List<Card> cards = deck.getCards();
@@ -195,10 +209,13 @@ public class AskCardMenu extends Menu {
             }
         }
     }
-    public void hide(){
-        group.setVisible(false);
-        if(cardLabels != null){
 
+    /**
+     * It hides the menu and all graphics of cards
+     */
+    public void hide(){
+        super.hide();
+        if(cardLabels != null){
             for(Label cardLabel: cardLabels.values()){
                 cardLabel.setVisible(false);
             }

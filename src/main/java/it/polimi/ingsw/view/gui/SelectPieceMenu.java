@@ -1,8 +1,9 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.PieceBag;
+import it.polimi.ingsw.model.Piece;
+import it.polimi.ingsw.model.Action;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,21 +18,33 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
+/**
+ * Menu to chose the piece of a build move
+ */
 public class SelectPieceMenu extends Menu {
-    Rectangle rect;
-    Label LEVEL1Button;
-    Label LEVEL2Button;
-    Label LEVEL3Button;
-    Label DOMEButton;
-    PieceBag pieceBag;
-    Text lv1Count;
-    Text lv2Count;
-    Text lv3Count;
-    Text domeCount;
-    Text lv1Name;
-    Text lv2Name;
-    Text lv3Name;
-    Text domeName;
+    private Rectangle rect;
+    private Label LEVEL1Button;
+    private Label LEVEL2Button;
+    private Label LEVEL3Button;
+    private Label DOMEButton;
+    private PieceBag pieceBag;
+    private Text lv1Count;
+    private Text lv2Count;
+    private Text lv3Count;
+    private Text domeCount;
+    private Text lv1Name;
+    private Text lv2Name;
+    private Text lv3Name;
+    private Text domeName;
+
+
+     /**
+     * It creates and sets the menu graphics to chose the piece of build
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     * @param actionFSM the action FSM of the turn
+     * @param pieceBag the piece bag of the game
+     */
     public SelectPieceMenu(int widthResolution, int heightResolution, final ActionFSM actionFSM, PieceBag pieceBag) {
         super(widthResolution, heightResolution);
         this.pieceBag = pieceBag;
@@ -314,6 +327,11 @@ public class SelectPieceMenu extends Menu {
 
     }
 
+    /**
+     * It shows the menu and set the color of button based on the existing or not of the action
+     * @param possibleActions the list of possible actions
+     * @param worker_id the id of current worked selected for the action
+     */
     public void show(List<Action> possibleActions, String worker_id){
         boolean lv1 = false, lv2 = false, lv3 = false, dome = false;
         for(Action action: possibleActions){

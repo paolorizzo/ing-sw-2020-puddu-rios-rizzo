@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.view.cli.RectangleCLI;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -13,10 +10,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
+/**
+ * Menu of win
+ */
 public class WinMenu extends Menu {
-    ImageView godView;
-
+    private ImageView godView;
+    /**
+     * It creates and sets the menu graphics to show a win
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public WinMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
 
@@ -81,7 +84,10 @@ public class WinMenu extends Menu {
         godView.setTranslateY(rect.getTranslateY()+30);
         group.getChildren().add(godView);
     }
-
+    /**
+     * It sets the graphic of own god when win
+     * @param card the card of god that win
+     */
     public void setGodView(Card card){
         Image god = GraphicsLoader.instance().getImage(card.getName()+"_podium");
         godView.setImage(god);

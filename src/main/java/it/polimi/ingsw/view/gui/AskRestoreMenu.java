@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
-
-import it.polimi.ingsw.view.ClientView;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -14,16 +11,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Menu to choose if restore an  existed game
+ */
 public class AskRestoreMenu extends Menu {
-    Rectangle rect;
-    Rectangle yesRect;
-    Rectangle noRect;
+    private Rectangle rect;
 
+    /**
+     * It creates and sets the menu graphics to choose if restore an existed game
+     * @param widthResolution the width resolution of window
+     * @param heightResolution hr the height resolution of window
+     */
     public AskRestoreMenu(int widthResolution, int heightResolution) {
         super(widthResolution, heightResolution);
         rect = new Rectangle(400, 250);
-        ImagePattern patt = new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false);
-        rect.setFill(patt);
+        rect.setFill(new ImagePattern(GraphicsLoader.instance().getImage("background_menu"), 0, 0, 750, 750, false));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(2);
         rect.setTranslateX(widthResolution / 2 - rect.getWidth() / 2);
@@ -58,7 +60,7 @@ public class AskRestoreMenu extends Menu {
         text.setMaxHeight(60);
 
 
-        yesRect = new Rectangle(60, 60);
+        Rectangle yesRect = new Rectangle(60, 60);
         yesRect.setTranslateX(rect.getTranslateX() + 130);
         yesRect.setTranslateY(rect.getTranslateY() + 140);
         yesRect.setTranslateZ(0);
@@ -91,7 +93,7 @@ public class AskRestoreMenu extends Menu {
             }
         });
 
-        noRect = new Rectangle(60, 60);
+        Rectangle noRect = new Rectangle(60, 60);
         noRect.setTranslateX(rect.getTranslateX() + 130 + yesRect.getWidth() + 20);
         noRect.setTranslateY(rect.getTranslateY() + 140);
         noRect.setTranslateZ(0);
