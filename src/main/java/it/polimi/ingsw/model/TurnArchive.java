@@ -105,12 +105,7 @@ public class TurnArchive extends MapConvertible{
      */
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("class", this.getClass().getName());
-        int size = this.turns.size();
-        map.put("size", size);
-        for(int i=0;i<size;i++){
-            map.put(String.valueOf(i), this.turns.get(i).toMap());
-        }
+        putEntries(map);
         return map;
     }
 
